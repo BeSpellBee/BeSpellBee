@@ -1,3 +1,24 @@
 
 li{color:teal}
 p{font-size:20px;}
+.demo-wrap {
+  overflow: hidden;
+  position: relative;
+  padding-top:200px;
+  padding-bottom:200px;
+  font-weight:bold;
+}
+
+.demo-bg {
+  opacity: 0.2;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height:100%;
+  padding-top:0px;
+  
+
+
+.demo-content {
+  position: relative;
