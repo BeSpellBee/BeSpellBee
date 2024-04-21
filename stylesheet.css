@@ -1,5 +1,3 @@
-body{font-size:20px;}
-
 
 .demo-wrap {
   overflow: hidden;
@@ -22,3 +20,4 @@ body{font-size:20px;}
 
 .demo-content {
   position: relative;
+body{font-size:20px;}
