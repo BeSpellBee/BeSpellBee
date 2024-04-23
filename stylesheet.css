@@ -1,9 +1,9 @@
 /*stylesheet for services.html page*/
 
 li{color:teal}
-p{font-size:20px; margin-left:20px}
-table,th,td{border:2px solid; border-collapse: collapse;}
-th{height:55px ;text-align:left;}
+p{font-size:20px;text-indent:20px}
+ table,th,td{border:2px solid;border-collapse: collapse;}
+ th,td{text-align:left;padding:10px;}
 
 /*stylesheet for About.html page*/
 
