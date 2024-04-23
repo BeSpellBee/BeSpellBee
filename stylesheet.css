@@ -3,7 +3,7 @@
 li{color:teal}
 p{font-size:20px;margin-left:20px}
 table,th,td{border:2px solid;border-collapse: collapse;}
- th{height:55px}
+th{height:55px}
 
 /*stylesheet for About.html page*/
 
@@ -22,9 +22,4 @@ table,th,td{border:2px solid;border-collapse: collapse;}
   width: 100%;
   height:100%;
  
-  
-
-
-.demo-content {
-  position: relative;
 }
