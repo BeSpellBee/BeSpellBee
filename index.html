@@ -4,7 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" >
     <title>Home page </title>
 	<link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
-	
+	<link rel="stylesheet" href="search.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
 <body 
 
@@ -16,19 +18,9 @@ style="background-color:black;">
 <a href= "Contact.html" target="_blank"style="color:aqua"> Contact</a>
 <a href= "Book.html" target="_blank" style="color:aqua;float: right;">Book now</a>
 
- <div class="search-box" style="float:right">
- 
-<div class="row"></div>
-<input type="text" id="input-box" placeholder="Search.." autocomplete="off">
-<div class="result-box"></div>
-<ul>
-<li>business english</li>
-<li>course</li>
-<li>technical training</li>
-<li>young learners</li>
-</ul>
 
-</div>
+
+
   <h1> <svg>
         <defs> 
             <linearGradient id="gradient" 
@@ -52,43 +44,9 @@ style="background-color:black;">
     </svg>BeSpellBee</h1>
 <center><img src="https://lh3.googleusercontent.com/drive-viewer/AKGpihaF3p0-waQo4aOVczCu_FZMQXIFPJmmwkeX-GUJQQLwSsTEIqdGywLkOCS-hW37Hcn8NKIs6dIoJ2zvY5yZAL0xr5v6d7ykHCI=s1600-v0" width="1000"></center>
 
-<script>
-let availableKeywords = [
-'HTML',
-'Business',
-'business',
-'course',
-'communication',
-'young learners',
-'technical',
-'technical training',]
-;
-const resultsBox = document.querySelector(".result-box");
-const inputBox = document.getElementById("input-box");
-inputBox.onkeyup = function(){
-let result = [];
-let input = inputBox.value;
-if(input.length){
-result = availableKeywords.filter((keyword)=>{
-return keyword.toLowerCase().includes(input.toLowerCase())
-});
-console.log(result);
-}
-display(result);
-}
 
-function display(result){
-const content = result.map((list)=>{
-return "<li onclick=selectInput(this)>" + list + "</li>";
-});
-resultsBox.innerHTML = "<ul>" + content.join('') + "</ul>";
-}
-function selectInput(list){
-inputBox.value = list.innerHTML
-}
-</script>
+</body>
+</html>
+
   </body>
   </html>
-  
-  
-  
