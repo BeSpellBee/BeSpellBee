@@ -25,46 +25,28 @@ style="background-color:black;">
 
 
 <script>
-	import { useState } from "react";
-import { FaSearch } from "react-icons/fa";
-
-import "./SearchBar.css";
-
-export const SearchBar = ({ setResults }) => {
-  const [input, setInput] = useState("");
-
-  const fetchData = (value) => {
-    fetch("https://")
-      .then((response) => response.json())
-      .then((json) => {
-        const results = json.filter((user) => {
-          return (
-            value &&
-            user &&
-            user.name &&
-            user.name.toLowerCase().includes(value)
-          );
-        });
-        setResults(results);
+	fetch('https://bespellbee.github.io/BeSpellBee/Services.html')
+.then(function (data) {
+  return data.text();
+})
+.then(function (html) {
+  document.getElementById('content').innerHTML = html;
+  var scripts = document.getElementById("content").querySelectorAll("script");
+  for (var i = 0; i < scripts.length; i++) {
+    if (scripts[i].innerText) {
+      eval(scripts[i].innerText);
+    } else {
+      fetch(scripts[i].src).then(function (data) {
+        data.text().then(function (r) {
+          eval(r);
+        })
       });
-  };
 
-  const handleChange = (value) => {
-    setInput(value);
-    fetchData(value);
-  };
-
-  return (
-    <div className="input-wrapper">
-      <FaSearch id="search-icon" />
-      <input
-        placeholder="Type to search..."
-        value={input}
-        onChange={(e) => handleChange(e.target.value)}
-      />
-    </div>
-  );
-};
+    }
+    // To not repeat the element
+    scripts[i].parentNode.removeChild(scripts[i]);
+  }
+});
 </script>
 
 
