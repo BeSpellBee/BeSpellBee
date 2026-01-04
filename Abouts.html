@@ -4,45 +4,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About</title>
     <style>
-        /* This container holds everything */
+        /* This container holds the background logo and text */
         .demo-wrap {
             position: relative;
-            overflow: hidden;
-            padding: 20px;
+            /* Negative margin-top pulls this whole section UP */
+            margin-top: -60px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 600px;
         }
 
-        /* This makes the large logo sit behind everything without taking up space */
         .demo-bg {
-            opacity: 0.15; /* Adjust transparency here */
             position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
             z-index: -1;
-            width: 600px;
-            height: auto;
+            opacity: 0.2; /* Keeps it transparent */
+            /* Sizes kept exactly as you requested */
+            width: 600px; 
+            height: 600px;
         }
 
-        /* Keeps your text and small logo on top */
         .demo-content {
             position: relative;
             z-index: 1;
+            width: 80%;
+            text-align: left;
+            font-weight: bold;
         }
 
         .top-logo {
-            display: block;
-            margin-bottom: 20px;
+            /* Kept exactly as you requested */
+            width: 250px;
+            height: 100px;
+            position: relative;
+            z-index: 2;
         }
     </style>
 </head>
 <body>
 
+<img src="images3/logo.png.png" class="top-logo" alt="Top Logo">
+
 <div class="demo-wrap">
-    <img class="demo-bg" src="images3/logo.png.png" alt="background logo" />
+    <img class="demo-bg" src="images3/logo.png.png" />
     
     <div class="demo-content">
-        <img src="images3/logo.png.png" width="250" height="100" class="top-logo">
-
         <p>
             BeSpellBee is an educational institution that offers a diverse range of training courses to <ins>professionals</ins>, <ins>students</ins> as well as <ins>job seekers</ins>. 
             We believe that success is within everyone's reach provided that sound teaching methods, relevant materials, professionalism and strong rapport are present.<br><br>
@@ -55,7 +61,6 @@
     </div>
 </div>
 
-<iframe src="services.html" style="border:ridge; border:dashed" align="right"></iframe>
-
 </body>
 </html>
+
