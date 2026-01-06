@@ -21,12 +21,6 @@ style="background-color:black;">
 <a href = "Rock-paper-scissors.html" target"_blank" style="color:aqua">French baccalaureate(English specialty)</a>
 
 
-	<div style="display: flex; justify-content: space-between; align-items: center;"
-		class="search-box">
-    <input type="text" id="courseInput" placeholder="Search (e.g. beginner, advanced...)">
-    <button onclick="executeSearch()">Search</button>
-</div>
-
 <script>
 function executeSearch() {
     var query = document.getElementById("courseInput").value.toLowerCase().trim();
@@ -52,7 +46,13 @@ document.getElementById("courseInput").addEventListener("keypress", function(eve
   }
 });
 </script>
+	
 <a href= "Book.html" target="_blank" style="color:aqua;float: right;">Book now</a>
+	<div style="display: flex; justify-content: space-between; align-items: center;"
+		class="search-box">
+    <input type="text" id="courseInput" placeholder="Search (e.g. beginner, advanced...)">
+    <button onclick="executeSearch()">Search</button>
+</div
 	
 	
 
@@ -114,6 +114,7 @@ document.getElementById("courseInput").addEventListener("keypress", function(eve
 
   </body>
   </html>
+
 
 
 
