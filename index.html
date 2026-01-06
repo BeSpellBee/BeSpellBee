@@ -49,11 +49,16 @@ document.getElementById("courseInput").addEventListener("keypress", function(eve
 	
 <a href= "Book.html" target="_blank" style="color:aqua;float: right;">Book now</a>
 	<br>
-	<div style="display: flex; justify-content: space-between; align-items: center;"
-		class="search-box">
-    <input type="text" id="courseInput" placeholder="Search (e.g. beginner, advanced...)">
-    <button onclick="executeSearch()">Search</button>
-</div
+	<div style="display: flex; justify-content: flex-end; align-items: center; gap: 15px;" class="search-box">
+    
+    <a href="Book.html" target="_blank" style="color:aqua; text-decoration: underline;">Book now</a>
+    
+    <div style="display: flex; gap: 5px;">
+        <input type="text" id="courseInput" placeholder="Search (e.g. beginner, advanced...)">
+        <button onclick="executeSearch()">Search</button>
+    </div>
+    
+</div>
 	
 	
 
@@ -115,6 +120,7 @@ document.getElementById("courseInput").addEventListener("keypress", function(eve
 
   </body>
   </html>
+
 
 
 
