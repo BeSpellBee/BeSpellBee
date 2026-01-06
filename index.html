@@ -21,16 +21,26 @@ style="background-color:black;">
 <a href = "Rock-paper-scissors.html" target"_blank" style="color:aqua">French baccalaureate(English specialty)</a>
 	
 
-    <div style="display: flex; gap: 5px;">
+   <br> 
+
+<div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin: 15px 0;">
+    
+    <div style="display: flex; gap: 8px; align-items: center;">
         <input type="text" id="courseInput" placeholder="Search (e.g. beginner...)" 
-               style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+               style="padding: 6px; border-radius: 4px; border: 1px solid #ccc; width: 200px;">
         <button onclick="executeSearch()" 
-                style="padding: 5px 15px; cursor: pointer; border-radius: 4px;">Search</button>
+                style="padding: 6px 12px; cursor: pointer; background-color: #f0f0f0; border: 1px solid #767676; border-radius: 4px;">
+            Search
+        </button>
     </div>
 
-    <div>
-        <a href="booking.html" style="color: #00ffff; text-decoration: underline; font-weight: bold;">Book now</a>
-    </div>
+    <a href="booking.html" style="color: #00ffff; font-weight: bold; text-decoration: underline; margin-right: 20px;">
+        Book now
+    </a>
+
+</div>
+
+<h1 style="color: cyan; margin-top: 10px;">BeSpellBee</h1>
 
 
 	<div class="search-box">
@@ -125,6 +135,7 @@ document.getElementById("courseInput").addEventListener("keypress", function(eve
 
   </body>
   </html>
+
 
 
 
