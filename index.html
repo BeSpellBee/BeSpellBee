@@ -21,31 +21,7 @@ style="background-color:black;">
 <a href = "Rock-paper-scissors.html" target"_blank" style="color:aqua">French baccalaureate(English specialty)</a>
 
 
-<script>
-function executeSearch() {
-    var query = document.getElementById("courseInput").value.toLowerCase().trim();
-    
-    // This links your keywords to the existing 'name' tags in your services page
-    if (query.includes("beginner")) {
-        window.location.href = "services.html#A1/A2/B1";
-    } 
-    else if (query.includes("advanced")) {
-        window.location.href = "services.html#B2";
-    } 
-    else if (query.includes("baccalaureate") || query.includes("preparation") || query.includes("bac")) {
-        window.location.href = "services.html#Bac";
-    } 
-    else {
-        alert("No match found. Try 'beginner', 'advanced', or 'baccalaureate'.");
-    }
-}
-	
-document.getElementById("courseInput").addEventListener("keypress", function(event) {
-  if (event.key === "Enter") {
-    executeSearch(); // This runs your search function automatically!
-  }
-});
-</script>
+
 	
 <a href= "Book.html" target="_blank" style="color:aqua;float: right;">Book now</a>
 	<br>
@@ -86,7 +62,31 @@ document.getElementById("courseInput").addEventListener("keypress", function(eve
   }
 });
 </script>
-
+<script>
+function executeSearch() {
+    var query = document.getElementById("courseInput").value.toLowerCase().trim();
+    
+    // This links your keywords to the existing 'name' tags in your services page
+    if (query.includes("beginner")) {
+        window.location.href = "services.html#A1/A2/B1";
+    } 
+    else if (query.includes("advanced")) {
+        window.location.href = "services.html#B2";
+    } 
+    else if (query.includes("baccalaureate") || query.includes("preparation") || query.includes("bac")) {
+        window.location.href = "services.html#Bac";
+    } 
+    else {
+        alert("No match found. Try 'beginner', 'advanced', or 'baccalaureate'.");
+    }
+}
+	
+document.getElementById("courseInput").addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    executeSearch(); // This runs your search function automatically!
+  }
+});
+</script>
 
   <h1> <svg>
         <defs> 
@@ -119,6 +119,7 @@ document.getElementById("courseInput").addEventListener("keypress", function(eve
 
   </body>
   </html>
+
 
 
 
