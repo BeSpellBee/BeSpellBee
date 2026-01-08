@@ -24,16 +24,19 @@ style="background-color:black;">
 
     <!-- Search FIRST -->
     <div style="display: flex; gap: 5px;">
-        <input type="text" id="courseInput" placeholder="Search (e.g. beginner, advanced...)">
-        <button onclick="executeSearch()">Search</button>
+        <input type="text" id="courseInput" placeholder="Search (e.g. beginner, advanced...)"
+		style=" padding: 8px 12px; border: 1px solid #444; border-radius: 6px;
+			background-color: #111; color: white; outline: none; transition: 0.2s; ">
+			<button onclick="executeSearch()"
+		 style=" padding: 8px 14px; background-color: #00ffff; color: #000; border: none; 
+				border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; ">
+				Search</button>
     </div>
 
     <!-- Book NOW SECOND -->
     <a href="Book.html" target="_blank" style="color:aqua;">Book now</a>
 
 </div>
-
-
 
 <script>
 	fetch('https://bespellbee.github.io/BeSpellBee/Services.html')
@@ -116,6 +119,7 @@ document.getElementById("courseInput").addEventListener("keypress", function(eve
 
   </body>
   </html>
+
 
 
 
