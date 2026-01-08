@@ -10,26 +10,43 @@
 
     <h2 style="text-align:center; color:aqua;">Book Your Lesson</h2>
 
-    <form>
+    <div style="
+    max-width: 450px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #111;
+    border-radius: 10px;
+    color: white;
+    font-family: Arial, sans-serif;
+">
+
+    <h2 style="text-align:center; color:aqua;">Book Your Lesson</h2>
+
+    <!-- FULL WORKING FORM -->
+    <form action="https://formsubmit.co/hendaharabii@gmail.com" method="POST">
+
+        <!-- Hidden settings -->
+        <input type="hidden" name="_subject" value="New Booking Request">
+        <input type="hidden" name="_captcha" value="false">
 
         <!-- Full Name -->
         <label>Full Name</label>
-        <input type="text" required
+        <input type="text" name="Full Name" required
             style="width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #444; background:#222; color:white;">
 
         <!-- Email -->
         <label>Email</label>
-        <input type="email" required
+        <input type="email" name="Email" required
             style="width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #444; background:#222; color:white;">
 
         <!-- Phone -->
         <label>Phone Number</label>
-        <input type="text" required
+        <input type="text" name="Phone" required
             style="width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #444; background:#222; color:white;">
 
         <!-- Course selection -->
         <label>Choose Course</label>
-        <select required
+        <select name="Course" required
             style="width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #444; background:#222; color:white;">
             <option value="">Select…</option>
             <option>B2 Exam Preparation</option>
@@ -39,7 +56,7 @@
 
         <!-- Payment method -->
         <label>Payment Method</label>
-        <select required
+        <select name="Payment Method" required
             style="width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #444; background:#222; color:white;">
             <option value="">Choose…</option>
             <option>e-Dinar</option>
@@ -70,3 +87,5 @@
 
     </form>
 </div>
+
+
