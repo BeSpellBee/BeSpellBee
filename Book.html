@@ -1,75 +1,72 @@
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
- <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-P6BJFG5B');</script>
-<!-- End Google Tag Manager -->
- <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-N3F5GM52DZ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<div style="
+    max-width: 450px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #111;
+    border-radius: 10px;
+    color: white;
+    font-family: Arial, sans-serif;
+">
 
-  gtag('config', 'G-N3F5GM52DZ');
-</script>
-<title> Book </title>
-<link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
-</head>
-<body >
- <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P6BJFG5B"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-<form action="https://formsubmit.co/d22e1aa7453f88164cfbd53fa7f62927" method="POST">
+    <h2 style="text-align:center; color:aqua;">Book Your Lesson</h2>
 
+    <form>
 
-<label for="username">Name</label>
-<input type="text" name="username" id="username"><br></br>
-<label for="lastname">Last name</label>
-<input type="text" name="lastname" id="lastname"><br></br>
-<label for="email">Email address</label>
-<input type="text" name="lastname" id="lastname"><br></br>
-<label for="phonenumber">Phone number</label>
-<input type="text" name="phonenumber" id="phonenumber"><br></br>
+        <!-- Full Name -->
+        <label>Full Name</label>
+        <input type="text" required
+            style="width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #444; background:#222; color:white;">
 
+        <!-- Email -->
+        <label>Email</label>
+        <input type="email" required
+            style="width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #444; background:#222; color:white;">
 
-<h3>Education level</h3>
-<label for="education1">High school</label>
-<input type="checkbox" name="education1" id="education1" value="high School"><br></br>
-<label for="education2">Baccalaureate Degree</label>
-<input type="checkbox" name="education2" id="education2" value="baccalaureate Degree"><br></br>
-<label for="education3">University level</label>
-<input type="checkbox" name="education3" id="education3" value="university level"><br></br>
-<label for="education4">License</label>
-<input type="checkbox" name="education4" id="education4" value="license"><br></br>
-<label for="education5">Bachelor</label>
-<input type="checkbox" name="education5" id="education5"value="bachelor"><br></br>
-<label for="education6">Masters</label>
-<input type="checkbox" name="education6" id="education6"value="masters"><br></br>
+        <!-- Phone -->
+        <label>Phone Number</label>
+        <input type="text" required
+            style="width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #444; background:#222; color:white;">
 
+        <!-- Course selection -->
+        <label>Choose Course</label>
+        <select required
+            style="width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #444; background:#222; color:white;">
+            <option value="">Select…</option>
+            <option>B2 Exam Preparation</option>
+            <option>A1/A2/B1 Levels</option>
+            <option>French Baccalaureate (English Specialty)</option>
+        </select>
 
-<h3>Job title</h3>
-<label for="student">Student</label>
-<input type="radio" name="student" id="student" value="student"><br></br>
-<label for="unemployed">Unemployed</label>
-<input type="radio" name="unemployed" id="unemployed"value="unemployed"><br></br>
-<label for "employee">Employee</label>
-<input type="radio" name="employee" id="employee"value="empolyee"><br></br>
+        <!-- Payment method -->
+        <label>Payment Method</label>
+        <select required
+            style="width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #444; background:#222; color:white;">
+            <option value="">Choose…</option>
+            <option>e-Dinar</option>
+            <option>Bank Transfer</option>
+            <option>Cash</option>
+            <option>Other</option>
+        </select>
 
+        <!-- Submit -->
+        <button type="submit"
+            style="
+                width:100%;
+                padding:12px;
+                margin-top:15px;
+                background:aqua;
+                color:black;
+                border:none;
+                border-radius:6px;
+                font-weight:bold;
+                cursor:pointer;
+                transition:0.2s;
+            "
+            onmouseover="this.style.backgroundColor='#00d4d4'"
+            onmouseout="this.style.backgroundColor='aqua'"
+        >
+            Submit Booking
+        </button>
 
-<label for="course"> The training you intend to take</label>
-<input type="text" name="course" id="course"><br></br>
-<label for="start date">Starting date</label>
-<input type="text" name="start date" id="start date"><br></br>
-<label for="payment">Payment mode</label>
-<input type="text" name="payment" id="payment" ><br></br>
-
-<input type="submit" value="submit">
-</form>
-</body>
-</html>
+    </form>
+</div>
