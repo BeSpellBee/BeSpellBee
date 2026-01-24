@@ -2,58 +2,144 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BAC Chatbot Demo</title>
+    <title>BAC French Art & Literature Chatbot</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        #chatbox { width: 100%; height: 300px; border: 1px solid #ccc; padding: 10px; overflow-y: scroll; }
-        #user-input { width: 80%; padding: 10px; }
-        #send-btn { padding: 10px; }
+        body { 
+            font-family: 'Georgia', serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        h1 { 
+            color: #2c3e50; 
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        #chatbox { 
+            width: 100%; 
+            height: 400px; 
+            border: 1px solid #bdc3c7; 
+            padding: 15px; 
+            overflow-y: scroll;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        #user-input { 
+            width: 75%; 
+            padding: 12px; 
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        #send-btn { 
+            padding: 12px 24px; 
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        #send-btn:hover { background-color: #2980b9; }
+        .user-msg { color: #2c3e50; margin: 10px 0; }
+        .bot-msg { 
+            color: #27ae60; 
+            margin: 10px 0;
+            background-color: #ecf9f3;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #2ecc71;
+        }
+        .thinking { 
+            color: #7f8c8d; 
+            font-style: italic; 
+        }
     </style>
 </head>
 <body>
-    <h1>BAC Chatbot Demo</h1>
-    <div id="chatbox"></div>
-    <input type="text" id="user-input" placeholder="Type your message">
-    <button id="send-btn">Send</button>
+    <h1>🤖 BAC French Art & Literature Assistant</h1>
+    <div id="chatbox">
+        <div class="bot-msg">
+            <strong>Assistant:</strong> Welcome! I'm here to help with BAC French literature and art analysis. 
+            Ask me about authors, works, or request analysis in the proper exam format.
+        </div>
+    </div>
+    <div>
+        <input type="text" id="user-input" placeholder="Ask about Victor Hugo, Baudelaire, Monet...">
+        <button id="send-btn">Send</button>
+    </div>
 
     <script>
         const chatbox = document.getElementById('chatbox');
         const input = document.getElementById('user-input');
         const sendBtn = document.getElementById('send-btn');
 
-        const HEROKU_URL = "https://your-app-name.herokuapp.com/chat"; // ← replace this
+        // This will work when Flask serves the HTML
+        const API_URL = "/chat";
 
-        function appendMessage(sender, text) {
-            const p = document.createElement('p');
-            p.innerHTML = `<strong>${sender}:</strong> ${text}`;
-            chatbox.appendChild(p);
+        function appendMessage(sender, text, isBot = false) {
+            const div = document.createElement('div');
+            div.className = isBot ? 'bot-msg' : 'user-msg';
+            div.innerHTML = `<strong>${sender}:</strong> ${text}`;
+            chatbox.appendChild(div);
             chatbox.scrollTop = chatbox.scrollHeight;
         }
 
-        sendBtn.addEventListener('click', async () => {
+        async function sendMessage() {
             const message = input.value.trim();
             if (!message) return;
 
-            appendMessage("You", message);
+            appendMessage("You", message, false);
             input.value = '';
+            input.disabled = true;
+            sendBtn.disabled = true;
+
+            // Show "thinking" message
+            const thinkingDiv = document.createElement('div');
+            thinkingDiv.className = 'bot-msg thinking';
+            thinkingDiv.innerHTML = '<strong>Assistant:</strong> Thinking...';
+            chatbox.appendChild(thinkingDiv);
 
             try {
-                const response = await fetch(HEROKU_URL, {
+                const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message })
+                    body: JSON.stringify({ message: message })
                 });
-                const data = await response.json();
-                appendMessage("Bot", data.reply);
+                
+                // Remove thinking message
+                chatbox.removeChild(thinkingDiv);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    appendMessage("Assistant", data.reply, true);
+                } else {
+                    const error = await response.json();
+                    appendMessage("Assistant", `Error: ${error.error || 'Server error'}`, true);
+                }
             } catch (err) {
-                appendMessage("Bot", "Error: Could not reach server.");
+                chatbox.removeChild(thinkingDiv);
+                appendMessage("Assistant", "Error: Could not connect to server. Please try again.", true);
                 console.error(err);
             }
+
+            input.disabled = false;
+            sendBtn.disabled = false;
+            input.focus();
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
         });
 
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendBtn.click();
-        });
+        // Focus input on load
+        input.focus();
     </script>
 </body>
 </html>
