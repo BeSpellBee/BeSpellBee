@@ -58,6 +58,13 @@
             color: #7f8c8d; 
             font-style: italic; 
         }
+        .error { 
+            color: #e74c3c; 
+            background-color: #fde8e8;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #e74c3c;
+        }
     </style>
 </head>
 <body>
@@ -95,4 +102,105 @@
         <button id="send-btn">Send</button>
     </div>
 
-    <!-- REST OF JAVASCRIPT STAYS THE SAME -->
+    <script>
+        // Get HTML elements
+        const chatbox = document.getElementById('chatbox');
+        const input = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        
+        // Your Render API URL - MAKE SURE THIS IS CORRECT!
+        const API_URL = "https://bac-chatbot-api.onrender.com/chat";
+        
+        // Function to add messages to chatbox
+        function appendMessage(sender, text, isBot = false, isError = false) {
+            const div = document.createElement('div');
+            if (isError) {
+                div.className = 'error';
+            } else {
+                div.className = isBot ? 'bot-msg' : 'user-msg';
+            }
+            div.innerHTML = `<strong>${sender}:</strong> ${text}`;
+            chatbox.appendChild(div);
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+        
+        // Function to send message to API
+        async function sendMessage() {
+            const message = input.value.trim();
+            if (!message) return;
+            
+            // Show user's message
+            appendMessage("You", message, false);
+            input.value = '';
+            input.disabled = true;
+            sendBtn.disabled = true;
+            
+            // Show "thinking" indicator
+            const thinkingDiv = document.createElement('div');
+            thinkingDiv.className = 'bot-msg thinking';
+            thinkingDiv.innerHTML = '<strong>Assistant:</strong> Thinking...';
+            chatbox.appendChild(thinkingDiv);
+            
+            try {
+                console.log('🔄 Sending to API:', message);
+                
+                // Send request to your Flask API
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message
+                    })
+                });
+                
+                console.log('📥 Response status:', response.status);
+                
+                // Remove thinking indicator
+                chatbox.removeChild(thinkingDiv);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('✅ API response:', data);
+                    appendMessage("Assistant", data.reply, true);
+                } else {
+                    // Handle API errors
+                    const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+                    console.error('❌ API error:', error);
+                    appendMessage("Assistant", `Error: ${error.error || 'Server error'}`, true, true);
+                }
+            } catch (error) {
+                // Handle network errors
+                console.error('❌ Network error:', error);
+                chatbox.removeChild(thinkingDiv);
+                appendMessage("Assistant", "Error: Could not connect to the server. Please check your internet connection.", true, true);
+            }
+            
+            // Re-enable input and button
+            input.disabled = false;
+            sendBtn.disabled = false;
+            input.focus();
+        }
+        
+        // Event listeners
+        sendBtn.addEventListener('click', sendMessage);
+        
+        input.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Focus input on page load
+        input.focus();
+        
+        // Test API connection on page load
+        console.log('🔌 Testing API connection...');
+        fetch(API_URL.replace('/chat', '/health'))
+            .then(response => response.json())
+            .then(data => console.log('✅ API Health:', data))
+            .catch(error => console.error('❌ API Health check failed:', error));
+    </script>
+</body>
+</html>
