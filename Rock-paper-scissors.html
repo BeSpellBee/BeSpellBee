@@ -79,7 +79,7 @@
         const sendBtn = document.getElementById('send-btn');
 
         // This will work when Flask serves the HTML
-        const API_URL = "/chat";
+        const API_URL = "https://bac-chatbot-api.onrender.com/chat";
 
         function appendMessage(sender, text, isBot = false) {
             const div = document.createElement('div');
@@ -143,3 +143,4 @@
     </script>
 </body>
 </html>
+
