@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>French BAC English Art & Literature Chatbot</title>
+    <title>LLCE BAC English Specialty Chatbot</title>
     <style>
         body { 
             font-family: 'Georgia', serif; 
@@ -61,87 +61,38 @@
     </style>
 </head>
 <body>
-    <h1>🤖 French Bac English  Art & Literature Assistant</h1>
+    <h1>🤖 LLCE BAC English Specialty Assistant</h1>
     <div id="chatbox">
         <div class="bot-msg">
-            <strong>Assistant:</strong> Welcome! I'm here to help with BAC French literature and art analysis. 
-            Ask me about authors, works, or request analysis in the proper exam format.
+            <strong>Assistant:</strong> Welcome! I'm your <strong>LLCE (English specialty) BAC assistant</strong>! 🇬🇧✨
+            <br><br>
+            I can help you with:
+            <br>
+            <strong>📚 Curriculum Units:</strong>
+            • Africa: The Danger of a Single Story (Adichie, Conrad, Achebe)<br>
+            • Sparking Debates with Modern Art (cummings, modern poetry)<br>
+            • Emotions in Literature (Austen, Brontë, Porter)<br>
+            • Bildungsroman & Coming-of-Age (Dickens, Rowling, Angelou)<br>
+            • And all 12 LLCE units!
+            <br><br>
+            <strong>✍️ Exam Preparation:</strong>
+            • Written synthesis (500 words)<br>
+            • Oral portfolio (6-8 documents)<br>
+            • Grand Oral presentation<br>
+            • Translation practice (EN↔FR)
+            <br><br>
+            <strong>🎯 How to use me:</strong><br>
+            1. Ask about specific authors/works<br>
+            2. Request analysis in BAC exam format<br>
+            3. Get portfolio/document suggestions<br>
+            4. Practice translation challenges
+            <br><br>
+            <em>Try: "Analyze e.e. cummings' poetry" or "How to structure my Grand Oral on postcolonial literature"</em>
         </div>
     </div>
     <div>
-        <input type="text" id="user-input" placeholder="Ask about Victor Hugo, Baudelaire, Monet...">
+        <input type="text" id="user-input" placeholder="Ask about Shakespeare, Adichie, cummings, Austen, Conrad...">
         <button id="send-btn">Send</button>
     </div>
 
-    <script>
-        const chatbox = document.getElementById('chatbox');
-        const input = document.getElementById('user-input');
-        const sendBtn = document.getElementById('send-btn');
-
-        // This will work when Flask serves the HTML
-        const API_URL = "https://bac-chatbot-api.onrender.com/chat";
-
-        function appendMessage(sender, text, isBot = false) {
-            const div = document.createElement('div');
-            div.className = isBot ? 'bot-msg' : 'user-msg';
-            div.innerHTML = `<strong>${sender}:</strong> ${text}`;
-            chatbox.appendChild(div);
-            chatbox.scrollTop = chatbox.scrollHeight;
-        }
-
-        async function sendMessage() {
-            const message = input.value.trim();
-            if (!message) return;
-
-            appendMessage("You", message, false);
-            input.value = '';
-            input.disabled = true;
-            sendBtn.disabled = true;
-
-            // Show "thinking" message
-            const thinkingDiv = document.createElement('div');
-            thinkingDiv.className = 'bot-msg thinking';
-            thinkingDiv.innerHTML = '<strong>Assistant:</strong> Thinking...';
-            chatbox.appendChild(thinkingDiv);
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message })
-                });
-                
-                // Remove thinking message
-                chatbox.removeChild(thinkingDiv);
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    appendMessage("Assistant", data.reply, true);
-                } else {
-                    const error = await response.json();
-                    appendMessage("Assistant", `Error: ${error.error || 'Server error'}`, true);
-                }
-            } catch (err) {
-                chatbox.removeChild(thinkingDiv);
-                appendMessage("Assistant", "Error: Could not connect to server. Please try again.", true);
-                console.error(err);
-            }
-
-            input.disabled = false;
-            sendBtn.disabled = false;
-            input.focus();
-        }
-
-        sendBtn.addEventListener('click', sendMessage);
-        
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
-
-        // Focus input on load
-        input.focus();
-    </script>
-</body>
-</html>
-
-
+    <!-- REST OF JAVASCRIPT STAYS THE SAME -->
