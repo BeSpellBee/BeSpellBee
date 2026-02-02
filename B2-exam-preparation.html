@@ -59,7 +59,7 @@
     <iframe src="https://app.lumi.education/api/v1/run/ahsD6O/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
 
     <script src="https://app.Lumi.education/api/v1/h5p/core/js/h5p-resizer.js" charset="UTF-8"></script>
-     <button id="topBtn" title="Go to top" style="
+    <button id="topBtn" title="Go to top" style="
     display: none; 
     position: fixed; 
     bottom: 20px; 
@@ -71,11 +71,30 @@
     background-color: #2196F3; 
     color: white; 
     cursor: pointer; 
-    padding: 15px; 
+    padding: 0;
+    line-height: 50px;
     border-radius: 50%;
     width: 50px;
     height: 50px;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
 ">↑</button>
+
+<script>
+    var mybutton = document.getElementById("topBtn");
+
+    // Show the button when scrolling down
+    window.onscroll = function() {
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    };
+
+    // Scroll to top when clicked
+    mybutton.onclick = function() {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    };
+</script>
 </body>
 </html>
