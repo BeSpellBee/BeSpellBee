@@ -1,98 +1,625 @@
-    <html>
+<html>
 <head>
     <title>B2 exam preparation</title>
     <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Base page styles – neutral background, no flex interference */
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f0f8ff; /* light background for the page */
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+        /* All game styles are now scoped under .relative-game */
+        .relative-game {
+            all: initial; /* reset inherited styles */
+            display: block;
+            max-width: 1300px;
+            margin: 20px auto;
+        }
+        .relative-game * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+        .relative-game .game-container {
+            max-width: 1300px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(6px);
+            border-radius: 48px;
+            padding: 24px;
+            box-shadow: 0 30px 45px rgba(0, 0, 0, 0.5), inset 0 2px 5px rgba(255, 255, 255, 0.3);
+            border: 2px solid #FFD700;
+        }
+        .relative-game h1 {
+            text-align: center;
+            margin: 0 0 20px 0;
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #FFD700;
+            text-shadow: 4px 4px 0 #000000, 7px 7px 0 rgba(0,0,0,0.3);
+            word-break: break-word;
+        }
+        .relative-game .board {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        .relative-game .board-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .relative-game .category-header {
+            background: #FFFFFF;
+            border: 3px solid #FFD700;
+            border-radius: 20px 20px 8px 8px;
+            padding: 15px 5px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            color: #1E90FF;
+            box-shadow: inset 0 -3px 0 #FFD700, 0 8px 0 #000000;
+            letter-spacing: 1px;
+            width: 20%;
+            min-width: 150px;
+            word-break: break-word;
+            line-height: 1.3;
+        }
+        .relative-game .cell {
+            background: #1E90FF;
+            border: 3px solid #FFD700;
+            border-radius: 16px;
+            width: 20%;
+            min-width: 150px;
+            aspect-ratio: 1 / 0.9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.3rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            text-shadow: 3px 3px 0 #000000;
+            box-shadow: 0 10px 0 #104E8B, inset 0 -3px 0 #FFD700;
+            cursor: pointer;
+            transition: all 0.08s linear;
+            user-select: none;
+        }
+        .relative-game .cell.used {
+            background: #87CEEB;
+            border-color: #A9A9A9;
+            color: #000000;
+            text-shadow: 2px 2px 0 #FFFFFF;
+            box-shadow: 0 5px 0 #5F9EA0, inset 0 -2px 0 #A9A9A9;
+            transform: translateY(5px);
+            cursor: not-allowed;
+            pointer-events: none;
+            font-size: 2.8rem;
+        }
+        .relative-game .cell:active:not(.used) {
+            transform: translateY(7px);
+            box-shadow: 0 3px 0 #104E8B;
+        }
+        .relative-game .question-panel {
+            background: #000000;
+            border: 4px solid #FFD700;
+            border-radius: 50px;
+            padding: 25px 30px;
+            color: #FFFFFF;
+            box-shadow: inset 0 0 15px #1E90FF, 0 15px 0 #000000;
+        }
+        .relative-game .question-text {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 0 0 15px 0;
+            line-height: 1.4;
+            text-shadow: 2px 2px 0 #1E90FF;
+        }
+        .relative-game .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin: 25px 0 20px;
+            justify-content: center;
+        }
+        .relative-game .option-btn {
+            background: #FFD700;
+            border: none;
+            border-radius: 60px;
+            padding: 16px 28px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #000000;
+            box-shadow: 0 6px 0 #B8860B, 0 8px 12px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: 0.07s;
+            min-width: 140px;
+            border: 2px solid #FFFFFF;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .relative-game .option-btn.selected {
+            background: #1E90FF;
+            color: #FFFFFF;
+            box-shadow: 0 3px 0 #104E8B, 0 8px 12px rgba(0,0,0,0.3);
+            transform: translateY(3px);
+            border-color: #FFD700;
+        }
+        .relative-game .option-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #B8860B;
+        }
+        .relative-game .option-btn:disabled {
+            opacity: 0.5;
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #8B6910;
+            pointer-events: none;
+        }
+        .relative-game .submit-btn {
+            background: #FFD700;
+            border: none;
+            border-radius: 40px;
+            padding: 16px 40px;
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #FFFFFF;
+            box-shadow: 0 8px 0 #B8860B, 0 8px 15px black;
+            cursor: pointer;
+            margin: 15px auto 10px;
+            transition: 0.07s;
+            border: 2px solid #FFFFFF;
+            display: inline-block;
+        }
+        .relative-game .submit-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #B8860B;
+        }
+        .relative-game .feedback {
+            background: #000000;
+            border-radius: 40px;
+            padding: 15px 25px;
+            font-size: 1.3rem;
+            border-left: 12px solid #FFD700;
+            margin-top: 20px;
+            color: #FFFFFF;
+            box-shadow: inset 0 0 10px #1E90FF;
+        }
+        .relative-game .feedback.correct {
+            background: #87CEEB;
+            border-left-color: #1E90FF;
+            color: #000000;
+        }
+        .relative-game .feedback.incorrect {
+            border-left-color: #FF4500;
+            background: #000000;
+            color: #FFFFFF;
+        }
+        .relative-game .explanation {
+            font-size: 1.1rem;
+            margin-top: 10px;
+            color: #1E90FF;
+            font-style: italic;
+        }
+        .relative-game .feedback.correct .explanation {
+            color: #000000;
+        }
+        .relative-game .reset-btn {
+            background: #FFD700;
+            border: none;
+            border-radius: 40px;
+            padding: 14px 35px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #000000;
+            box-shadow: 0 8px 0 #B8860B, 0 6px 15px black;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: 0.07s;
+            width: fit-content;
+            border: 2px solid #FFFFFF;
+        }
+        .relative-game .reset-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #B8860B;
+        }
+        .relative-game .footer {
+            display: flex;
+            justify-content: center;
+        }
+        .relative-game .used-mark {
+            font-size: 2.2rem;
+        }
+        .relative-game .action-row {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+    </style>
 </head>
 <body>
 
-     <center><h1 style="font-size:20px"><b>Mixed conditionals</b></h1></center>
-    
-  
-    
+    <center><h1 style="font-size:20px"><b>Mixed conditionals</b></h1></center>
+    <center><h1 style="font-size:20px"><b>Relative clauses</b></h1></center>
 
-        <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-    
-        <div style="width: 100%; height: 8px; background-color: #e0e0e0; margin: 20px 0; border-radius: 4px;">
-        <div style="width: 25%; height: 100%; background-color: #2196F3; border-radius: 4px;"></div>
+    <!-- Relative Clauses Jeopardy Game (isolated) -->
+    <div class="relative-game">
+        <div class="game-container">
+            <h1>RELATIVE CLAUSES JEOPARDY</h1>
+            <div id="jeopardyBoard" class="board"></div>
+            <div class="question-panel" id="questionPanel">
+                <div class="question-text" id="questionDisplay">✨ Select a value on the board</div>
+                <div class="options" id="optionsContainer"></div>
+                <div class="action-row">
+                    <button class="submit-btn" id="submitAnswerBtn">✅ CHECK ANSWER</button>
+                </div>
+                <div class="feedback" id="feedbackArea">
+                    <span id="feedbackMessage">Select options and click CHECK</span>
+                    <div class="explanation" id="explanationMessage"></div>
+                </div>
+            </div>
+            <div class="footer">
+                <button class="reset-btn" id="resetGameBtn">↻ RESTART GAME</button>
+            </div>
         </div>
-   
-     <center><h1 style="font-size:20px"><b>The future perfect/The future continuous</b></h1></center>
-        <iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-    
-        <div style="width: 100%; height: 8px; background-color: #e0e0e0; margin: 20px 0; border-radius: 4px;">
+    </div>
+
+    <script>
+    (function() {
+        const categories = [
+            { name: "NON-<br>IDENTIFYING" },
+            { name: "IDENTIFYING" },
+            { name: "WHOSE & WHOM" },
+            { name: "MIXED CHALLENGES" }
+        ];
+
+        const questionsData = [
+            // NON-IDENTIFYING (5)
+            { category: 0, points: 100,
+              question: "My sister, ____ lives in London, is a data analyst.",
+              options: ["A) that", "B) who", "C) which"],
+              correct: ["B"],
+              explanation: "Non‑identifying clause (with commas): use 'who' for people. 'That' is not used in non‑identifying clauses." },
+            { category: 0, points: 200,
+              question: "Elon Musk, ____ companies include Tesla and SpaceX, is a controversial figure.",
+              options: ["A) who", "B) whose", "C) that"],
+              correct: ["B"],
+              explanation: "Possessive 'whose' shows the companies belong to him. Non‑identifying." },
+            { category: 0, points: 300,
+              question: "The Eiffel Tower, ____ is in Paris, was built in 1889.",
+              options: ["A) that", "B) which", "C) who"],
+              correct: ["B"],
+              explanation: "Non‑identifying clause: use 'which' for things (never 'that' here)." },
+            { category: 0, points: 400,
+              question: "My boss, ____ I respect a lot, is leaving the company.",
+              options: ["A) who", "B) whom", "C) which"],
+              correct: ["A","B"],
+              explanation: "Object of 'respect'. Formal = whom, everyday = who. Both acceptable in non‑identifying." },
+            { category: 0, points: 500,
+              question: "The film 'Oppenheimer,' ____ won many Oscars, was a huge success.",
+              options: ["A) that", "B) which", "C) which it"],
+              correct: ["B"],
+              explanation: "Non‑identifying: only 'which' is correct. 'That' is impossible, 'which it' is redundant." },
+
+            // IDENTIFYING (5) – NO HINTS
+            { category: 1, points: 100,
+              question: "The smartphone ____ I bought last week has a fantastic camera.",
+              options: ["A) that/which", "B) (no pronoun)", "C) who"],
+              correct: ["A","B"],
+              explanation: "IDENTIFYING + object → both a pronoun ('that'/'which') and omission are correct." },
+            { category: 1, points: 200,
+              question: "The new restaurant ____ opened on Main Street is already fully booked.",
+              options: ["A) that/which", "B) (no pronoun)", "C) who"],
+              correct: ["A"],
+              explanation: "IDENTIFYING + subject → the pronoun cannot be omitted. 'That' or 'which' are correct." },
+            { category: 1, points: 300,
+              question: "The woman ____ lives next door is a doctor.",
+              options: ["A) who/that", "B) (no pronoun)", "C) which"],
+              correct: ["A"],
+              explanation: "IDENTIFYING + subject (person) → 'who' or 'that' are correct, but cannot omit." },
+            { category: 1, points: 400,
+              question: "The book ____ she gave me for my birthday is a bestseller.",
+              options: ["A) that/which", "B) (no pronoun)", "C) who"],
+              correct: ["A","B"],
+              explanation: "IDENTIFYING + object → pronoun ('that'/'which') OR omission – both correct." },
+            { category: 1, points: 500,
+              question: "The artist ____ I was telling you about is very talented.",
+              options: ["A) who/that", "B) (no pronoun)", "C) which"],
+              correct: ["A","B"],
+              explanation: "IDENTIFYING + object (person) → 'who'/'that' or omission are all correct." },
+
+            // WHOSE & WHOM (5)
+            { category: 2, points: 100,
+              question: "I have a friend ____ father is a famous chef.",
+              options: ["A) who's", "B) whose", "C) who"],
+              correct: ["B"],
+              explanation: "Possession requires 'whose'. 'Who's' = who is/has." },
+            { category: 2, points: 200,
+              question: "The company, ____ CEO just resigned, is facing a financial crisis.",
+              options: ["A) which", "B) whose", "C) that"],
+              correct: ["B"],
+              explanation: "Non‑identifying + possession: use 'whose'." },
+            { category: 2, points: 300,
+              question: "That's the musician about ____ I was reading an article.",
+              options: ["A) who", "B) whom", "C) which"],
+              correct: ["B"],
+              explanation: "Preposition before the pronoun → formal 'whom' is required." },
+            { category: 2, points: 400,
+              question: "The people ____ car was stolen have called the police.",
+              options: ["A) who", "B) whose", "C) which"],
+              correct: ["B"],
+              explanation: "Possession (their car) → only 'whose' works." },
+            { category: 2, points: 500,
+              question: "The person to ____ you should send the report is Mr. Jones.",
+              options: ["A) who", "B) whom", "C) that"],
+              correct: ["B"],
+              explanation: "Preposition 'to' before the gap → formal object requires 'whom'." },
+
+            // MIXED CHALLENGES (5) – two blanks
+            { category: 3, points: 100,
+              question: "The new CEO, ____ graduated from Harvard, is the person ____ we should hire.",
+              options: ["A) who / who", "B) who / that", "C) who / (no pronoun)", "D) which / who", "E) that / whom"],
+              correct: ["A","B","C"],
+              explanation: "First blank (non‑identifying, person) → only 'who'. Second blank (identifying, object, person) → 'who', 'that', or omission." },
+            { category: 3, points: 200,
+              question: "My laptop, ____ I bought last year, has a feature ____ allows face recognition.",
+              options: ["A) which / which", "B) which / that", "C) that / which", "D) (no pronoun) / that", "E) which / (no pronoun)"],
+              correct: ["A","B"],
+              explanation: "First blank (non‑identifying, thing) → only 'which'. Second blank (identifying, subject, thing) → 'which' or 'that' (no omission)." },
+            { category: 3, points: 300,
+              question: "The artist, ____ paintings are famous, is someone ____ I admire.",
+              options: ["A) whose / who", "B) whose / that", "C) whose / (no pronoun)", "D) who's / who", "E) which / whom"],
+              correct: ["A","B","C"],
+              explanation: "First blank (non‑identifying, possessive) → only 'whose'. Second blank (identifying, object, person) → 'who', 'that', or omission." },
+            { category: 3, points: 400,
+              question: "The house, ____ was built in 1900, has a garden ____ is full of roses.",
+              options: ["A) which / which", "B) which / that", "C) that / which", "D) which / (no pronoun)", "E) (no pronoun) / that"],
+              correct: ["A","B"],
+              explanation: "First blank (non‑identifying, thing) → only 'which'. Second blank (identifying, subject, thing) → 'which' or 'that' (no omission)." },
+            { category: 3, points: 500,
+              question: "The professor, ____ I respect deeply, wrote a book ____ became a bestseller.",
+              options: ["A) who / which", "B) who / that", "C) whom / which", "D) whom / that", "E) that / which"],
+              correct: ["A","B","C","D"],
+              explanation: "First blank (non‑identifying, object, person) → 'who' (informal) or 'whom' (formal). Second blank (identifying, subject, thing) → 'which' or 'that'." }
+        ];
+
+        let usedCells = {};
+        let currentCellKey = null;
+        let currentQuestion = null;
+        let selectedOptions = [];
+
+        const boardDiv = document.getElementById('jeopardyBoard');
+        const questionDisplay = document.getElementById('questionDisplay');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const submitBtn = document.getElementById('submitAnswerBtn');
+        const feedbackMessage = document.getElementById('feedbackMessage');
+        const explanationMessage = document.getElementById('explanationMessage');
+        const feedbackArea = document.getElementById('feedbackArea');
+
+        function renderBoard() {
+            boardDiv.innerHTML = '';
+            const headerRow = document.createElement('div');
+            headerRow.className = 'board-row';
+            categories.forEach(cat => {
+                const header = document.createElement('div');
+                header.className = 'category-header';
+                header.innerHTML = cat.name;
+                headerRow.appendChild(header);
+            });
+            boardDiv.appendChild(headerRow);
+
+            const pointValues = [100, 200, 300, 400, 500];
+            for (let rowIdx = 0; rowIdx < pointValues.length; rowIdx++) {
+                const row = document.createElement('div');
+                row.className = 'board-row';
+                const pts = pointValues[rowIdx];
+                for (let catIdx = 0; catIdx < categories.length; catIdx++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    const cellKey = `${catIdx}-${pts}`;
+                    cell.dataset.cat = catIdx;
+                    cell.dataset.points = pts;
+                    cell.dataset.key = cellKey;
+
+                    if (usedCells[cellKey]) {
+                        cell.classList.add('used');
+                        cell.innerHTML = '<span class="used-mark">⬇️<br>HOLE</span>';
+                    } else {
+                        cell.innerText = pts;
+                    }
+
+                    cell.addEventListener('click', onCellClick);
+                    row.appendChild(cell);
+                }
+                boardDiv.appendChild(row);
+            }
+        }
+
+        function onCellClick(e) {
+            const cell = e.currentTarget;
+            if (cell.classList.contains('used')) return;
+
+            const catIdx = cell.dataset.cat;
+            const points = parseInt(cell.dataset.points);
+
+            const q = questionsData.find(qd => qd.category === parseInt(catIdx) && qd.points === points);
+            if (!q) {
+                alert('Question data missing');
+                return;
+            }
+
+            currentCellKey = `${catIdx}-${points}`;
+            currentQuestion = q;
+            selectedOptions = [];
+
+            questionDisplay.innerText = q.question;
+            optionsContainer.innerHTML = '';
+            q.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = optText;
+                btn.dataset.optionLetter = optText[0];
+                btn.addEventListener('click', toggleOption);
+                optionsContainer.appendChild(btn);
+            });
+
+            feedbackMessage.innerText = 'Select the correct option(s) and click CHECK';
+            explanationMessage.innerText = '';
+            feedbackArea.className = 'feedback';
+            submitBtn.disabled = false;
+        }
+
+        function toggleOption(e) {
+            const btn = e.currentTarget;
+            const letter = btn.dataset.optionLetter;
+            if (btn.classList.contains('selected')) {
+                btn.classList.remove('selected');
+                selectedOptions = selectedOptions.filter(l => l !== letter);
+            } else {
+                btn.classList.add('selected');
+                selectedOptions.push(letter);
+            }
+        }
+
+        function onSubmit() {
+            if (!currentQuestion) {
+                feedbackMessage.innerText = '⚠️ First select a question from the board.';
+                return;
+            }
+
+            const selectedSorted = [...selectedOptions].sort();
+            const correctSorted = [...currentQuestion.correct].sort();
+
+            const isCorrect = (selectedSorted.length === correctSorted.length) &&
+                              selectedSorted.every((val, i) => val === correctSorted[i]);
+
+            if (currentCellKey) {
+                usedCells[currentCellKey] = true;
+            }
+
+            const allOpts = document.querySelectorAll('.option-btn');
+            allOpts.forEach(btn => btn.disabled = true);
+            submitBtn.disabled = true;
+
+            feedbackArea.classList.remove('correct', 'incorrect');
+            if (isCorrect) {
+                feedbackMessage.innerText = '✅ SAFE! You chose exactly the right answers. You move forward.';
+                feedbackArea.classList.add('correct');
+            } else {
+                feedbackMessage.innerText = '❌ OH NO! You fell down a hole (wrong selection).';
+                feedbackArea.classList.add('incorrect');
+            }
+            explanationMessage.innerText = currentQuestion.explanation;
+
+            renderBoard();
+        }
+
+        function resetGame() {
+            usedCells = {};
+            currentQuestion = null;
+            currentCellKey = null;
+            selectedOptions = [];
+            questionDisplay.innerText = '✨ Select a value on the board';
+            optionsContainer.innerHTML = '';
+            feedbackMessage.innerText = 'Select options and click CHECK';
+            explanationMessage.innerText = '';
+            feedbackArea.className = 'feedback';
+            submitBtn.disabled = false;
+            renderBoard();
+        }
+
+        submitBtn.addEventListener('click', onSubmit);
+        document.getElementById('resetGameBtn').addEventListener('click', resetGame);
+
+        renderBoard();
+    })();
+    </script>
+
+    <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+
+    <div style="width: 100%; height: 8px; background-color: #e0e0e0; margin: 20px 0; border-radius: 4px;">
         <div style="width: 25%; height: 100%; background-color: #2196F3; border-radius: 4px;"></div>
-        </div>
+    </div>
+
+    <center><h1 style="font-size:20px"><b>The future perfect/The future continuous</b></h1></center>
+    <iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+
+    <div style="width: 100%; height: 8px; background-color: #e0e0e0; margin: 20px 0; border-radius: 4px;">
+        <div style="width: 25%; height: 100%; background-color: #2196F3; border-radius: 4px;"></div>
+    </div>
 
     <center><h1 style="font-size:20px"><b>The present perfect/The present perfect progressive</b></h1></center>
-         <iframe src="https://app.lumi.education/api/v1/run/NqzFpP/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-    
-         <div style="width: 100%; height: 8px; background-color: #e0e0e0; margin: 20px 0; border-radius: 4px;">
-         <div style="width: 25%; height: 100%; background-color: #2196F3; border-radius: 4px;"></div>
-         </div>
+    <iframe src="https://app.lumi.education/api/v1/run/NqzFpP/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
 
-   
+    <div style="width: 100%; height: 8px; background-color: #e0e0e0; margin: 20px 0; border-radius: 4px;">
+        <div style="width: 25%; height: 100%; background-color: #2196F3; border-radius: 4px;"></div>
+    </div>
 
     <center><h1 style="font-size:20px"><b>The order of adjectives</b></h1></center>
-          <iframe src="https://app.lumi.education/api/v1/run/tJevug/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-    
-          <div style="width: 100%; height: 8px; background-color: #e0e0e0; margin: 20px 0; border-radius: 4px;">
-          <div style="width: 25%; height: 100%; background-color: #2196F3; border-radius: 4px;"></div>
-          </div>
+    <iframe src="https://app.lumi.education/api/v1/run/tJevug/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+
+    <div style="width: 100%; height: 8px; background-color: #e0e0e0; margin: 20px 0; border-radius: 4px;">
+        <div style="width: 25%; height: 100%; background-color: #2196F3; border-radius: 4px;"></div>
+    </div>
 
     <center><h1 style="font-size:20px"><b>Expressing the future with: will/going to/the present/the present progressive</b></h1></center>
-           <iframe src="https://app.lumi.education/api/v1/run/ICS3lU/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-    
-           <div style="width: 100%; height: 8px; background-color: #e0e0e0; margin: 20px 0; border-radius: 4px;">
-           <div style="width: 25%; height: 100%; background-color: #2196F3; border-radius: 4px;"></div>
-           </div>
+    <iframe src="https://app.lumi.education/api/v1/run/ICS3lU/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
 
-    
+    <div style="width: 100%; height: 8px; background-color: #e0e0e0; margin: 20px 0; border-radius: 4px;">
+        <div style="width: 25%; height: 100%; background-color: #2196F3; border-radius: 4px;"></div>
+    </div>
 
-<br>
+    <br>
     <center><h1 style="font-size:20px; font-family: sans-serif;"><b>4 ways to express regrets</b></h1>
     <p style="text-align: center; font-size: 18px; font-family: sans-serif; color: #333; margin-top: 10px; margin-bottom: 20px;">
         Drag and drop the sentences into their appropriate boxes.
     </p>
-   </center>
+    </center>
 
-<div style="max-width: 600px; margin: 0 auto;">
-    <iframe src="https://app.lumi.education/api/v1/run/m_XXyx/embed" width="100%" height="320" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-    
-    <div style="width: 100%; height: 8px; background-color: #e0e0e0; margin: 20px 0; border-radius: 4px;">
-        <div style="width: 25%; height: 100%; background-color: #2196F3; border-radius: 4px;"></div>
-    </div>
-</div>
-
-<center>
-    <h1 style="font-size:20px; font-family: sans-serif;"><b>The definite article/zero article with geographical locations</b></h1>
-    <p style="text-align: center; font-size:18px; font-family:Arial, sans-serif; color: #333;">Choose the correct article</p>
-</center>
-
-<div style="max-width: 600px; margin: 0 auto;">
-    <iframe src="https://app.lumi.education/api/v1/run/ahsD6O/embed" width="100%" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-
-    
-</div>
     <div style="max-width: 600px; margin: 0 auto;">
-    <div style="width: 100%;"><div style="position: relative; padding-bottom: 56.25%; padding-top: 0; height: 0;"><iframe title="________" frameborder="0" width="1200" height="675" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://view.genially.com/69872d5a0eca7e681b734da2" type="text/html" allowscriptaccess="always" allowfullscreen="true" scrolling="yes" allownetworking="all"></iframe> </div> </div>
+        <iframe src="https://app.lumi.education/api/v1/run/m_XXyx/embed" width="100%" height="320" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+        <div style="width: 100%; height: 8px; background-color: #e0e0e0; margin: 20px 0; border-radius: 4px;">
+            <div style="width: 25%; height: 100%; background-color: #2196F3; border-radius: 4px;"></div>
+        </div>
+    </div>
 
-<script src="https://app.Lumi.education/api/v1/h5p/core/js/h5p-resizer.js" charset="UTF-8"></script>
+    <center>
+        <h1 style="font-size:20px; font-family: sans-serif;"><b>The definite article/zero article with geographical locations</b></h1>
+        <p style="text-align: center; font-size:18px; font-family:Arial, sans-serif; color: #333;">Choose the correct article</p>
+    </center>
 
-<button id="topBtn" title="Go to top" style="display: none; position: fixed; bottom: 20px; right: 30px; z-index: 99; font-size: 24px; border: none; outline: none; background-color: #2196F3; color: white; cursor: pointer; border-radius: 50%; width: 50px; height: 50px; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); line-height: 50px; padding: 0;">↑</button>
+    <div style="max-width: 600px; margin: 0 auto;">
+        <iframe src="https://app.lumi.education/api/v1/run/ahsD6O/embed" width="100%" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+    </div>
 
-<script>
-    const btn = document.getElementById("topBtn");
-    window.onscroll = function() {
-        if (window.scrollY > 400) {
-            btn.style.display = "block";
-        } else {
-            btn.style.display = "none";
-        }
-    };
-    btn.onclick = function() {
-        window.scrollTo({top: 0, behavior: 'smooth'});
-    };
-</script>
+    <div style="max-width: 600px; margin: 0 auto;">
+        <div style="width: 100%;"><div style="position: relative; padding-bottom: 56.25%; padding-top: 0; height: 0;"><iframe title="________" frameborder="0" width="1200" height="675" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://view.genially.com/69872d5a0eca7e681b734da2" type="text/html" allowscriptaccess="always" allowfullscreen="true" scrolling="yes" allownetworking="all"></iframe> </div> </div>
+    </div>
+
+    <script src="https://app.Lumi.education/api/v1/h5p/core/js/h5p-resizer.js" charset="UTF-8"></script>
+
+    <button id="topBtn" title="Go to top" style="display: none; position: fixed; bottom: 20px; right: 30px; z-index: 99; font-size: 24px; border: none; outline: none; background-color: #2196F3; color: white; cursor: pointer; border-radius: 50%; width: 50px; height: 50px; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); line-height: 50px; padding: 0;">↑</button>
+
+    <script>
+        const btn = document.getElementById("topBtn");
+        window.onscroll = function() {
+            if (window.scrollY > 400) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+        btn.onclick = function() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        };
+    </script>
 
 </body>
 </html>
