@@ -7,6 +7,12 @@
     <style>
         body { margin:0; padding:0; background:#000; text-align:center; font-family:Arial; }
         #game-container { margin:auto; }
+        <div id="riddle-container" style="position:absolute; top:620px; text-align:center; width:100%;">
+    <p style="color:white;">Riddle: I speak without a mouth and hear without ears. What am I?</p>
+    <input type="text" id="riddle-answer" placeholder="Type your answer here">
+    <button id="riddle-submit">Submit</button>
+</div>
+
     </style>
 </head>
 <body>
@@ -62,16 +68,18 @@ function create() {
     // Dialogue text
     this.add.text(20, 20, "Your friend disappeared on a quest...", { font: "18px Arial", fill: "#fff" });
 
-    // Riddle prompt
-    setTimeout(() => {
-        const answer = prompt("Riddle: I speak without a mouth and hear without ears. What am I?");
-        if (answer.toLowerCase() === "echo") {
-            alert("Correct! You solved the riddle!");
-            riddleSolved = true;
-        } else {
-            alert("Wrong! Try again later.");
-        }
-    }, 1000);
+   // Riddle logic
+document.getElementById('riddle-submit').addEventListener('click', () => {
+    const answer = document.getElementById('riddle-answer').value.trim().toLowerCase();
+    if(answer === 'echo'){
+        alert('Correct! You solved the riddle!');
+        riddleSolved = true;
+        document.getElementById('riddle-container').style.display = 'none';
+    } else {
+        alert('Wrong! Try again.');
+    }
+});
+
 }
 
 function update() {
