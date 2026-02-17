@@ -78,6 +78,11 @@ document.getElementById('riddle-submit').addEventListener('click', () => {
     if(answer === 'echo'){
         alert('Correct! You solved the riddle!');
         riddleSolved = true;
+        // Check for collision immediately after solving
+if (Phaser.Geom.Intersects.RectangleToRectangle(hero.getBounds(), enemy.getBounds())) {
+    encounterEnemy(hero, enemy);
+}
+
         document.getElementById('riddle-container').style.display = 'none';
     } else {
         alert('Wrong! Try again.');
