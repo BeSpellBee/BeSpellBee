@@ -29,12 +29,18 @@
             max-width: 600px;
             text-align: center;
         }
+        #loading {
+            color: #fff;
+            text-align: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <div>
         <canvas id="gameCanvas" width="600" height="400"></canvas>
         <div id="message">Use arrow keys to move. Approach the blue character.</div>
+        <div id="loading">Loading images...</div>
     </div>
 
     <script>
@@ -42,11 +48,12 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const messageBox = document.getElementById('message');
+        const loadingDiv = document.getElementById('loading');
 
         // --- Game settings ---
-        const TILE_SIZE = 40;          // each tile is 40x40 pixels
-        const MAP_WIDTH = 15;           // tiles horizontally (canvas width 600)
-        const MAP_HEIGHT = 10;           // tiles vertically (canvas height 400)
+        const TILE_SIZE = 40;           // each tile is 40x40 pixels
+        const MAP_WIDTH = 15;            // tiles horizontally (canvas width 600)
+        const MAP_HEIGHT = 10;            // tiles vertically (canvas height 400)
 
         // --- Map definition (0 = empty, 1 = wall) ---
         const map = [
@@ -66,20 +73,47 @@
         const player = {
             x: 5,          // tile column
             y: 5,          // tile row
-            color: '#4caf50'
         };
 
-        // --- NPC object (can be moved or given AI later) ---
-        const npc = {
+        // --- Enemy (NPC) object ---
+        const enemy = {
             x: 10,
             y: 4,
-            color: '#2196f3',
             message: 'Hello, traveler! I have a quest for you.'
+        };
+
+        // --- Load images ---
+        const playerImg = new Image();
+        playerImg.src = 'player.png';   // make sure this file exists
+
+        const enemyImg = new Image();
+        enemyImg.src = 'enemy.png';     // make sure this file exists
+
+        // Track loading progress
+        let imagesLoaded = 0;
+        const totalImages = 2;
+
+        function imageLoaded() {
+            imagesLoaded++;
+            if (imagesLoaded === totalImages) {
+                loadingDiv.textContent = 'Images loaded! Ready to play.';
+                loadingDiv.style.color = '#4caf50';
+            } else {
+                loadingDiv.textContent = `Loading images... (${imagesLoaded}/${totalImages})`;
+            }
+        }
+
+        playerImg.onload = imageLoaded;
+        playerImg.onerror = () => {
+            loadingDiv.textContent = 'Error loading player.png – make sure the file exists.';
+        };
+        enemyImg.onload = imageLoaded;
+        enemyImg.onerror = () => {
+            loadingDiv.textContent = 'Error loading enemy.png – make sure the file exists.';
         };
 
         // --- Check if a tile is walkable (not a wall) ---
         function isWalkable(tx, ty) {
-            // map boundaries are walls, so we're safe with the array check
             return map[ty] && map[ty][tx] === 0;
         }
 
@@ -91,16 +125,16 @@
                 player.x = newX;
                 player.y = newY;
             }
-            checkInteraction(); // see if we are near the NPC
+            checkInteraction(); // see if we are near the enemy
         }
 
-        // --- Interaction: show NPC message if adjacent ---
+        // --- Interaction: show enemy message if adjacent ---
         function checkInteraction() {
-            const dx = Math.abs(player.x - npc.x);
-            const dy = Math.abs(player.y - npc.y);
-            // adjacent (including diagonals) if max(dx,dy) <= 1
+            const dx = Math.abs(player.x - enemy.x);
+            const dy = Math.abs(player.y - enemy.y);
+            // adjacent (including diagonals) if max(dx,dy) <= 1 and not on same tile
             if (dx <= 1 && dy <= 1 && !(dx === 0 && dy === 0)) {
-                messageBox.textContent = `🧙 NPC says: "${npc.message}"`;
+                messageBox.textContent = `🧙 Enemy says: "${enemy.message}"`;
             } else {
                 messageBox.textContent = 'Use arrow keys to move. Approach the blue character.';
             }
@@ -130,13 +164,21 @@
                 }
             }
 
-            // Draw NPC
-            ctx.fillStyle = npc.color;
-            ctx.fillRect(npc.x * TILE_SIZE, npc.y * TILE_SIZE, TILE_SIZE-1, TILE_SIZE-1);
+            // Draw enemy (NPC) – use image if loaded, otherwise fallback to blue square
+            if (enemyImg.complete && enemyImg.naturalHeight !== 0) {
+                ctx.drawImage(enemyImg, enemy.x * TILE_SIZE, enemy.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            } else {
+                ctx.fillStyle = '#2196f3';
+                ctx.fillRect(enemy.x * TILE_SIZE, enemy.y * TILE_SIZE, TILE_SIZE-1, TILE_SIZE-1);
+            }
 
-            // Draw Player
-            ctx.fillStyle = player.color;
-            ctx.fillRect(player.x * TILE_SIZE, player.y * TILE_SIZE, TILE_SIZE-1, TILE_SIZE-1);
+            // Draw player – use image if loaded, otherwise fallback to green square
+            if (playerImg.complete && playerImg.naturalHeight !== 0) {
+                ctx.drawImage(playerImg, player.x * TILE_SIZE, player.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            } else {
+                ctx.fillStyle = '#4caf50';
+                ctx.fillRect(player.x * TILE_SIZE, player.y * TILE_SIZE, TILE_SIZE-1, TILE_SIZE-1);
+            }
         }
 
         // --- Game loop (update & draw continuously) ---
@@ -160,8 +202,11 @@
             }
         });
 
-        // Start the game
+        // Start the game loop immediately (draw will handle missing images gracefully)
         gameLoop();
+
+        // If you prefer to wait until images are loaded, you could call gameLoop() only after imagesLoaded === totalImages.
+        // But the fallback squares make it playable even without images.
     </script>
 </body>
 </html>
