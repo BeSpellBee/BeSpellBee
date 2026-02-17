@@ -1,102 +1,185 @@
-// Game state
-const state = {
-    hasKey: false,
-    // add more flags as needed
-};
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adventure Game</title>
+    <style>
+        /* --- CSS (combined) --- */
+        body {
+            background: #1a1a2e;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 16px;
+            box-sizing: border-box;
+        }
 
-// Story data
-const story = {
-    start: {
-        id: 'start',
-        text: 'You wake up in a dark forest. A faint path leads east, and you hear water to the north.',
-        choices: [
-            { text: 'Go north towards the water', next: 'lake' },
-            { text: 'Go east along the path', next: 'path' }
-        ]
-    },
-    lake: {
-        id: 'lake',
-        text: 'You arrive at a serene lake. An old boat is tied to a dock. You see a glint in the water.',
-        choices: [
-            { text: 'Investigate the glint', next: 'glint', action: () => { state.hasKey = true; } },
-            { text: 'Take the boat', next: 'boat' },
-            { text: 'Go back south', next: 'start' }
-        ]
-    },
-    glint: {
-        id: 'glint',
-        text: 'You find a rusty key! (Key added to inventory)',
-        choices: [
-            { text: 'Return to the lake', next: 'lake' }
-        ]
-    },
-    path: {
-        id: 'path',
-        text: 'The path leads to a small cottage. The door is locked.',
-        choices: [
-            { text: 'Try the door', next: 'cottage_door' },
-            { text: 'Go back west', next: 'start' }
-        ]
-    },
-    cottage_door: {
-        id: 'cottage_door',
-        text: state.hasKey ? 'You use the rusty key. It fits! The door opens.' : 'The door is firmly locked. You need a key.',
-        choices: state.hasKey ? 
-            [{ text: 'Enter the cottage', next: 'cottage_inside' }] : 
-            [{ text: 'Go back to the path', next: 'path' }]
-    },
-    cottage_inside: {
-        id: 'cottage_inside',
-        text: 'You are inside the cottage. It’s cozy, with a fireplace and a table. On the table lies a treasure chest!',
-        choices: [
-            { text: 'Open the chest', next: 'chest' }
-        ]
-    },
-    chest: {
-        id: 'chest',
-        text: 'The chest is full of gold! You have won. Congratulations!',
-        choices: [
-            { text: 'Play again', next: 'start', action: () => { state.hasKey = false; } }
-        ]
-    },
-    boat: {
-        id: 'boat',
-        text: 'You row across the lake and find a small island. There’s nothing here. You row back.',
-        choices: [
-            { text: 'Return to the lake', next: 'lake' }
-        ]
-    }
-};
+        #game-container {
+            max-width: 600px;
+            width: 100%;
+            background: #16213e;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
 
-// Current node
-let currentNode = 'start';
+        #story-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            white-space: pre-wrap;
+        }
 
-// Function to update the page
-function updatePage() {
-    const node = story[currentNode];
-    if (!node) return;
+        #choices {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
 
-    // If the node's text is a function (dynamic), call it; otherwise use as is
-    const storyText = typeof node.text === 'function' ? node.text() : node.text;
-    document.getElementById('story-text').textContent = storyText;
+        .choice-btn {
+            background: #0f3460;
+            color: #fff;
+            border: 2px solid #e94560;
+            border-radius: 4px;
+            padding: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
 
-    const choicesDiv = document.getElementById('choices');
-    choicesDiv.innerHTML = ''; // clear old choices
+        .choice-btn:hover {
+            background: #e94560;
+            border-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="story-text"></div>
+        <div id="choices"></div>
+    </div>
 
-    node.choices.forEach(choice => {
-        const btn = document.createElement('button');
-        btn.className = 'choice-btn';
-        btn.textContent = choice.text;
-        btn.onclick = () => {
-            if (choice.action) choice.action(); // perform any state change
-            if (choice.next) {
-                currentNode = choice.next;
-                updatePage();
+    <script>
+        // --- JavaScript (combined) ---
+
+        // Game state
+        const state = {
+            hasKey: false,
+        };
+
+        // Story data
+        const story = {
+            start: {
+                id: 'start',
+                text: 'You wake up in a dark forest. A faint path leads east, and you hear water to the north.',
+                choices: [
+                    { text: 'Go north towards the water', next: 'lake' },
+                    { text: 'Go east along the path', next: 'path' }
+                ]
+            },
+            lake: {
+                id: 'lake',
+                text: 'You arrive at a serene lake. An old boat is tied to a dock. You see a glint in the water.',
+                choices: [
+                    { text: 'Investigate the glint', next: 'glint', action: () => { state.hasKey = true; } },
+                    { text: 'Take the boat', next: 'boat' },
+                    { text: 'Go back south', next: 'start' }
+                ]
+            },
+            glint: {
+                id: 'glint',
+                text: 'You find a rusty key! (Key added to inventory)',
+                choices: [
+                    { text: 'Return to the lake', next: 'lake' }
+                ]
+            },
+            path: {
+                id: 'path',
+                text: 'The path leads to a small cottage. The door is locked.',
+                choices: [
+                    { text: 'Try the door', next: 'cottage_door' },
+                    { text: 'Go back west', next: 'start' }
+                ]
+            },
+            cottage_door: {
+                id: 'cottage_door',
+                // Dynamic text based on state
+                text: () => state.hasKey ? 'You use the rusty key. It fits! The door opens.' : 'The door is firmly locked. You need a key.',
+                choices: () => state.hasKey ? 
+                    [{ text: 'Enter the cottage', next: 'cottage_inside' }] : 
+                    [{ text: 'Go back to the path', next: 'path' }]
+            },
+            cottage_inside: {
+                id: 'cottage_inside',
+                text: 'You are inside the cottage. It’s cozy, with a fireplace and a table. On the table lies a treasure chest!',
+                choices: [
+                    { text: 'Open the chest', next: 'chest' }
+                ]
+            },
+            chest: {
+                id: 'chest',
+                text: 'The chest is full of gold! You have won. Congratulations!',
+                choices: [
+                    { text: 'Play again', next: 'start', action: () => { state.hasKey = false; } }
+                ]
+            },
+            boat: {
+                id: 'boat',
+                text: 'You row across the lake and find a small island. There’s nothing here. You row back.',
+                choices: [
+                    { text: 'Return to the lake', next: 'lake' }
+                ]
             }
         };
-        choicesDiv.appendChild(btn);
-    });
-}
 
-// Start the game
-updatePage();
+        // Current node
+        let currentNode = 'start';
+
+        // Helper to get the actual choices (resolves if it's a function)
+        function getChoices(node) {
+            return typeof node.choices === 'function' ? node.choices() : node.choices;
+        }
+
+        // Helper to get the actual text (resolves if it's a function)
+        function getText(node) {
+            return typeof node.text === 'function' ? node.text() : node.text;
+        }
+
+        // Update the page
+        function updatePage() {
+            const node = story[currentNode];
+            if (!node) return;
+
+            document.getElementById('story-text').textContent = getText(node);
+
+            const choicesDiv = document.getElementById('choices');
+            choicesDiv.innerHTML = ''; // clear old choices
+
+            const choices = getChoices(node);
+            choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                btn.textContent = choice.text;
+                btn.onclick = () => {
+                    if (choice.action) choice.action(); // perform any state change
+                    if (choice.next) {
+                        currentNode = choice.next;
+                        updatePage();
+                    }
+                };
+                choicesDiv.appendChild(btn);
+            });
+        }
+
+        // Start the game
+        updatePage();
+    </script>
+</body>
+</html>
