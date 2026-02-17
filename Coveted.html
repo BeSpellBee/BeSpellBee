@@ -78,10 +78,7 @@ document.getElementById('riddle-submit').addEventListener('click', () => {
     if(answer === 'echo'){
         alert('Correct! You solved the riddle!');
         riddleSolved = true;
-        // Check for collision immediately after solving
-if (Phaser.Geom.Intersects.RectangleToRectangle(hero.getBounds(), enemy.getBounds())) {
-    encounterEnemy(hero, enemy);
-}
+        
 
         document.getElementById('riddle-container').style.display = 'none';
     } else {
@@ -98,6 +95,12 @@ function update() {
     if (cursors.right.isDown) hero.setVelocityX(200);
     if (cursors.up.isDown) hero.setVelocityY(-200);
     if (cursors.down.isDown) hero.setVelocityY(200);
+    
+    if (riddleSolved && Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey('SPACE'))) {
+        if (Phaser.Geom.Intersects.RectangleToRectangle(hero.getBounds(), enemy.getBounds())) {
+            encounterEnemy(hero, enemy);
+        }
+    
 }
 
 function encounterEnemy(hero, enemy) {
