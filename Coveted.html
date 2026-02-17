@@ -3,17 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Desert Adventure</title>
-    
     <style>
         body { margin:0; padding:0; background:#000; text-align:center; font-family:Arial; }
         #game-container { margin:auto; }
     </style>
     
-     <div id="riddle-container" style="position:absolute; top:620px; text-align:center; width:100%;">
-    <p style="color:white;">Riddle: I speak without a mouth and hear without ears. What am I?</p>
-    <input type="text" id="riddle-answer" placeholder="Type your answer here">
-    <button id="riddle-submit">Submit</button>
-</div>
+     
     
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
     
@@ -21,6 +16,11 @@
 <body>
 <h1>Desert Adventure</h1>
 <div id="game-container"></div>
+    <div id="riddle-container" style="position:absolute; top:620px; text-align:center; width:100%;">
+    <p style="color:white;">Riddle: I speak without a mouth and hear without ears. What am I?</p>
+    <input type="text" id="riddle-answer" placeholder="Type your answer here">
+    <button id="riddle-submit">Submit</button>
+</div>
 
 <script>
 const config = {
