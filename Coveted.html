@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Desert Adventure</title>
-    <style>
-        body { margin:0; padding:0; background:#000; text-align:center; font-family:Arial; }
-        #game-container { margin:auto; }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
+<meta charset="UTF-8">
+<title>Desert Adventure</title>
+<style>
+    body { margin:0; padding:0; background:#000; text-align:center; font-family:Arial; }
+    #game-container { margin:auto; }
+    #riddle-container { position:absolute; top:620px; text-align:center; width:100%; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
 </head>
 <body>
 <h1>Desert Adventure</h1>
 <div id="game-container"></div>
 
 <!-- Riddle input -->
-<div id="riddle-container" style="position:absolute; top:620px; text-align:center; width:100%;">
+<div id="riddle-container">
     <p style="color:white;">Riddle: I speak without a mouth and hear without ears. What am I?</p>
     <input type="text" id="riddle-answer" placeholder="Type your answer here">
     <button id="riddle-submit">Submit</button>
@@ -26,25 +27,24 @@ const config = {
     width: 800,
     height: 600,
     parent: 'game-container',
-    physics: {
-        default: 'arcade',
-        arcade: { debug: false }
-    },
+    physics: { default: 'arcade', arcade: { debug: false } },
     scene: { preload: preload, create: create, update: update }
 };
 
 const game = new Phaser.Game(config);
 
-let hero, cursors, enemy;
+let hero, enemy, cursors, spaceKey;
 let riddleSolved = false;
-let spaceKey; // for attack
+let heroHP = 100, enemyHP = 50;
 
+// Preload images
 function preload() {
     this.load.image('desert', 'images/UrbanMetastasis.png');
     this.load.image('hero', 'images/hero1.png');
     this.load.image('enemy', 'images/enemy2.png');
 }
 
+// Create game objects
 function create() {
     // Background
     let bg = this.add.image(400, 300, 'desert');
@@ -62,7 +62,7 @@ function create() {
     cursors = this.input.keyboard.createCursorKeys();
     spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-    // Collision detection
+    // Collision detection (not strictly needed for this version)
     this.physics.add.overlap(hero, enemy, encounterEnemy, null, this);
 
     // Dialogue
@@ -74,46 +74,66 @@ function create() {
         riddleButton.addEventListener('click', () => {
             const answer = document.getElementById('riddle-answer').value.trim().toLowerCase();
             if(answer === 'echo'){
-                alert('Correct! You solved the riddle!');
+                alert('Correct! You solved the riddle! Combat unlocked!');
                 riddleSolved = true;
                 document.getElementById('riddle-container').style.display = 'none';
-
-                // Auto-defeat enemy
-                if(enemy){
-                    alert("You defeat the desert raider! Onward to your journey...");
-                    enemy.destroy();
-                }
             } else {
                 alert('Wrong! Try again.');
             }
         });
     }
+
+    // Enemy attacks every 2 seconds
+    this.time.addEvent({
+        delay: 2000,
+        callback: () => {
+            if(riddleSolved && enemyHP > 0 && Phaser.Geom.Intersects.RectangleToRectangle(hero.getBounds(), enemy.getBounds())){
+                heroHP -= 10;
+                if(heroHP <= 0){
+                    alert("You were defeated! Game over.");
+                    heroHP = 100;
+                    hero.setPosition(100,500);
+                }
+            }
+        },
+        loop: true
+    });
 }
 
+// Update loop
 function update() {
-    if(!hero) return; // safety
+    if(!hero || !enemy) return;
 
+    // Reset hero velocity
     hero.setVelocity(0);
 
+    // Hero movement
     if(cursors.left.isDown) hero.setVelocityX(-200);
     if(cursors.right.isDown) hero.setVelocityX(200);
     if(cursors.up.isDown) hero.setVelocityY(-200);
     if(cursors.down.isDown) hero.setVelocityY(200);
 
-    // Optional: attack with space if enemy still exists
-    if(riddleSolved && enemy && Phaser.Input.Keyboard.JustDown(spaceKey)){
-        encounterEnemy(hero, enemy);
+    // Hero attack
+    if(riddleSolved && Phaser.Input.Keyboard.JustDown(spaceKey)){
+        if(Phaser.Geom.Intersects.RectangleToRectangle(hero.getBounds(), enemy.getBounds()) && enemyHP > 0){
+            enemyHP -= 20;
+
+            // Visual feedback: make enemy flash
+            enemy.setTint(0xff0000);
+            setTimeout(()=>enemy.clearTint(), 100);
+
+            if(enemyHP <= 0){
+                enemy.destroy();
+                alert("You defeated the desert raider! Onward to your journey...");
+            }
+        }
     }
 }
 
+// Encounter function (optional)
 function encounterEnemy(hero, enemy) {
     if(!riddleSolved){
-        alert("You cannot defeat the desert raider until you solve the riddle!");
-    } else {
-        if(enemy){
-            alert("You defeat the desert raider! Onward to your journey...");
-            enemy.destroy();
-        }
+        alert("You cannot fight the desert raider until you solve the riddle!");
     }
 }
 </script>
