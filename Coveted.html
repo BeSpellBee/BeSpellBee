@@ -37,14 +37,12 @@ let hero, enemy, cursors, spaceKey;
 let riddleSolved = false;
 let heroHP = 100, enemyHP = 50;
 
-// Preload images
 function preload() {
     this.load.image('desert', 'images/UrbanMetastasis.png');
     this.load.image('hero', 'images/hero1.png');
     this.load.image('enemy', 'images/enemy2.png');
 }
 
-// Create game objects
 function create() {
     // Background
     let bg = this.add.image(400, 300, 'desert');
@@ -62,8 +60,9 @@ function create() {
     cursors = this.input.keyboard.createCursorKeys();
     spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-    // Collision detection (not strictly needed for this version)
-    this.physics.add.overlap(hero, enemy, encounterEnemy, null, this);
+    // Make canvas focusable
+    game.canvas.setAttribute('tabindex','0');
+    game.canvas.focus();
 
     // Dialogue
     this.add.text(20, 20, "Your friend disappeared on a quest...", { font: "18px Arial", fill: "#fff" });
@@ -83,14 +82,14 @@ function create() {
         });
     }
 
-    // Enemy attacks every 2 seconds
+    // Enemy automatic attack every 2 seconds
     this.time.addEvent({
         delay: 2000,
         callback: () => {
             if(riddleSolved && enemyHP > 0 && Phaser.Geom.Intersects.RectangleToRectangle(hero.getBounds(), enemy.getBounds())){
                 heroHP -= 10;
                 if(heroHP <= 0){
-                    alert("You were defeated! Game over.");
+                    alert("You were defeated! Try again.");
                     heroHP = 100;
                     hero.setPosition(100,500);
                 }
@@ -100,11 +99,9 @@ function create() {
     });
 }
 
-// Update loop
 function update() {
     if(!hero || !enemy) return;
 
-    // Reset hero velocity
     hero.setVelocity(0);
 
     // Hero movement
@@ -114,11 +111,11 @@ function update() {
     if(cursors.down.isDown) hero.setVelocityY(200);
 
     // Hero attack
-    if(riddleSolved && Phaser.Input.Keyboard.JustDown(spaceKey)){
-        if(Phaser.Geom.Intersects.RectangleToRectangle(hero.getBounds(), enemy.getBounds()) && enemyHP > 0){
+    if(riddleSolved && Phaser.Input.Keyboard.JustDown(spaceKey) && enemyHP > 0){
+        if(Phaser.Geom.Intersects.RectangleToRectangle(hero.getBounds(), enemy.getBounds())){
             enemyHP -= 20;
 
-            // Visual feedback: make enemy flash
+            // Enemy visual feedback
             enemy.setTint(0xff0000);
             setTimeout(()=>enemy.clearTint(), 100);
 
@@ -127,13 +124,6 @@ function update() {
                 alert("You defeated the desert raider! Onward to your journey...");
             }
         }
-    }
-}
-
-// Encounter function (optional)
-function encounterEnemy(hero, enemy) {
-    if(!riddleSolved){
-        alert("You cannot fight the desert raider until you solve the riddle!");
     }
 }
 </script>
