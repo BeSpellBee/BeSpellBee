@@ -4,6 +4,635 @@
     <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>GRAMMAR MILLIONAIRE · narrative tenses</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #1a2634;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 12px;
+    }
+
+    /* main game card – fits mobile, uses brand hex values */
+    .game-container {
+      max-width: 700px;
+      width: 100%;
+      background: #FFFFFF;
+      border-radius: 32px;
+      box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35);
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    /* header area – deep blue */
+    .header {
+      background: #0056B3;         /* primary dark blue */
+      padding: 18px 22px 14px 22px;
+      color: white;
+      display: flex;
+            flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo h2 {
+      font-weight: 600;
+      font-size: 1.4rem;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .logo span {
+      background: #FFEB3B;          /* bright yellow */
+      color: #000000;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 40px;
+      margin-left: 8px;
+    }
+
+    .level-prize {
+      background: #1976D2;           /* medium accent blue */
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 1.2rem;
+      box-shadow: inset 0 -2px 0 #0d4175;
+      color: white;
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+    }
+
+    .level-prize small {
+      font-size: 0.8rem;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+
+    /* main question area */
+    .question-panel {
+      background: #FFFFFF;
+      padding: 28px 20px 16px 20px;
+      border-bottom: 2px solid #f0f2f5;
+    }
+
+    .question-text {
+      background: #f5f7fc;
+      border-left: 6px solid #FFEB3B;   /* yellow accent */
+      border-radius: 20px 8px 8px 20px;
+      padding: 20px 18px;
+      font-size: 1.3rem;
+      line-height: 1.4;
+      font-weight: 500;
+      color: #000000;
+      box-shadow: 0 4px 8px rgba(0,86,179,0.08);
+      margin-bottom: 18px;
+    }
+
+    .prize-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1rem;
+      background: #eef4fe;
+      padding: 10px 16px;
+      border-radius: 40px;
+      color: #0056B3;
+      font-weight: 600;
+    }
+
+    .prize-amount {
+      background: #1976D2;
+      color: white;
+      padding: 4px 20px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+    }
+
+    /* answer grid – 2x2 always */
+    .answers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding: 22px 20px 20px 20px;
+      background: #FFFFFF;
+    }
+
+    .answer-btn {
+      background: #FFFFFF;
+      border: 2px solid #dde3ed;
+      border-radius: 60px;
+      padding: 18px 6px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.1s ease;
+      color: #000000;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #cbd2df;
+      word-break: break-word;
+    }
+
+    .answer-btn:hover:not(:disabled) {
+      background: #f0f6ff;
+      border-color: #1976D2;
+    }
+
+    .answer-letter {
+      background: #0056B3;
+      color: white;
+      font-weight: 700;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin-left: 12px;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .answer-btn.selected-correct {
+      background: #c8e6c9;
+      border-color: #2e7d32;
+      box-shadow: 0 4px 0 #1b5e20;
+    }
+
+    .answer-btn.selected-wrong {
+      background: #ffcdd2;
+      border-color: #b71c1c;
+      box-shadow: 0 4px 0 #8b1e1e;
+    }
+
+    .answer-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      box-shadow: 0 2px 0 #b0bec5;
+      transform: translateY(2px);
+    }
+
+    /* footer / controls */
+    .game-footer {
+      background: #f7f9fc;
+      padding: 18px 20px 20px 20px;
+      border-top: 1px solid #d9e2ef;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .lifelines {
+      display: flex;
+      gap: 12px;
+    }
+
+    .lifeline-btn {
+      background: #1976D2;
+      border: none;
+      color: white;
+      font-weight: 600;
+      font-size: 1.0rem;
+      padding: 12px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      border-bottom: 4px solid #0d3d70;
+      transition: 0.1s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .lifeline-btn:disabled {
+      opacity: 0.4;
+      border-bottom-width: 2px;
+      transform: translateY(2px);
+      cursor: default;
+    }
+
+    .lifeline-btn:not(:disabled):hover {
+      background: #0056B3;
+    }
+
+    .next-btn {
+      background: #FFEB3B;           /* bright yellow */
+      border: none;
+      color: #000000;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: 12px 32px;
+      border-radius: 60px;
+      border-bottom: 4px solid #c5a605;
+      cursor: pointer;
+      transition: 0.1s;
+      box-shadow: 0 4px 12px rgba(255,235,59,0.4);
+    }
+
+    .next-btn:disabled {
+      opacity: 0.4;
+      border-bottom-width: 2px;
+      transform: translateY(2px);
+      cursor: default;
+    }
+
+    .reset-area {
+      text-align: center;
+      margin: 0 0 18px 0;
+    }
+
+    .reset-btn {
+      background: transparent;
+      border: 2px solid #0056B3;
+      color: #0056B3;
+      font-weight: 600;
+      padding: 8px 30px;
+      border-radius: 40px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    /* explanation / feedback */
+    .feedback-message {
+      padding: 5px 20px 10px 20px;
+      font-size: 1rem;
+      color: #000000;
+      font-weight: 500;
+      min-height: 2.8rem;
+    }
+
+    .green-text { color: #1d6b2c; background: #e8f5e9; padding: 8px 15px; border-radius: 30px; }
+    .red-text { color: #a51b1b; background: #ffebee; padding: 8px 15px; border-radius: 30px; }
+
+    /* mobile fine‑tune */
+    @media (max-width: 500px) {
+      .answers-grid { gap: 10px; padding: 16px 12px; }
+      .answer-btn { padding: 14px 4px; font-size: 0.95rem; }
+      .answer-letter { width: 34px; height: 34px; font-size: 1rem; }
+      .question-text { font-size: 1.1rem; padding: 16px; }
+      .header { padding: 14px; }
+      .lifeline-btn { padding: 10px 16px; font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="game-container">
+  <!-- header with colors: #0056B3 background, #FFEB3B badge, #1976D2 prize -->
+  <div class="header">
+    <div class="logo">
+      <h2>📚 MILLIONAIRE <span>grammar</span></h2>
+    </div>
+    <div class="level-prize" style="background:#1976D2;">
+      <small>£</small><span id="prizeDisplay">500</span>
+    </div>
+  </div>
+
+  <!-- question block -->
+  <div class="question-panel">
+    <div class="question-text" id="questionText">
+      Loading question...
+    </div>
+    <div class="prize-row">
+      <span>🎯 question <span id="qNumber">1</span>/15</span>
+      <span class="prize-amount" id="qValue">£500</span>
+    </div>
+  </div>
+
+  <!-- answer buttons grid (2x2) -->
+  <div class="answers-grid" id="answersContainer"></div>
+
+  <!-- dynamic feedback -->
+  <div class="feedback-message" id="feedbackMessage"></div>
+
+  <!-- footer with lifelines & next -->
+  <div class="game-footer">
+    <div class="lifelines">
+      <button class="lifeline-btn" id="fiftyBtn" style="background:#1976D2;">🔹 50:50</button>
+      <button class="lifeline-btn" id="audienceBtn" style="background:#1976D2;">👥 audience</button>
+    </div>
+    <button class="next-btn" id="nextBtn" disabled>➡️ next</button>
+  </div>
+
+  <!-- reset / play again -->
+  <div class="reset-area">
+    <button class="reset-btn" id="resetBtn">⟲ play again</button>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ---------- QUESTIONS (B2/C1 narrative tenses, fresh examples) ----------
+    const questions = [
+      { // q0 - £100
+        question: "Which tense is best for the main, completed actions in a story?",
+        answers: ["A: Past Perfect", "B: Past Continuous", "C: Simple Past", "D: Past Perfect Continuous"],
+        correct: 2, // index 2 -> Simple Past (C)
+        level: 100,
+        explanation: "✓ Simple Past describes main story events. (rule 1)"
+      },
+      { // q1 - £200
+        question: "Complete: 'When I reached the office, my boss ______ already ______ home.'",
+        answers: ["A: did / go", "B: was / going", "C: had / gone", "D: has / gone"],
+        correct: 2, // C: had / gone
+        level: 200,
+        explanation: "✓ 'had gone' – past perfect shows earlier action (rule 3)."
+      },
+      { // q2 - £300
+        question: "Which sentence describes two simultaneous past actions?",
+        answers: ["A: I cooked dinner and watched news.", "B: I had cooked before you arrived.", "C: I was cooking while my kids were playing.", "D: I have cooked every day."],
+        correct: 2, // C
+        level: 300,
+        explanation: "✓ past continuous for two actions in progress (rule 2)."
+      },
+      { // q3 - £500
+        question: "I was frustrated. I ______ on the report for hours.",
+        answers: ["A: worked", "B: had been working", "C: was working", "D: have worked"],
+        correct: 1, // B: had been working
+        level: 500,
+        explanation: "✓ past perfect continuous – duration before a past moment (rule 4)."
+      },
+      { // q4 - £1000
+        question: "Find the error: 'We had been knowing each other for years before we started the band.'",
+        answers: ["A: had been knowing", "B: each other", "C: before", "D: started"],
+        correct: 0, // A
+        level: 1000,
+        explanation: "✓ 'know' is stative – use 'had known' (rule 4 note)."
+      },
+      { // q5 - £2000
+        question: "The garden was soaked because it ______ all night.",
+        answers: ["A: rained", "B: was raining", "C: had been raining", "D: had rained"],
+        correct: 2, // C
+        level: 2000,
+        explanation: "✓ 'had been raining' emphasises duration + result (rule 4)."
+      },
+      { // q6 - £4000
+        question: "Which is correct?",
+        answers: ["A: I realised I forgot my wallet.", "B: I realised I had forgotten my wallet.", "C: I have forgotten my wallet.", "D: I was forgetting my wallet."],
+        correct: 1, // B
+        level: 4000,
+        explanation: "✓ past perfect 'had forgotten' – happened before realising (rule 3)."
+      },
+      { // q7 - £8000
+        question: "Choose the best background description: 'The sun ______, and children played outside.'",
+        answers: ["A: shone", "B: had shone", "C: was shining", "D: had been shining"],
+        correct: 2, // C
+        level: 8000,
+        explanation: "✓ 'was shining' sets the scene (past continuous – rule 2)."
+      },
+      { // q8 - £16000
+        question: "Before she ______ her own cafe, she ______ as a barista for three years.",
+        answers: ["A: opened / worked", "B: had opened / worked", "C: opened / had been working", "D: was opening / had worked"],
+        correct: 2, // C
+        level: 16000,
+        explanation: "✓ 'had been working' = duration before main event (rule 4)."
+      },
+      { // q9 - £32000
+        question: "Spot the mistake: 'He looked exhausted because he was running for an hour before the interview.'",
+        answers: ["A: looked", "B: was running", "C: for an hour", "D: before the interview"],
+        correct: 1, // B
+        level: 32000,
+        explanation: "✓ need 'had been running' – cause with duration before past (rule 4)."
+      },
+      { // q10 - £64000
+        question: "I ______ to call you all week, and then you finally ______ me!",
+        answers: ["A: tried / were calling", "B: had been trying / called", "C: had tried / had called", "D: was trying / call"],
+        correct: 1, // B
+        level: 64000,
+        explanation: "✓ 'had been trying' repeated attempts, 'called' main event (rule 4 & 1)."
+      },
+      { // q11 - £125000
+        question: "Which sentence is INCORRECT?",
+        answers: ["A: I had been living in Oslo for a year.", "B: I had known the truth all along.", "C: I had been being a fan for ages.", "D: The ground was wet. It had rained."],
+        correct: 2, // C
+        level: 125000,
+        explanation: "✓ 'had been being' – stative 'be' no continuous (rule 4 note)."
+      },
+      { // q12 - £250000
+        question: "You enter a room; your colleague sighs, papers everywhere. Best description:",
+        answers: ["A: He looked for the contract before you arrived.", "B: He was looking for the contract.", "C: He had been looking for the contract for an hour.", "D: He looked for the contract and you arrived."],
+        correct: 2, // C
+        level: 250000,
+        explanation: "✓ past perf. continuous explains visible result & duration (rule 4)."
+      },
+      { // q13 - £500000
+        question: "When help finally arrived, the hikers ______ to a tree for two days.",
+        answers: ["A: clung", "B: were clinging", "C: had been clinging", "D: have clung"],
+        correct: 2, // C
+        level: 500000,
+        explanation: "✓ duration up to that past moment – past perfect continuous (rule 4)."
+      },
+      { // q14 - £1000000
+        question: "Is this correct? 'I finally grasped the theory my tutor was explaining all year.'",
+        answers: ["A: yes, correct", "B: change 'was explaining' to 'had been explaining'", "C: change 'grasped' to 'had grasped'", "D: change 'all year' to 'throughout year'"],
+        correct: 1, // B
+        level: 1000000,
+        explanation: "✓ 'had been explaining' = duration completed before 'grasped' (rule 3 & 4)."
+      }
+    ];
+
+    // ---------- game state ----------
+    let currentIndex = 0;               // 0-based
+    let fiftyUsed = false;
+    let audienceUsed = false;
+    let answerLocked = false;           // true if already answered
+    let eliminatedIndices = [];          // for 50:50
+
+    // DOM elements
+    const questionEl = document.getElementById('questionText');
+    const answersContainer = document.getElementById('answersContainer');
+    const feedbackEl = document.getElementById('feedbackMessage');
+    const nextBtn = document.getElementById('nextBtn');
+    const fiftyBtn = document.getElementById('fiftyBtn');
+    const audienceBtn = document.getElementById('audienceBtn');
+    const prizeSpan = document.getElementById('prizeDisplay');
+    const qNumberSpan = document.getElementById('qNumber');
+    const qValueSpan = document.getElementById('qValue');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // helpers
+    function formatPrize(level) {
+      if (level >= 1000000) return '£1M';
+      if (level >= 1000) return '£' + (level/1000) + 'k';
+      return '£' + level;
+    }
+
+    function loadQuestion(index) {
+      const q = questions[index];
+      questionEl.innerText = q.question;
+      qNumberSpan.innerText = index + 1;
+      qValueSpan.innerText = formatPrize(q.level);
+      prizeSpan.innerText = q.level >= 1000000 ? '1M' : (q.level >= 1000 ? (q.level/1000)+'k' : q.level);
+
+      // build answers
+      let htmlStr = '';
+      for (let i = 0; i < q.answers.length; i++) {
+        const letter = String.fromCharCode(65 + i); // A,B,C,D
+        htmlStr += `<button class="answer-btn" data-index="${i}" id="ansBtn_${i}">
+          <span class="answer-letter">${letter}</span>${q.answers[i]}
+        </button>`;
+      }
+      answersContainer.innerHTML = htmlStr;
+
+      // attach listeners
+      document.querySelectorAll('.answer-btn').forEach(btn => {
+        btn.addEventListener('click', answerHandler);
+      });
+
+      // apply 50:50 elimination if previously used on this question? (reset on each new question)
+      // but if fifty was used for this question (stored), we re-apply
+      if (eliminatedIndices.length > 0 && !answerLocked) {
+        applyFiftyVisibility();
+      } else {
+        // make all visible
+        document.querySelectorAll('.answer-btn').forEach(btn => {
+          btn.style.display = 'flex';
+        });
+      }
+
+      // if answer is locked (should not happen on new question, but safe)
+      answerLocked = false;
+      nextBtn.disabled = true;
+
+      // clean feedback
+      feedbackEl.innerHTML = '';
+    }
+
+    // answer handler
+    function answerHandler(e) {
+      if (answerLocked) return;
+      const btn = e.currentTarget;
+      const selectedIdx = parseInt(btn.dataset.index, 10);
+      const currentQ = questions[currentIndex];
+      const isCorrect = (selectedIdx === currentQ.correct);
+
+      // lock
+      answerLocked = true;
+      nextBtn.disabled = false;
+
+      // style buttons: mark correct/wrong
+      document.querySelectorAll('.answer-btn').forEach(b => {
+        b.disabled = true;
+        const idx = parseInt(b.dataset.index, 10);
+        if (idx === currentQ.correct) {
+          b.classList.add('selected-correct');
+        } else if (idx === selectedIdx && !isCorrect) {
+          b.classList.add('selected-wrong');
+        }
+      });
+
+      // show feedback
+      if (isCorrect) {
+        feedbackEl.innerHTML = `<span class="green-text">✅ correct! ${currentQ.explanation || ''}</span>`;
+      } else {
+        feedbackEl.innerHTML = `<span class="red-text">❌ wrong. correct answer: ${String.fromCharCode(65+currentQ.correct)}. ${currentQ.explanation || ''}</span>`;
+      }
+
+      // (lifelines stay, but can't change answer)
+    }
+
+    // 50:50 logic – hide two wrong answers (never hide correct)
+    function applyFiftyVisibility() {
+      const currentQ = questions[currentIndex];
+      const correctIdx = currentQ.correct;
+
+      // collect all wrong indices
+      let wrongIndices = [0,1,2,3].filter(i => i !== correctIdx);
+      // shuffle and pick two to eliminate
+      for (let i = wrongIndices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [wrongIndices[i], wrongIndices[j]] = [wrongIndices[j], wrongIndices[i]];
+      }
+      const toEliminate = wrongIndices.slice(0, 2); // two wrongs
+      eliminatedIndices = toEliminate; // store
+
+      document.querySelectorAll('.answer-btn').forEach(btn => {
+        const idx = parseInt(btn.dataset.index, 10);
+        if (toEliminate.includes(idx)) {
+          btn.style.display = 'none'; // hide
+        } else {
+          btn.style.display = 'flex';
+        }
+      });
+    }
+
+    // lifeline 50
+    fiftyBtn.addEventListener('click', () => {
+      if (fiftyUsed || answerLocked) return;
+      fiftyUsed = true;
+      fiftyBtn.disabled = true;
+      applyFiftyVisibility();
+      feedbackEl.innerHTML = '<span class="green-text">🔹 50:50 applied – two wrong answers hidden.</span>';
+    });
+
+    // audience "lifeline" – gives hint (shows correct letter)
+    audienceBtn.addEventListener('click', () => {
+      if (audienceUsed || answerLocked) return;
+      audienceUsed = true;
+      audienceBtn.disabled = true;
+      const correctLetter = String.fromCharCode(65 + questions[currentIndex].correct);
+      feedbackEl.innerHTML = `<span class="green-text">👥 audience thinks ${correctLetter} is correct! (use wisely)</span>`;
+    });
+
+    // next button
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < questions.length - 1) {
+        currentIndex++;
+        eliminatedIndices = []; // reset 50:50 for new question
+        answerLocked = false;
+        // enable all lifelines if not used
+        if (!fiftyUsed) fiftyBtn.disabled = false;
+        if (!audienceUsed) audienceBtn.disabled = false;
+        loadQuestion(currentIndex);
+      } else {
+        // game finished
+        questionEl.innerText = "🏆 YOU ARE A GRAMMAR MILLIONAIRE! 🏆";
+        answersContainer.innerHTML = '';
+        feedbackEl.innerHTML = '<span class="green-text">perfect! click play again.</span>';
+        nextBtn.disabled = true;
+        fiftyBtn.disabled = true;
+        audienceBtn.disabled = true;
+      }
+    });
+
+    // reset everything
+    resetBtn.addEventListener('click', () => {
+      currentIndex = 0;
+      fiftyUsed = false;
+      audienceUsed = false;
+      eliminatedIndices = [];
+      answerLocked = false;
+      fiftyBtn.disabled = false;
+      audienceBtn.disabled = false;
+      loadQuestion(0);
+    });
+
+    // initial load
+    loadQuestion(0);
+  })();
+</script>
+
     <style>
         /* Global body styles – kept as you originally intended, but without flex centering 
            so that the page flows normally and iframes are not forced into a column. */
