@@ -1,275 +1,793 @@
-    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <style>
-        /* Global body styles – kept as you originally intended, but without flex centering 
-           so that the page flows normally and iframes are not forced into a column. */
-        body {
-            background: linear-gradient(145deg, #1E90FF 0%, #87CEEB 100%);
-            margin: 0;
-            padding: 20px;
-            /* removed display: flex, justify-content, align-items – they were breaking the layout */
-        }
+<link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<style>
+    /* Global body styles – kept as you originally intended */
+    body {
+        background: linear-gradient(145deg, #1E90FF 0%, #87CEEB 100%);
+        margin: 0;
+        padding: 20px;
+    }
 
-        /* All game styles are now scoped under .relative-game */
-        .relative-game {
-            display: block;
-            max-width: 1300px;
-            margin: 20px auto; /* centers the game on the page */
-        }
-        .relative-game * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-        }
-        .relative-game .game-container {
-            max-width: 1300px;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(6px);
-            border-radius: 48px;
-            padding: 24px;
-            box-shadow: 0 30px 45px rgba(0, 0, 0, 0.5), inset 0 2px 5px rgba(255, 255, 255, 0.3);
-            border: 2px solid #FFD700;
-        }
-        .relative-game h1 {
-            text-align: center;
-            margin: 0 0 20px 0;
-            font-size: 2.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: #FFD700;
-            text-shadow: 4px 4px 0 #000000, 7px 7px 0 rgba(0,0,0,0.3);
-            word-break: break-word;
-        }
-        .relative-game .board {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-        .relative-game .board-row {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-        }
-        .relative-game .category-header {
-            background: #FFFFFF;
-            border: 3px solid #FFD700;
-            border-radius: 20px 20px 8px 8px;
-            padding: 15px 5px;
-            text-align: center;
-            font-weight: 800;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            color: #1E90FF;
-            box-shadow: inset 0 -3px 0 #FFD700, 0 8px 0 #000000;
-            letter-spacing: 1px;
-            width: 20%;
-            min-width: 150px;
-            word-break: break-word;
-            line-height: 1.3;
-        }
-        .relative-game .cell {
-            background: #1E90FF;
-            border: 3px solid #FFD700;
-            border-radius: 16px;
-            width: 20%;
-            min-width: 150px;
-            aspect-ratio: 1 / 0.9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.3rem;
-            font-weight: 800;
-            color: #FFFFFF;
-            text-shadow: 3px 3px 0 #000000;
-            box-shadow: 0 10px 0 #104E8B, inset 0 -3px 0 #FFD700;
-            cursor: pointer;
-            transition: all 0.08s linear;
-            user-select: none;
-        }
-        .relative-game .cell.used {
-            background: #87CEEB;
-            border-color: #A9A9A9;
-            color: #000000;
-            text-shadow: 2px 2px 0 #FFFFFF;
-            box-shadow: 0 5px 0 #5F9EA0, inset 0 -2px 0 #A9A9A9;
-            transform: translateY(5px);
-            cursor: not-allowed;
-            pointer-events: none;
-            font-size: 2.8rem;
-        }
-        .relative-game .cell:active:not(.used) {
-            transform: translateY(7px);
-            box-shadow: 0 3px 0 #104E8B;
-        }
-        .relative-game .question-panel {
-            background: #000000;
-            border: 4px solid #FFD700;
-            border-radius: 50px;
-            padding: 25px 30px;
-            color: #FFFFFF;
-            box-shadow: inset 0 0 15px #1E90FF, 0 15px 0 #000000;
-        }
-        .relative-game .question-text {
-            font-size: 1.6rem;
-            font-weight: 600;
-            margin: 0 0 15px 0;
-            line-height: 1.4;
-            text-shadow: 2px 2px 0 #1E90FF;
-        }
-        .relative-game .options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 18px;
-            margin: 25px 0 20px;
-            justify-content: center;
-        }
-        .relative-game .option-btn {
-            background: #FFD700;
-            border: none;
-            border-radius: 60px;
-            padding: 16px 28px;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #000000;
-            box-shadow: 0 6px 0 #B8860B, 0 8px 12px rgba(0,0,0,0.3);
-            cursor: pointer;
-            transition: 0.07s;
-            min-width: 140px;
-            border: 2px solid #FFFFFF;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .relative-game .option-btn.selected {
-            background: #1E90FF;
-            color: #FFFFFF;
-            box-shadow: 0 3px 0 #104E8B, 0 8px 12px rgba(0,0,0,0.3);
-            transform: translateY(3px);
-            border-color: #FFD700;
-        }
-        .relative-game .option-btn:active {
-            transform: translateY(6px);
-            box-shadow: 0 2px 0 #B8860B;
-        }
-        .relative-game .option-btn:disabled {
-            opacity: 0.5;
-            transform: translateY(4px);
-            box-shadow: 0 4px 0 #8B6910;
-            pointer-events: none;
-        }
-        .relative-game .submit-btn {
-            background: #FFD700 ;
-            border: none;
-            border-radius: 40px;
-            padding: 16px 40px;
-            font-size: 1.6rem;
-            font-weight: bold;
-            color: #FFFFFF;
-            box-shadow: 0 8px 0 #104E8B, 0 8px 15px black;
-            cursor: pointer;
-            margin: 15px auto 10px;
-            transition: 0.07s;
-            border: 2px solid #FFD700;
-            display: inline-block;
-        }
-        .relative-game .submit-btn:active {
-            transform: translateY(6px);
-            box-shadow: 0 2px 0 #104E8B;
-        }
-        .relative-game .feedback {
-            background: #000000;
-            border-radius: 40px;
-            padding: 15px 25px;
-            font-size: 1.3rem;
-            border-left: 12px solid #FFD700;
-            margin-top: 20px;
-            color: #FFFFFF;
-            box-shadow: inset 0 0 10px #1E90FF;
-        }
-        .relative-game .feedback.correct {
-            border-left-color: #1E90FF;
-        }
-        .relative-game .feedback.incorrect {
-            border-left-color: #FF4500;
-        }
-        .relative-game .explanation {
-            font-size: 1.1rem;
-            margin-top: 10px;
-            color: #87CEEB;
-            font-style: italic;
-        }
-        .relative-game .reset-btn {
-            background: #FFD700;
-            border: none;
-            border-radius: 40px;
-            padding: 14px 35px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #000000 ;
-            box-shadow: 0 8px 0 #B8860B, 0 6px 15px black;
-            cursor: pointer;
-            margin-top: 25px;
-            transition: 0.07s;
-            width: fit-content;
-            border: 2px solid #FFFFFF;
-        }
-        .relative-game .reset-btn:active {
-            transform: translateY(6px);
-            box-shadow: 0 2px 0 #B8860B;
-        }
-        .relative-game .footer {
-            display: flex;
-            justify-content: center;
-        }
-        .relative-game .used-mark {
-            font-size: 2.2rem;
-        }
-        .relative-game .action-row {
-            display: flex;
-            gap: 25px;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        /* Remove the universal selector that was affecting everything */
-    </style>
+    /* MILLIONAIRE GAME STYLES - using your specified colors */
+    .millionaire-game {
+        max-width: 700px;
+        margin: 20px auto 40px auto;
+        font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+
+    .millionaire-game * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    .millionaire-game .game-card {
+        width: 100%;
+        background: #FFFFFF;
+        border-radius: 32px;
+        box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35);
+        overflow: hidden;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .millionaire-game .header {
+        background: #0056B3;
+        padding: 18px 22px 14px 22px;
+        color: white;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .millionaire-game .logo h2 {
+        font-weight: 600;
+        font-size: 1.4rem;
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .millionaire-game .logo span {
+        background: #FFEB3B;
+        color: #000000;
+        font-size: 1rem;
+        font-weight: 700;
+        padding: 5px 12px;
+        border-radius: 40px;
+        margin-left: 8px;
+    }
+
+    .millionaire-game .level-prize {
+        background: #1976D2;
+        padding: 8px 18px;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 1.2rem;
+        box-shadow: inset 0 -2px 0 #0d4175;
+        color: white;
+        display: flex;
+        gap: 8px;
+        align-items: baseline;
+    }
+
+    .millionaire-game .question-panel {
+        background: #FFFFFF;
+        padding: 28px 20px 16px 20px;
+        border-bottom: 2px solid #f0f2f5;
+    }
+
+    .millionaire-game .question-text {
+        background: #f5f7fc;
+        border-left: 6px solid #FFEB3B;
+        border-radius: 20px 8px 8px 20px;
+        padding: 20px 18px;
+        font-size: 1.3rem;
+        line-height: 1.4;
+        font-weight: 500;
+        color: #000000;
+        box-shadow: 0 4px 8px rgba(0,86,179,0.08);
+        margin-bottom: 18px;
+    }
+
+    .millionaire-game .prize-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.1rem;
+        background: #eef4fe;
+        padding: 10px 16px;
+        border-radius: 40px;
+        color: #0056B3;
+        font-weight: 600;
+    }
+
+    .millionaire-game .prize-amount {
+        background: #1976D2;
+        color: white;
+        padding: 4px 20px;
+        border-radius: 30px;
+        font-size: 1.1rem;
+    }
+
+    .millionaire-game .answers-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        padding: 22px 20px 20px 20px;
+        background: #FFFFFF;
+    }
+
+    .millionaire-game .answer-btn {
+        background: #FFFFFF;
+        border: 2px solid #dde3ed;
+        border-radius: 60px;
+        padding: 18px 6px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: all 0.1s ease;
+        color: #000000;
+        cursor: pointer;
+        box-shadow: 0 4px 0 #cbd2df;
+        word-break: break-word;
+    }
+
+    .millionaire-game .answer-btn:hover:not(:disabled) {
+        background: #f0f6ff;
+        border-color: #1976D2;
+    }
+
+    .millionaire-game .answer-letter {
+        background: #0056B3;
+        color: white;
+        font-weight: 700;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin-left: 12px;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+
+    .millionaire-game .answer-btn.selected-correct {
+        background: #c8e6c9;
+        border-color: #2e7d32;
+        box-shadow: 0 4px 0 #1b5e20;
+    }
+
+    .millionaire-game .answer-btn.selected-wrong {
+        background: #ffcdd2;
+        border-color: #b71c1c;
+        box-shadow: 0 4px 0 #8b1e1e;
+    }
+
+    .millionaire-game .answer-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        box-shadow: 0 2px 0 #b0bec5;
+        transform: translateY(2px);
+    }
+
+    .millionaire-game .game-footer {
+        background: #f7f9fc;
+        padding: 18px 20px 20px 20px;
+        border-top: 1px solid #d9e2ef;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .millionaire-game .lifelines {
+        display: flex;
+        gap: 12px;
+    }
+
+    .millionaire-game .lifeline-btn {
+        background: #1976D2;
+        border: none;
+        color: white;
+        font-weight: 600;
+        font-size: 1.0rem;
+        padding: 12px 20px;
+        border-radius: 50px;
+        cursor: pointer;
+        border-bottom: 4px solid #0d3d70;
+        transition: 0.1s;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .millionaire-game .lifeline-btn:disabled {
+        opacity: 0.4;
+        border-bottom-width: 2px;
+        transform: translateY(2px);
+        cursor: default;
+    }
+
+    .millionaire-game .lifeline-btn:not(:disabled):hover {
+        background: #0056B3;
+    }
+
+    .millionaire-game .next-btn {
+        background: #FFEB3B;
+        border: none;
+        color: #000000;
+        font-weight: 700;
+        font-size: 1.2rem;
+        padding: 12px 32px;
+        border-radius: 60px;
+        border-bottom: 4px solid #c5a605;
+        cursor: pointer;
+        transition: 0.1s;
+        box-shadow: 0 4px 12px rgba(255,235,59,0.4);
+    }
+
+    .millionaire-game .next-btn:disabled {
+        opacity: 0.4;
+        border-bottom-width: 2px;
+        transform: translateY(2px);
+        cursor: default;
+    }
+
+    .millionaire-game .reset-area {
+        text-align: center;
+        margin: 0 0 18px 0;
+    }
+
+    .millionaire-game .reset-btn {
+        background: transparent;
+        border: 2px solid #0056B3;
+        color: #0056B3;
+        font-weight: 600;
+        padding: 8px 30px;
+        border-radius: 40px;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+    .millionaire-game .reset-btn:hover {
+        background: #0056B3;
+        color: white;
+    }
+
+    .millionaire-game .feedback-message {
+        padding: 5px 20px 10px 20px;
+        font-size: 1rem;
+        color: #000000;
+        font-weight: 500;
+        min-height: 2.8rem;
+    }
+
+    .millionaire-game .green-text { 
+        color: #1d6b2c; 
+        background: #e8f5e9; 
+        padding: 8px 15px; 
+        border-radius: 30px; 
+        display: inline-block;
+    }
+    
+    .millionaire-game .red-text { 
+        color: #a51b1b; 
+        background: #ffebee; 
+        padding: 8px 15px; 
+        border-radius: 30px; 
+        display: inline-block;
+    }
+
+    @media (max-width: 500px) {
+        .millionaire-game .answers-grid { gap: 10px; padding: 16px 12px; }
+        .millionaire-game .answer-btn { padding: 14px 4px; font-size: 0.95rem; }
+        .millionaire-game .answer-letter { width: 34px; height: 34px; font-size: 1rem; }
+        .millionaire-game .question-text { font-size: 1.1rem; padding: 16px; }
+        .millionaire-game .header { padding: 14px; }
+        .millionaire-game .lifeline-btn { padding: 10px 16px; font-size: 0.9rem; }
+    }
+
+    /* All your original Jeopardy styles remain untouched */
+    .relative-game {
+        display: block;
+        max-width: 1300px;
+        margin: 20px auto;
+    }
+    .relative-game * {
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    }
+    .relative-game .game-container {
+        max-width: 1300px;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(6px);
+        border-radius: 48px;
+        padding: 24px;
+        box-shadow: 0 30px 45px rgba(0, 0, 0, 0.5), inset 0 2px 5px rgba(255, 255, 255, 0.3);
+        border: 2px solid #FFD700;
+    }
+    .relative-game h1 {
+        text-align: center;
+        margin: 0 0 20px 0;
+        font-size: 2.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        color: #FFD700;
+        text-shadow: 4px 4px 0 #000000, 7px 7px 0 rgba(0,0,0,0.3);
+        word-break: break-word;
+    }
+    .relative-game .board {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 30px;
+    }
+    .relative-game .board-row {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+    }
+    .relative-game .category-header {
+        background: #FFFFFF;
+        border: 3px solid #FFD700;
+        border-radius: 20px 20px 8px 8px;
+        padding: 15px 5px;
+        text-align: center;
+        font-weight: 800;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        color: #1E90FF;
+        box-shadow: inset 0 -3px 0 #FFD700, 0 8px 0 #000000;
+        letter-spacing: 1px;
+        width: 20%;
+        min-width: 150px;
+        word-break: break-word;
+        line-height: 1.3;
+    }
+    .relative-game .cell {
+        background: #1E90FF;
+        border: 3px solid #FFD700;
+        border-radius: 16px;
+        width: 20%;
+        min-width: 150px;
+        aspect-ratio: 1 / 0.9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.3rem;
+        font-weight: 800;
+        color: #FFFFFF;
+        text-shadow: 3px 3px 0 #000000;
+        box-shadow: 0 10px 0 #104E8B, inset 0 -3px 0 #FFD700;
+        cursor: pointer;
+        transition: all 0.08s linear;
+        user-select: none;
+    }
+    .relative-game .cell.used {
+        background: #87CEEB;
+        border-color: #A9A9A9;
+        color: #000000;
+        text-shadow: 2px 2px 0 #FFFFFF;
+        box-shadow: 0 5px 0 #5F9EA0, inset 0 -2px 0 #A9A9A9;
+        transform: translateY(5px);
+        cursor: not-allowed;
+        pointer-events: none;
+        font-size: 2.8rem;
+    }
+    .relative-game .cell:active:not(.used) {
+        transform: translateY(7px);
+        box-shadow: 0 3px 0 #104E8B;
+    }
+    .relative-game .question-panel {
+        background: #000000;
+        border: 4px solid #FFD700;
+        border-radius: 50px;
+        padding: 25px 30px;
+        color: #FFFFFF;
+        box-shadow: inset 0 0 15px #1E90FF, 0 15px 0 #000000;
+    }
+    .relative-game .question-text {
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin: 0 0 15px 0;
+        line-height: 1.4;
+        text-shadow: 2px 2px 0 #1E90FF;
+    }
+    .relative-game .options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin: 25px 0 20px;
+        justify-content: center;
+    }
+    .relative-game .option-btn {
+        background: #FFD700;
+        border: none;
+        border-radius: 60px;
+        padding: 16px 28px;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #000000;
+        box-shadow: 0 6px 0 #B8860B, 0 8px 12px rgba(0,0,0,0.3);
+        cursor: pointer;
+        transition: 0.07s;
+        min-width: 140px;
+        border: 2px solid #FFFFFF;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .relative-game .option-btn.selected {
+        background: #1E90FF;
+        color: #FFFFFF;
+        box-shadow: 0 3px 0 #104E8B, 0 8px 12px rgba(0,0,0,0.3);
+        transform: translateY(3px);
+        border-color: #FFD700;
+    }
+    .relative-game .option-btn:active {
+        transform: translateY(6px);
+        box-shadow: 0 2px 0 #B8860B;
+    }
+    .relative-game .option-btn:disabled {
+        opacity: 0.5;
+        transform: translateY(4px);
+        box-shadow: 0 4px 0 #8B6910;
+        pointer-events: none;
+    }
+    .relative-game .submit-btn {
+        background: #FFD700 ;
+        border: none;
+        border-radius: 40px;
+        padding: 16px 40px;
+        font-size: 1.6rem;
+        font-weight: bold;
+        color: #FFFFFF;
+        box-shadow: 0 8px 0 #104E8B, 0 8px 15px black;
+        cursor: pointer;
+        margin: 15px auto 10px;
+        transition: 0.07s;
+        border: 2px solid #FFD700;
+        display: inline-block;
+    }
+    .relative-game .submit-btn:active {
+        transform: translateY(6px);
+        box-shadow: 0 2px 0 #104E8B;
+    }
+    .relative-game .feedback {
+        background: #000000;
+        border-radius: 40px;
+        padding: 15px 25px;
+        font-size: 1.3rem;
+        border-left: 12px solid #FFD700;
+        margin-top: 20px;
+        color: #FFFFFF;
+        box-shadow: inset 0 0 10px #1E90FF;
+    }
+    .relative-game .feedback.correct {
+        border-left-color: #1E90FF;
+    }
+    .relative-game .feedback.incorrect {
+        border-left-color: #FF4500;
+    }
+    .relative-game .explanation {
+        font-size: 1.1rem;
+        margin-top: 10px;
+        color: #87CEEB;
+        font-style: italic;
+    }
+    .relative-game .reset-btn {
+        background: #FFD700;
+        border: none;
+        border-radius: 40px;
+        padding: 14px 35px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #000000 ;
+        box-shadow: 0 8px 0 #B8860B, 0 6px 15px black;
+        cursor: pointer;
+        margin-top: 25px;
+        transition: 0.07s;
+        width: fit-content;
+        border: 2px solid #FFFFFF;
+    }
+    .relative-game .reset-btn:active {
+        transform: translateY(6px);
+        box-shadow: 0 2px 0 #B8860B;
+    }
+    .relative-game .footer {
+        display: flex;
+        justify-content: center;
+    }
+    .relative-game .used-mark {
+        font-size: 2.2rem;
+    }
+    .relative-game .action-row {
+        display: flex;
+        gap: 25px;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+</style>
 </head>
 <body>
 
-
-
-
-    <!-- The game is now wrapped in a scoped div -->
-    <div class="relative-game">
-        <div class="game-container">
-            <h1>RELATIVE CLAUSES JEOPARDY</h1>
-
-            <div id="jeopardyBoard" class="board">
-                <!-- dynamic board -->
+<!-- MILLIONAIRE GAME ADDED HERE - NEW SECTION -->
+<div class="millionaire-game">
+    <div class="game-card">
+        <div class="header">
+            <div class="logo">
+                <h2>📚 GRAMMAR <span>millionaire</span></h2>
             </div>
-
-            <div class="question-panel" id="questionPanel">
-                <div class="question-text" id="questionDisplay"> Select a value on the board</div>
-                <div class="options" id="optionsContainer"></div>
-                <div class="action-row">
-                    <button class="submit-btn" id="submitAnswerBtn"> CHECK ANSWER</button>
-                </div>
-                <div class="feedback" id="feedbackArea">
-                    <span id="feedbackMessage">Select options and click CHECK</span>
-                    <div class="explanation" id="explanationMessage"></div>
-                </div>
-            </div>
-
-            <div class="footer">
-                <button class="reset-btn" id="resetGameBtn">↻ RESTART GAME</button>
+            <div class="level-prize">
+                <small>£</small><span id="prizeDisplay">500</span>
             </div>
         </div>
-    </div>
 
-    <script>
+        <div class="question-panel">
+            <div class="question-text" id="questionText">Loading question...</div>
+            <div class="prize-row">
+                <span>🎯 question <span id="qNumber">1</span>/15</span>
+                <span class="prize-amount" id="qValue">£500</span>
+            </div>
+        </div>
+
+        <div class="answers-grid" id="answersContainer"></div>
+        <div class="feedback-message" id="feedbackMessage"></div>
+
+        <div class="game-footer">
+            <div class="lifelines">
+                <button class="lifeline-btn" id="fiftyBtn">🔹 50:50</button>
+                <button class="lifeline-btn" id="audienceBtn">👥 audience</button>
+            </div>
+            <button class="next-btn" id="nextBtn" disabled>➡️ next</button>
+        </div>
+
+        <div class="reset-area">
+            <button class="reset-btn" id="resetBtn">⟲ play again</button>
+        </div>
+    </div>
+</div>
+
+<!-- YOUR ORIGINAL RELATIVE CLAUSES JEOPARDY GAME - COMPLETELY UNCHANGED -->
+<div class="relative-game">
+    <div class="game-container">
+        <h1>RELATIVE CLAUSES JEOPARDY</h1>
+
+        <div id="jeopardyBoard" class="board">
+            <!-- dynamic board -->
+        </div>
+
+        <div class="question-panel" id="questionPanel">
+            <div class="question-text" id="questionDisplay"> Select a value on the board</div>
+            <div class="options" id="optionsContainer"></div>
+            <div class="action-row">
+                <button class="submit-btn" id="submitAnswerBtn"> CHECK ANSWER</button>
+            </div>
+            <div class="feedback" id="feedbackArea">
+                <span id="feedbackMessage">Select options and click CHECK</span>
+                <div class="explanation" id="explanationMessage"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <button class="reset-btn" id="resetGameBtn">↻ RESTART GAME</button>
+        </div>
+    </div>
+</div>
+
+<!-- YOUR ORIGINAL LUMI ACTIVITIES - COMPLETELY UNCHANGED -->
+<br>
+<center><h1 style="font-size:20px"><b>Mixed conditionals</b></h1></center>
+<iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+
+<center><h1 style="font-size:20px"><b>The future perfect/The future continuous</b></h1></center>
+<iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+
+<center><h1 style="font-size:20px"><b>The present perfect/The present perfect progressive</b></h1></center>
+<iframe src="https://app.lumi.education/api/v1/run/NqzFpP/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+
+<center><h1 style="font-size:20px"><b>The order of adjectives</b></h1></center>
+<iframe src="https://app.lumi.education/api/v1/run/tJevug/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+
+<center><h1 style="font-size:20px"><b>Expressing the future with: will/going to/the present/the present progressive</b></h1></center>
+<iframe src="https://app.lumi.education/api/v1/run/ICS3lU/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+
+<center><h1 style="font-size:20px; font-family: sans-serif;"><b>4 ways to express regrets</b></h1>
+<p style="text-align: center; font-size: 18px; font-family: sans-serif; color: #333; margin-top: 10px; margin-bottom: 20px;">
+    Drag and drop the sentences into their appropriate boxes.
+</p>
+</center>
+
+<div style="max-width: 600px; margin: 0 auto;">
+    <iframe src="https://app.lumi.education/api/v1/run/m_XXyx/embed" width="100%" height="320" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+</div>
+
+<center>
+    <h1 style="font-size:20px; font-family: sans-serif;"><b>The definite article/zero article with geographical locations</b></h1>
+    <p style="text-align: center; font-size:18px; font-family:Arial, sans-serif; color: #333;">Choose the correct article</p>
+</center>
+
+<div style="max-width: 600px; margin: 0 auto;">
+    <iframe src="https://app.lumi.education/api/v1/run/ahsD6O/embed" width="100%" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+</div>
+
+<center><h1 style="font-size:20px"><b>Phrasal verbs of time and money</b></h1></center>
+<div style="max-width: 600px; margin: 0 auto;">
+    <div style="width: 100%;"><div style="position: relative; padding-bottom: 56.25%; padding-top: 0; height: 0;"><iframe title="________" frameborder="0" width="1200" height="675" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://view.genially.com/69872d5a0eca7e681b734da2" type="text/html" allowscriptaccess="always" allowfullscreen="true" scrolling="yes" allownetworking="all"></iframe> </div> </div>
+</div>
+
+<script src="https://app.Lumi.education/api/v1/h5p/core/js/h5p-resizer.js" charset="UTF-8"></script>
+
+<button id="topBtn" title="Go to top" style="display: none; position: fixed; bottom: 20px; right: 30px; z-index: 99; font-size: 24px; border: none; outline: none; background-color: #2196F3; color: white; cursor: pointer; border-radius: 50%; width: 50px; height: 50px; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); line-height: 50px; padding: 0;">↑</button>
+
+<script>
+    // MILLIONAIRE GAME SCRIPT
     (function() {
-        // ---------- CATEGORIES (with intentional line break for NON‑IDENTIFYING) ----------
+        const questions = [
+            { question: "Which tense is best for the main, completed actions in a story?", answers: ["A: Past Perfect", "B: Past Continuous", "C: Simple Past", "D: Past Perfect Continuous"], correct: 2, level: 100, explanation: "✓ Simple Past describes main story events. (rule 1)" },
+            { question: "Complete: 'When I reached the office, my boss ______ already ______ home.'", answers: ["A: did / go", "B: was / going", "C: had / gone", "D: has / gone"], correct: 2, level: 200, explanation: "✓ 'had gone' – past perfect shows earlier action (rule 3)." },
+            { question: "Which sentence describes two simultaneous past actions?", answers: ["A: I cooked dinner and watched news.", "B: I had cooked before you arrived.", "C: I was cooking while my kids were playing.", "D: I have cooked every day."], correct: 2, level: 300, explanation: "✓ past continuous for two actions in progress (rule 2)." },
+            { question: "I was frustrated. I ______ on the report for hours.", answers: ["A: worked", "B: had been working", "C: was working", "D: have worked"], correct: 1, level: 500, explanation: "✓ past perfect continuous – duration before a past moment (rule 4)." },
+            { question: "Find the error: 'We had been knowing each other for years before we started the band.'", answers: ["A: had been knowing", "B: each other", "C: before", "D: started"], correct: 0, level: 1000, explanation: "✓ 'know' is stative – use 'had known' (rule 4 note)." },
+            { question: "The garden was soaked because it ______ all night.", answers: ["A: rained", "B: was raining", "C: had been raining", "D: had rained"], correct: 2, level: 2000, explanation: "✓ 'had been raining' emphasises duration + result (rule 4)." },
+            { question: "Which is correct?", answers: ["A: I realised I forgot my wallet.", "B: I realised I had forgotten my wallet.", "C: I have forgotten my wallet.", "D: I was forgetting my wallet."], correct: 1, level: 4000, explanation: "✓ past perfect 'had forgotten' – happened before realising (rule 3)." },
+            { question: "Choose the best background description: 'The sun ______, and children played outside.'", answers: ["A: shone", "B: had shone", "C: was shining", "D: had been shining"], correct: 2, level: 8000, explanation: "✓ 'was shining' sets the scene (past continuous – rule 2)." },
+            { question: "Before she ______ her own cafe, she ______ as a barista for three years.", answers: ["A: opened / worked", "B: had opened / worked", "C: opened / had been working", "D: was opening / had worked"], correct: 2, level: 16000, explanation: "✓ 'had been working' = duration before main event (rule 4)." },
+            { question: "Spot the mistake: 'He looked exhausted because he was running for an hour before the interview.'", answers: ["A: looked", "B: was running", "C: for an hour", "D: before the interview"], correct: 1, level: 32000, explanation: "✓ need 'had been running' – cause with duration before past (rule 4)." },
+            { question: "I ______ to call you all week, and then you finally ______ me!", answers: ["A: tried / were calling", "B: had been trying / called", "C: had tried / had called", "D: was trying / call"], correct: 1, level: 64000, explanation: "✓ 'had been trying' repeated attempts, 'called' main event (rule 4 & 1)." },
+            { question: "Which sentence is INCORRECT?", answers: ["A: I had been living in Oslo for a year.", "B: I had known the truth all along.", "C: I had been being a fan for ages.", "D: The ground was wet. It had rained."], correct: 2, level: 125000, explanation: "✓ 'had been being' – stative 'be' no continuous (rule 4 note)." },
+            { question: "You enter a room; your colleague sighs, papers everywhere. Best description:", answers: ["A: He looked for the contract before you arrived.", "B: He was looking for the contract.", "C: He had been looking for the contract for an hour.", "D: He looked for the contract and you arrived."], correct: 2, level: 250000, explanation: "✓ past perf. continuous explains visible result & duration (rule 4)." },
+            { question: "When help finally arrived, the hikers ______ to a tree for two days.", answers: ["A: clung", "B: were clinging", "C: had been clinging", "D: have clung"], correct: 2, level: 500000, explanation: "✓ duration up to that past moment – past perfect continuous (rule 4)." },
+            { question: "Is this correct? 'I finally grasped the theory my tutor was explaining all year.'", answers: ["A: yes, correct", "B: change 'was explaining' to 'had been explaining'", "C: change 'grasped' to 'had grasped'", "D: change 'all year' to 'throughout year'"], correct: 1, level: 1000000, explanation: "✓ 'had been explaining' = duration completed before 'grasped' (rule 3 & 4)." }
+        ];
+
+        let currentIndex = 0, fiftyUsed = false, audienceUsed = false, answerLocked = false, eliminatedIndices = [];
+        
+        const questionEl = document.getElementById('questionText');
+        const answersContainer = document.getElementById('answersContainer');
+        const feedbackEl = document.getElementById('feedbackMessage');
+        const nextBtn = document.getElementById('nextBtn');
+        const fiftyBtn = document.getElementById('fiftyBtn');
+        const audienceBtn = document.getElementById('audienceBtn');
+        const prizeSpan = document.getElementById('prizeDisplay');
+        const qNumberSpan = document.getElementById('qNumber');
+        const qValueSpan = document.getElementById('qValue');
+        const resetBtn = document.getElementById('resetBtn');
+
+        function formatPrize(level) {
+            if (level >= 1000000) return '£1M';
+            if (level >= 1000) return '£' + (level/1000) + 'k';
+            return '£' + level;
+        }
+
+        function loadQuestion(index) {
+            const q = questions[index];
+            questionEl.innerText = q.question;
+            qNumberSpan.innerText = index + 1;
+            qValueSpan.innerText = formatPrize(q.level);
+            prizeSpan.innerText = q.level >= 1000000 ? '1M' : (q.level >= 1000 ? (q.level/1000)+'k' : q.level);
+
+            let htmlStr = '';
+            for (let i = 0; i < q.answers.length; i++) {
+                const letter = String.fromCharCode(65 + i);
+                htmlStr += `<button class="answer-btn" data-index="${i}"><span class="answer-letter">${letter}</span>${q.answers[i]}</button>`;
+            }
+            answersContainer.innerHTML = htmlStr;
+
+            document.querySelectorAll('.millionaire-game .answer-btn').forEach(btn => btn.addEventListener('click', answerHandler));
+
+            if (eliminatedIndices.length > 0 && !answerLocked) {
+                applyFiftyVisibility();
+            } else {
+                document.querySelectorAll('.millionaire-game .answer-btn').forEach(btn => btn.style.display = 'flex');
+            }
+
+            answerLocked = false;
+            nextBtn.disabled = true;
+            feedbackEl.innerHTML = '';
+        }
+
+        function answerHandler(e) {
+            if (answerLocked) return;
+            const btn = e.currentTarget;
+            const selectedIdx = parseInt(btn.dataset.index, 10);
+            const currentQ = questions[currentIndex];
+            const isCorrect = (selectedIdx === currentQ.correct);
+
+            answerLocked = true;
+            nextBtn.disabled = false;
+
+            document.querySelectorAll('.millionaire-game .answer-btn').forEach(b => {
+                b.disabled = true;
+                const idx = parseInt(b.dataset.index, 10);
+                if (idx === currentQ.correct) b.classList.add('selected-correct');
+                else if (idx === selectedIdx && !isCorrect) b.classList.add('selected-wrong');
+            });
+
+            if (isCorrect) {
+                feedbackEl.innerHTML = `<span class="green-text">✅ correct! ${currentQ.explanation || ''}</span>`;
+            } else {
+                feedbackEl.innerHTML = `<span class="red-text">❌ wrong. correct answer: ${String.fromCharCode(65+currentQ.correct)}. ${currentQ.explanation || ''}</span>`;
+            }
+        }
+
+        function applyFiftyVisibility() {
+            const currentQ = questions[currentIndex];
+            const correctIdx = currentQ.correct;
+            let wrongIndices = [0,1,2,3].filter(i => i !== correctIdx);
+            for (let i = wrongIndices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [wrongIndices[i], wrongIndices[j]] = [wrongIndices[j], wrongIndices[i]];
+            }
+            const toEliminate = wrongIndices.slice(0, 2);
+            eliminatedIndices = toEliminate;
+
+            document.querySelectorAll('.millionaire-game .answer-btn').forEach(btn => {
+                const idx = parseInt(btn.dataset.index, 10);
+                btn.style.display = toEliminate.includes(idx) ? 'none' : 'flex';
+            });
+        }
+
+        fiftyBtn.addEventListener('click', () => {
+            if (fiftyUsed || answerLocked) return;
+            fiftyUsed = true;
+            fiftyBtn.disabled = true;
+            applyFiftyVisibility();
+            feedbackEl.innerHTML = '<span class="green-text">🔹 50:50 applied – two wrong answers hidden.</span>';
+        });
+
+        audienceBtn.addEventListener('click', () => {
+            if (audienceUsed || answerLocked) return;
+            audienceUsed = true;
+            audienceBtn.disabled = true;
+            const correctLetter = String.fromCharCode(65 + questions[currentIndex].correct);
+            feedbackEl.innerHTML = `<span class="green-text">👥 audience thinks ${correctLetter} is correct! (use wisely)</span>`;
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < questions.length - 1) {
+                currentIndex++;
+                eliminatedIndices = [];
+                answerLocked = false;
+                if (!fiftyUsed) fiftyBtn.disabled = false;
+                if (!audienceUsed) audienceBtn.disabled = false;
+                loadQuestion(currentIndex);
+            } else {
+                questionEl.innerText = "🏆 YOU ARE A GRAMMAR MILLIONAIRE! 🏆";
+                answersContainer.innerHTML = '';
+                feedbackEl.innerHTML = '<span class="green-text">perfect! click play again.</span>';
+                nextBtn.disabled = true;
+                fiftyBtn.disabled = true;
+                audienceBtn.disabled = true;
+            }
+        });
+
+        resetBtn.addEventListener('click', () => {
+            currentIndex = 0;
+            fiftyUsed = false;
+            audienceUsed = false;
+            eliminatedIndices = [];
+            answerLocked = false;
+            fiftyBtn.disabled = false;
+            audienceBtn.disabled = false;
+            loadQuestion(0);
+        });
+
+        loadQuestion(0);
+    })();
+
+    // YOUR ORIGINAL JEOPARDY GAME SCRIPT
+    (function() {
         const categories = [
             { name: "NON-<br>IDENTIFYING" },
             { name: "IDENTIFYING" },
@@ -277,124 +795,34 @@
             { name: "MIXED CHALLENGES" }
         ];
 
-        // ---------- REVISED MIXED CHALLENGES (two‑blank, both clause types) ----------
         const questionsData = [
-            // ----------------------------------- NON-IDENTIFYING (5) -----------------------------------
-            { category: 0, points: 100,
-              question: "My sister, ____ lives in London, is a data analyst.",
-              options: ["A) that", "B) who", "C) which"],
-              correct: ["B"],
-              explanation: "Non‑identifying clause (with commas): use 'who' for people. 'That' is not used in non‑identifying clauses." },
-            { category: 0, points: 200,
-              question: "Elon Musk, ____ companies include Tesla and SpaceX, is a controversial figure.",
-              options: ["A) who", "B) whose", "C) that"],
-              correct: ["B"],
-              explanation: "Possessive 'whose' shows the companies belong to him. Non‑identifying." },
-            { category: 0, points: 300,
-              question: "The Eiffel Tower, ____ is in Paris, was built in 1889.",
-              options: ["A) that", "B) which", "C) who"],
-              correct: ["B"],
-              explanation: "Non‑identifying clause: use 'which' for things (never 'that' here)." },
-            { category: 0, points: 400,
-              question: "My boss, ____ I respect a lot, is leaving the company.",
-              options: ["A) who", "B) whom", "C) which"],
-              correct: ["A","B"],
-              explanation: "Object of 'respect'. Formal = whom, everyday = who. Both acceptable in non‑identifying." },
-            { category: 0, points: 500,
-              question: "The film 'Oppenheimer,' ____ won many Oscars, was a huge success.",
-              options: ["A) that", "B) which", "C) which it"],
-              correct: ["B"],
-              explanation: "Non‑identifying: only 'which' is correct. 'That' is impossible, 'which it' is redundant." },
-
-            // ----------------------------------- IDENTIFYING (5) – NO HINTS -----------------------------------
-            { category: 1, points: 100,
-              question: "The smartphone ____ I bought last week has a fantastic camera.",
-              options: ["A) that/which", "B) (no pronoun)", "C) who"],
-              correct: ["A","B"],
-              explanation: "IDENTIFYING + object → both a pronoun ('that'/'which') and omission are correct." },
-            { category: 1, points: 200,
-              question: "The new restaurant ____ opened on Main Street is already fully booked.",
-              options: ["A) that/which", "B) (no pronoun)", "C) who"],
-              correct: ["A"],
-              explanation: "IDENTIFYING + subject → the pronoun cannot be omitted. 'That' or 'which' are correct." },
-            { category: 1, points: 300,
-              question: "The woman ____ lives next door is a doctor.",
-              options: ["A) who/that", "B) (no pronoun)", "C) which"],
-              correct: ["A"],
-              explanation: "IDENTIFYING + subject (person) → 'who' or 'that' are correct, but cannot omit." },
-            { category: 1, points: 400,
-              question: "The book ____ she gave me for my birthday is a bestseller.",
-              options: ["A) that/which", "B) (no pronoun)", "C) who"],
-              correct: ["A","B"],
-              explanation: "IDENTIFYING + object → pronoun ('that'/'which') OR omission – both correct." },
-            { category: 1, points: 500,
-              question: "The artist ____ I was telling you about is very talented.",
-              options: ["A) who/that", "B) (no pronoun)", "C) which"],
-              correct: ["A","B"],
-              explanation: "IDENTIFYING + object (person) → 'who'/'that' or omission are all correct." },
-
-            // ----------------------------------- WHOSE & WHOM (5) ---------------------------------------
-            { category: 2, points: 100,
-              question: "I have a friend ____ father is a famous chef.",
-              options: ["A) who's", "B) whose", "C) who"],
-              correct: ["B"],
-              explanation: "Possession requires 'whose'. 'Who's' = who is/has." },
-            { category: 2, points: 200,
-              question: "The company, ____ CEO just resigned, is facing a financial crisis.",
-              options: ["A) which", "B) whose", "C) that"],
-              correct: ["B"],
-              explanation: "Non‑identifying + possession: use 'whose'." },
-            { category: 2, points: 300,
-              question: "That's the musician about ____ I was reading an article.",
-              options: ["A) who", "B) whom", "C) which"],
-              correct: ["B"],
-              explanation: "Preposition before the pronoun → formal 'whom' is required." },
-            { category: 2, points: 400,
-              question: "The people ____ car was stolen have called the police.",
-              options: ["A) who", "B) whose", "C) which"],
-              correct: ["B"],
-              explanation: "Possession (their car) → only 'whose' works." },
-            { category: 2, points: 500,
-              question: "The person to ____ you should send the report is Mr. Jones.",
-              options: ["A) who", "B) whom", "C) that"],
-              correct: ["B"],
-              explanation: "Preposition 'to' before the gap → formal object requires 'whom'." },
-
-            // ----------------------------------- MIXED CHALLENGES (5) – two‑blank, both types -----------------
-            { category: 3, points: 100,
-              question: "The new CEO, ____ graduated from Harvard, is the person ____ we should hire.",
-              options: ["A) who / who", "B) who / that", "C) who / (no pronoun)", "D) which / who", "E) that / whom"],
-              correct: ["A","B","C"],
-              explanation: "First blank (non‑identifying, person) → only 'who'. Second blank (identifying, object, person) → 'who', 'that', or omission." },
-            { category: 3, points: 200,
-              question: "My laptop, ____ I bought last year, has a feature ____ allows face recognition.",
-              options: ["A) which / which", "B) which / that", "C) that / which", "D) (no pronoun) / that", "E) which / (no pronoun)"],
-              correct: ["A","B"],
-              explanation: "First blank (non‑identifying, thing) → only 'which'. Second blank (identifying, subject, thing) → 'which' or 'that' (no omission)." },
-            { category: 3, points: 300,
-              question: "The artist, ____ paintings are famous, is someone ____ I admire.",
-              options: ["A) whose / who", "B) whose / that", "C) whose / (no pronoun)", "D) who's / who", "E) which / whom"],
-              correct: ["A","B","C"],
-              explanation: "First blank (non‑identifying, possessive) → only 'whose'. Second blank (identifying, object, person) → 'who', 'that', or omission." },
-            { category: 3, points: 400,
-              question: "The house, ____ was built in 1900, has a garden ____ is full of roses.",
-              options: ["A) which / which", "B) which / that", "C) that / which", "D) which / (no pronoun)", "E) (no pronoun) / that"],
-              correct: ["A","B"],
-              explanation: "First blank (non‑identifying, thing) → only 'which'. Second blank (identifying, subject, thing) → 'which' or 'that' (no omission)." },
-            { category: 3, points: 500,
-              question: "The professor, ____ I respect deeply, wrote a book ____ became a bestseller.",
-              options: ["A) who / which", "B) who / that", "C) whom / which", "D) whom / that", "E) that / which"],
-              correct: ["A","B","C","D"],
-              explanation: "First blank (non‑identifying, object, person) → 'who' (informal) or 'whom' (formal). Second blank (identifying, subject, thing) → 'which' or 'that'." }
+            { category: 0, points: 100, question: "My sister, ____ lives in London, is a data analyst.", options: ["A) that", "B) who", "C) which"], correct: ["B"], explanation: "Non‑identifying clause (with commas): use 'who' for people. 'That' is not used in non‑identifying clauses." },
+            { category: 0, points: 200, question: "Elon Musk, ____ companies include Tesla and SpaceX, is a controversial figure.", options: ["A) who", "B) whose", "C) that"], correct: ["B"], explanation: "Possessive 'whose' shows the companies belong to him. Non‑identifying." },
+            { category: 0, points: 300, question: "The Eiffel Tower, ____ is in Paris, was built in 1889.", options: ["A) that", "B) which", "C) who"], correct: ["B"], explanation: "Non‑identifying clause: use 'which' for things (never 'that' here)." },
+            { category: 0, points: 400, question: "My boss, ____ I respect a lot, is leaving the company.", options: ["A) who", "B) whom", "C) which"], correct: ["A","B"], explanation: "Object of 'respect'. Formal = whom, everyday = who. Both acceptable in non‑identifying." },
+            { category: 0, points: 500, question: "The film 'Oppenheimer,' ____ won many Oscars, was a huge success.", options: ["A) that", "B) which", "C) which it"], correct: ["B"], explanation: "Non‑identifying: only 'which' is correct. 'That' is impossible, 'which it' is redundant." },
+            { category: 1, points: 100, question: "The smartphone ____ I bought last week has a fantastic camera.", options: ["A) that/which", "B) (no pronoun)", "C) who"], correct: ["A","B"], explanation: "IDENTIFYING + object → both a pronoun ('that'/'which') and omission are correct." },
+            { category: 1, points: 200, question: "The new restaurant ____ opened on Main Street is already fully booked.", options: ["A) that/which", "B) (no pronoun)", "C) who"], correct: ["A"], explanation: "IDENTIFYING + subject → the pronoun cannot be omitted. 'That' or 'which' are correct." },
+            { category: 1, points: 300, question: "The woman ____ lives next door is a doctor.", options: ["A) who/that", "B) (no pronoun)", "C) which"], correct: ["A"], explanation: "IDENTIFYING + subject (person) → 'who' or 'that' are correct, but cannot omit." },
+            { category: 1, points: 400, question: "The book ____ she gave me for my birthday is a bestseller.", options: ["A) that/which", "B) (no pronoun)", "C) who"], correct: ["A","B"], explanation: "IDENTIFYING + object → pronoun ('that'/'which') OR omission – both correct." },
+            { category: 1, points: 500, question: "The artist ____ I was telling you about is very talented.", options: ["A) who/that", "B) (no pronoun)", "C) which"], correct: ["A","B"], explanation: "IDENTIFYING + object (person) → 'who'/'that' or omission are all correct." },
+            { category: 2, points: 100, question: "I have a friend ____ father is a famous chef.", options: ["A) who's", "B) whose", "C) who"], correct: ["B"], explanation: "Possession requires 'whose'. 'Who's' = who is/has." },
+            { category: 2, points: 200, question: "The company, ____ CEO just resigned, is facing a financial crisis.", options: ["A) which", "B) whose", "C) that"], correct: ["B"], explanation: "Non‑identifying + possession: use 'whose'." },
+            { category: 2, points: 300, question: "That's the musician about ____ I was reading an article.", options: ["A) who", "B) whom", "C) which"], correct: ["B"], explanation: "Preposition before the pronoun → formal 'whom' is required." },
+            { category: 2, points: 400, question: "The people ____ car was stolen have called the police.", options: ["A) who", "B) whose", "C) which"], correct: ["B"], explanation: "Possession (their car) → only 'whose' works." },
+            { category: 2, points: 500, question: "The person to ____ you should send the report is Mr. Jones.", options: ["A) who", "B) whom", "C) that"], correct: ["B"], explanation: "Preposition 'to' before the gap → formal object requires 'whom'." },
+            { category: 3, points: 100, question: "The new CEO, ____ graduated from Harvard, is the person ____ we should hire.", options: ["A) who / who", "B) who / that", "C) who / (no pronoun)", "D) which / who", "E) that / whom"], correct: ["A","B","C"], explanation: "First blank (non‑identifying, person) → only 'who'. Second blank (identifying, object, person) → 'who', 'that', or omission." },
+            { category: 3, points: 200, question: "My laptop, ____ I bought last year, has a feature ____ allows face recognition.", options: ["A) which / which", "B) which / that", "C) that / which", "D) (no pronoun) / that", "E) which / (no pronoun)"], correct: ["A","B"], explanation: "First blank (non‑identifying, thing) → only 'which'. Second blank (identifying, subject, thing) → 'which' or 'that' (no omission)." },
+            { category: 3, points: 300, question: "The artist, ____ paintings are famous, is someone ____ I admire.", options: ["A) whose / who", "B) whose / that", "C) whose / (no pronoun)", "D) who's / who", "E) which / whom"], correct: ["A","B","C"], explanation: "First blank (non‑identifying, possessive) → only 'whose'. Second blank (identifying, object, person) → 'who', 'that', or omission." },
+            { category: 3, points: 400, question: "The house, ____ was built in 1900, has a garden ____ is full of roses.", options: ["A) which / which", "B) which / that", "C) that / which", "D) which / (no pronoun)", "E) (no pronoun) / that"], correct: ["A","B"], explanation: "First blank (non‑identifying, thing) → only 'which'. Second blank (identifying, subject, thing) → 'which' or 'that' (no omission)." },
+            { category: 3, points: 500, question: "The professor, ____ I respect deeply, wrote a book ____ became a bestseller.", options: ["A) who / which", "B) who / that", "C) whom / which", "D) whom / that", "E) that / which"], correct: ["A","B","C","D"], explanation: "First blank (non‑identifying, object, person) → 'who' (informal) or 'whom' (formal). Second blank (identifying, subject, thing) → 'which' or 'that'." }
         ];
 
-        // ---------- GAME STATE ----------
-        let usedCells = {};                // "cat-points" -> true
+        let usedCells = {};
         let currentCellKey = null;
         let currentQuestion = null;
-        let selectedOptions = [];          // store selected letters (e.g. ['A','B'])
+        let selectedOptions = [];
 
-        // DOM elements
         const boardDiv = document.getElementById('jeopardyBoard');
         const questionDisplay = document.getElementById('questionDisplay');
         const optionsContainer = document.getElementById('optionsContainer');
@@ -403,21 +831,18 @@
         const explanationMessage = document.getElementById('explanationMessage');
         const feedbackArea = document.getElementById('feedbackArea');
 
-        // ---------- RENDER BOARD (using innerHTML for category headers) ----------
         function renderBoard() {
             boardDiv.innerHTML = '';
-            // header row
             const headerRow = document.createElement('div');
             headerRow.className = 'board-row';
             categories.forEach(cat => {
                 const header = document.createElement('div');
                 header.className = 'category-header';
-                header.innerHTML = cat.name;   // innerHTML allows <br> in NON-<br>IDENTIFYING
+                header.innerHTML = cat.name;
                 headerRow.appendChild(header);
             });
             boardDiv.appendChild(headerRow);
 
-            // rows for points 100,200,300,400,500
             const pointValues = [100, 200, 300, 400, 500];
             for (let rowIdx = 0; rowIdx < pointValues.length; rowIdx++) {
                 const row = document.createElement('div');
@@ -445,7 +870,6 @@
             }
         }
 
-        // ---------- CELL CLICK : load question, reset UI ----------
         function onCellClick(e) {
             const cell = e.currentTarget;
             if (cell.classList.contains('used')) return;
@@ -461,30 +885,25 @@
 
             currentCellKey = `${catIdx}-${points}`;
             currentQuestion = q;
-            selectedOptions = [];           // clear previous selections
+            selectedOptions = [];
 
-            // display question
             questionDisplay.innerText = q.question;
-            // rebuild option buttons
             optionsContainer.innerHTML = '';
             q.options.forEach((optText, idx) => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
                 btn.innerText = optText;
-                btn.dataset.optionLetter = optText[0]; // 'A', 'B', 'C', ...
+                btn.dataset.optionLetter = optText[0];
                 btn.addEventListener('click', toggleOption);
                 optionsContainer.appendChild(btn);
             });
 
-            // reset feedback area
             feedbackMessage.innerText = 'Select the correct option(s) and click CHECK';
             explanationMessage.innerText = '';
             feedbackArea.className = 'feedback';
-            // enable submit (it may have been disabled after previous answer)
             submitBtn.disabled = false;
         }
 
-        // ---------- TOGGLE option selection ----------
         function toggleOption(e) {
             const btn = e.currentTarget;
             const letter = btn.dataset.optionLetter;
@@ -497,31 +916,26 @@
             }
         }
 
-        // ---------- SUBMIT answer : check if selected matches correct set ----------
         function onSubmit() {
             if (!currentQuestion) {
                 feedbackMessage.innerText = '⚠️ First select a question from the board.';
                 return;
             }
 
-            // sort both arrays for comparison (order doesn't matter)
             const selectedSorted = [...selectedOptions].sort();
             const correctSorted = [...currentQuestion.correct].sort();
 
             const isCorrect = (selectedSorted.length === correctSorted.length) &&
                               selectedSorted.every((val, i) => val === correctSorted[i]);
 
-            // mark cell as used regardless? only if they submit (even wrong, they fall)
             if (currentCellKey) {
                 usedCells[currentCellKey] = true;
             }
 
-            // disable all option buttons and submit button
-            const allOpts = document.querySelectorAll('.option-btn');
+            const allOpts = document.querySelectorAll('.relative-game .option-btn');
             allOpts.forEach(btn => btn.disabled = true);
             submitBtn.disabled = true;
 
-            // feedback styling
             feedbackArea.classList.remove('correct', 'incorrect');
             if (isCorrect) {
                 feedbackMessage.innerText = '✅ SAFE! You chose exactly the right answers. You move forward.';
@@ -532,11 +946,9 @@
             }
             explanationMessage.innerText = currentQuestion.explanation;
 
-            // re-render board to show used cell (hole)
             renderBoard();
         }
 
-        // ---------- RESET GAME ----------
         function resetGame() {
             usedCells = {};
             currentQuestion = null;
@@ -551,82 +963,25 @@
             renderBoard();
         }
 
-        // attach listeners
         submitBtn.addEventListener('click', onSubmit);
         document.getElementById('resetGameBtn').addEventListener('click', resetGame);
 
-        // initial render
         renderBoard();
     })();
-    </script>
 
-    <!-- The rest of your original page – completely unchanged -->
-    <br>
-    <center><h1 style="font-size:20px"><b>Mixed conditionals</b></h1></center>
-    <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-
-
-
-    <center><h1 style="font-size:20px"><b>The future perfect/The future continuous</b></h1></center>
-    <iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-
-
-
-    <center><h1 style="font-size:20px"><b>The present perfect/The present perfect progressive</b></h1></center>
-    <iframe src="https://app.lumi.education/api/v1/run/NqzFpP/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-
-
-
-    <center><h1 style="font-size:20px"><b>The order of adjectives</b></h1></center>
-    <iframe src="https://app.lumi.education/api/v1/run/tJevug/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-
-
-
-    <center><h1 style="font-size:20px"><b>Expressing the future with: will/going to/the present/the present progressive</b></h1></center>
-    <iframe src="https://app.lumi.education/api/v1/run/ICS3lU/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-
-
-    <center><h1 style="font-size:20px; font-family: sans-serif;"><b>4 ways to express regrets</b></h1>
-    <p style="text-align: center; font-size: 18px; font-family: sans-serif; color: #333; margin-top: 10px; margin-bottom: 20px;">
-        Drag and drop the sentences into their appropriate boxes.
-    </p>
-    </center>
-
-    <div style="max-width: 600px; margin: 0 auto;">
-        <iframe src="https://app.lumi.education/api/v1/run/m_XXyx/embed" width="100%" height="320" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-
-    </div>
-
-    <center>
-        <h1 style="font-size:20px; font-family: sans-serif;"><b>The definite article/zero article with geographical locations</b></h1>
-        <p style="text-align: center; font-size:18px; font-family:Arial, sans-serif; color: #333;">Choose the correct article</p>
-    </center>
-
-    <div style="max-width: 600px; margin: 0 auto;">
-        <iframe src="https://app.lumi.education/api/v1/run/ahsD6O/embed" width="100%" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-    </div>
-<center><h1 style="font-size:20px"><b>Phrasal verbs of time and money</b></h1></center>
-    <div style="max-width: 600px; margin: 0 auto;">
-        <div style="width: 100%;"><div style="position: relative; padding-bottom: 56.25%; padding-top: 0; height: 0;"><iframe title="________" frameborder="0" width="1200" height="675" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://view.genially.com/69872d5a0eca7e681b734da2" type="text/html" allowscriptaccess="always" allowfullscreen="true" scrolling="yes" allownetworking="all"></iframe> </div> </div>
-    </div>
-
-    <script src="https://app.Lumi.education/api/v1/h5p/core/js/h5p-resizer.js" charset="UTF-8"></script>
-
-    <button id="topBtn" title="Go to top" style="display: none; position: fixed; bottom: 20px; right: 30px; z-index: 99; font-size: 24px; border: none; outline: none; background-color: #2196F3; color: white; cursor: pointer; border-radius: 50%; width: 50px; height: 50px; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); line-height: 50px; padding: 0;">↑</button>
-
-    <script>
-        const btn = document.getElementById("topBtn");
-        window.onscroll = function() {
-            if (window.scrollY > 400) {
-                btn.style.display = "block";
-            } else {
-                btn.style.display = "none";
-            }
-        };
-        btn.onclick = function() {
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        };
-    </script>
+    // TOP BUTTON SCRIPT
+    const btn = document.getElementById("topBtn");
+    window.onscroll = function() {
+        if (window.scrollY > 400) {
+            btn.style.display = "block";
+        } else {
+            btn.style.display = "none";
+        }
+    };
+    btn.onclick = function() {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    };
+</script>
 
 </body>
 </html>
