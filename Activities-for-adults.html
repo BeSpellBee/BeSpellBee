@@ -1,21 +1,354 @@
 <html>
 <head>
-<title>Activities2 </title>
-<link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
+    <title>Hospitality Students - Beginner Activities</title>
+    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Global styles - matching the B2 page exactly */
+        body {
+            background: linear-gradient(145deg, #1E90FF 0%, #87CEEB 100%);
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        /* Main container - matches game card style from B2 page */
+        .beginner-container {
+            max-width: 1088px;
+            margin: 0 auto;
+        }
+
+        /* Header section - matches millionaire/jeopardy header */
+        .page-header {
+            background: #0056B3;
+            border-radius: 32px 32px 0 0;
+            padding: 24px 32px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header h1 span {
+            background: #FFEB3B;
+            color: #000000;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: 40px;
+            letter-spacing: 0.5px;
+        }
+
+        .level-badge {
+            background: #1976D2;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: inset 0 -2px 0 #0d4175;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Activity card - matches game-card from B2 page */
+        .activity-card {
+            background: #FFFFFF;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        /* Activity header - matches header from B2 page */
+        .activity-header {
+            background: #0056B3;
+            padding: 18px 24px;
+            color: white;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .activity-header h2 {
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: 0.5px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .activity-header h2::before {
+            content: "📘";
+            font-size: 1.6rem;
+        }
+
+        .activity-tag {
+            background: #FFEB3B;
+            color: #000000;
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 5px 14px;
+            border-radius: 40px;
+            letter-spacing: 0.3px;
+        }
+
+        /* Audio section styling */
+        .audio-section {
+            background: #f5f7fc;
+            padding: 20px 24px;
+            border-bottom: 2px solid #eef4fe;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .audio-label {
+            background: #1976D2;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 0 #0d3d70;
+        }
+
+        .audio-label::before {
+            content: "🎧";
+            font-size: 1.1rem;
+        }
+
+        audio {
+            flex: 1;
+            min-width: 250px;
+            height: 45px;
+            border-radius: 30px;
+        }
+
+        /* Iframe wrapper - matches B2 page styling */
+        .iframe-wrapper {
+            padding: 24px;
+            background: #FFFFFF;
+        }
+
+        .iframe-wrapper iframe {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #eef4fe;
+            border-radius: 16px;
+            background: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(0,86,179,0.08);
+        }
+
+        /* Special styling for multiple iframes in Zoe's section */
+        .multi-iframe .iframe-wrapper {
+            border-bottom: 2px solid #eef4fe;
+        }
+
+        .multi-iframe .iframe-wrapper:last-child {
+            border-bottom: none;
+        }
+
+        /* Divider between activities */
+        .activity-divider {
+            height: 4px;
+            background: linear-gradient(90deg, #FFEB3B, #1976D2, #0056B3);
+            width: 100%;
+            margin: 20px 0;
+            border-radius: 2px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 700px) {
+            .page-header h1 { font-size: 1.8rem; }
+            .activity-header h2 { font-size: 1.2rem; }
+            .iframe-wrapper iframe { height: 450px; }
+            .audio-section { flex-direction: column; align-items: flex-start; }
+            audio { width: 100%; }
+        }
+
+        @media (max-width: 500px) {
+            .page-header { flex-direction: column; align-items: flex-start; }
+            .page-header h1 { font-size: 1.5rem; }
+            .iframe-wrapper iframe { height: 350px; }
+        }
+
+        /* Top button styling - matches B2 page */
+        #topBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            z-index: 99;
+            font-size: 24px;
+            border: none;
+            outline: none;
+            background-color: #1976D2;
+            color: white;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            line-height: 50px;
+            padding: 0;
+            transition: 0.1s;
+            border-bottom: 4px solid #0d3d70;
+        }
+
+        #topBtn:hover {
+            background-color: #0056B3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+
+        #topBtn:active {
+            transform: translateY(2px);
+            border-bottom-width: 2px;
+        }
+    </style>
 </head>
-<body><center><h1 style="font-size:30px"><b>Hospitality students</b></h1> </center>
-  <h1 style="font-size:  25px"><b>Common job questions and answers-vocabulary and pronunciation(Google Chrome only)</b></h1> 
-  <iframe src="https://app.lumi.education/api/v1/run/ui5YGZ/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"></iframe><script src="https://app.Lumi.education/api/v1/h5p/core/js/h5p-resizer.js" charset="UTF-8"></script>
-  <h1 style="font-size:25px"><b>First meetings</b></h1> 
-<iframe src="https://app.Lumi.education/api/v1/run/WkKntW/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"></iframe><script src="https://app.Lumi.education/api/v1/h5p/core/js/h5p-resizer.js" charset="UTF-8"></script>
-  <h1 style="font-size:25px"><b>Daily routines at work</b></h1> 
-<iframe src="https://app.Lumi.education/api/v1/run/Zc_45y/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"></iframe><script src="https://app.Lumi.education/api/v1/h5p/core/js/h5p-resizer.js" charset="UTF-8"></script>
-  <h1 style="font-size:25px"><b>Daily routines at work(dictation)</b></h1> 
-<iframe src="https://app.Lumi.education/api/v1/run/0WviSL/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"></iframe><script src="https://app.Lumi.education/api/v1/h5p/core/js/h5p-resizer.js" charset="UTF-8"></script>
-<h1 style="font-size:25px"><b>Zoe's first day at work</b></h1> 
-<audio src="mp3/2_6.mp3" controls></audio>
-<iframe src="https://app.Lumi.education/api/v1/run/IOyPZA/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"></iframe><script src="https://app.Lumi.education/api/v1/h5p/core/js/h5p-resizer.js" charset="UTF-8"></script>
-<iframe src="https://app.Lumi.education/api/v1/run/RgqSXb/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"></iframe><script src="https://app.Lumi.education/api/v1/h5p/core/js/h5p-resizer.js" charset="UTF-8"></script>
-<iframe src="https://app.Lumi.education/api/v1/run/lwVZ9D/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"></iframe><script src="https://app.Lumi.education/api/v1/h5p/core/js/h5p-resizer.js" charset="UTF-8"></script>
+<body>
+    <div class="beginner-container">
+        <!-- Page Header - matches B2 page style -->
+        <div class="page-header">
+            <h1>
+                HOSPITALITY STUDENTS
+                <span>beginner</span>
+            </h1>
+            <div class="level-badge">
+                <span>🔰</span> CEFR A1-A2
+            </div>
+        </div>
+
+        <!-- Common job questions -->
+        <div class="activity-card">
+            <div class="activity-header">
+                <h2>Common job questions and answers</h2>
+                <span class="activity-tag">vocabulary & pronunciation</span>
+            </div>
+            <div class="activity-description" style="background: #f5f7fc; padding: 12px 24px; color: #1976D2; font-style: italic; border-bottom: 2px solid #eef4fe;">
+                ⚠️ Google Chrome only
+            </div>
+            <div class="iframe-wrapper">
+                <iframe src="https://app.lumi.education/api/v1/run/ui5YGZ/embed" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"></iframe>
+            </div>
+        </div>
+
+        <div class="activity-divider"></div>
+
+        <!-- First meetings -->
+        <div class="activity-card">
+            <div class="activity-header">
+                <h2>First meetings</h2>
+                <span class="activity-tag">conversation skills</span>
+            </div>
+            <div class="iframe-wrapper">
+                <iframe src="https://app.lumi.education/api/v1/run/WkKntW/embed" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"></iframe>
+            </div>
+        </div>
+
+        <div class="activity-divider"></div>
+
+        <!-- Daily routines at work -->
+        <div class="activity-card">
+            <div class="activity-header">
+                <h2>Daily routines at work</h2>
+                <span class="activity-tag">present simple</span>
+            </div>
+            <div class="iframe-wrapper">
+                <iframe src="https://app.lumi.education/api/v1/run/Zc_45y/embed" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"></iframe>
+            </div>
+        </div>
+
+        <div class="activity-divider"></div>
+
+        <!-- Daily routines dictation -->
+        <div class="activity-card">
+            <div class="activity-header">
+                <h2>Daily routines at work</h2>
+                <span class="activity-tag">dictation</span>
+            </div>
+            <div class="iframe-wrapper">
+                <iframe src="https://app.lumi.education/api/v1/run/0WviSL/embed" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"></iframe>
+            </div>
+        </div>
+
+        <div class="activity-divider"></div>
+
+        <!-- Zoe's first day at work - with audio and multiple activities -->
+        <div class="activity-card multi-iframe">
+            <div class="activity-header">
+                <h2>Zoe's first day at work</h2>
+                <span class="activity-tag">listening comprehension</span>
+            </div>
+            
+            <!-- Audio section -->
+            <div class="audio-section">
+                <span class="audio-label">Listen first</span>
+                <audio src="mp3/2_6.mp3" controls></audio>
+            </div>
+
+            <!-- Activity 1 -->
+            <div class="iframe-wrapper">
+                <iframe src="https://app.lumi.education/api/v1/run/IOyPZA/embed" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"></iframe>
+            </div>
+
+            <!-- Activity 2 -->
+            <div class="iframe-wrapper">
+                <iframe src="https://app.lumi.education/api/v1/run/RgqSXb/embed" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"></iframe>
+            </div>
+
+            <!-- Activity 3 -->
+            <div class="iframe-wrapper">
+                <iframe src="https://app.lumi.education/api/v1/run/lwVZ9D/embed" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lumi resizer script -->
+    <script src="https://app.Lumi.education/api/v1/h5p/core/js/h5p-resizer.js" charset="UTF-8"></script>
+
+    <!-- Back to top button - matches B2 page -->
+    <button id="topBtn" title="Go to top">↑</button>
+
+    <script>
+        // Back to top button functionality
+        const btn = document.getElementById("topBtn");
+        window.onscroll = function() {
+            if (window.scrollY > 400) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+        btn.onclick = function() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        };
+    </script>
 </body>
 </html>
