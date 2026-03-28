@@ -85,6 +85,19 @@
         font-size: 0.8rem;
         margin-bottom: 15px;
     }
+ .iframe-wrapper {
+  display: flex;
+  justify-content: center; /* centers horizontally */
+  margin-top: 20px;
+}
+
+.iframe-wrapper iframe {
+  width: 750px;
+  height: 560px;
+  border: none;
+  display: block;
+}
+
 </style>
 </head>
 <body>
@@ -100,7 +113,10 @@
         <i class="fas fa-phone-alt"></i>
         <div>
             <span class="label"></span>
-            <center><span class="value"><center><iframe src="https://scheduler.zoom.us/be-spellbee/30-minutes-avec-be?embed=true" frameborder="0" style="width: 750px; height: 560px;"></iframe></center></span></center>
+           <div class="iframe-wrapper">
+  <iframe src="https://scheduler.zoom.us/be-spellbee/30-minutes-avec-be?embed=true" frameborder="0"></iframe>
+</div>
+
             
         </div>
     </a>
