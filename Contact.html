@@ -1,184 +1,167 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-yellow: #FFD700;
-            --primary-blue: #2B65EC;
-            --dark-bg: #1a1a1a;
-            --soft-white: #f9f9f9;
-        }
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    :root {
+        --primary-yellow: #FFD700; /* Matching your Bee logo */
+        --primary-blue: #2B65EC;   /* Matching your logo accents */
+        --dark-bg: #1a1a1a;
+        --soft-white: #f9f9f9;
+    }
 
-        .contact-container {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 30px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
-            border-top: 8px solid var(--primary-yellow);
-        }
+    .contact-container {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 30px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        text-align: center;
+        border-top: 8px solid var(--primary-yellow);
+    }
 
-        .contact-logo {
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-        }
+   
+    .contact-logo {
+    width: 120px ;
+    height: 120px ;
+    object-fit: contain;
+}
 
-        h2 { 
-            color: #333; 
-            margin-bottom: 10px; 
-        }
-        
-        p { 
-            color: #666; 
-            font-size: 0.95rem; 
-            margin-bottom: 25px; 
-        }
+    h2 { color: #333; margin-bottom: 10px; }
+    p { color: #666; font-size: 0.95rem; margin-bottom: 25px; }
 
-        .contact-method {
-            display: flex;
-            align-items: center;
-            background: var(--soft-white);
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 12px;
-            text-decoration: none;
-            color: #333;
-            transition: transform 0.2s, background 0.2s;
-            border: 1px solid #eee;
-        }
+    .contact-method {
+        display: flex;
+        align-items: center;
+        background: var(--soft-white);
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 12px;
+        text-decoration: none;
+        color: #333;
+        transition: transform 0.2s, background 0.2s;
+        border: 1px solid #eee;
+    }
 
-        .contact-method:hover {
-            transform: translateY(-3px);
-            background: #fffdf0;
-            border-color: var(--primary-yellow);
-        }
+    .contact-method:hover {
+        transform: translateY(-3px);
+        background: #fffdf0;
+        border-color: var(--primary-yellow);
+    }
 
-        .contact-method i {
-            font-size: 1.5rem;
-            margin-right: 15px;
-            width: 40px;
-            color: var(--primary-blue);
-        }
+    .contact-method i {
+        font-size: 1.5rem;
+        margin-right: 15px;
+        width: 40px;
+        color: var(--primary-blue);
+    }
 
-        .contact-method div {
-            text-align: left;
-        }
+    .contact-method div {
+        text-align: left;
+    }
 
-        .label {
-            display: block;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            font-weight: bold;
-            color: #888;
-        }
+    .label {
+        display: block;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-weight: bold;
+        color: #888;
+    }
 
-        .value {
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
+    .value {
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
 
-        .badge {
-            display: inline-block;
-            background: var(--primary-blue);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin-bottom: 15px;
-        }
+    .badge {
+        display: inline-block;
+        background: var(--primary-blue);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin-bottom: 15px;
+    }
+.iframe-wrapper {
+  width: 100%;              /* take full width of parent */
+  display: flex;            /* use flexbox */
+  justify-content: center;  /* center horizontally */
+}
 
-        /* FIX #1: Iframe wrapper - center the iframe */
-        .iframe-wrapper {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
+.iframe-wrapper iframe {
+  max-width: 100%;          /* responsive: don’t overflow */
+  width: 750px;             /* your chosen width */
+  height: 560px;
+  border: none;
+}
 
-        .iframe-wrapper iframe {
-            max-width: 100%;
-            width: 750px;
-            height: 560px;
-            border: none;
-        }
+/* NEW: wrapper to center the logo */
+.logo-center {
+    text-align: center;
+}
 
-        /* FIX #2: Logo wrapper - center the logo at top */
-        .logo-wrapper {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+/* NEW: yellow border around the upper container */
+.yellow-border-top {
+    border: 3px solid var(--primary-yellow);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
 
-        /* FIX #3: Yellow border around the upper container (matching good.jpg) */
-        .yellow-border-wrapper {
-            border: 3px solid var(--primary-yellow);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-    </style>
-    <title>Contact</title>
-    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
+</style>
 </head>
 <body>
 
 <div class="contact-container">
     
-    <!-- YELLOW BORDER AROUND THE UPPER SECTION (added) -->
-    <div class="yellow-border-wrapper">
+    <!-- YELLOW BORDER WRAPPER - added around the top section -->
+    <div class="yellow-border-top">
         
-        <!-- LOGO - now centered at top -->
-        <div class="logo-wrapper">
+        <!-- LOGO WRAPPER - added to center the logo -->
+        <div class="logo-center">
             <img src="images3/original.logo.jpg" class="contact-logo" alt="Logo">
         </div>
         
-        <!-- YOUR ORIGINAL BLUE BOX - completely unchanged except removed duplicate iframe wrapper conflict -->
-        <div style="background: #3b71ed; color: white; padding: 5px 15px; border-radius: 20px; font-family: sans-serif; font-size: 14px; display: inline-block; width: 100%;">
-            <h2 style="color: white; margin: 10px 0;">Can't make up your mind? Book a free 30-minute trial session</h2>
+        <div style="background: #3b71ed; color: white; padding: 5px 15px; border-radius: 20px; font-family: sans-serif; font-size: 14px; display: inline-block;">
+            <h2>Can't make up your mind? Book a free 30-minute trial session</h2>
         </div>
-        
-        <!-- YOUR EXISTING IF Wrapper (already centers the iframe) -->
+   
+        <i class="fas fa-phone-alt"></i>
         <div>
             <span class="label"></span>
             <div class="iframe-wrapper">
                 <iframe src="https://scheduler.zoom.us/be-spellbee/30-minutes-avec-be?embed=true" frameborder="0"></iframe>
             </div>
         </div>
-        
+    
     </div>
     <!-- END OF YELLOW BORDER WRAPPER -->
-    
-    <!-- YOUR ORIGINAL CONTACT METHOD SECTION - preserved exactly -->
-    <i class="fas fa-phone-alt"></i>
-    <div>
-        <span class="label"></span>
-        <!-- your contact methods would go here if any -->
-    </div>
-    
+
 </div>
 
-<!-- Google Tag Manager -->
+  <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-P6BJFG5B');</script>
 <!-- End Google Tag Manager -->
-
-<!-- Google tag (gtag.js) -->
+  <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-N3F5GM52DZ"></script>
 <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-N3F5GM52DZ');
-</script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-<!-- Google Tag Manager (noscript) -->
+  gtag('config', 'G-N3F5GM52DZ');
+</script>
+<title>Contact </title>
+<link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
+</body>
+
+ <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P6BJFG5B"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
