@@ -86,17 +86,18 @@
         margin-bottom: 15px;
     }
 .iframe-wrapper {
-  display: flex;
-  justify-content: center; /* centers horizontally */
-  margin-top: 20px;
+  width: 100%;              /* take full width of parent */
+  display: flex;            /* use flexbox */
+  justify-content: center;  /* center horizontally */
 }
 
 .iframe-wrapper iframe {
-  width: 750px;
+  max-width: 100%;          /* responsive: don’t overflow */
+  width: 750px;             /* your chosen width */
   height: 560px;
   border: none;
-  display: block;
 }
+
 
 
 
