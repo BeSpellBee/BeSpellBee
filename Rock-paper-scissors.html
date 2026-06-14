@@ -1,9 +1,21 @@
-<!DOCTYPE html>
+
+    <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-N3F5GM52DZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-N3F5GM52DZ');
+</script>
     <meta charset="UTF-8">
+
+   
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Bac Philo · Assistant & Tronc Commun | 17 thèmes</title>
+    <title>Le Tronc commun du bac français • Philosophie : les 17 thèmes</title>
     <style>
         * {
             margin: 0;
@@ -12,151 +24,140 @@
         }
 
         body {
-            background: linear-gradient(145deg, #e8e2d4 0%, #f1ede5 100%);
+            background: #f6f4f0;  /* soft paper-like background */
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Times New Roman', Georgia, serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 2rem 1.8rem;
+            padding: 2rem 1.5rem;
         }
 
-        /* MAIN UNIFIED CARD: regroupe assistant + tronc commun dans un même niveau */
-        .bac-unified {
-            max-width: 1400px;
+        /* main card container */
+        .philo-container {
+            max-width: 880px;
             width: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
-            align-items: stretch;
-        }
-
-        /* Chaque bloc (assistant / tronc commun) a la même hauteur par flex */
-        .assistant-card, .tronc-card {
-            flex: 1;
-            min-width: 320px;
             background: #ffffff;
             border-radius: 2rem;
-            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            display: flex;
-            flex-direction: column;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.02);
             overflow: hidden;
-            backdrop-filter: blur(0px);
+            transition: all 0.2s ease;
         }
 
-        .assistant-card:hover, .tronc-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 30px 50px -14px rgba(0, 0, 0, 0.22);
-        }
-
-        /* En-têtes harmonisés (même palette) */
-        .card-header {
-            background: #1e2a3a;  /* profond bleu-gris */
+        /* header section with french touch */
+        .header {
+            background: #1e2a3a;
             color: #f9f3e2;
-            padding: 1.6rem 1.8rem;
-            border-bottom: 1px solid #2f4248;
+            padding: 1.8rem 2rem;
+            border-bottom: 1px solid #2c3e3f;
         }
 
-        .card-header h2 {
-            font-size: 1.65rem;
+        .header h1 {
+            font-size: 1.85rem;
             font-weight: 600;
-            letter-spacing: -0.2px;
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
+            letter-spacing: -0.3px;
+            font-family: 'Inter', system-ui, sans-serif;
         }
 
-        .card-header h2 span {
+        .header h1 span {
             font-weight: 500;
             color: #e6bc8e;
         }
 
-        .card-header .sub {
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
+        .header .sub {
+            font-size: 0.9rem;
+            margin-top: 0.65rem;
             opacity: 0.8;
             font-style: italic;
             border-left: 3px solid #e6bc8e;
-            padding-left: 0.75rem;
+            padding-left: 0.85rem;
         }
 
-        /* contenu général */
-        .card-content {
-            padding: 1.8rem 1.8rem 2rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+        /* content zone */
+        .content {
+            padding: 2rem 2rem 2.2rem 2rem;
         }
 
-        /* zone du dropdown dans tronc commun */
+        /* dropdown block */
         .dropdown-block {
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
 
         .dropdown-label {
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #5b6e5c;
-            margin-bottom: 0.7rem;
+            color: #4b5563;
+            margin-bottom: 0.75rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
+        .dropdown-label i {
+            font-style: normal;
+            font-size: 1.2rem;
+        }
+
+        .custom-select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        /* modern dropdown styling */
         select {
             width: 100%;
-            padding: 0.9rem 1.2rem;
-            font-size: 1rem;
+            padding: 1rem 1.2rem;
+            font-size: 1.05rem;
             font-family: 'Inter', monospace, system-ui;
             background-color: #ffffff;
-            border: 1.5px solid #dad3c5;
+            border: 1.5px solid #ddd8ce;
             border-radius: 1.2rem;
             cursor: pointer;
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             color: #1e293b;
             font-weight: 500;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%237a6b55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+            line-height: 1.4;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%234b5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
             background-repeat: no-repeat;
             background-position: right 1.2rem center;
-            background-size: 1.1rem;
+            background-size: 1.2rem;
         }
 
         select:hover, select:focus {
             border-color: #b07e4b;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(176, 126, 75, 0.15);
+            box-shadow: 0 0 0 3px rgba(176, 126, 75, 0.2);
         }
 
-        /* theme display panel – exact même style que l'assistant (carte interne) */
+        /* theme display panel (imaginary content) */
         .theme-display {
             background: #fefaf5;
             border-radius: 1.5rem;
-            border: 1px solid #efe2d2;
-            padding: 1.5rem 1.5rem;
-            transition: all 0.2s;
-            margin-top: 0.2rem;
+            border: 1px solid #f0e4d4;
+            padding: 1.8rem 2rem;
+            transition: all 0.25s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
         }
 
         .theme-title {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 600;
             letter-spacing: -0.2px;
             color: #2c3e2f;
             border-left: 5px solid #c49a6c;
             padding-left: 1rem;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-family: 'Inter', serif;
         }
 
         .theme-content {
             color: #2d3e42;
-            font-size: 0.95rem;
+            font-size: 1rem;
             line-height: 1.6;
             white-space: pre-wrap;
             word-break: break-word;
@@ -164,174 +165,111 @@
             padding: 1.2rem;
             border-radius: 1rem;
             font-family: 'Courier New', 'Fira Code', monospace;
-            border: 1px dashed #e4d5c2;
             font-weight: 400;
+            border: 1px dashed #e7dacf;
         }
 
-        /* style spécifique pour l'assistant (chat / contenu statique mais avec une élégance similaire) */
-        .assistant-greeting {
-            background: #fefaf5;
-            border-radius: 1.5rem;
-            border: 1px solid #efe2d2;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .assistant-message {
-            font-size: 1rem;
-            line-height: 1.55;
-            color: #2c423f;
-        }
-
-        .highlight-list {
-            margin: 1rem 0 0.5rem 1.2rem;
-            color: #3a5a4b;
-        }
-
-        .highlight-list li {
-            margin: 0.5rem 0;
-        }
-
-        .pillar-badge {
-            background: #f3ede5;
-            border-radius: 2rem;
-            padding: 0.2rem 0.8rem;
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #8b694a;
-            display: inline-block;
-            margin-top: 1rem;
+        .theme-content p {
+            margin-bottom: 0.75rem;
         }
 
         .footer-note {
-            margin-top: 1.5rem;
+            margin-top: 1.8rem;
             text-align: center;
-            font-size: 0.7rem;
-            color: #a1927e;
-            border-top: 1px solid #ede0d2;
-            padding-top: 1rem;
+            font-size: 0.75rem;
+            color: #8a7f72;
+            border-top: 1px solid #ede3d7;
+            padding-top: 1.2rem;
+            letter-spacing: 0.2px;
         }
 
-        /* responsive: sur petit écran, les cartes s'empilent mais restent alignées */
-        @media (max-width: 850px) {
-            body {
+        .footer-note a {
+            color: #8a6e4b;
+            text-decoration: none;
+            border-bottom: 1px dotted;
+        }
+
+        /* responsive */
+        @media (max-width: 620px) {
+            .content {
                 padding: 1.5rem;
             }
-            .card-header h2 {
+            .theme-title {
                 font-size: 1.3rem;
             }
-            .theme-title {
-                font-size: 1.25rem;
+            select {
+                font-size: 0.95rem;
+                padding: 0.85rem 1rem;
+            }
+            .header h1 {
+                font-size: 1.4rem;
             }
         }
 
-        /* petit style pour le bouton d'exemple (assistant fictif mais harmonisé) */
-        .sample-btn {
-            background: #e9e0d4;
-            border-radius: 2rem;
-            padding: 0.4rem 1rem;
-            font-size: 0.75rem;
-            color: #5d4a32;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            width: fit-content;
-            margin-top: 1rem;
-            border: none;
-            font-weight: 500;
-            cursor: default;
+        /* placeholder imaginary content style */
+        .placeholder-illu {
+            font-family: monospace;
+            background: #fbf8f2;
         }
     </style>
 </head>
 <body>
-<div class="bac-unified">
-    <!-- BLOC ASSISTANT (BAC ASSISTANT) – même niveau que Tronc commun -->
-    <div class="assistant-card">
-        <div class="card-header">
-            <h2>🎓 Bac Assistant <span>✧ Philosophie</span></h2>
-            <div class="sub">conseils méthodologiques · explications de concepts · orientation bac</div>
-        </div>
-        <div class="card-content">
-            <div class="assistant-greeting">
-                <div class="assistant-message">
-                    <strong>📌 Bonjour ! Je suis votre assistant philosophique.</strong><br>
-                    Je vous guide à travers les 17 thèmes du tronc commun. Chaque notion est accompagnée de repères, auteurs clés et sujets types.
-                </div>
-                <div class="pillar-badge">✨ dissertation · explication de texte · pensée critique</div>
-            </div>
-            <div class="assistant-greeting" style="margin-top: 0;">
-                <div class="assistant-message">
-                    <strong>⚡ Conseils pour le bac :</strong>
-                    <ul class="highlight-list">
-                        <li>• Maîtrisez les distinctions notionnelles (ex: justice légale / justice naturelle).</li>
-                        <li>• Mobilisez toujours des références précises (Platon, Kant, Arendt...).</li>
-                        <li>• Structurez vos raisonnements : thèse, antithèse, dépassement ou problème.</li>
-                        <li>• Pour le thème "La technique", interrogez le progrès et l'autonomie humaine.</li>
-                    </ul>
-                    <div class="sample-btn">📖 17 notions · programme officiel</div>
-                </div>
-            </div>
-            <div class="footer-note" style="border-top-color: #f0e2d4;">
-                💬 Assistant intégré – exemples de sujets, plans, citations.
-            </div>
-        </div>
+<div class="philo-container">
+    <div class="header">
+        <h1>Tronc commun – Bac français <span>✧ Philosophie</span></h1>
+        <div class="sub">17 thèmes fondamentaux · programme officiel · réflexion & argumentation</div>
     </div>
-
-    <!-- BLOC TRONC COMMUN (avec dropdown et contenu imaginaire "aaaaaaaa...", même style graphique que l'assistant) -->
-    <div class="tronc-card">
-        <div class="card-header">
-            <h2>Tronc commun – Bac français <span>✧ Philosophie</span></h2>
-            <div class="sub">17 thèmes fondamentaux · parcours réflexif & argumentation</div>
+    <div class="content">
+        <!-- dropdown selector -->
+        <div class="dropdown-block">
+            <div class="dropdown-label">
+                <i>📖</i> PARCOURIR LES THÈMES
+            </div>
+            <div class="custom-select-wrapper">
+                <select id="philoThemeSelect" aria-label="Liste des 17 thèmes de philosophie">
+                    <option value="0">1. L'art</option>
+                    <option value="1">2. Le bonheur</option>
+                    <option value="2">3. La conscience</option>
+                    <option value="3">4. Le devoir</option>
+                    <option value="4">5. L'État</option>
+                    <option value="5">6. La justice</option>
+                    <option value="6">7. L'inconscient</option>
+                    <option value="7">8. Le langage</option>
+                    <option value="8">9. La liberté</option>
+                    <option value="9">10. La nature</option>
+                    <option value="10">11. La raison</option>
+                    <option value="11">12. La religion</option>
+                    <option value="12">13. La science</option>
+                    <option value="13">14. La technique</option>
+                    <option value="14">15. Le travail</option>
+                    <option value="15">16. Le temps</option>
+                    <option value="16">17. La vérité</option>
+                </select>
+            </div>
         </div>
-        <div class="card-content">
-            <!-- dropdown selector avec les 17 thèmes -->
-            <div class="dropdown-block">
-                <div class="dropdown-label">
-                    <i>📖</i> PARCOURIR LES THÈMES
-                </div>
-                <div class="custom-select-wrapper">
-                    <select id="philoThemeSelect" aria-label="Liste des 17 thèmes de philosophie">
-                        <option value="0">1. L'art</option>
-                        <option value="1">2. Le bonheur</option>
-                        <option value="2">3. La conscience</option>
-                        <option value="3">4. Le devoir</option>
-                        <option value="4">5. L'État</option>
-                        <option value="5">6. La justice</option>
-                        <option value="6">7. L'inconscient</option>
-                        <option value="7">8. Le langage</option>
-                        <option value="8">9. La liberté</option>
-                        <option value="9">10. La nature</option>
-                        <option value="10">11. La raison</option>
-                        <option value="11">12. La religion</option>
-                        <option value="12">13. La science</option>
-                        <option value="13">14. La technique</option>
-                        <option value="14">15. Le travail</option>
-                        <option value="15">16. Le temps</option>
-                        <option value="16">17. La vérité</option>
-                    </select>
-                </div>
-            </div>
 
-            <!-- panneau d'affichage dynamique (imaginary content "aaaaaaaa..." philosophique) -->
-            <div class="theme-display" id="themeDisplayPanel">
-                <div class="theme-title" id="themeTitle">L'art</div>
-                <div class="theme-content" id="themeImaginaryContent">
-                    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                </div>
+        <!-- dynamic display panel for the selected theme & imaginary content "aaaaaaaa..." -->
+        <div class="theme-display" id="themeDisplayPanel">
+            <div class="theme-title" id="themeTitle">L'art</div>
+            <div class="theme-content" id="themeImaginaryContent">
+                <!-- initial imaginary content for art -->
+                aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
             </div>
-            <div class="footer-note">
-                ⚜️ Programme du tronc commun — chaque thème enrichi d’une trame réflexive (contenu imaginaire illustratif) <br>
-                📚 <em>« Connais-toi toi-même » – Socrate</em>
-            </div>
+        </div>
+        <div class="footer-note">
+            ⚜️ Programme du tronc commun — chaque thème est enrichi d'une trame réflexive (contenu imaginaire illustratif) <br>
+            📚 <em>« Connais-toi toi-même » – Socrate</em>
         </div>
     </div>
 </div>
 
 <script>
     // ------------------------------------------------------------------
-    // Imaginary content for each theme (respectant le style "aaaaaa" et références)
-    // Même contenu philosophique et fictif, aligné avec le besoin initial.
-    // Chaque thème possède des lignes aaaaaa... + questionnements.
+    // Imaginary content for each theme (the "aaaaaaaa..." extended)
+    // Based on your provided note: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    // Each theme gets a distinctive but still placeholder-like creative pattern
+    // respecting the original "aaaaaaaa" spirit but with philosophical flavour.
+    // All are fictional / imaginary expanding lines.
     // ------------------------------------------------------------------
     const imaginaryContents = [
         // 1 L'art
@@ -386,6 +324,7 @@
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nLa vérité est-elle universelle ou relative ? Correspondance, cohérence, utilité. Nietzsche, James, la vérité comme perspective. a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — vérité scientifique, morale et existence. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ];
 
+    // theme titles exactly as ordered
     const themeTitles = [
         "L'art", "Le bonheur", "La conscience", "Le devoir", "L'État",
         "La justice", "L'inconscient", "Le langage", "La liberté", "La nature",
@@ -393,33 +332,543 @@
         "Le temps", "La vérité"
     ];
 
+    // DOM elements
     const selectEl = document.getElementById("philoThemeSelect");
     const themeTitleEl = document.getElementById("themeTitle");
     const themeContentEl = document.getElementById("themeImaginaryContent");
 
+    // function to update display based on selected index (0-based index of option)
     function updateThemeDisplay(selectedIndex) {
         if (selectedIndex >= 0 && selectedIndex < themeTitles.length) {
             themeTitleEl.textContent = themeTitles[selectedIndex];
             themeContentEl.textContent = imaginaryContents[selectedIndex];
         } else {
+            // fallback (should never happen)
             themeTitleEl.textContent = themeTitles[0];
             themeContentEl.textContent = imaginaryContents[0];
         }
     }
 
+    // add event listener to select
     selectEl.addEventListener("change", (event) => {
         const idx = parseInt(event.target.value, 10);
-        if (!isNaN(idx)) updateThemeDisplay(idx);
+        if (!isNaN(idx)) {
+            updateThemeDisplay(idx);
+        }
     });
 
-    // initialisation (art)
-    updateThemeDisplay(0);
-    selectEl.selectedIndex = 0;  // synchro
-
-    // légère amélioration de l'interaction
+    // initial display: theme 0 (L'art) by default
+    // if page loads ensure that select shows "0" and content matches
+    const initialSelected = selectEl.selectedIndex; // first option => 0
+    updateThemeDisplay(initialSelected);
+    
+    // optional: also watch for any sync if url hash is not needed, perfect.
+    // add fine touch: keyboard accessibility
     selectEl.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") e.stopPropagation();
+        if (e.key === "Enter" || e.key === " ") {
+            // already toggles but we keep
+            e.stopPropagation();
+        }
     });
 </script>
+
+    
+    <title>French BAC LLCE - Advanced Chatbot</title>
+    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Global styles - matching the B2 page exactly */
+        body {
+            background: linear-gradient(145deg, #1E90FF 0%, #87CEEB 100%);
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        /* Main container - matches game card style from B2 page */
+        .bac-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header section - matches millionaire/jeopardy header */
+        .page-header {
+            background: #0056B3;
+            border-radius: 32px 32px 0 0;
+            padding: 24px 32px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header h1 span {
+            background: #FFEB3B;
+            color: #000000;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: 40px;
+            letter-spacing: 0.5px;
+        }
+
+        .level-badge {
+            background: #1976D2;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: inset 0 -2px 0 #0d4175;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Chat card - matches game-card from B2 page */
+        .chat-card {
+            background: #FFFFFF;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        /* Chat header - matches activity-header from B2 page */
+        .chat-header {
+            background: #0056B3;
+            padding: 18px 24px;
+            color: white;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .chat-header h2 {
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: 0.5px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-header h2::before {
+            content: "🤖";
+            font-size: 1.6rem;
+        }
+
+        .chat-tag {
+            background: #FFEB3B;
+            color: #000000;
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 5px 14px;
+            border-radius: 40px;
+            letter-spacing: 0.3px;
+        }
+
+        /* Chatbox - redesigned with B2 styling */
+        .chat-content {
+            padding: 24px;
+            background: #FFFFFF;
+        }
+
+        #chatbox { 
+            width: 100%; 
+            height: 450px; 
+            border: 2px solid #eef4fe;
+            border-radius: 24px;
+            padding: 20px; 
+            overflow-y: scroll;
+            background: #f5f7fc;
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 8px rgba(0,86,179,0.05);
+        }
+
+        /* Message styling with B2 colors */
+        .user-msg { 
+            color: #000000; 
+            margin: 15px 0;
+            background-color: #e3f2fd;
+            padding: 14px 18px;
+            border-radius: 20px 20px 4px 20px;
+            border-left: 6px solid #1976D2;
+            box-shadow: 0 4px 8px rgba(0,86,179,0.08);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .bot-msg { 
+            color: #000000; 
+            margin: 15px 0;
+            background-color: #FFFFFF;
+            padding: 14px 18px;
+            border-radius: 20px 20px 20px 4px;
+            border-left: 6px solid #FFEB3B;
+            box-shadow: 0 4px 8px rgba(0,86,179,0.08);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.5;
+        }
+
+        .bot-msg strong {
+            color: #0056B3;
+        }
+
+        .user-msg strong {
+            color: #1976D2;
+        }
+
+        .thinking { 
+            color: #666666;
+            background-color: #f5f7fc;
+            padding: 14px 18px;
+            border-radius: 20px;
+            border-left: 6px solid #1976D2;
+            font-style: italic; 
+        }
+
+        .error { 
+            color: #b71c1c;
+            background-color: #ffebee;
+            padding: 14px 18px;
+            border-radius: 20px;
+            border-left: 6px solid #b71c1c;
+            margin: 15px 0;
+        }
+
+        /* Input area - styled like B2 buttons */
+        .input-area {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        #user-input { 
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid #dde3ed;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            outline: none;
+            box-shadow: 0 4px 0 #cbd2df;
+            transition: all 0.1s ease;
+            background: #FFFFFF;
+            color: #000000;
+        }
+
+        #user-input:focus {
+            border-color: #1976D2;
+            box-shadow: 0 4px 0 #0d3d70;
+            outline: none;
+        }
+
+        #user-input::placeholder {
+            color: #999999;
+            font-style: italic;
+        }
+
+        #send-btn { 
+            padding: 16px 32px;
+            background: #FFEB3B;
+            border: none;
+            color: #000000;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 60px;
+            border-bottom: 4px solid #c5a605;
+            cursor: pointer;
+            transition: 0.1s;
+            box-shadow: 0 4px 12px rgba(255,235,59,0.4);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+
+        #send-btn:hover { 
+            background: #f1df2c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255,235,59,0.5);
+        }
+
+        #send-btn:active {
+            transform: translateY(2px);
+            border-bottom-width: 2px;
+        }
+
+        #send-btn:disabled {
+            opacity: 0.4;
+            transform: translateY(2px);
+            border-bottom-width: 2px;
+            cursor: default;
+        }
+
+        /* Lists inside messages - styled nicely */
+        .bot-msg ul, .bot-msg ol {
+            margin: 10px 0 10px 20px;
+            padding-left: 10px;
+        }
+
+        .bot-msg li {
+            margin: 5px 0;
+            color: #000000;
+        }
+
+        .bot-msg strong {
+            color: #1976D2;
+        }
+
+        .bot-msg em {
+            color: #0056B3;
+            font-style: italic;
+        }
+
+        /* Welcome message special styling */
+        .bot-msg:first-child {
+            border-left-width: 8px;
+        }
+
+        .bot-msg br {
+            margin-bottom: 5px;
+        }
+
+        /* Top button styling - matches B2 page */
+        #topBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            z-index: 99;
+            font-size: 24px;
+            border: none;
+            outline: none;
+            background-color: #1976D2;
+            color: white;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            line-height: 50px;
+            padding: 0;
+            transition: 0.1s;
+            border-bottom: 4px solid #0d3d70;
+        }
+
+        #topBtn:hover {
+            background-color: #0056B3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+
+        #topBtn:active {
+            transform: translateY(2px);
+            border-bottom-width: 2px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .page-header h1 { font-size: 1.8rem; }
+            .chat-header h2 { font-size: 1.2rem; }
+            .input-area { flex-direction: column; }
+            #send-btn { width: 100%; }
+            #chatbox { height: 350px; }
+        }
+
+        @media (max-width: 500px) {
+            .page-header { flex-direction: column; align-items: flex-start; }
+            .page-header h1 { font-size: 1.5rem; }
+            .chat-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bac-container">
+        <!-- Page Header - matches B2 page style -->
+        <div class="page-header">
+            <h1>
+                FRENCH BAC LLCE
+                <span>advanced</span>
+            </h1>
+            <div class="level-badge">
+                <span>🎓</span> CEFR C1-C2
+            </div>
+        </div>
+
+        <!-- Chat Card - matches B2 activity card style -->
+        <div class="chat-card">
+            <div class="chat-header">
+                <h2>BeSpellBee Assistant</h2>
+                <span class="chat-tag">LLCE specialist</span>
+            </div>
+            
+            <div class="chat-content">
+                <div id="chatbox">
+                    <div class="bot-msg">
+                        <strong>Assistant:</strong> Welcome! I'm your <strong>LLCE (English specialty) BAC assistant</strong> BeSpellBee! ✨
+                        <br><br>
+                        I can help you with:
+                        <br>
+                        <strong>📚 Curriculum Units:</strong><br>
+                        • Africa: The Danger of a Single Story (Adichie, Conrad, Achebe)<br>
+                        • Sparking Debates with Modern Art (cummings, modern poetry)<br>
+                        • Emotions in Literature (Austen, Brontë, Porter)<br>
+                        • Bildungsroman & Coming-of-Age (Dickens, Rowling, Angelou)<br>
+                        • And all 12 LLCE units!
+                        <br><br>
+                        <strong>✍️ Exam Preparation:</strong><br>
+                        • Written synthesis (500 words)<br>
+                        • Oral portfolio (6-8 documents)<br>
+                        • Grand Oral presentation<br>
+                        • Translation practice (EN↔FR)
+                        <br><br>
+                        <strong>🎯 How to use me:</strong><br>
+                        1. Ask about specific authors/works<br>
+                        2. Request analysis in BAC exam format<br>
+                        3. Get portfolio/document suggestions<br>
+                        4. Practice translation challenges
+                        <br><br>
+                        <em>Try: "Analyze e.e. cummings' poetry" or "How to structure my Grand Oral on postcolonial literature"</em>
+                    </div>
+                </div>
+                
+                <div class="input-area">
+                    <input type="text" id="user-input" placeholder="Ask about Shakespeare, Adichie, cummings, Austen, Conrad...">
+                    <button id="send-btn">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to top button - matches B2 page -->
+    <button id="topBtn" title="Go to top">↑</button>
+
+    <script>
+        // Get HTML elements
+        const chatbox = document.getElementById('chatbox');
+        const input = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        
+        // Your Render API URL
+        const API_URL = "https://bac-chatbot-api.onrender.com/chat";
+        
+        // Function to add messages to chatbox
+        function appendMessage(sender, text, isBot = false, isError = false) {
+            const div = document.createElement('div');
+            if (isError) {
+                div.className = 'error';
+            } else {
+                div.className = isBot ? 'bot-msg' : 'user-msg';
+            }
+            
+            // Format text with line breaks and bold
+            const formattedText = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>');
+            
+            div.innerHTML = `<strong>${sender}:</strong> ${formattedText}`;
+            chatbox.appendChild(div);
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+        
+        // Function to send message to API
+        async function sendMessage() {
+            const message = input.value.trim();
+            if (!message) return;
+            
+            appendMessage("You", message, false);
+            input.value = '';
+            input.disabled = true;
+            sendBtn.disabled = true;
+            
+            const thinkingDiv = document.createElement('div');
+            thinkingDiv.className = 'bot-msg thinking';
+            thinkingDiv.innerHTML = '<strong>Assistant:</strong> Thinking...';
+            chatbox.appendChild(thinkingDiv);
+            
+            try {
+                console.log('🔄 Sending to API:', message);
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message
+                    })
+                });
+                
+                console.log('📥 Response status:', response.status);
+                chatbox.removeChild(thinkingDiv);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('✅ API response:', data);
+                    appendMessage("Assistant", data.reply, true);
+                } else {
+                    const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+                    console.error('❌ API error:', error);
+                    appendMessage("Assistant", `Error: ${error.error || 'Server error'}`, true, true);
+                }
+            } catch (error) {
+                console.error('❌ Network error:', error);
+                chatbox.removeChild(thinkingDiv);
+                appendMessage("Assistant", "Error: Could not connect to the server. Please check your internet connection.", true, true);
+            }
+            
+            input.disabled = false;
+            sendBtn.disabled = false;
+            input.focus();
+        }
+        
+        // Event listeners
+        sendBtn.addEventListener('click', sendMessage);
+        
+        input.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        input.focus();
+        
+        // Test API connection
+        console.log('🔌 Testing API connection...');
+        fetch(API_URL.replace('/chat', '/health'))
+            .then(response => response.json())
+            .then(data => console.log('✅ API Health:', data))
+            .catch(error => console.error('❌ API Health check failed:', error));
+
+        // Back to top button functionality
+        const btn = document.getElementById("topBtn");
+        window.onscroll = function() {
+            if (window.scrollY > 400) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+        btn.onclick = function() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        };
+    </script>
 </body>
 </html>
