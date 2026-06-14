@@ -7,18 +7,15 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-N3F5GM52DZ');
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    
-    <!-- TITLE UPDATE: Both sections now clearly visible -->
-    <title>French BAC LLCE Assistant + Tronc commun Philo | 17 thèmes</title>
+    <title>French BAC LLCE + Tronc commun Philo | 17 thèmes</title>
     <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
     
     <style>
-        /* ========== GLOBAL RESET & BACKGROUND (matches assistant blue gradient) ========== */
+        /* ========== GLOBAL STYLES ========== */
         * {
             margin: 0;
             padding: 0;
@@ -31,8 +28,8 @@
             padding: 20px;
         }
 
-        /* MAIN CONTAINER: two-column flex layout for side-by-side alignment (same level) */
-        .master-wrapper {
+        /* TWO-COLUMN LAYOUT - same level alignment */
+        .dashboard {
             max-width: 1400px;
             margin: 0 auto;
             display: flex;
@@ -41,19 +38,17 @@
             align-items: stretch;
         }
 
-        /* left column: assistant container (exactly as original, untouched) */
-        .assistant-column {
+        .assistant-wrapper {
             flex: 1;
             min-width: 320px;
         }
 
-        /* right column: tronc commun redesigned with blue/yellow style */
-        .tronc-column {
+        .tronc-wrapper {
             flex: 1;
             min-width: 320px;
         }
 
-        /* ===== ASSISTANT BLOCK (YOUR ORIGINAL CODE – COMPLETELY UNTOUCHED) ===== */
+        /* ========== ORIGINAL ASSISTANT STYLES (COMPLETELY UNTOUCHED) ========== */
         .bac-container {
             max-width: 900px;
             margin: 0 auto;
@@ -342,7 +337,7 @@
             .chat-header { flex-direction: column; align-items: flex-start; }
         }
 
-        /* ========== NEW DESIGN FOR TRONC COMMUN (BLUE/YELLOW - matching assistant) ========== */
+        /* ========== TRONC COMMUN STYLES (BLUE/YELLOW - MATCHING ASSISTANT) ========== */
         .tronc-card {
             background: #FFFFFF;
             border-radius: 32px;
@@ -398,7 +393,6 @@
             flex-direction: column;
         }
 
-        /* dropdown styling - matches assistant's yellow/blue vibe */
         .dropdown-label {
             font-weight: 700;
             font-size: 0.85rem;
@@ -415,11 +409,6 @@
             width: fit-content;
         }
 
-        .dropdown-label i {
-            font-style: normal;
-            font-size: 1.2rem;
-        }
-
         select {
             width: 100%;
             padding: 14px 20px;
@@ -430,8 +419,6 @@
             border-radius: 60px;
             cursor: pointer;
             appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
             transition: all 0.2s ease;
             color: #000000;
             font-weight: 500;
@@ -448,7 +435,6 @@
             box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
         }
 
-        /* theme display - card within card (blue/yellow accents) */
         .theme-display {
             background: #f5f7fc;
             border-radius: 24px;
@@ -482,7 +468,6 @@
             font-family: 'Segoe UI', 'Courier New', monospace;
             font-weight: 400;
             border: 1px solid #e3f2fd;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
         }
 
         .tronc-footer {
@@ -492,11 +477,10 @@
             color: #6c757d;
             border-top: 1px solid #eef4fe;
             padding-top: 1.2rem;
-            letter-spacing: 0.3px;
         }
 
         @media (max-width: 850px) {
-            .master-wrapper {
+            .dashboard {
                 flex-direction: column;
             }
             .theme-title {
@@ -506,9 +490,9 @@
     </style>
 </head>
 <body>
-<div class="master-wrapper">
-    <!-- LEFT COLUMN: YOUR ORIGINAL ASSISTANT (INTACT) -->
-    <div class="assistant-column">
+<div class="dashboard">
+    <!-- LEFT COLUMN: ORIGINAL ASSISTANT - COMPLETELY UNMODIFIED -->
+    <div class="assistant-wrapper">
         <div class="bac-container">
             <div class="page-header">
                 <h1>
@@ -565,8 +549,8 @@
         </div>
     </div>
 
-    <!-- RIGHT COLUMN: TRONC COMMUN PHILO (REDESIGNED TO MATCH BLUE/YELLOW STYLE) -->
-    <div class="tronc-column">
+    <!-- RIGHT COLUMN: TRONC COMMUN PHILOSOPHIE (NEW SECTION, SAME STYLE) -->
+    <div class="tronc-wrapper">
         <div class="tronc-card">
             <div class="tronc-header">
                 <h2>Tronc commun – Bac français</h2>
@@ -611,15 +595,20 @@
     </div>
 </div>
 
+<!-- Back to top button -->
 <button id="topBtn" title="Go to top">↑</button>
 
+<!-- ========== ORIGINAL ASSISTANT SCRIPT - COMPLETELY UNMODIFIED ========== -->
 <script>
-    // ========== ORIGINAL ASSISTANT SCRIPT (COMPLETELY UNTOUCHED) ==========
+    // Get HTML elements
     const chatbox = document.getElementById('chatbox');
     const input = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
+    
+    // Your Render API URL
     const API_URL = "https://bac-chatbot-api.onrender.com/chat";
     
+    // Function to add messages to chatbox
     function appendMessage(sender, text, isBot = false, isError = false) {
         const div = document.createElement('div');
         if (isError) {
@@ -627,64 +616,103 @@
         } else {
             div.className = isBot ? 'bot-msg' : 'user-msg';
         }
+        
+        // Format text with line breaks and bold
         const formattedText = text
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
             .replace(/\n/g, '<br>');
+        
         div.innerHTML = `<strong>${sender}:</strong> ${formattedText}`;
         chatbox.appendChild(div);
         chatbox.scrollTop = chatbox.scrollHeight;
     }
     
+    // Function to send message to API
     async function sendMessage() {
         const message = input.value.trim();
         if (!message) return;
+        
         appendMessage("You", message, false);
         input.value = '';
         input.disabled = true;
         sendBtn.disabled = true;
+        
         const thinkingDiv = document.createElement('div');
         thinkingDiv.className = 'bot-msg thinking';
         thinkingDiv.innerHTML = '<strong>Assistant:</strong> Thinking...';
         chatbox.appendChild(thinkingDiv);
+        
         try {
+            console.log('🔄 Sending to API:', message);
+            
             const response = await fetch(API_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: message })
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message
+                })
             });
+            
+            console.log('📥 Response status:', response.status);
             chatbox.removeChild(thinkingDiv);
+            
             if (response.ok) {
                 const data = await response.json();
+                console.log('✅ API response:', data);
                 appendMessage("Assistant", data.reply, true);
             } else {
                 const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+                console.error('❌ API error:', error);
                 appendMessage("Assistant", `Error: ${error.error || 'Server error'}`, true, true);
             }
         } catch (error) {
+            console.error('❌ Network error:', error);
             chatbox.removeChild(thinkingDiv);
-            appendMessage("Assistant", "Error: Could not connect to the server.", true, true);
+            appendMessage("Assistant", "Error: Could not connect to the server. Please check your internet connection.", true, true);
         }
+        
         input.disabled = false;
         sendBtn.disabled = false;
         input.focus();
     }
     
+    // Event listeners
     sendBtn.addEventListener('click', sendMessage);
-    input.addEventListener('keypress', function(event) { if (event.key === 'Enter') sendMessage(); });
+    
+    input.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    });
+    
     input.focus();
     
+    // Test API connection
+    console.log('🔌 Testing API connection...');
     fetch(API_URL.replace('/chat', '/health'))
         .then(response => response.json())
         .then(data => console.log('✅ API Health:', data))
         .catch(error => console.error('❌ API Health check failed:', error));
-    
-    // Back to top button
+
+    // Back to top button functionality
     const btn = document.getElementById("topBtn");
-    window.onscroll = function() { btn.style.display = window.scrollY > 400 ? "block" : "none"; };
-    btn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
-    
-    // ========== TRONC COMMUN PHILOSOPHY SCRIPT (imaginary content, untouched logic) ==========
+    window.onscroll = function() {
+        if (window.scrollY > 400) {
+            btn.style.display = "block";
+        } else {
+            btn.style.display = "none";
+        }
+    };
+    btn.onclick = function() {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    };
+</script>
+
+<!-- ========== TRONC COMMUN SCRIPT (standalone, does not interfere with assistant) ========== -->
+<script>
     const imaginaryContents = [
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nL'art comme imitation, expression ou transfiguration du réel. Question : l'art nous détourne-t-il de la vérité ou nous ouvre-t-il à une vérité supérieure ? a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — Kant, Hegel, Nietzsche : réflexion esthétique et puissance créatrice. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nLe bonheur est-il accessible ? Faut-il le rechercher directement ou le considérer comme une conséquence d'une vie vertueuse ? a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — Épicure, Sénèque, Aristote : sagesse pratique et ataraxie. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
