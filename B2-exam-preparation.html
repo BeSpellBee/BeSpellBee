@@ -12,15 +12,23 @@
     <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Grammar Games + Lumi Activities</title>
     <style>
         /* Global body styles */
         body {
             background: linear-gradient(145deg, #1E90FF 0%, #87CEEB 100%);
             margin: 0;
             padding: 20px;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
         }
 
-        /* MILLIONAIRE GAME STYLES */
+        /* Main container - full width */
+        .games-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* MILLIONAIRE GAME STYLES (unchanged structure) */
         .millionaire-game {
             max-width: 700px;
             margin: 20px auto 40px auto;
@@ -179,16 +187,11 @@
             justify-content: space-between;
         }
 
-        /* JEOPARDY GAME STYLES – fully responsive */
-        /* Add spacing between board and question panel */
-.relative-game .question-panel {
-    margin-top: 24px;
-}
+        /* JEOPARDY GAME – RESPONSIVE */
         .relative-game {
             display: block;
             max-width: 1000px;
-            margin: 20px auto 40px auto;
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            margin: 40px auto 40px auto;
         }
 
         .relative-game .game-container {
@@ -196,7 +199,7 @@
             background: #FFFFFF;
             border-radius: 32px;
             box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35);
-            overflow-x: auto;  /* allow horizontal scroll if needed, but we prevent cramping */
+            overflow-x: auto;
             overflow-y: visible;
         }
 
@@ -219,7 +222,6 @@
             background: #FFFFFF;
         }
 
-        /* Board uses flex but on very small we add horizontal scroll inside container */
         .relative-game .board {
             display: flex;
             flex-direction: column;
@@ -264,8 +266,6 @@
             color: #FFFFFF;
             box-shadow: 0 8px 0 #0d3d70;
             cursor: pointer;
-            transition: all 0.1s ease;
-            user-select: none;
         }
 
         .relative-game .cell.used .used-mark {
@@ -276,6 +276,13 @@
             line-height: 1.2;
         }
 
+        .relative-game .question-panel {
+            margin-top: 28px;
+            background: #f5f7fc;
+            border-radius: 24px;
+            padding: 20px;
+        }
+
         .relative-game .options {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -283,209 +290,243 @@
             margin: 20px 0;
         }
 
-        /* Responsive improvements for phones */
+        /* Activity card for Lumi sections – exactly matching the example page */
+        .activity-card {
+            background: #FFFFFF;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .activity-header {
+            background: #0056B3;
+            padding: 18px 24px;
+            color: white;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .activity-header h2 {
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: 0.5px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .activity-header h2::before {
+            content: "📘";
+            font-size: 1.6rem;
+        }
+
+        .activity-tag {
+            background: #FFEB3B;
+            color: #000000;
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 5px 14px;
+            border-radius: 40px;
+            letter-spacing: 0.3px;
+        }
+
+        .iframe-wrapper {
+            padding: 24px;
+            background: #FFFFFF;
+        }
+
+        .iframe-wrapper iframe {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #eef4fe;
+            border-radius: 16px;
+            background: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(0,86,179,0.08);
+        }
+
+        /* Simple divider between major sections (games / lumi blocks) */
+        .section-divider {
+            height: 4px;
+            background: linear-gradient(90deg, #FFEB3B, #1976D2, #0056B3);
+            width: 100%;
+            margin: 30px 0;
+            border-radius: 2px;
+        }
+
+        /* Responsive for Lumi iframes */
         @media (max-width: 700px) {
-            .millionaire-game .answers-grid {
-                gap: 10px;
-                padding: 16px 12px;
-            }
-            .millionaire-game .answer-btn {
-                padding: 14px 4px;
-                font-size: 0.9rem;
-            }
-            .millionaire-game .logo h2 {
-                font-size: 1.1rem;
-            }
-            .millionaire-game .logo span {
-                font-size: 0.8rem;
-                white-space: normal;
-                margin-left: 0;
-            }
-            .relative-game .category-header {
-                min-width: 85px;
-                font-size: 0.75rem;
-                padding: 10px 4px;
-            }
-            .relative-game .cell {
-                min-width: 85px;
-                font-size: 1.5rem;
-            }
-            .relative-game .board-row {
-                gap: 8px;
-            }
+            .iframe-wrapper iframe { height: 450px; }
+            .relative-game .category-header { min-width: 85px; font-size: 0.75rem; }
+            .relative-game .cell { min-width: 85px; font-size: 1.5rem; }
+            .relative-game .question-panel { margin-top: 20px; }
         }
 
         @media (max-width: 550px) {
-            .relative-game .category-header {
-                min-width: 75px;
-                font-size: 0.65rem;
-                padding: 8px 2px;
-            }
-            .relative-game .cell {
-                min-width: 75px;
-                font-size: 1.3rem;
-            }
-            .relative-game .board-row {
-                gap: 6px;
-            }
-            .millionaire-game .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            .millionaire-game .logo h2 {
-                font-size: 1rem;
-            }
-            .millionaire-game .question-text {
-                font-size: 1rem;
-            }
+            .relative-game .category-header { min-width: 75px; font-size: 0.65rem; }
+            .relative-game .cell { min-width: 75px; font-size: 1.3rem; }
+            .iframe-wrapper iframe { height: 350px; }
         }
 
         @media (max-width: 480px) {
-            .relative-game .category-header {
-                min-width: 65px;
-                font-size: 0.55rem;
-                word-break: keep-all;
-                overflow-wrap: break-word;
-            }
-            .relative-game .cell {
-                min-width: 65px;
-                font-size: 1.1rem;
-            }
-            /* ensure first letter "I" and "GE" from "challenge" show */
-            .relative-game .category-header {
-                line-height: 1.2;
-                letter-spacing: -0.2px;
-            }
+            .relative-game .category-header { min-width: 65px; font-size: 0.55rem; }
+            .relative-game .cell { min-width: 65px; font-size: 1.1rem; }
         }
 
-        /* keep existing styles for buttons, lifelines, etc. unchanged */
+        /* existing button / feedback styles */
         .millionaire-game .answer-btn.selected-correct { background: #c8e6c9; border-color: #2e7d32; box-shadow: 0 4px 0 #1b5e20; }
         .millionaire-game .answer-btn.selected-wrong { background: #ffcdd2; border-color: #b71c1c; box-shadow: 0 4px 0 #8b1e1e; }
-        .millionaire-game .answer-btn:disabled { opacity: 0.7; cursor: not-allowed; box-shadow: 0 2px 0 #b0bec5; transform: translateY(2px); }
-        .millionaire-game .lifelines { display: flex; gap: 12px; }
-        .millionaire-game .lifeline-btn { background: #1976D2; border: none; color: white; font-weight: 600; font-size: 1.0rem; padding: 12px 20px; border-radius: 50px; cursor: pointer; border-bottom: 4px solid #0d3d70; transition: 0.1s; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 6px; }
-        .millionaire-game .lifeline-btn:disabled { opacity: 0.4; border-bottom-width: 2px; transform: translateY(2px); cursor: default; }
-        .millionaire-game .next-btn { background: #FFEB3B; border: none; color: #000000; font-weight: 700; font-size: 1.2rem; padding: 12px 32px; border-radius: 60px; border-bottom: 4px solid #c5a605; cursor: pointer; transition: 0.1s; box-shadow: 0 4px 12px rgba(255,235,59,0.4); }
-        .millionaire-game .next-btn:disabled { opacity: 0.4; border-bottom-width: 2px; transform: translateY(2px); cursor: default; }
-        .millionaire-game .reset-area { text-align: center; margin: 0 0 18px 0; }
-        .millionaire-game .reset-btn, .relative-game .reset-btn { background: transparent; border: 2px solid #0056B3; color: #0056B3; font-weight: 600; padding: 8px 30px; border-radius: 40px; font-size: 1rem; cursor: pointer; transition: 0.1s; }
-        .millionaire-game .reset-btn:hover, .relative-game .reset-btn:hover { background: #0056B3; color: white; }
-        .relative-game .option-btn { background: #FFFFFF; border: 2px solid #dde3ed; border-radius: 40px; padding: 14px 20px; font-size: 1rem; font-weight: 600; color: #000000; cursor: pointer; box-shadow: 0 4px 0 #cbd2df; transition: all 0.1s ease; text-align: center; }
-        .relative-game .option-btn.selected { background: #1976D2; color: white; border-color: #0056B3; box-shadow: 0 4px 0 #0d3d70; }
-        .relative-game .submit-btn { background: #FFEB3B; border: none; color: #000000; font-weight: 700; font-size: 1.2rem; padding: 14px 40px; border-radius: 60px; border-bottom: 4px solid #c5a605; cursor: pointer; transition: 0.1s; box-shadow: 0 4px 12px rgba(255,235,59,0.4); }
+        .millionaire-game .lifeline-btn, .millionaire-game .next-btn { cursor: pointer; }
+        .relative-game .option-btn { background: #FFFFFF; border: 2px solid #dde3ed; border-radius: 40px; padding: 14px 20px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 0 #cbd2df; }
+        .relative-game .option-btn.selected { background: #1976D2; color: white; border-color: #0056B3; }
+        .relative-game .submit-btn { background: #FFEB3B; border: none; color: #000000; font-weight: 700; font-size: 1.2rem; padding: 14px 40px; border-radius: 60px; border-bottom: 4px solid #c5a605; cursor: pointer; }
         .relative-game .feedback { background: #FFFFFF; border-radius: 16px; padding: 16px 20px; margin-top: 20px; border-left: 6px solid #1976D2; }
         .relative-game .feedback.correct { border-left-color: #2e7d32; background: #e8f5e9; }
         .relative-game .feedback.incorrect { border-left-color: #b71c1c; background: #ffebee; }
-        #topBtn { display: none; position: fixed; bottom: 20px; right: 30px; z-index: 99; font-size: 24px; border: none; outline: none; background-color: #2196F3; color: white; cursor: pointer; border-radius: 50%; width: 50px; height: 50px; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); line-height: 50px; padding: 0; }
+        #topBtn { display: none; position: fixed; bottom: 20px; right: 30px; z-index: 99; font-size: 24px; background-color: #1976D2; color: white; cursor: pointer; border-radius: 50%; width: 50px; height: 50px; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); line-height: 50px; text-align: center; border: none; }
+        #topBtn:hover { background-color: #0056B3; }
     </style>
 </head>
 <body>
-
-<!-- MILLIONAIRE GAME -->
-<div class="millionaire-game">
-    <div class="game-card">
-        <div class="header">
-            <div class="logo">
-                <h2>📚 The Past Perfect(continous) <span>millionaire</span></h2>
+<div class="games-container">
+    <!-- MILLIONAIRE GAME -->
+    <div class="millionaire-game">
+        <div class="game-card">
+            <div class="header">
+                <div class="logo"><h2>📚 The Past Perfect(continuous) <span>millionaire</span></h2></div>
+                <div class="level-prize"><small>£</small><span id="prizeDisplay">500</span></div>
             </div>
-            <div class="level-prize">
-                <small>£</small><span id="prizeDisplay">500</span>
+            <div class="question-panel">
+                <div class="question-text" id="questionText">Loading question...</div>
+                <div class="prize-row"><span>🎯 question <span id="qNumber">1</span>/15</span><span class="prize-amount" id="qValue">£500</span></div>
             </div>
-        </div>
-
-        <div class="question-panel">
-            <div class="question-text" id="questionText">Loading question...</div>
-            <div class="prize-row">
-                <span>🎯 question <span id="qNumber">1</span>/15</span>
-                <span class="prize-amount" id="qValue">£500</span>
+            <div class="answers-grid" id="answersContainer"></div>
+            <div class="feedback-message" id="feedbackMessage"></div>
+            <div class="game-footer">
+                <div class="lifelines"><button class="lifeline-btn" id="fiftyBtn">🔹 50:50</button><button class="lifeline-btn" id="audienceBtn">👥 audience</button></div>
+                <button class="next-btn" id="nextBtn" disabled>➡️ next</button>
             </div>
-        </div>
-
-        <div class="answers-grid" id="answersContainer"></div>
-        <div class="feedback-message" id="feedbackMessage"></div>
-
-        <div class="game-footer">
-            <div class="lifelines">
-                <button class="lifeline-btn" id="fiftyBtn">🔹 50:50</button>
-                <button class="lifeline-btn" id="audienceBtn">👥 audience</button>
-            </div>
-            <button class="next-btn" id="nextBtn" disabled>➡️ next</button>
-        </div>
-
-        <div class="reset-area">
-            <button class="reset-btn" id="resetBtn">⟲ play again</button>
+            <div class="reset-area"><button class="reset-btn" id="resetBtn">⟲ play again</button></div>
         </div>
     </div>
-</div>
 
-<!-- REDESIGNED JEOPARDY GAME (fully responsive) -->
-<div class="relative-game">
-    <div class="game-container">
-        <h1>RELATIVE CLAUSES</h1>
-
-        <div class="board-section">
-            <div id="jeopardyBoard" class="board">
-                <!-- dynamic board -->
-            </div>
-
-            <div class="question-panel" id="questionPanel">
-                <div class="question-text" id="questionDisplay">Select a value on the board</div>
-                <div class="options" id="optionsContainer"></div>
-                <div class="action-row">
-                    <button class="submit-btn" id="submitAnswerBtn">CHECK ANSWER</button>
+    <!-- JEOPARDY GAME -->
+    <div class="relative-game">
+        <div class="game-container">
+            <h1>RELATIVE CLAUSES</h1>
+            <div class="board-section">
+                <div id="jeopardyBoard" class="board"></div>
+                <div class="question-panel" id="questionPanel">
+                    <div class="question-text" id="questionDisplay">Select a value on the board</div>
+                    <div class="options" id="optionsContainer"></div>
+                    <div class="action-row"><button class="submit-btn" id="submitAnswerBtn">CHECK ANSWER</button></div>
+                    <div class="feedback" id="feedbackArea"><span id="feedbackMessage">Select options and click CHECK</span><div class="explanation" id="explanationMessage"></div></div>
                 </div>
-                <div class="feedback" id="feedbackArea">
-                    <span id="feedbackMessage">Select options and click CHECK</span>
-                    <div class="explanation" id="explanationMessage"></div>
-                </div>
-            </div>
-
-            <div class="footer">
-                <button class="reset-btn" id="resetGameBtn">↻ RESTART GAME</button>
+                <div class="footer"><button class="reset-btn" id="resetGameBtn">↻ RESTART GAME</button></div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- LUMI ACTIVITIES (unchanged) -->
-<br>
-<center><h1 style="font-size:20px"><b>Mixed conditionals</b></h1></center>
-<iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+    <!-- DIVIDER BETWEEN GAMES AND LUMI ACTIVITIES -->
+    <div class="section-divider"></div>
 
-<center><h1 style="font-size:20px"><b>The future perfect/The future continuous</b></h1></center>
-<iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+    <!-- ========== LUMI ACTIVITIES – each wrapped in an activity card ========== -->
 
-<center><h1 style="font-size:20px"><b>The present perfect/The present perfect progressive</b></h1></center>
-<iframe src="https://app.lumi.education/api/v1/run/NqzFpP/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+    <!-- Mixed conditionals -->
+    <div class="activity-card">
+        <div class="activity-header">
+            <h2>Mixed conditionals</h2>
+            <span class="activity-tag">interactive H5P</span>
+        </div>
+        <div class="iframe-wrapper">
+            <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+        </div>
+    </div>
 
-<center><h1 style="font-size:20px"><b>The order of adjectives</b></h1></center>
-<iframe src="https://app.lumi.education/api/v1/run/tJevug/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+    <!-- The future perfect / continuous -->
+    <div class="activity-card">
+        <div class="activity-header">
+            <h2>The future perfect / The future continuous</h2>
+            <span class="activity-tag">grammar practice</span>
+        </div>
+        <div class="iframe-wrapper">
+            <iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+        </div>
+    </div>
 
-<center><h1 style="font-size:20px"><b>Expressing the future with: will/going to/the present/the present progressive</b></h1></center>
-<iframe src="https://app.lumi.education/api/v1/run/ICS3lU/embed" width="1088" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+    <!-- present perfect progressive -->
+    <div class="activity-card">
+        <div class="activity-header">
+            <h2>The present perfect / The present perfect progressive</h2>
+            <span class="activity-tag">tense comparison</span>
+        </div>
+        <div class="iframe-wrapper">
+            <iframe src="https://app.lumi.education/api/v1/run/NqzFpP/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+        </div>
+    </div>
 
-<center><h1 style="font-size:20px; font-family: sans-serif;"><b>4 ways to express regrets</b></h1>
-<p style="text-align: center; font-size: 18px; font-family: sans-serif; color: #333; margin-top: 10px; margin-bottom: 20px;">Drag and drop the sentences into their appropriate boxes.</p>
-</center>
+    <!-- Order of adjectives -->
+    <div class="activity-card">
+        <div class="activity-header">
+            <h2>The order of adjectives</h2>
+            <span class="activity-tag">word order</span>
+        </div>
+        <div class="iframe-wrapper">
+            <iframe src="https://app.lumi.education/api/v1/run/tJevug/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+        </div>
+    </div>
 
-<div style="max-width: 600px; margin: 0 auto;">
-    <iframe src="https://app.lumi.education/api/v1/run/m_XXyx/embed" width="100%" height="320" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-</div>
+    <!-- Expressing the future -->
+    <div class="activity-card">
+        <div class="activity-header">
+            <h2>Expressing the future with: will / going to / present simple / present progressive</h2>
+            <span class="activity-tag">future forms</span>
+        </div>
+        <div class="iframe-wrapper">
+            <iframe src="https://app.lumi.education/api/v1/run/ICS3lU/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+        </div>
+    </div>
 
-<center><h1 style="font-size:20px; font-family: sans-serif;"><b>The definite article/zero article with geographical locations</b></h1>
-<p style="text-align: center; font-size:18px; font-family:Arial, sans-serif; color: #333;">Choose the correct article</p></center>
+    <!-- 4 ways to express regrets -->
+    <div class="activity-card">
+        <div class="activity-header">
+            <h2>4 ways to express regrets</h2>
+            <span class="activity-tag">drag & drop</span>
+        </div>
+        <div class="activity-description" style="background: #f5f7fc; padding: 8px 24px; color: #1976D2; font-style: italic; border-bottom: 2px solid #eef4fe;">
+            Drag and drop the sentences into their appropriate boxes.
+        </div>
+        <div class="iframe-wrapper" style="padding-top: 8px;">
+            <iframe src="https://app.lumi.education/api/v1/run/m_XXyx/embed" width="100%" height="320" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+        </div>
+    </div>
 
-<div style="max-width: 600px; margin: 0 auto;">
-    <iframe src="https://app.lumi.education/api/v1/run/ahsD6O/embed" width="100%" height="720" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-</div>
+    <!-- The definite article / zero article with geographical locations -->
+    <div class="activity-card">
+        <div class="activity-header">
+            <h2>The definite article / zero article with geographical locations</h2>
+            <span class="activity-tag">choose the correct article</span>
+        </div>
+        <div class="activity-description" style="background: #f5f7fc; padding: 8px 24px; color: #1976D2; font-style: italic; border-bottom: 2px solid #eef4fe;">
+            Choose the correct article
+        </div>
+        <div class="iframe-wrapper">
+            <iframe src="https://app.lumi.education/api/v1/run/ahsD6O/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+        </div>
+    </div>
+
+</div> <!-- end games-container -->
 
 <script src="https://app.Lumi.education/api/v1/h5p/core/js/h5p-resizer.js" charset="UTF-8"></script>
-
 <button id="topBtn" title="Go to top">↑</button>
 
 <script>
-// MILLIONAIRE GAME SCRIPT (unchanged)
+// MILLIONAIRE GAME SCRIPT (unchanged logic)
 (function() {
     const questions = [
         { question: "Which tense is best for the main, completed actions in a story?", answers: ["A: Past Perfect", "B: Past Continuous", "C: Simple Past", "D: Past Perfect Continuous"], correct: 2, level: 100, explanation: "✓ Simple Past describes main story events. (rule 1)" },
@@ -504,151 +545,40 @@
         { question: "When help finally arrived, the hikers ______ to a tree for two days.", answers: ["A: clung", "B: were clinging", "C: had been clinging", "D: have clung"], correct: 2, level: 500000, explanation: "✓ duration up to that past moment – past perfect continuous (rule 4)." },
         { question: "Is this correct? 'I finally grasped the theory my tutor was explaining all year.'", answers: ["A: yes, correct", "B: change 'was explaining' to 'had been explaining'", "C: change 'grasped' to 'had grasped'", "D: change 'all year' to 'throughout year'"], correct: 1, level: 1000000, explanation: "✓ 'had been explaining' = duration completed before 'grasped' (rule 3 & 4)." }
     ];
-
     let currentIndex = 0, fiftyUsed = false, audienceUsed = false, answerLocked = false, eliminatedIndices = [];
-    
-    const questionEl = document.getElementById('questionText');
-    const answersContainer = document.getElementById('answersContainer');
-    const feedbackEl = document.getElementById('feedbackMessage');
-    const nextBtn = document.getElementById('nextBtn');
-    const fiftyBtn = document.getElementById('fiftyBtn');
-    const audienceBtn = document.getElementById('audienceBtn');
-    const prizeSpan = document.getElementById('prizeDisplay');
-    const qNumberSpan = document.getElementById('qNumber');
-    const qValueSpan = document.getElementById('qValue');
-    const resetBtn = document.getElementById('resetBtn');
-
-    function formatPrize(level) {
-        if (level >= 1000000) return '£1M';
-        if (level >= 1000) return '£' + (level/1000) + 'k';
-        return '£' + level;
-    }
-
+    const questionEl = document.getElementById('questionText'), answersContainer = document.getElementById('answersContainer'), feedbackEl = document.getElementById('feedbackMessage'), nextBtn = document.getElementById('nextBtn'), fiftyBtn = document.getElementById('fiftyBtn'), audienceBtn = document.getElementById('audienceBtn'), prizeSpan = document.getElementById('prizeDisplay'), qNumberSpan = document.getElementById('qNumber'), qValueSpan = document.getElementById('qValue'), resetBtn = document.getElementById('resetBtn');
+    function formatPrize(level) { if (level >= 1000000) return '£1M'; if (level >= 1000) return '£' + (level/1000) + 'k'; return '£' + level; }
     function loadQuestion(index) {
         const q = questions[index];
         questionEl.innerText = q.question;
         qNumberSpan.innerText = index + 1;
         qValueSpan.innerText = formatPrize(q.level);
         prizeSpan.innerText = q.level >= 1000000 ? '1M' : (q.level >= 1000 ? (q.level/1000)+'k' : q.level);
-
         let htmlStr = '';
-        for (let i = 0; i < q.answers.length; i++) {
-            const letter = String.fromCharCode(65 + i);
-            htmlStr += `<button class="answer-btn" data-index="${i}"><span class="answer-letter">${letter}</span>${q.answers[i]}</button>`;
-        }
+        for (let i = 0; i < q.answers.length; i++) { const letter = String.fromCharCode(65 + i); htmlStr += `<button class="answer-btn" data-index="${i}"><span class="answer-letter">${letter}</span>${q.answers[i]}</button>`; }
         answersContainer.innerHTML = htmlStr;
-
         document.querySelectorAll('.millionaire-game .answer-btn').forEach(btn => btn.addEventListener('click', answerHandler));
-
-        if (eliminatedIndices.length > 0 && !answerLocked) {
-            applyFiftyVisibility();
-        } else {
-            document.querySelectorAll('.millionaire-game .answer-btn').forEach(btn => btn.style.display = 'flex');
-        }
-
-        answerLocked = false;
-        nextBtn.disabled = true;
-        feedbackEl.innerHTML = '';
+        if (eliminatedIndices.length > 0 && !answerLocked) applyFiftyVisibility(); else document.querySelectorAll('.millionaire-game .answer-btn').forEach(btn => btn.style.display = 'flex');
+        answerLocked = false; nextBtn.disabled = true; feedbackEl.innerHTML = '';
     }
-
     function answerHandler(e) {
         if (answerLocked) return;
-        const btn = e.currentTarget;
-        const selectedIdx = parseInt(btn.dataset.index, 10);
-        const currentQ = questions[currentIndex];
-        const isCorrect = (selectedIdx === currentQ.correct);
-
-        answerLocked = true;
-        nextBtn.disabled = false;
-
-        document.querySelectorAll('.millionaire-game .answer-btn').forEach(b => {
-            b.disabled = true;
-            const idx = parseInt(b.dataset.index, 10);
-            if (idx === currentQ.correct) b.classList.add('selected-correct');
-            else if (idx === selectedIdx && !isCorrect) b.classList.add('selected-wrong');
-        });
-
-        if (isCorrect) {
-            feedbackEl.innerHTML = `<span class="green-text">✅ correct! ${currentQ.explanation || ''}</span>`;
-        } else {
-            feedbackEl.innerHTML = `<span class="red-text">❌ wrong. correct answer: ${String.fromCharCode(65+currentQ.correct)}. ${currentQ.explanation || ''}</span>`;
-        }
+        const btn = e.currentTarget, selectedIdx = parseInt(btn.dataset.index, 10), currentQ = questions[currentIndex], isCorrect = (selectedIdx === currentQ.correct);
+        answerLocked = true; nextBtn.disabled = false;
+        document.querySelectorAll('.millionaire-game .answer-btn').forEach(b => { b.disabled = true; const idx = parseInt(b.dataset.index, 10); if (idx === currentQ.correct) b.classList.add('selected-correct'); else if (idx === selectedIdx && !isCorrect) b.classList.add('selected-wrong'); });
+        if (isCorrect) feedbackEl.innerHTML = `<span class="green-text">✅ correct! ${currentQ.explanation || ''}</span>`; else feedbackEl.innerHTML = `<span class="red-text">❌ wrong. correct answer: ${String.fromCharCode(65+currentQ.correct)}. ${currentQ.explanation || ''}</span>`;
     }
-
-    function applyFiftyVisibility() {
-        const currentQ = questions[currentIndex];
-        const correctIdx = currentQ.correct;
-        let wrongIndices = [0,1,2,3].filter(i => i !== correctIdx);
-        for (let i = wrongIndices.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [wrongIndices[i], wrongIndices[j]] = [wrongIndices[j], wrongIndices[i]];
-        }
-        const toEliminate = wrongIndices.slice(0, 2);
-        eliminatedIndices = toEliminate;
-
-        document.querySelectorAll('.millionaire-game .answer-btn').forEach(btn => {
-            const idx = parseInt(btn.dataset.index, 10);
-            btn.style.display = toEliminate.includes(idx) ? 'none' : 'flex';
-        });
-    }
-
-    fiftyBtn.addEventListener('click', () => {
-        if (fiftyUsed || answerLocked) return;
-        fiftyUsed = true;
-        fiftyBtn.disabled = true;
-        applyFiftyVisibility();
-        feedbackEl.innerHTML = '<span class="green-text">🔹 50:50 applied – two wrong answers hidden.</span>';
-    });
-
-    audienceBtn.addEventListener('click', () => {
-        if (audienceUsed || answerLocked) return;
-        audienceUsed = true;
-        audienceBtn.disabled = true;
-        const correctLetter = String.fromCharCode(65 + questions[currentIndex].correct);
-        feedbackEl.innerHTML = `<span class="green-text">👥 audience thinks ${correctLetter} is correct! (use wisely)</span>`;
-    });
-
-    nextBtn.addEventListener('click', () => {
-        if (currentIndex < questions.length - 1) {
-            currentIndex++;
-            eliminatedIndices = [];
-            answerLocked = false;
-            if (!fiftyUsed) fiftyBtn.disabled = false;
-            if (!audienceUsed) audienceBtn.disabled = false;
-            loadQuestion(currentIndex);
-        } else {
-            questionEl.innerText = "🏆 YOU ARE A GRAMMAR MILLIONAIRE! 🏆";
-            answersContainer.innerHTML = '';
-            feedbackEl.innerHTML = '<span class="green-text">perfect! click play again.</span>';
-            nextBtn.disabled = true;
-            fiftyBtn.disabled = true;
-            audienceBtn.disabled = true;
-        }
-    });
-
-    resetBtn.addEventListener('click', () => {
-        currentIndex = 0;
-        fiftyUsed = false;
-        audienceUsed = false;
-        eliminatedIndices = [];
-        answerLocked = false;
-        fiftyBtn.disabled = false;
-        audienceBtn.disabled = false;
-        loadQuestion(0);
-    });
-
+    function applyFiftyVisibility() { const currentQ = questions[currentIndex], correctIdx = currentQ.correct; let wrongIndices = [0,1,2,3].filter(i => i !== correctIdx); for (let i = wrongIndices.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [wrongIndices[i], wrongIndices[j]] = [wrongIndices[j], wrongIndices[i]]; } const toEliminate = wrongIndices.slice(0, 2); eliminatedIndices = toEliminate; document.querySelectorAll('.millionaire-game .answer-btn').forEach(btn => { const idx = parseInt(btn.dataset.index, 10); btn.style.display = toEliminate.includes(idx) ? 'none' : 'flex'; }); }
+    fiftyBtn.addEventListener('click', () => { if (fiftyUsed || answerLocked) return; fiftyUsed = true; fiftyBtn.disabled = true; applyFiftyVisibility(); feedbackEl.innerHTML = '<span class="green-text">🔹 50:50 applied – two wrong answers hidden.</span>'; });
+    audienceBtn.addEventListener('click', () => { if (audienceUsed || answerLocked) return; audienceUsed = true; audienceBtn.disabled = true; const correctLetter = String.fromCharCode(65 + questions[currentIndex].correct); feedbackEl.innerHTML = `<span class="green-text">👥 audience thinks ${correctLetter} is correct! (use wisely)</span>`; });
+    nextBtn.addEventListener('click', () => { if (currentIndex < questions.length - 1) { currentIndex++; eliminatedIndices = []; answerLocked = false; if (!fiftyUsed) fiftyBtn.disabled = false; if (!audienceUsed) audienceBtn.disabled = false; loadQuestion(currentIndex); } else { questionEl.innerText = "🏆 YOU ARE A GRAMMAR MILLIONAIRE! 🏆"; answersContainer.innerHTML = ''; feedbackEl.innerHTML = '<span class="green-text">perfect! click play again.</span>'; nextBtn.disabled = true; fiftyBtn.disabled = true; audienceBtn.disabled = true; } });
+    resetBtn.addEventListener('click', () => { currentIndex = 0; fiftyUsed = false; audienceUsed = false; eliminatedIndices = []; answerLocked = false; fiftyBtn.disabled = false; audienceBtn.disabled = false; loadQuestion(0); });
     loadQuestion(0);
 })();
 
-// JEOPARDY GAME SCRIPT (unchanged logic, fully responsive layout via CSS)
+// JEOPARDY GAME SCRIPT (unchanged)
 (function() {
-    const categories = [
-        { name: "NON-<br>IDENTIFYING" },
-        { name: "IDENTIFYING" },
-        { name: "WHOSE & WHOM" },
-        { name: "MIXED CHALLENGES" }
-    ];
-
+    const categories = [{ name: "NON-<br>IDENTIFYING" }, { name: "IDENTIFYING" }, { name: "WHOSE & WHOM" }, { name: "MIXED CHALLENGES" }];
     const questionsData = [
         { category: 0, points: 100, question: "My sister, ____ lives in London, is a data analyst.", options: ["A) that", "B) who", "C) which"], correct: ["B"], explanation: "Non‑identifying clause (with commas): use 'who' for people. 'That' is not used in non‑identifying clauses." },
         { category: 0, points: 200, question: "Elon Musk, ____ companies include Tesla and SpaceX, is a controversial figure.", options: ["A) who", "B) whose", "C) that"], correct: ["B"], explanation: "Possessive 'whose' shows the companies belong to him. Non‑identifying." },
@@ -671,166 +601,36 @@
         { category: 3, points: 400, question: "The house, ____ was built in 1900, has a garden ____ is full of roses.", options: ["A) which / which", "B) which / that", "C) that / which", "D) which / (no pronoun)", "E) (no pronoun) / that"], correct: ["A","B"], explanation: "First blank (non‑identifying, thing) → only 'which'. Second blank (identifying, subject, thing) → 'which' or 'that' (no omission)." },
         { category: 3, points: 500, question: "The professor, ____ I respect deeply, wrote a book ____ became a bestseller.", options: ["A) who / which", "B) who / that", "C) whom / which", "D) whom / that", "E) that / which"], correct: ["A","B","C","D"], explanation: "First blank (non‑identifying, object, person) → 'who' (informal) or 'whom' (formal). Second blank (identifying, subject, thing) → 'which' or 'that'." }
     ];
-
-    let usedCells = {};
-    let currentCellKey = null;
-    let currentQuestion = null;
-    let selectedOptions = [];
-
-    const boardDiv = document.getElementById('jeopardyBoard');
-    const questionDisplay = document.getElementById('questionDisplay');
-    const optionsContainer = document.getElementById('optionsContainer');
-    const submitBtn = document.getElementById('submitAnswerBtn');
-    const feedbackMessage = document.getElementById('feedbackMessage');
-    const explanationMessage = document.getElementById('explanationMessage');
-    const feedbackArea = document.getElementById('feedbackArea');
-
+    let usedCells = {}, currentCellKey = null, currentQuestion = null, selectedOptions = [];
+    const boardDiv = document.getElementById('jeopardyBoard'), questionDisplay = document.getElementById('questionDisplay'), optionsContainer = document.getElementById('optionsContainer'), submitBtn = document.getElementById('submitAnswerBtn'), feedbackMessage = document.getElementById('feedbackMessage'), explanationMessage = document.getElementById('explanationMessage'), feedbackArea = document.getElementById('feedbackArea');
     function renderBoard() {
         boardDiv.innerHTML = '';
-        const headerRow = document.createElement('div');
-        headerRow.className = 'board-row';
-        categories.forEach(cat => {
-            const header = document.createElement('div');
-            header.className = 'category-header';
-            header.innerHTML = cat.name;
-            headerRow.appendChild(header);
-        });
+        const headerRow = document.createElement('div'); headerRow.className = 'board-row';
+        categories.forEach(cat => { const header = document.createElement('div'); header.className = 'category-header'; header.innerHTML = cat.name; headerRow.appendChild(header); });
         boardDiv.appendChild(headerRow);
-
         const pointValues = [100, 200, 300, 400, 500];
         for (let rowIdx = 0; rowIdx < pointValues.length; rowIdx++) {
-            const row = document.createElement('div');
-            row.className = 'board-row';
-            const pts = pointValues[rowIdx];
+            const row = document.createElement('div'); row.className = 'board-row'; const pts = pointValues[rowIdx];
             for (let catIdx = 0; catIdx < categories.length; catIdx++) {
-                const cell = document.createElement('div');
-                cell.className = 'cell';
-                const cellKey = `${catIdx}-${pts}`;
-                cell.dataset.cat = catIdx;
-                cell.dataset.points = pts;
-                cell.dataset.key = cellKey;
-
-                if (usedCells[cellKey]) {
-                    cell.classList.add('used');
-                    cell.innerHTML = '<span class="used-mark">⬇️<br>HOLE</span>';
-                } else {
-                    cell.innerText = '$' + pts;
-                }
-
-                cell.addEventListener('click', onCellClick);
-                row.appendChild(cell);
+                const cell = document.createElement('div'); cell.className = 'cell'; const cellKey = `${catIdx}-${pts}`;
+                cell.dataset.cat = catIdx; cell.dataset.points = pts; cell.dataset.key = cellKey;
+                if (usedCells[cellKey]) { cell.classList.add('used'); cell.innerHTML = '<span class="used-mark">⬇️<br>HOLE</span>'; } else { cell.innerText = '$' + pts; }
+                cell.addEventListener('click', onCellClick); row.appendChild(cell);
             }
             boardDiv.appendChild(row);
         }
     }
-
-    function onCellClick(e) {
-        const cell = e.currentTarget;
-        if (cell.classList.contains('used')) return;
-
-        const catIdx = cell.dataset.cat;
-        const points = parseInt(cell.dataset.points);
-
-        const q = questionsData.find(qd => qd.category === parseInt(catIdx) && qd.points === points);
-        if (!q) {
-            alert('Question data missing');
-            return;
-        }
-
-        currentCellKey = `${catIdx}-${points}`;
-        currentQuestion = q;
-        selectedOptions = [];
-
-        questionDisplay.innerText = q.question;
-        optionsContainer.innerHTML = '';
-        q.options.forEach((optText, idx) => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.innerText = optText;
-            btn.dataset.optionLetter = optText[0];
-            btn.addEventListener('click', toggleOption);
-            optionsContainer.appendChild(btn);
-        });
-
-        feedbackMessage.innerText = 'Select the correct option(s) and click CHECK';
-        explanationMessage.innerText = '';
-        feedbackArea.className = 'feedback';
-        submitBtn.disabled = false;
-    }
-
-    function toggleOption(e) {
-        const btn = e.currentTarget;
-        const letter = btn.dataset.optionLetter;
-        if (btn.classList.contains('selected')) {
-            btn.classList.remove('selected');
-            selectedOptions = selectedOptions.filter(l => l !== letter);
-        } else {
-            btn.classList.add('selected');
-            selectedOptions.push(letter);
-        }
-    }
-
-    function onSubmit() {
-        if (!currentQuestion) {
-            feedbackMessage.innerText = '⚠️ First select a question from the board.';
-            return;
-        }
-
-        const selectedSorted = [...selectedOptions].sort();
-        const correctSorted = [...currentQuestion.correct].sort();
-
-        const isCorrect = (selectedSorted.length === correctSorted.length) &&
-                          selectedSorted.every((val, i) => val === correctSorted[i]);
-
-        if (currentCellKey) {
-            usedCells[currentCellKey] = true;
-        }
-
-        const allOpts = document.querySelectorAll('.relative-game .option-btn');
-        allOpts.forEach(btn => btn.disabled = true);
-        submitBtn.disabled = true;
-
-        feedbackArea.classList.remove('correct', 'incorrect');
-        if (isCorrect) {
-            feedbackMessage.innerText = '✅ SAFE! You chose exactly the right answers. You move forward.';
-            feedbackArea.classList.add('correct');
-        } else {
-            feedbackMessage.innerText = '❌ OH NO! You fell down a hole (wrong selection).';
-            feedbackArea.classList.add('incorrect');
-        }
-        explanationMessage.innerText = currentQuestion.explanation;
-
-        renderBoard();
-    }
-
-    function resetGame() {
-        usedCells = {};
-        currentQuestion = null;
-        currentCellKey = null;
-        selectedOptions = [];
-        questionDisplay.innerText = 'Select a value on the board';
-        optionsContainer.innerHTML = '';
-        feedbackMessage.innerText = 'Select options and click CHECK';
-        explanationMessage.innerText = '';
-        feedbackArea.className = 'feedback';
-        submitBtn.disabled = false;
-        renderBoard();
-    }
-
-    submitBtn.addEventListener('click', onSubmit);
-    document.getElementById('resetGameBtn').addEventListener('click', resetGame);
-
-    renderBoard();
+    function onCellClick(e) { const cell = e.currentTarget; if (cell.classList.contains('used')) return; const catIdx = cell.dataset.cat, points = parseInt(cell.dataset.points); const q = questionsData.find(qd => qd.category === parseInt(catIdx) && qd.points === points); if (!q) { alert('Question data missing'); return; } currentCellKey = `${catIdx}-${points}`; currentQuestion = q; selectedOptions = []; questionDisplay.innerText = q.question; optionsContainer.innerHTML = ''; q.options.forEach((optText, idx) => { const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = optText; btn.dataset.optionLetter = optText[0]; btn.addEventListener('click', toggleOption); optionsContainer.appendChild(btn); }); feedbackMessage.innerText = 'Select the correct option(s) and click CHECK'; explanationMessage.innerText = ''; feedbackArea.className = 'feedback'; submitBtn.disabled = false; }
+    function toggleOption(e) { const btn = e.currentTarget, letter = btn.dataset.optionLetter; if (btn.classList.contains('selected')) { btn.classList.remove('selected'); selectedOptions = selectedOptions.filter(l => l !== letter); } else { btn.classList.add('selected'); selectedOptions.push(letter); } }
+    function onSubmit() { if (!currentQuestion) { feedbackMessage.innerText = '⚠️ First select a question from the board.'; return; } const selectedSorted = [...selectedOptions].sort(), correctSorted = [...currentQuestion.correct].sort(); const isCorrect = (selectedSorted.length === correctSorted.length) && selectedSorted.every((val, i) => val === correctSorted[i]); if (currentCellKey) usedCells[currentCellKey] = true; document.querySelectorAll('.relative-game .option-btn').forEach(btn => btn.disabled = true); submitBtn.disabled = true; feedbackArea.classList.remove('correct', 'incorrect'); if (isCorrect) { feedbackMessage.innerText = '✅ SAFE! You chose exactly the right answers. You move forward.'; feedbackArea.classList.add('correct'); } else { feedbackMessage.innerText = '❌ OH NO! You fell down a hole (wrong selection).'; feedbackArea.classList.add('incorrect'); } explanationMessage.innerText = currentQuestion.explanation; renderBoard(); }
+    function resetGame() { usedCells = {}; currentQuestion = null; currentCellKey = null; selectedOptions = []; questionDisplay.innerText = 'Select a value on the board'; optionsContainer.innerHTML = ''; feedbackMessage.innerText = 'Select options and click CHECK'; explanationMessage.innerText = ''; feedbackArea.className = 'feedback'; submitBtn.disabled = false; renderBoard(); }
+    submitBtn.addEventListener('click', onSubmit); document.getElementById('resetGameBtn').addEventListener('click', resetGame); renderBoard();
 })();
 
-// back to top button
+// Back to top button
 const topBtn = document.getElementById("topBtn");
-window.onscroll = function() {
-    topBtn.style.display = window.scrollY > 400 ? "block" : "none";
-};
-topBtn.onclick = function() {
-    window.scrollTo({top: 0, behavior: 'smooth'});
-};
+window.onscroll = function() { topBtn.style.display = window.scrollY > 400 ? "block" : "none"; };
+topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
 </script>
 </body>
 </html>
