@@ -549,7 +549,7 @@
         </div>
     </div>
 
-    <!-- RIGHT COLUMN: TRONC COMMUN PHILOSOPHIE (NEW SECTION, SAME STYLE) -->
+    <!-- RIGHT COLUMN: TRONC COMMUN PHILOSOPHIE (La liberté is now #1) -->
     <div class="tronc-wrapper">
         <div class="tronc-card">
             <div class="tronc-header">
@@ -580,7 +580,12 @@
                     <option value="16">17. La vérité</option>
                 </select>
 
-              
+                <div class="theme-display" id="themeDisplayPanel">
+                    <div class="theme-title" id="themeTitle">La liberté</div>
+                    <div class="theme-content" id="themeImaginaryContent">
+                        <!-- Temporary content, will be replaced by script -->
+                    </div>
+                </div>
                 <div class="tronc-footer">
                     ⚜️ Programme officiel — chaque thème avec trame réflexive <br>
                     📚 <em>« Connais-toi toi-même » – Socrate</em>
@@ -706,25 +711,58 @@
     };
 </script>
 
-<!-- ========== TRONC COMMUN SCRIPT (standalone, does not interfere with assistant) ========== -->
+<!-- ========== TRONC COMMUN SCRIPT (FIXED: escaped double quotes inside string) ========== -->
 <script>
-     const imaginaryContents = [
-         "L'homme est soumis au déterminisme naturel: tout dans la nature, obéissant à des lois naturelles,résulte de causes nécessaires. On n'est pas paslibre de voler ou marcher sur l'eau. Réduit à la seule liberté physique, il s'ensuit qu'on n'est pas plus libre qu'une pierre qui tombe sans recontrer l'obstacle.\n Pour autant, l'on est libre physiquement lorsque on excerce notre liberté de mouvement contrairement à ceux qui sont enchaînés. De plus, l'absence de contrainte qu'est la liberté physique, pour Aristote et Leibniz, consiste dans la spontanéité de mouvement du à une cause interne et non à une contrainte externe.C'est faire ce que je veux et peux sans contrainte.\n\n De même, la liberté politique désigne un être libre à sa volonté,qui est soi-même son propre maître, indépendant à l'égard de tout pouvoir.Néanmoins, l'homme, comme animal politique selon Aristotle, ne vit pas seul",
-        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nL'art comme imitation, expression ou transfiguration du réel. Question : l'art nous détourne-t-il de la vérité ou nous ouvre-t-il à une vérité supérieure ? a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — Kant, Hegel, Nietzsche : réflexion esthétique et puissance créatrice. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    const imaginaryContents = [
+        // 0: La liberté (fixed: escaped inner double quotes around "animal politique")
+        "L'homme est soumis au déterminisme naturel: tout dans la nature, obéissant à des lois naturelles, résulte de causes nécessaires. On n'est pas libre de voler ou marcher sur l'eau. Réduit à la seule liberté physique, il s'ensuit qu'on n'est pas plus libre qu'une pierre qui tombe sans rencontrer l'obstacle.\nPour autant, l'on est libre physiquement lorsque l'on exerce notre liberté de mouvement contrairement à ceux qui sont enchaînés. De plus, l'absence de contrainte qu'est la liberté physique, pour Aristote et Leibniz, consiste dans la spontanéité de mouvement due à une cause interne et non à une contrainte externe. C'est faire ce que je veux et peux sans contrainte.\n\nDe même, la liberté politique désigne un être libre à sa volonté, qui est soi-même son propre maître, indépendant à l'égard de tout pouvoir. Néanmoins, l'homme, comme \"animal politique\" selon Aristote, ne vit pas seul.",
+        
+        // 1: Le bonheur
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nLe bonheur est-il accessible ? Faut-il le rechercher directement ou le considérer comme une conséquence d'une vie vertueuse ? a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — Épicure, Sénèque, Aristote : sagesse pratique et ataraxie. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        
+        // 2: La conscience
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nLa conscience rend-elle libre ou constitue-t-elle un obstacle à notre spontanéité ? Peut-on avoir conscience de soi sans autrui ? a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — Sartre, Husserl, Descartes : le cogito et l'intentionnalité. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        
+        // 3: Le devoir
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nLe devoir s'impose-t-il par la raison universelle ou par des contextes concrets ? Morale kantienne vs éthique du care. a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — Impératif catégorique, délibération, conflits de devoirs. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        
+        // 4: L'État
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nL'État garantit-il la liberté ou impose-t-il une domination légitime ? Théories du contrat social : Hobbes, Locke, Rousseau. a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — Souveraineté, obéissance civile et désobéissance. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        
+        // 5: La justice
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nQu'est-ce qu'une société juste ? Justice distributive, corrective, commutative. Rawls, Nozick, Aristote. a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — Égalité, équité et reconnaissance des singularités. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        
+        // 6: L'inconscient
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nL'inconscient détermine-t-il nos actes ? Psychanalyse : refoulement, désir, symptôme. Freud, Lacan. a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — L'ombre de la conscience, l'interprétation des rêves. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        
+        // 7: Le langage
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nLe langage structure-t-il la pensée ou la trahit-il ? Wittgenstein, Austin, Saussure. a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — Jeux de langage, performativité, limites du dicible. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        
+        // 8: L'art
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nL'art comme imitation, expression ou transfiguration du réel. Question : l'art nous détourne-t-il de la vérité ou nous ouvre-t-il à une vérité supérieure ? a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — Kant, Hegel, Nietzsche : réflexion esthétique et puissance créatrice. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        
+        // 9: La nature
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nLa nature a-t-elle une finalité ? L'homme doit-il dominer ou préserver la nature ? Philosophie antique et éthique environnementale. a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — Aristote, Descartes, Hans Jonas. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        
+        // 10: La raison
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nLa raison peut-elle tout connaître ? Quels sont ses pouvoirs et ses limites ? Lumières, rationalisme critique. a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — Kant, critique de la raison pure, rationalité scientifique. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        
+        // 11: La religion
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nLa croyance religieuse est-elle raisonnable ? Foi, preuve, expérience mystique. Pascal, Kierkegaard, Bergson. a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — le pari de Pascal, aliénation ou sens de l'existence. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        
+        // 12: La science
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nLa science nous délivre-t-elle la vérité objective ? Paradigmes, révolutions scientifiques. Popper, Kuhn, Bachelard. a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — Falsifiabilité et progrès épistémique. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        
+        // 13: La technique
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nLa technique libère-t-elle l'humanité ou l'asservit-elle ? Heidegger, Ellul, Simondon. a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — technique comme prolongement du corps vs arraisonnement. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        
+        // 14: Le travail
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nLe travail est-il une aliénation ou une source d'épanouissement ? Marx, Arendt, la valeur du labeur. a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — travail, oeuvre, activité et sens. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        
+        // 15: Le temps
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nLe temps est-il réel ou une illusion de la conscience ? Augustin, Bergson, Heidegger. a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — durée, éternité, et projet existentiel. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        
+        // 16: La vérité
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\nLa vérité est-elle universelle ou relative ? Correspondance, cohérence, utilité. Nietzsche, James, la vérité comme perspective. a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a — vérité scientifique, morale et existence. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ];
     
@@ -754,6 +792,7 @@
         if (!isNaN(idx)) updateThemeDisplay(idx);
     });
     
+    // Initialize with first theme (La liberté)
     updateThemeDisplay(0);
     selectEl.selectedIndex = 0;
 </script>
