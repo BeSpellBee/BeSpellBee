@@ -3,19 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    
-    <!-- ================= ORIGINAL GOOGLE TAG (gtag.js) - PRESERVED EXACTLY ================= -->
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N3F5GM52DZ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-N3F5GM52DZ');
-    </script>
-    <!-- ================================ END GOOGLE TAG ======================================= -->
-    
     <title>Bac Philo · Assistant & Tronc Commun | 17 thèmes</title>
     <style>
         * {
@@ -341,23 +328,6 @@
 </div>
 
 <script>
-    // ======================== GOOGLE TAG ENHANCEMENT (optional tracking events using existing gtag) ========================
-    // The original Google Tag (G-N3F5GM52DZ) is already loaded above. 
-    // This code adds custom event tracking for theme selections (for backend analytics).
-    // It does NOT modify or remove the original config — it only uses the existing gtag function.
-    function trackThemeSelection(themeName, themeIndex) {
-        if (typeof gtag === 'function') {
-            gtag('event', 'select_philosophy_theme', {
-                'event_category': 'engagement',
-                'event_label': themeName,
-                'value': themeIndex
-            });
-        }
-        // Console log for debugging (won't affect analytics)
-        console.log(`[Analytics] Theme selected: ${themeName} (index ${themeIndex})`);
-    }
-    // ===================================================================================================
-
     // ------------------------------------------------------------------
     // Imaginary content for each theme (respectant le style "aaaaaa" et références)
     // Même contenu philosophique et fictif, aligné avec le besoin initial.
@@ -429,17 +399,11 @@
 
     function updateThemeDisplay(selectedIndex) {
         if (selectedIndex >= 0 && selectedIndex < themeTitles.length) {
-            const newTitle = themeTitles[selectedIndex];
-            const newContent = imaginaryContents[selectedIndex];
-            themeTitleEl.textContent = newTitle;
-            themeContentEl.textContent = newContent;
-            
-            // Track this theme selection with Google Tag (backend analytics using original G-N3F5GM52DZ)
-            trackThemeSelection(newTitle, selectedIndex);
+            themeTitleEl.textContent = themeTitles[selectedIndex];
+            themeContentEl.textContent = imaginaryContents[selectedIndex];
         } else {
             themeTitleEl.textContent = themeTitles[0];
             themeContentEl.textContent = imaginaryContents[0];
-            trackThemeSelection(themeTitles[0], 0);
         }
     }
 
@@ -448,18 +412,11 @@
         if (!isNaN(idx)) updateThemeDisplay(idx);
     });
 
-    // initialisation (art) + trigger initial tracking if needed (pageview already sent via original gtag config)
+    // initialisation (art)
     updateThemeDisplay(0);
     selectEl.selectedIndex = 0;  // synchro
 
-    // Send an initial custom event to mark first load theme (optional but useful for analytics)
-    if (typeof gtag === 'function') {
-        gtag('event', 'page_view_theme_loaded', {
-            'event_category': 'engagement',
-            'event_label': 'initial_theme_art'
-        });
-    }
-
+    // légère amélioration de l'interaction
     selectEl.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") e.stopPropagation();
     });
