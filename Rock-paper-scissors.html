@@ -8,7 +8,7 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-N3F5GM52DZ');
-    </script> 
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>French BAC LLCE + Tronc commun Philo | 17 thèmes</title>
@@ -41,6 +41,15 @@
         .assistant-wrapper {
             flex: 1;
             min-width: 320px;
+            /* NEW: vertically center the assistant card */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .assistant-wrapper .bac-container {
+            width: 100%;
+            margin: 0;
         }
 
         .tronc-wrapper {
@@ -491,7 +500,7 @@
 </head>
 <body>
 <div class="dashboard">
-    <!-- LEFT COLUMN: ORIGINAL ASSISTANT - COMPLETELY UNMODIFIED -->
+    <!-- LEFT COLUMN: ORIGINAL ASSISTANT - NOW VERTICALLY CENTERED -->
     <div class="assistant-wrapper">
         <div class="bac-container">
             <div class="page-header">
@@ -549,7 +558,7 @@
         </div>
     </div>
 
-    <!-- RIGHT COLUMN: TRONC COMMUN PHILOSOPHIE (La liberté is now #1) -->
+    <!-- RIGHT COLUMN: TRONC COMMUN PHILOSOPHIE -->
     <div class="tronc-wrapper">
         <div class="tronc-card">
             <div class="tronc-header">
@@ -711,57 +720,41 @@
     };
 </script>
 
-<!-- ========== TRONC COMMUN SCRIPT (FIXED: escaped double quotes inside string) ========== -->
+<!-- ========== TRONC COMMUN SCRIPT ========== -->
 <script>
     const imaginaryContents = [
-        // 0: La liberté (fixed: escaped inner double quotes around "animal politique")
-        "L'homme est soumis au déterminisme naturel: tout dans la nature, obéissant à des lois naturelles, résulte de causes nécessaires. On n'est pas libre de voler ou marcher sur l'eau. Réduit à la seule liberté physique, il s'ensuit qu'on n'est pas plus libre qu'une pierre qui tombe sans rencontrer d'obstacle.Pour autant, l'on est libre physiquement lorsque l'on exerce notre liberté de mouvement contrairement à ceux qui sont enchaînés. De plus, l'absence de contrainte qu'est la liberté physique, pour Aristote et Leibniz, consiste dans la spontanéité de mouvement due à une cause interne et non à une contrainte externe. C'est faire ce que je veux et peux sans contrainte.\n\nDe même, la liberté politique désigne un être libre à sa volonté, qui est soi-même son propre maître, indépendant à l'égard de tout pouvoir. Néanmoins, l'homme, comme \"animal politique\" selon Aristote, ne vit pas seul. A la condition d'obéir à une loi égale pour tous(isonomie), it est citoyen libre en société. Quant à Thomas Hobbes, il est d'ailleurs indispensable, pour se conserver,  qu'on se dépouille d'une partie de notre liberté au profit d'un souverain absolu qui arbitre entre nous. Cependant pour Rousseau, cette soumission doit être libre en ce que le citoyen obéit obéir librement à une loi comme l'expression d'une volonté générale,une loi qu'il s'est lui-même donnée. Pour Marx et surtout Hegel cependant, la liberté n'est pas un statut juridique, mais le résultat d'un processus historique de libération par le travail. Le mâitre qui ne travaille pas devient davantage dépendend de l'escalve qui, en transformant lui-même et la nature, devient le nouveau maître.\n\n Au sens moral, la liberté pour les Anciens et les stoiciens  réside dans une volonté intérieure indépendante de toute contrainte physique ou du corp. Ainsi, pour rester libre, it faut détacher la volonté des biens ou corps extéreurs dont notre corps dépend. La liberté est non pas faire ce que je veux, puisque on dépend d'un cours de la nature dont on ignore(Spinoza), mais vouloir ce que je peux. C'est supposer ma responsabilité à l'égard de l'autre(Levinas), en choisissant entre le mal et le bien par le bias du libre arbitre",
-        
+        // 0: La liberté (your fully corrected content)
+        "L'homme est soumis au déterminisme naturel: tout dans la nature, obéissant à des lois naturelles, résulte de causes nécessaires. On n'est pas libre de voler ou marcher sur l'eau. Réduit à la seule liberté physique, il s'ensuit qu'on n'est pas plus libre qu'une pierre qui tombe sans rencontrer d'obstacle.Pour autant, l'on est libre physiquement lorsque l'on exerce notre liberté de mouvement contrairement à ceux qui sont enchaînés. De plus, l'absence de contrainte qu'est la liberté physique, pour Aristote et Leibniz, consiste dans la spontanéité de mouvement due à une cause interne et non à une contrainte externe. C'est faire ce que je veux et peux sans contrainte.\n\nDe même, la liberté politique désigne un être libre à sa volonté, qui est soi-même son propre maître, indépendant à l'égard de tout pouvoir. Néanmoins, l'homme, comme \"animal politique\" selon Aristote, ne vit pas seul. A la condition d'obéir à une loi égale pour tous (isonomie), il est citoyen libre en société. Quant à Thomas Hobbes, il est d'ailleurs indispensable, pour se conserver, qu'on se dépouille d'une partie de notre liberté au profit d'un souverain absolu qui arbitre entre nous. Cependant pour Rousseau, cette soumission doit être libre en ce que le citoyen obéit librement à une loi comme l'expression d'une volonté générale, une loi qu'il s'est lui-même donnée. Pour Marx et surtout Hegel cependant, la liberté n'est pas un statut juridique, mais le résultat d'un processus historique de libération par le travail. Le maître qui ne travaille pas devient davantage dépendant de l'esclave qui, en transformant lui-même et la nature, devient le nouveau maître.\n\nAu sens moral, la liberté pour les Anciens et les stoïciens réside dans une volonté intérieure indépendante de toute contrainte physique ou du corps. Ainsi, pour rester libre, il faut détacher la volonté des biens ou corps extérieurs dont notre corps dépend. La liberté n'est pas faire ce que je veux, puisque on dépend d'un cours de la nature dont on ignore (Spinoza), mais vouloir ce que je peux. C'est supposer ma responsabilité à l'égard de l'autre (Levinas), en choisissant entre le mal et le bien par le biais du libre arbitre.",
         // 1: Le bonheur
         "",
-        
         // 2: La conscience
         "",
-        
         // 3: Le devoir
         "",
-        
         // 4: L'État
         "",
-        
         // 5: La justice
         "",
-        
         // 6: L'inconscient
         "",
-        
         // 7: Le langage
         "",
-        
         // 8: L'art
         "",
-        
         // 9: La nature
         "",
-        
         // 10: La raison
         "",
-        
         // 11: La religion
         "",
-        
         // 12: La science
         "",
-        
         // 13: La technique
         "",
-        
         // 14: Le travail
         "",
-        
         // 15: Le temps
         "",
-        
         // 16: La vérité
         ""
     ];
