@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
-    
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N3F5GM52DZ"></script>
     <script>
@@ -11,11 +9,9 @@
       gtag('js', new Date());
       gtag('config', 'G-N3F5GM52DZ');
     </script>
-    
     <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    
     <title>B2 exam</title>
     <style>
         /* Global body styles */
@@ -390,7 +386,8 @@ const topBtn = document.getElementById("topBtn");
 window.onscroll = function() { topBtn.style.display = window.scrollY > 400 ? "block" : "none"; };
 topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
 </script>
-    <!-- ========== EMBEDDED MINI-LMS (Password Protected) ========== -->
+
+    <!-- ========== UPDATED EMBEDDED MINI-LMS (Password Protected + Email/Download) ========== -->
 <style>
     /* ----- LMS Container Styles ----- */
     .lms-wrapper {
@@ -644,10 +641,7 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
 
             <!-- DASHBOARD VIEW -->
             <div id="viewDashboard" class="lms-view active">
-                <h2 style="color: #0056B3; border-left: 6px solid #FFEB3B; padding-left: 16px;">📋 Course Dashboard</h2>
-                <div id="dashboardContent">
-                    <!-- Modules injected by JavaScript -->
-                </div>
+                <div id="dashboardContent"></div>
             </div>
 
             <!-- LESSON VIEW -->
@@ -672,6 +666,12 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
 </div>
 
 <script>
+    // ============================================================
+    // 0. CUSTOMIZE THESE TWO LINES
+    // ============================================================
+    const ACCESS_CODE = 'beLMS';          // <-- Change this to your own password
+    const TEACHER_EMAIL = 'your-email@example.com'; // <-- Replace with your email
+
     // ============================================================
     // 1. COURSE DATA (Edit this to build your course)
     // ============================================================
@@ -769,26 +769,23 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
     // ============================================================
     // 2. STATE & HELPERS
     // ============================================================
-    const ACCESS_CODE = 'beLMS'; // <-- CHANGE THIS PASSWORD
-
-    // Get saved progress
     function getProgress() {
         const saved = localStorage.getItem('lmsProgress');
         return saved ? JSON.parse(saved) : {};
     }
 
-    function saveProgress(progress) {
-        localStorage.setItem('lmsProgress', JSON.stringify(progress));
+    function saveProgress(prog) {
+        localStorage.setItem('lmsProgress', JSON.stringify(prog));
     }
 
     function isCompleted(lessonId) {
         const prog = getProgress();
-        return prog[lessonId] === true;
+        return prog[lessonId] && prog[lessonId].completed === true;
     }
 
     function markCompleted(lessonId) {
         const prog = getProgress();
-        prog[lessonId] = true;
+        prog[lessonId] = { completed: true };
         saveProgress(prog);
     }
 
@@ -804,30 +801,103 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
     }
 
     // ============================================================
-    // 3. RENDER DASHBOARD
+    // 3. GENERATE REPORT (used for both download and email)
+    // ============================================================
+    function generateReport() {
+        const prog = getProgress();
+        let report = "=== Progress Report ===\n";
+        report += "Generated: " + new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString() + "\n\n";
+
+        courseData.modules.forEach(mod => {
+            report += `📌 ${mod.title}\n`;
+            mod.lessons.forEach(lesson => {
+                const data = prog[lesson.id];
+                if (lesson.type === 'quiz') {
+                    if (data && data.completed) {
+                        report += `  🧠 ${lesson.title}: ✅ Completed (Score: ${data.score}/${data.total})\n`;
+                    } else {
+                        report += `  🧠 ${lesson.title}: ⬜ Not started\n`;
+                    }
+                } else {
+                    const status = data && data.completed ? "✅ Completed" : "⬜ Not started";
+                    report += `  📖 ${lesson.title}: ${status}\n`;
+                }
+            });
+            report += "\n";
+        });
+        report += "=== End of Report ===";
+        return report;
+    }
+
+    // ============================================================
+    // 4. DOWNLOAD & EMAIL PROGRESS
+    // ============================================================
+    function downloadProgress() {
+        const report = generateReport();
+        const blob = new Blob([report], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `progress_${new Date().toISOString().slice(0,10)}.txt`;
+        a.click();
+    }
+
+    function emailProgress() {
+        const report = generateReport();
+        const subject = encodeURIComponent('Progress Report – B2 Exam Prep Course');
+        const body = encodeURIComponent(report);
+        window.location.href = `mailto:${TEACHER_EMAIL}?subject=${subject}&body=${body}`;
+    }
+
+    // ============================================================
+    // 5. RENDER DASHBOARD
     // ============================================================
     function renderDashboard() {
         const container = document.getElementById('dashboardContent');
-        let html = '';
+        let html = `
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+                <h2 style="color: #0056B3; border-left: 6px solid #FFEB3B; padding-left: 16px; margin:0;">📋 Course Dashboard</h2>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button onclick="downloadProgress()" style="background:#1976D2; color:white; border:none; padding:10px 20px; border-radius:40px; cursor:pointer; font-weight:600; border-bottom:4px solid #0d3d70;">
+                        📥 Download Progress
+                    </button>
+                    <button onclick="emailProgress()" style="background:#FFEB3B; color:#000; border:none; padding:10px 20px; border-radius:40px; cursor:pointer; font-weight:600; border-bottom:4px solid #c5a605;">
+                        📧 Email Progress
+                    </button>
+                </div>
+            </div>
+            <div id="moduleList"></div>
+        `;
+        container.innerHTML = html;
+
+        const moduleList = document.getElementById('moduleList');
+        let listHtml = '';
         courseData.modules.forEach(mod => {
-            html += `<div class="module-card"><h3>📌 ${mod.title}</h3>`;
+            listHtml += `<div class="module-card"><h3>📌 ${mod.title}</h3>`;
             mod.lessons.forEach(lesson => {
                 const done = isCompleted(lesson.id) ? 'done' : '';
-                const label = isCompleted(lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson');
-                html += `
+                let label = isCompleted(lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson');
+                if (lesson.type === 'quiz') {
+                    const prog = getProgress();
+                    const data = prog[lesson.id];
+                    if (data && data.completed) {
+                        label = `✅ Completed (${data.score}/${data.total})`;
+                    }
+                }
+                const icon = lesson.type === 'quiz' ? '🧠' : '📖';
+                listHtml += `
                     <div class="lesson-item" onclick="openLesson('${mod.id}','${lesson.id}')">
-                        <span>${lesson.type === 'quiz' ? '🧠' : '📖'} ${lesson.title}</span>
+                        <span>${icon} ${lesson.title}</span>
                         <span class="status ${done}">${label}</span>
                     </div>
                 `;
             });
-            html += `</div>`;
+            listHtml += `</div>`;
         });
-        container.innerHTML = html;
+        moduleList.innerHTML = listHtml;
     }
 
     // ============================================================
-    // 4. OPEN LESSON / QUIZ
+    // 6. OPEN LESSON / QUIZ
     // ============================================================
     function openLesson(moduleId, lessonId) {
         const module = courseData.modules.find(m => m.id === moduleId);
@@ -892,6 +962,9 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         container.innerHTML = html;
     }
 
+    // ============================================================
+    // 7. SUBMIT QUIZ (saves score + completion)
+    // ============================================================
     function submitQuiz(quizId) {
         // find quiz data
         let quizData = null;
@@ -921,8 +994,12 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         const total = questions.length;
         const passed = score >= total * 0.6;
 
+        // SAVE SCORE in localStorage (including total)
+        const prog = getProgress();
+        prog[quizId] = { completed: true, score: score, total: total };
+        saveProgress(prog);
+
         if (passed) {
-            markCompleted(quizId);
             resultDiv.className = 'quiz-result pass';
             resultDiv.innerHTML = `<h3>✅ You scored ${score}/${total}. Well done!</h3>`;
         } else {
@@ -934,7 +1011,7 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
     }
 
     // ============================================================
-    // 5. PASSWORD GATE
+    // 8. PASSWORD GATE
     // ============================================================
     function unlockLMS() {
         const input = document.getElementById('lmsPassword');
@@ -966,5 +1043,6 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
     });
 </script>
 <!-- ========== END EMBEDDED LMS ========== -->
+
 </body>
 </html>
