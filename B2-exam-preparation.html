@@ -387,9 +387,8 @@ window.onscroll = function() { topBtn.style.display = window.scrollY > 400 ? "bl
 topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
 </script>
 
-    <!-- ========== UPDATED EMBEDDED MINI-LMS (Password Protected + Email/Download) ========== -->
+   <!-- ========== UPDATED LMS: Web3Forms Integration (Key Inserted) ========== -->
 <style>
-    /* ----- LMS Container Styles ----- */
     .lms-wrapper {
         max-width: 1100px;
         margin: 60px auto 20px auto;
@@ -410,215 +409,39 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         justify-content: space-between;
         gap: 15px;
     }
-    .lms-header h2 {
-        font-weight: 600;
-        font-size: 1.4rem;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .lms-badge {
-        background: #FFEB3B;
-        color: #000000;
-        font-size: 0.95rem;
-        font-weight: 700;
-        padding: 5px 14px;
-        border-radius: 40px;
-        letter-spacing: 0.3px;
-    }
-    .lms-body {
-        padding: 24px;
-        background: #FFFFFF;
-    }
-
-    /* ----- Password Gate (inside LMS) ----- */
-    .lms-gate {
-        background: #f5f7fc;
-        border-radius: 24px;
-        padding: 30px 20px;
-        text-align: center;
-        max-width: 500px;
-        margin: 0 auto;
-        border: 2px solid #eef4fe;
-    }
-    .lms-gate input {
-        padding: 14px 20px;
-        border: 2px solid #dde3ed;
-        border-radius: 60px;
-        font-size: 1rem;
-        width: 100%;
-        max-width: 300px;
-        outline: none;
-        margin: 10px 0;
-    }
-    .lms-gate input:focus {
-        border-color: #1976D2;
-        box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
-    }
-    .lms-gate button {
-        padding: 14px 32px;
-        background: #1976D2;
-        border: none;
-        color: white;
-        font-weight: 700;
-        font-size: 1.1rem;
-        border-radius: 60px;
-        border-bottom: 4px solid #0d3d70;
-        cursor: pointer;
-        transition: 0.1s;
-        box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
-    }
-    .lms-gate button:hover {
-        background: #0056B3;
-    }
-    .lms-gate .error {
-        color: #b71c1c;
-        margin-top: 10px;
-    }
-
-    /* ----- Dashboard View ----- */
-    .lms-view {
-        display: none;
-    }
-    .lms-view.active {
-        display: block;
-    }
-    .module-card {
-        background: #f5f7fc;
-        border-radius: 24px;
-        padding: 20px;
-        margin-bottom: 20px;
-        border-left: 6px solid #FFEB3B;
-    }
-    .module-card h3 {
-        color: #0056B3;
-        margin-top: 0;
-    }
-    .lesson-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: #FFFFFF;
-        padding: 12px 18px;
-        border-radius: 16px;
-        border: 1px solid #eef4fe;
-        margin: 8px 0;
-        cursor: pointer;
-        transition: 0.1s;
-    }
-    .lesson-item:hover {
-        background: #e3f2fd;
-    }
-    .lesson-item .status {
-        font-size: 0.8rem;
-        padding: 4px 12px;
-        border-radius: 40px;
-        background: #eef4fe;
-        color: #666;
-    }
-    .lesson-item .status.done {
-        background: #c8e6c9;
-        color: #1d6b2c;
-    }
-    .lesson-item .status.locked {
-        background: #ffcdd2;
-        color: #b71c1c;
-    }
-
-    /* ----- Lesson View ----- */
-    .lesson-content {
-        background: #f5f7fc;
-        padding: 24px;
-        border-radius: 24px;
-        line-height: 1.7;
-    }
-    .lesson-content iframe {
-        width: 100%;
-        height: 500px;
-        border: 2px solid #eef4fe;
-        border-radius: 16px;
-        background: #FFFFFF;
-        margin-top: 15px;
-    }
-    .nav-row {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 12px;
-        margin-top: 24px;
-        padding-top: 20px;
-        border-top: 2px solid #eef4fe;
-    }
-    .nav-row button, .nav-row a {
-        background: #1976D2;
-        color: white;
-        padding: 12px 28px;
-        border-radius: 60px;
-        border: none;
-        font-weight: 600;
-        cursor: pointer;
-        border-bottom: 4px solid #0d3d70;
-        text-decoration: none;
-        font-size: 0.95rem;
-    }
-    .nav-row button:hover, .nav-row a:hover {
-        background: #0056B3;
-    }
-    .nav-row .complete-btn {
-        background: #FFEB3B;
-        color: #000;
-        border-bottom: 4px solid #c5a605;
-    }
-    .nav-row .complete-btn:hover {
-        background: #f1df2c;
-    }
-
-    /* ----- Quiz View ----- */
-    .question-block {
-        background: #FFFFFF;
-        padding: 20px;
-        border-radius: 24px;
-        margin-bottom: 20px;
-        border-left: 6px solid #1976D2;
-    }
-    .question-block label {
-        display: block;
-        margin: 8px 0;
-        padding: 10px 16px;
-        background: #f5f7fc;
-        border-radius: 40px;
-        cursor: pointer;
-    }
-    .question-block label:hover {
-        background: #e3f2fd;
-    }
-    .quiz-result {
-        margin-top: 20px;
-        padding: 20px;
-        border-radius: 24px;
-        display: none;
-    }
-    .quiz-result.pass {
-        background: #c8e6c9;
-        border-left: 6px solid #1d6b2c;
-        display: block;
-    }
-    .quiz-result.fail {
-        background: #ffcdd2;
-        border-left: 6px solid #b71c1c;
-        display: block;
-    }
-
-    /* ----- Responsive ----- */
-    @media (max-width: 600px) {
-        .lesson-content iframe { height: 350px; }
-        .nav-row { flex-direction: column; align-items: stretch; }
-        .nav-row button, .nav-row a { text-align: center; }
-    }
+    .lms-header h2 { font-weight: 600; font-size: 1.4rem; margin: 0; display: flex; align-items: center; gap: 8px; }
+    .lms-badge { background: #FFEB3B; color: #000; font-size: 0.95rem; font-weight: 700; padding: 5px 14px; border-radius: 40px; }
+    .lms-body { padding: 24px; background: #FFFFFF; }
+    .lms-gate { background: #f5f7fc; border-radius: 24px; padding: 30px 20px; text-align: center; max-width: 500px; margin: 0 auto; border: 2px solid #eef4fe; }
+    .lms-gate input { padding: 14px 20px; border: 2px solid #dde3ed; border-radius: 60px; font-size: 1rem; width: 100%; max-width: 300px; outline: none; margin: 10px 0; }
+    .lms-gate input:focus { border-color: #1976D2; box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2); }
+    .lms-gate button { padding: 14px 32px; background: #1976D2; border: none; color: white; font-weight: 700; font-size: 1.1rem; border-radius: 60px; border-bottom: 4px solid #0d3d70; cursor: pointer; }
+    .lms-gate button:hover { background: #0056B3; }
+    .lms-gate .error { color: #b71c1c; margin-top: 10px; }
+    .lms-view { display: none; }
+    .lms-view.active { display: block; }
+    .module-card { background: #f5f7fc; border-radius: 24px; padding: 20px; margin-bottom: 20px; border-left: 6px solid #FFEB3B; }
+    .module-card h3 { color: #0056B3; margin-top: 0; }
+    .lesson-item { display: flex; justify-content: space-between; align-items: center; background: #FFFFFF; padding: 12px 18px; border-radius: 16px; border: 1px solid #eef4fe; margin: 8px 0; cursor: pointer; }
+    .lesson-item:hover { background: #e3f2fd; }
+    .lesson-item .status { font-size: 0.8rem; padding: 4px 12px; border-radius: 40px; background: #eef4fe; color: #666; }
+    .lesson-item .status.done { background: #c8e6c9; color: #1d6b2c; }
+    .lesson-content { background: #f5f7fc; padding: 24px; border-radius: 24px; line-height: 1.7; }
+    .lesson-content iframe { width: 100%; height: 500px; border: 2px solid #eef4fe; border-radius: 16px; background: #FFFFFF; margin-top: 15px; }
+    .nav-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 24px; padding-top: 20px; border-top: 2px solid #eef4fe; }
+    .nav-row button, .nav-row a { background: #1976D2; color: white; padding: 12px 28px; border-radius: 60px; border: none; font-weight: 600; cursor: pointer; border-bottom: 4px solid #0d3d70; text-decoration: none; }
+    .nav-row button:hover, .nav-row a:hover { background: #0056B3; }
+    .nav-row .complete-btn { background: #FFEB3B; color: #000; border-bottom: 4px solid #c5a605; }
+    .nav-row .complete-btn:hover { background: #f1df2c; }
+    .question-block { background: #FFFFFF; padding: 20px; border-radius: 24px; margin-bottom: 20px; border-left: 6px solid #1976D2; }
+    .question-block label { display: block; margin: 8px 0; padding: 10px 16px; background: #f5f7fc; border-radius: 40px; cursor: pointer; }
+    .question-block label:hover { background: #e3f2fd; }
+    .quiz-result { margin-top: 20px; padding: 20px; border-radius: 24px; display: none; }
+    .quiz-result.pass { background: #c8e6c9; border-left: 6px solid #1d6b2c; display: block; }
+    .quiz-result.fail { background: #ffcdd2; border-left: 6px solid #b71c1c; display: block; }
+    @media (max-width: 600px) { .lesson-content iframe { height: 350px; } .nav-row { flex-direction: column; align-items: stretch; } .nav-row button, .nav-row a { text-align: center; } }
 </style>
 
-<!-- ====== LMS HTML ====== -->
 <div class="lms-wrapper" id="lmsWrapper">
     <div class="lms-header">
         <h2>📘 B2 Exam Prep – Full Course</h2>
@@ -626,51 +449,45 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
     </div>
     <div class="lms-body">
 
-        <!-- PASSWORD GATE -->
         <div id="lmsGate" class="lms-gate">
             <h3>🔐 Enter your access code</h3>
             <p style="color: #666;">Purchase access to unlock the full course.</p>
-            <input type="password" id="lmsPassword" placeholder="Your access code...">
-            <br>
+            <input type="password" id="lmsPassword" placeholder="Your access code..."><br>
             <button onclick="unlockLMS()">Unlock Course</button>
             <div id="lmsGateError" class="error"></div>
         </div>
 
-        <!-- ====== LMS VIEWS (hidden until unlocked) ====== -->
         <div id="lmsViews" style="display: none;">
-
-            <!-- DASHBOARD VIEW -->
-            <div id="viewDashboard" class="lms-view active">
-                <div id="dashboardContent"></div>
-            </div>
-
-            <!-- LESSON VIEW -->
+            <div id="viewDashboard" class="lms-view active"><div id="dashboardContent"></div></div>
             <div id="viewLesson" class="lms-view">
                 <button onclick="showDashboard()" style="background: none; border: none; color: #0056B3; font-weight: 600; cursor: pointer; margin-bottom: 16px;">← Back to Dashboard</button>
-                <div id="lessonContent">
-                    <!-- Injected by JavaScript -->
-                </div>
+                <div id="lessonContent"></div>
             </div>
-
-            <!-- QUIZ VIEW -->
             <div id="viewQuiz" class="lms-view">
                 <button onclick="showDashboard()" style="background: none; border: none; color: #0056B3; font-weight: 600; cursor: pointer; margin-bottom: 16px;">← Back to Dashboard</button>
-                <div id="quizContent">
-                    <!-- Injected by JavaScript -->
-                </div>
+                <div id="quizContent"></div>
             </div>
-
-        </div><!-- end lmsViews -->
+        </div>
 
     </div>
 </div>
 
+<!-- Hidden form for Web3Forms (Key Inserted) -->
+<form id="reportForm" action="https://api.web3forms.com/submit" method="POST" style="display:none;">
+    <input type="hidden" name="access_key" value="587c378a-3c75-498e-b3bc-b7fd96ad2278">
+    <input type="hidden" name="subject" id="reportSubject" value="Progress Report – B2 Exam Prep Course">
+    <input type="hidden" name="from_name" value="B2 Student">
+    <input type="hidden" name="replyto" value="student@example.com">
+    <input type="hidden" name="redirect" value="false">
+    <textarea name="message" id="reportBody"></textarea>
+</form>
+
 <script>
     // ============================================================
-    // 0. CUSTOMIZE THESE TWO LINES
+    // 0. CUSTOMIZE THESE
     // ============================================================
-    const ACCESS_CODE = 'beLMS';          // <-- Change this to your own password
-    const TEACHER_EMAIL = 'your-email@example.com'; // <-- Replace with your email
+    const ACCESS_CODE = 'beLMS';          // <-- Change this to your own password (e.g., B2PREMIUM2025)
+    // The Web3Forms dashboard will send reports to your registered email.
 
     // ============================================================
     // 1. COURSE DATA (Edit this to build your course)
@@ -696,7 +513,6 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
                             <p><em>Correct:</em> "I <strong>believe</strong> you."<br>
                             <em>Incorrect:</em> "I am believing you."</p>
                             <h3>🔹 Practice Activity</h3>
-                            <!-- REPLACE this iframe with your actual Lumi activity -->
                             <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
                         `
                     },
@@ -705,21 +521,9 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
                         title: 'Tenses Quiz',
                         type: 'quiz',
                         questions: [
-                            {
-                                question: 'She ______ to work every day by bus.',
-                                options: ['A) go', 'B) goes', 'C) is going'],
-                                correct: 1
-                            },
-                            {
-                                question: 'Listen! Someone ______ the piano.',
-                                options: ['A) play', 'B) plays', 'C) is playing'],
-                                correct: 2
-                            },
-                            {
-                                question: 'I ______ him for years.',
-                                options: ['A) know', 'B) have known', 'C) knew'],
-                                correct: 1
-                            }
+                            { question: 'She ______ to work every day by bus.', options: ['A) go', 'B) goes', 'C) is going'], correct: 1 },
+                            { question: 'Listen! Someone ______ the piano.', options: ['A) play', 'B) plays', 'C) is playing'], correct: 2 },
+                            { question: 'I ______ him for years.', options: ['A) know', 'B) have known', 'C) knew'], correct: 1 }
                         ]
                     }
                 ]
@@ -740,7 +544,6 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
                                 <li><strong>Cost an arm and a leg</strong> – very expensive.</li>
                             </ul>
                             <h3>🔹 Practice Activity</h3>
-                            <!-- REPLACE with your Lumi activity -->
                             <iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
                         `
                     },
@@ -749,16 +552,8 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
                         title: 'Vocabulary Quiz',
                         type: 'quiz',
                         questions: [
-                            {
-                                question: 'To "break the ice" means to:',
-                                options: ['A) Start a conversation', 'B) Break something frozen', 'C) End a fight'],
-                                correct: 0
-                            },
-                            {
-                                question: 'If something "costs an arm and a leg", it is:',
-                                options: ['A) Cheap', 'B) Expensive', 'C) Free'],
-                                correct: 1
-                            }
+                            { question: 'To "break the ice" means to:', options: ['A) Start a conversation', 'B) Break something frozen', 'C) End a fight'], correct: 0 },
+                            { question: 'If something "costs an arm and a leg", it is:', options: ['A) Cheap', 'B) Expensive', 'C) Free'], correct: 1 }
                         ]
                     }
                 ]
@@ -789,7 +584,6 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         saveProgress(prog);
     }
 
-    // View switching
     function showView(viewId) {
         document.querySelectorAll('.lms-view').forEach(v => v.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
@@ -801,7 +595,7 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
     }
 
     // ============================================================
-    // 3. GENERATE REPORT (used for both download and email)
+    // 3. GENERATE REPORT
     // ============================================================
     function generateReport() {
         const prog = getProgress();
@@ -830,7 +624,7 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
     }
 
     // ============================================================
-    // 4. DOWNLOAD & EMAIL PROGRESS
+    // 4. DOWNLOAD & SEND PROGRESS
     // ============================================================
     function downloadProgress() {
         const report = generateReport();
@@ -841,11 +635,41 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         a.click();
     }
 
-    function emailProgress() {
+    function sendProgress() {
         const report = generateReport();
-        const subject = encodeURIComponent('Progress Report – B2 Exam Prep Course');
-        const body = encodeURIComponent(report);
-        window.location.href = `mailto:${TEACHER_EMAIL}?subject=${subject}&body=${body}`;
+        document.getElementById('reportSubject').value = 'Progress Report – B2 Exam Prep Course';
+        document.getElementById('reportBody').value = report;
+
+        const form = document.getElementById('reportForm');
+        const btn = document.querySelector('[onclick="sendProgress()"]');
+        if (btn) {
+            btn.innerText = '📤 Sending...';
+            btn.disabled = true;
+        }
+
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('✅ Progress report sent successfully! Your teacher will receive it shortly.');
+            } else {
+                alert('❌ Sending failed. Please use the Download button and email it manually.');
+            }
+            if (btn) {
+                btn.innerText = '📤 Send Progress to Teacher';
+                btn.disabled = false;
+            }
+        })
+        .catch(() => {
+            alert('❌ Network error. Please use the Download button and email it manually.');
+            if (btn) {
+                btn.innerText = '📤 Send Progress to Teacher';
+                btn.disabled = false;
+            }
+        });
     }
 
     // ============================================================
@@ -860,8 +684,8 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
                     <button onclick="downloadProgress()" style="background:#1976D2; color:white; border:none; padding:10px 20px; border-radius:40px; cursor:pointer; font-weight:600; border-bottom:4px solid #0d3d70;">
                         📥 Download Progress
                     </button>
-                    <button onclick="emailProgress()" style="background:#FFEB3B; color:#000; border:none; padding:10px 20px; border-radius:40px; cursor:pointer; font-weight:600; border-bottom:4px solid #c5a605;">
-                        📧 Email Progress
+                    <button onclick="sendProgress()" style="background:#FFEB3B; color:#000; border:none; padding:10px 20px; border-radius:40px; cursor:pointer; font-weight:600; border-bottom:4px solid #c5a605;">
+                        📤 Send Progress to Teacher
                     </button>
                 </div>
             </div>
@@ -902,7 +726,6 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
     function openLesson(moduleId, lessonId) {
         const module = courseData.modules.find(m => m.id === moduleId);
         const lesson = module.lessons.find(l => l.id === lessonId);
-
         if (lesson.type === 'quiz') {
             showView('viewQuiz');
             renderQuiz(lesson);
@@ -912,7 +735,6 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         }
     }
 
-    // ----- Render Lesson -----
     function renderLesson(lesson, moduleId) {
         const container = document.getElementById('lessonContent');
         const done = isCompleted(lesson.id);
@@ -934,7 +756,6 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         showDashboard();
     }
 
-    // ----- Render Quiz -----
     function renderQuiz(quiz) {
         const container = document.getElementById('quizContent');
         let html = `<h2 style="color: #0056B3;">🧠 ${quiz.title}</h2>`;
@@ -944,9 +765,7 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
                 <div class="question-block">
                     <p><strong>${idx+1}. ${q.question}</strong></p>
                     ${q.options.map((opt, oi) => `
-                        <label>
-                            <input type="radio" name="q${idx}" value="${oi}"> ${opt}
-                        </label>
+                        <label><input type="radio" name="q${idx}" value="${oi}"> ${opt}</label>
                     `).join('')}
                 </div>
             `;
@@ -963,10 +782,9 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
     }
 
     // ============================================================
-    // 7. SUBMIT QUIZ (saves score + completion)
+    // 7. SUBMIT QUIZ
     // ============================================================
     function submitQuiz(quizId) {
-        // find quiz data
         let quizData = null;
         for (let m of courseData.modules) {
             const found = m.lessons.find(l => l.id === quizId);
@@ -994,7 +812,6 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         const total = questions.length;
         const passed = score >= total * 0.6;
 
-        // SAVE SCORE in localStorage (including total)
         const prog = getProgress();
         prog[quizId] = { completed: true, score: score, total: total };
         saveProgress(prog);
@@ -1006,7 +823,6 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
             resultDiv.className = 'quiz-result fail';
             resultDiv.innerHTML = `<h3>❌ You scored ${score}/${total}. Review the lessons and try again.</h3>`;
         }
-        // disable all inputs
         document.querySelectorAll('#quizForm input[type="radio"]').forEach(el => el.disabled = true);
     }
 
@@ -1028,7 +844,6 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         }
     }
 
-    // Auto-unlock if previously unlocked
     document.addEventListener('DOMContentLoaded', function() {
         if (localStorage.getItem('lmsUnlocked') === 'true') {
             document.getElementById('lmsGate').style.display = 'none';
@@ -1037,12 +852,11 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         }
     });
 
-    // Allow Enter key on password field
     document.getElementById('lmsPassword').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') unlockLMS();
     });
 </script>
-<!-- ========== END EMBEDDED LMS ========== -->
+<!-- ========== END LMS ========== -->
 
 </body>
 </html>
