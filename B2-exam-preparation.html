@@ -77,7 +77,7 @@
             box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35);
             overflow: hidden;
             border: 1px solid rgba(0,0,0,0.05);
-            margin-bottom: 0; /* remove default margin, divider handles spacing */
+            margin-bottom: 0;
         }
 
         .activity-header {
@@ -97,7 +97,7 @@
         .iframe-wrapper { padding: 24px; background: #FFFFFF; }
         .iframe-wrapper iframe { width: 100%; height: 600px; border: 2px solid #eef4fe; border-radius: 16px; background: #FFFFFF; box-shadow: 0 4px 12px rgba(0,86,179,0.08); }
 
-        /* Fix for activities with no internal padding: remove top border-radius to prevent text clipping */
+        /* UNIFIED STYLING FOR ALL LUMI ACTIVITIES – flat top, rounded bottom corners */
         .iframe-wrapper.no-internal-padding iframe {
             border-top-left-radius: 0;
             border-top-right-radius: 0;
@@ -190,9 +190,9 @@
     <!-- DIVIDER BETWEEN GAMES AND LUMI ACTIVITIES -->
     <div class="section-divider"></div>
 
-    <!-- ========== LUMI ACTIVITIES – each followed by a colored divider (except last) ========== -->
+    <!-- ========== LUMI ACTIVITIES – ALL NOW USE no-internal-padding FOR CONSISTENCY ========== -->
 
-    <!-- 1. Mixed conditionals – problematic, added no-internal-padding -->
+    <!-- 1. Mixed conditionals -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>Mixed conditionals</h2>
@@ -204,7 +204,7 @@
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 2. The future perfect / continuous – problematic, added no-internal-padding -->
+    <!-- 2. The future perfect / continuous -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>The future perfect / The future continuous</h2>
@@ -216,19 +216,19 @@
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 3. The present perfect / progressive – good -->
+    <!-- 3. The present perfect / progressive -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>The present perfect / The present perfect progressive</h2>
             <span class="activity-tag">Tense comparison</span>
         </div>
-        <div class="iframe-wrapper">
+        <div class="iframe-wrapper no-internal-padding">
             <iframe src="https://app.lumi.education/api/v1/run/NqzFpP/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
         </div>
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 4. Order of adjectives – problematic, added no-internal-padding -->
+    <!-- 4. Order of adjectives -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>The order of adjectives</h2>
@@ -240,13 +240,13 @@
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 5. Expressing the future – good -->
+    <!-- 5. Expressing the future -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>Expressing the future with: will / going to / present simple / present progressive</h2>
             <span class="activity-tag">Future forms</span>
         </div>
-        <div class="iframe-wrapper">
+        <div class="iframe-wrapper no-internal-padding">
             <iframe src="https://app.lumi.education/api/v1/run/ICS3lU/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
         </div>
     </div>
@@ -261,7 +261,7 @@
         <div class="activity-description" style="background: #f5f7fc; padding: 8px 24px; color: #1976D2; font-style: italic; border-bottom: 2px solid #eef4fe;">
             Drag and drop the sentences into their appropriate boxes.
         </div>
-        <div class="iframe-wrapper" style="padding-top: 8px;">
+        <div class="iframe-wrapper no-internal-padding" style="padding-top: 8px;">
             <iframe src="https://app.lumi.education/api/v1/run/m_XXyx/embed" width="100%" height="320" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
         </div>
     </div>
@@ -276,7 +276,7 @@
         <div class="activity-description" style="background: #f5f7fc; padding: 8px 24px; color: #1976D2; font-style: italic; border-bottom: 2px solid #eef4fe;">
             Choose the correct article
         </div>
-        <div class="iframe-wrapper">
+        <div class="iframe-wrapper no-internal-padding">
             <iframe src="https://app.lumi.education/api/v1/run/ahsD6O/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
         </div>
     </div>
@@ -494,7 +494,7 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
     // ============================================================
     // 0. CUSTOMIZE THESE
     // ============================================================
-    const ACCESS_CODE = 'beLMS';          // <-- Change this to your own password (e.g., B2PREMIUM2025)
+    const ACCESS_CODE = 'beLMS';
     // The Web3Forms dashboard will send reports to your registered email.
 
     // ============================================================
