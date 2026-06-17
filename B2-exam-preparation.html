@@ -90,6 +90,9 @@
             justify-content: space-between;
             gap: 15px;
         }
+        .iframe-wrapper.no-internal-padding {
+    padding-top: 50px;   /* adjust this value if needed */
+}
         .activity-header h2 { font-weight: 600; font-size: 1.4rem; letter-spacing: 0.5px; margin: 0; display: flex; align-items: center; gap: 8px; }
         .activity-header h2::before { content: "📘"; font-size: 1.6rem; }
         .activity-tag { background: #FFEB3B; color: #000000; font-size: 0.95rem; font-weight: 700; padding: 5px 14px; border-radius: 40px; letter-spacing: 0.3px; }
@@ -187,6 +190,29 @@
     <!-- 1. Mixed conditionals -->
     <div class="activity-card">
         <div class="activity-header">
+            <!-- Mixed conditionals -->
+<div class="activity-card">
+    ...
+    <div class="iframe-wrapper no-internal-padding">   <!-- ← added class -->
+        <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" ...></iframe>
+    </div>
+</div>
+
+<!-- Future perfect / continuous -->
+<div class="activity-card">
+    ...
+    <div class="iframe-wrapper no-internal-padding">   <!-- ← added class -->
+        <iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" ...></iframe>
+    </div>
+</div>
+
+<!-- Order of adjectives -->
+<div class="activity-card">
+    ...
+    <div class="iframe-wrapper no-internal-padding">   <!-- ← added class -->
+        <iframe src="https://app.lumi.education/api/v1/run/tJevug/embed" ...></iframe>
+    </div>
+</div>
             <h2>Mixed conditionals</h2>
             <span class="activity-tag">Mixed conditionals</span>
         </div>
