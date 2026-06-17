@@ -96,21 +96,6 @@
         .activity-header h2::before { content: "📘"; font-size: 1.6rem; }
         .activity-tag { background: #FFEB3B; color: #000000; font-size: 0.95rem; font-weight: 700; padding: 5px 14px; border-radius: 40px; letter-spacing: 0.3px; }
 
-        /* UNIFIED IFRAME STYLING – applied directly to all iframes */
-        .activity-card iframe {
-            width: 100%;
-            height: 600px;
-            border: 2px solid #eef4fe;
-            border-radius: 16px;
-            background: #FFFFFF;
-            box-shadow: 0 4px 12px rgba(0,86,179,0.08);
-            display: block;
-        }
-
-        /* Shorter iframe for the regrets activity */
-        .activity-card.regrets-activity iframe {
-            height: 320px;
-        }
 
         /* Colored divider between activities */
         .activity-divider {
@@ -127,6 +112,20 @@
             width: 100%;
             margin: 30px 0;
             border-radius: 2px;
+        }
+         /* Iframe wrapper - matches B2 page styling */
+        .iframe-wrapper {
+            padding: 24px;
+            background: #FFFFFF;
+        }
+
+        .iframe-wrapper iframe {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #eef4fe;
+            border-radius: 16px;
+            background: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(0,86,179,0.08);
         }
 
         /* Responsive */
@@ -204,6 +203,7 @@
             <h2>Mixed conditionals</h2>
             <span class="activity-tag">Mixed conditionals</span>
         </div>
+        <div class="iframe-wrapper">
         <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
     </div>
     <div class="activity-divider"></div>
