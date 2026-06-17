@@ -28,7 +28,7 @@
             margin: 0 auto;
         }
 
-        /* MILLIONAIRE GAME STYLES (unchanged) */
+        /* MILLIONAIRE GAME STYLES */
         .millionaire-game {
             max-width: 700px;
             margin: 20px auto 40px auto;
@@ -51,7 +51,7 @@
         .millionaire-game .reset-area { text-align: center; margin: 0 0 18px 0; }
         .millionaire-game .reset-btn, .relative-game .reset-btn { background: transparent; border: 2px solid #0056B3; color: #0056B3; font-weight: 600; padding: 8px 30px; border-radius: 40px; font-size: 1rem; cursor: pointer; transition: 0.1s; }
 
-        /* JEOPARDY GAME – RESPONSIVE */
+        /* JEOPARDY GAME */
         .relative-game { display: block; max-width: 1000px; margin: 40px auto 40px auto; }
         .relative-game .game-container { width: 100%; background: #FFFFFF; border-radius: 32px; box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35); overflow-x: auto; overflow-y: visible; }
         .relative-game .game-container > h1 { background: #0056B3; margin: 0; padding: 18px 22px; font-size: 1.4rem; font-weight: 600; text-align: left; color: white; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -70,7 +70,9 @@
         .relative-game .feedback.correct { border-left-color: #2e7d32; background: #e8f5e9; }
         .relative-game .feedback.incorrect { border-left-color: #b71c1c; background: #ffebee; }
 
-        /* Activity card for Lumi sections – exactly matching the example page */
+        /* ============================================================
+           SIMPLIFIED LUMI ACTIVITY STYLING – SAME AS ADULT PAGE
+           ============================================================ */
         .activity-card {
             background: #FFFFFF;
             border-radius: 32px;
@@ -94,27 +96,23 @@
         .activity-header h2::before { content: "📘"; font-size: 1.6rem; }
         .activity-tag { background: #FFEB3B; color: #000000; font-size: 0.95rem; font-weight: 700; padding: 5px 14px; border-radius: 40px; letter-spacing: 0.3px; }
 
-        /* Default wrapper: padding all sides, iframe with full rounded corners (but we'll override with no-internal-padding) */
-        .iframe-wrapper { padding: 24px; background: #FFFFFF; }
-        .iframe-wrapper iframe { width: 100%; height: 600px; border: 2px solid #eef4fe; border-radius: 16px; background: #FFFFFF; box-shadow: 0 4px 12px rgba(0,86,179,0.08); }
-
-        /* Remove top border-radius to prevent text clipping on all activities */
-        .iframe-wrapper.no-internal-padding iframe {
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-            border-bottom-left-radius: 16px;
-            border-bottom-right-radius: 16px;
+        /* UNIFIED IFRAME STYLING – applied directly to all iframes */
+        .activity-card iframe {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #eef4fe;
+            border-radius: 16px;
+            background: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(0,86,179,0.08);
+            display: block;
         }
 
-        /* Add top gap for activities that lack internal Lumi padding */
-        .iframe-wrapper.needs-top-gap {
-            overflow: visible; /* prevent clipping of the iframe's top margin */
-        }
-        .iframe-wrapper.needs-top-gap iframe {
-            margin-top: 18px; /* matches the natural gap of activities 3 and 5 */
+        /* Shorter iframe for the regrets activity */
+        .activity-card.regrets-activity iframe {
+            height: 320px;
         }
 
-        /* Colored divider between activities – matches beginner page */
+        /* Colored divider between activities */
         .activity-divider {
             height: 4px;
             background: linear-gradient(90deg, #FFEB3B, #1976D2, #0056B3);
@@ -123,7 +121,6 @@
             border-radius: 2px;
         }
 
-        /* Divider between games and Lumi activities */
         .section-divider {
             height: 4px;
             background: linear-gradient(90deg, #FFEB3B, #1976D2, #0056B3);
@@ -134,22 +131,22 @@
 
         /* Responsive */
         @media (max-width: 700px) {
-            .iframe-wrapper iframe { height: 450px; }
+            .activity-card iframe { height: 450px; }
             .relative-game .category-header { min-width: 85px; font-size: 0.75rem; }
             .relative-game .cell { min-width: 85px; font-size: 1.5rem; }
             .relative-game .question-panel { margin-top: 20px; }
         }
         @media (max-width: 550px) {
+            .activity-card iframe { height: 350px; }
             .relative-game .category-header { min-width: 75px; font-size: 0.65rem; }
             .relative-game .cell { min-width: 75px; font-size: 1.3rem; }
-            .iframe-wrapper iframe { height: 350px; }
         }
         @media (max-width: 480px) {
             .relative-game .category-header { min-width: 65px; font-size: 0.55rem; }
             .relative-game .cell { min-width: 65px; font-size: 1.1rem; }
         }
 
-        /* Additional styles for buttons and feedback */
+        /* Additional styles */
         .millionaire-game .answer-btn.selected-correct { background: #c8e6c9; border-color: #2e7d32; box-shadow: 0 4px 0 #1b5e20; }
         .millionaire-game .answer-btn.selected-wrong { background: #ffcdd2; border-color: #b71c1c; box-shadow: 0 4px 0 #8b1e1e; }
         #topBtn { display: none; position: fixed; bottom: 20px; right: 30px; z-index: 99; font-size: 24px; background-color: #1976D2; color: white; cursor: pointer; border-radius: 50%; width: 50px; height: 50px; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); line-height: 50px; text-align: center; border: none; }
@@ -199,89 +196,75 @@
     <!-- DIVIDER BETWEEN GAMES AND LUMI ACTIVITIES -->
     <div class="section-divider"></div>
 
-    <!-- ========== LUMI ACTIVITIES – ALL NOW VISUALLY IDENTICAL ========== -->
+    <!-- ========== LUMI ACTIVITIES – SIMPLIFIED, CONSISTENT, SAME AS ADULT PAGE ========== -->
 
-    <!-- 1. Mixed conditionals – needs gap -->
+    <!-- 1. Mixed conditionals -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>Mixed conditionals</h2>
             <span class="activity-tag">Mixed conditionals</span>
         </div>
-        <div class="iframe-wrapper no-internal-padding needs-top-gap">
-            <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-        </div>
+        <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 2. The future perfect / continuous – needs gap -->
+    <!-- 2. The future perfect / continuous -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>The future perfect / The future continuous</h2>
             <span class="activity-tag">Tense comparison</span>
         </div>
-        <div class="iframe-wrapper no-internal-padding needs-top-gap">
-            <iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-        </div>
+        <iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 3. The present perfect / progressive – already perfect (has internal Lumi gap) -->
+    <!-- 3. The present perfect / progressive -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>The present perfect / The present perfect progressive</h2>
             <span class="activity-tag">Tense comparison</span>
         </div>
-        <div class="iframe-wrapper no-internal-padding">
-            <iframe src="https://app.lumi.education/api/v1/run/NqzFpP/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-        </div>
+        <iframe src="https://app.lumi.education/api/v1/run/NqzFpP/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 4. Order of adjectives – needs gap -->
+    <!-- 4. Order of adjectives -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>The order of adjectives</h2>
             <span class="activity-tag">Adjective order</span>
         </div>
-        <div class="iframe-wrapper no-internal-padding needs-top-gap">
-            <iframe src="https://app.lumi.education/api/v1/run/tJevug/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-        </div>
+        <iframe src="https://app.lumi.education/api/v1/run/tJevug/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 5. Expressing the future – already perfect (has internal Lumi gap) -->
+    <!-- 5. Expressing the future -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>Expressing the future with: will / going to / present simple / present progressive</h2>
             <span class="activity-tag">Future forms</span>
         </div>
-        <div class="iframe-wrapper no-internal-padding">
-            <iframe src="https://app.lumi.education/api/v1/run/ICS3lU/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-        </div>
+        <iframe src="https://app.lumi.education/api/v1/run/ICS3lU/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 6. 4 ways to express regrets – needs gap -->
-    <div class="activity-card">
+    <!-- 6. 4 ways to express regrets – shorter iframe -->
+    <div class="activity-card regrets-activity">
         <div class="activity-header">
             <h2>4 ways to express regrets</h2>
             <span class="activity-tag">Regret</span>
         </div>
-        <div class="iframe-wrapper no-internal-padding needs-top-gap">
-            <iframe src="https://app.lumi.education/api/v1/run/m_XXyx/embed" width="100%" height="320" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-        </div>
+        <iframe src="https://app.lumi.education/api/v1/run/m_XXyx/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 7. The definite article / zero article with geographical locations – needs gap -->
+    <!-- 7. The definite article / zero article with geographical locations -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>The definite article / zero article with geographical locations</h2>
             <span class="activity-tag">Advanced articles</span>
         </div>
-        <div class="iframe-wrapper no-internal-padding needs-top-gap">
-            <iframe src="https://app.lumi.education/api/v1/run/ahsD6O/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-        </div>
+        <iframe src="https://app.lumi.education/api/v1/run/ahsD6O/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
     </div>
     <!-- No divider after last activity -->
 
@@ -291,7 +274,7 @@
 <button id="topBtn" title="Go to top">↑</button>
 
 <script>
-// MILLIONAIRE GAME SCRIPT (unchanged)
+// MILLIONAIRE GAME SCRIPT
 (function() {
     const questions = [
         { question: "Which tense is best for the main, completed actions in a story?", answers: ["A: Past Perfect", "B: Past Continuous", "C: Simple Past", "D: Past Perfect Continuous"], correct: 2, level: 100, explanation: "✓ Simple Past describes main story events. (rule 1)" },
@@ -341,7 +324,7 @@
     loadQuestion(0);
 })();
 
-// JEOPARDY GAME SCRIPT (unchanged)
+// JEOPARDY GAME SCRIPT
 (function() {
     const categories = [{ name: "NON-<br>IDENTIFYING" }, { name: "IDENTIFYING" }, { name: "WHOSE & WHOM" }, { name: "MIXED CHALLENGES" }];
     const questionsData = [
@@ -398,7 +381,7 @@ window.onscroll = function() { topBtn.style.display = window.scrollY > 400 ? "bl
 topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
 </script>
 
-   <!-- ========== UPDATED LMS: Web3Forms Integration (Key Inserted) ========== -->
+   <!-- ========== LMS: Web3Forms Integration ========== -->
 <style>
     .lms-wrapper {
         max-width: 1100px;
@@ -483,7 +466,7 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
     </div>
 </div>
 
-<!-- Hidden form for Web3Forms (Key Inserted) -->
+<!-- Hidden form for Web3Forms -->
 <form id="reportForm" action="https://api.web3forms.com/submit" method="POST" style="display:none;">
     <input type="hidden" name="access_key" value="587c378a-3c75-498e-b3bc-b7fd96ad2278">
     <input type="hidden" name="subject" id="reportSubject" value="Progress Report – B2 Exam Prep Course">
@@ -495,14 +478,10 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
 
 <script>
     // ============================================================
-    // 0. CUSTOMIZE THESE
+    // LMS JavaScript (unchanged from your original)
     // ============================================================
     const ACCESS_CODE = 'beLMS';
-    // The Web3Forms dashboard will send reports to your registered email.
 
-    // ============================================================
-    // 1. COURSE DATA (Edit this to build your course)
-    // ============================================================
     const courseData = {
         modules: [
             {
@@ -572,9 +551,6 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         ]
     };
 
-    // ============================================================
-    // 2. STATE & HELPERS
-    // ============================================================
     function getProgress() {
         const saved = localStorage.getItem('lmsProgress');
         return saved ? JSON.parse(saved) : {};
@@ -605,9 +581,6 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         renderDashboard();
     }
 
-    // ============================================================
-    // 3. GENERATE REPORT
-    // ============================================================
     function generateReport() {
         const prog = getProgress();
         let report = "=== Progress Report ===\n";
@@ -632,18 +605,6 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         });
         report += "=== End of Report ===";
         return report;
-    }
-
-    // ============================================================
-    // 4. DOWNLOAD & SEND PROGRESS
-    // ============================================================
-    function downloadProgress() {
-        const report = generateReport();
-        const blob = new Blob([report], { type: 'text/plain' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `progress_${new Date().toISOString().slice(0,10)}.txt`;
-        a.click();
     }
 
     function sendProgress() {
@@ -683,16 +644,12 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         });
     }
 
-    // ============================================================
-    // 5. RENDER DASHBOARD
-    // ============================================================
     function renderDashboard() {
         const container = document.getElementById('dashboardContent');
         let html = `
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
                 <h2 style="color: #0056B3; border-left: 6px solid #FFEB3B; padding-left: 16px; margin:0;">📋 Course Dashboard</h2>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    
                     <button onclick="sendProgress()" style="background:#FFEB3B; color:#000; border:none; padding:10px 20px; border-radius:40px; cursor:pointer; font-weight:600; border-bottom:4px solid #c5a605;">
                         📤 Send Progress to Teacher
                     </button>
@@ -729,9 +686,6 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         moduleList.innerHTML = listHtml;
     }
 
-    // ============================================================
-    // 6. OPEN LESSON / QUIZ
-    // ============================================================
     function openLesson(moduleId, lessonId) {
         const module = courseData.modules.find(m => m.id === moduleId);
         const lesson = module.lessons.find(l => l.id === lessonId);
@@ -790,9 +744,6 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         container.innerHTML = html;
     }
 
-    // ============================================================
-    // 7. SUBMIT QUIZ
-    // ============================================================
     function submitQuiz(quizId) {
         let quizData = null;
         for (let m of courseData.modules) {
@@ -835,9 +786,6 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
         document.querySelectorAll('#quizForm input[type="radio"]').forEach(el => el.disabled = true);
     }
 
-    // ============================================================
-    // 8. PASSWORD GATE
-    // ============================================================
     function unlockLMS() {
         const input = document.getElementById('lmsPassword');
         const error = document.getElementById('lmsGateError');
