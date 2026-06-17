@@ -73,15 +73,17 @@
         /* ============================================================
            SIMPLIFIED LUMI ACTIVITY STYLING – SAME AS ADULT PAGE
            ============================================================ */
+       /* Activity card - matches game-card from B2 page */
         .activity-card {
             background: #FFFFFF;
             border-radius: 32px;
             box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35);
             overflow: hidden;
             border: 1px solid rgba(0,0,0,0.05);
-            margin-bottom: 0;
+            margin-bottom: 30px;
         }
 
+        /* Activity header - matches header from B2 page */
         .activity-header {
             background: #0056B3;
             padding: 18px 24px;
@@ -92,9 +94,31 @@
             justify-content: space-between;
             gap: 15px;
         }
-        .activity-header h2 { font-weight: 600; font-size: 1.4rem; letter-spacing: 0.5px; margin: 0; display: flex; align-items: center; gap: 8px; }
-        .activity-header h2::before { content: "📘"; font-size: 1.6rem; }
-        .activity-tag { background: #FFEB3B; color: #000000; font-size: 0.95rem; font-weight: 700; padding: 5px 14px; border-radius: 40px; letter-spacing: 0.3px; }
+
+        .activity-header h2 {
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: 0.5px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .activity-header h2::before {
+            content: "📘";
+            font-size: 1.6rem;
+        }
+
+        .activity-tag {
+            background: #FFEB3B;
+            color: #000000;
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 5px 14px;
+            border-radius: 40px;
+            letter-spacing: 0.3px;
+        }
 
 
         /* Colored divider between activities */
