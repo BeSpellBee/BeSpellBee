@@ -97,6 +97,14 @@
         .iframe-wrapper { padding: 24px; background: #FFFFFF; }
         .iframe-wrapper iframe { width: 100%; height: 600px; border: 2px solid #eef4fe; border-radius: 16px; background: #FFFFFF; box-shadow: 0 4px 12px rgba(0,86,179,0.08); }
 
+        /* Fix for activities with no internal padding: remove top border-radius to prevent text clipping */
+        .iframe-wrapper.no-internal-padding iframe {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+
         /* Colored divider between activities – matches beginner page */
         .activity-divider {
             height: 4px;
@@ -184,31 +192,31 @@
 
     <!-- ========== LUMI ACTIVITIES – each followed by a colored divider (except last) ========== -->
 
-    <!-- 1. Mixed conditionals -->
+    <!-- 1. Mixed conditionals – problematic, added no-internal-padding -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>Mixed conditionals</h2>
             <span class="activity-tag">Mixed conditionals</span>
         </div>
-        <div class="iframe-wrapper">
+        <div class="iframe-wrapper no-internal-padding">
             <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
         </div>
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 2. The future perfect / continuous -->
+    <!-- 2. The future perfect / continuous – problematic, added no-internal-padding -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>The future perfect / The future continuous</h2>
             <span class="activity-tag">Tense comparison</span>
         </div>
-        <div class="iframe-wrapper">
+        <div class="iframe-wrapper no-internal-padding">
             <iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
         </div>
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 3. The present perfect / progressive -->
+    <!-- 3. The present perfect / progressive – good -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>The present perfect / The present perfect progressive</h2>
@@ -220,19 +228,19 @@
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 4. Order of adjectives -->
+    <!-- 4. Order of adjectives – problematic, added no-internal-padding -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>The order of adjectives</h2>
             <span class="activity-tag">Adjective order</span>
         </div>
-        <div class="iframe-wrapper">
+        <div class="iframe-wrapper no-internal-padding">
             <iframe src="https://app.lumi.education/api/v1/run/tJevug/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
         </div>
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 5. Expressing the future -->
+    <!-- 5. Expressing the future – good -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>Expressing the future with: will / going to / present simple / present progressive</h2>
