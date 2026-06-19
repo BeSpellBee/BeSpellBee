@@ -894,8 +894,7 @@
     // ============================================================
     // 1. COURSE DATA (Edit this to build your course)
     // ============================================================
-    // ✅ FIX: Made global with window.
-    window.courseData = {
+    const courseData = {
         modules: [
             {
                 id: 'm1',
@@ -928,9 +927,11 @@
                             --<strong>Ralph Waldo Emerson</strong>(essays)<br>
                             --<strong>Ralph Walt Whitman</strong>(Leaves of Grass, 1855)<br>
                             
-                            <h3>🔹 Practice Activity</h3>
-                            <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-                        
+                             <h3>🔹 Practice Activity</h3>
+<h3>🔹 Practice Activity</h3>
+<iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+`,
+                    },
                     },
                     {
                         id: 'q1',
@@ -1018,8 +1019,7 @@
         let report = "=== Progress Report ===\n";
         report += "Generated: " + new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString() + "\n\n";
 
-        // ✅ FIX: Use window.courseData
-        window.courseData.modules.forEach(mod => {
+        courseData.modules.forEach(mod => {
             report += `📌 ${mod.title}\n`;
             mod.lessons.forEach(lesson => {
                 const data = prog[lesson.id];
@@ -1110,8 +1110,7 @@
 
         const moduleList = document.getElementById('moduleList');
         let listHtml = '';
-        // ✅ FIX: Use window.courseData
-        window.courseData.modules.forEach(mod => {
+        courseData.modules.forEach(mod => {
             listHtml += `<div class="module-card"><h3>📌 ${mod.title}</h3>`;
             mod.lessons.forEach(lesson => {
                 const done = isCompleted(lesson.id) ? 'done' : '';
@@ -1140,8 +1139,7 @@
     // 6. OPEN LESSON / QUIZ
     // ============================================================
     function openLesson(moduleId, lessonId) {
-        // ✅ FIX: Use window.courseData
-        const module = window.courseData.modules.find(m => m.id === moduleId);
+        const module = courseData.modules.find(m => m.id === moduleId);
         const lesson = module.lessons.find(l => l.id === lessonId);
         if (lesson.type === 'quiz') {
             showView('viewQuiz');
@@ -1203,8 +1201,7 @@
     // ============================================================
     function submitQuiz(quizId) {
         let quizData = null;
-        // ✅ FIX: Use window.courseData
-        for (let m of window.courseData.modules) {
+        for (let m of courseData.modules) {
             const found = m.lessons.find(l => l.id === quizId);
             if (found) { quizData = found; break; }
         }
