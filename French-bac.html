@@ -894,7 +894,8 @@
     // ============================================================
     // 1. COURSE DATA (Edit this to build your course)
     // ============================================================
-    const courseData = {
+    // ✅ FIX: Made global with window.
+    window.courseData = {
         modules: [
             {
                 id: 'm1',
@@ -1017,7 +1018,8 @@
         let report = "=== Progress Report ===\n";
         report += "Generated: " + new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString() + "\n\n";
 
-        courseData.modules.forEach(mod => {
+        // ✅ FIX: Use window.courseData
+        window.courseData.modules.forEach(mod => {
             report += `📌 ${mod.title}\n`;
             mod.lessons.forEach(lesson => {
                 const data = prog[lesson.id];
@@ -1108,7 +1110,8 @@
 
         const moduleList = document.getElementById('moduleList');
         let listHtml = '';
-        courseData.modules.forEach(mod => {
+        // ✅ FIX: Use window.courseData
+        window.courseData.modules.forEach(mod => {
             listHtml += `<div class="module-card"><h3>📌 ${mod.title}</h3>`;
             mod.lessons.forEach(lesson => {
                 const done = isCompleted(lesson.id) ? 'done' : '';
@@ -1137,7 +1140,8 @@
     // 6. OPEN LESSON / QUIZ
     // ============================================================
     function openLesson(moduleId, lessonId) {
-        const module = courseData.modules.find(m => m.id === moduleId);
+        // ✅ FIX: Use window.courseData
+        const module = window.courseData.modules.find(m => m.id === moduleId);
         const lesson = module.lessons.find(l => l.id === lessonId);
         if (lesson.type === 'quiz') {
             showView('viewQuiz');
@@ -1199,7 +1203,8 @@
     // ============================================================
     function submitQuiz(quizId) {
         let quizData = null;
-        for (let m of courseData.modules) {
+        // ✅ FIX: Use window.courseData
+        for (let m of window.courseData.modules) {
             const found = m.lessons.find(l => l.id === quizId);
             if (found) { quizData = found; break; }
         }
