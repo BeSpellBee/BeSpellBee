@@ -21,13 +21,13 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+ 
         body {
             background: linear-gradient(145deg, #1E90FF 0%, #87CEEB 100%);
             font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
             padding: 20px;
         }
-
+ 
         /* TWO-COLUMN LAYOUT - same level alignment */
         .dashboard {
             max-width: 1400px;
@@ -37,12 +37,12 @@
             gap: 30px;
             align-items: stretch;
         }
-
+ 
         .tronc-wrapper {
             flex: 1;
             min-width: 320px;
         }
-
+ 
         .assistant-wrapper {
             flex: 1;
             min-width: 320px;
@@ -51,18 +51,18 @@
             align-items: center;
             justify-content: center;
         }
-
+ 
         .assistant-wrapper .bac-container {
             width: 100%;
             margin: 0;
         }
-
+ 
         /* ========== ORIGINAL ASSISTANT STYLES (COMPLETELY UNTOUCHED) ========== */
         .bac-container {
             max-width: 900px;
             margin: 0 auto;
         }
-
+ 
         .page-header {
             background: #0056B3;
             border-radius: 32px 32px 0 0;
@@ -75,7 +75,7 @@
             flex-wrap: wrap;
             gap: 20px;
         }
-
+ 
         .page-header h1 {
             font-size: 2.2rem;
             font-weight: 700;
@@ -85,7 +85,7 @@
             align-items: center;
             gap: 12px;
         }
-
+ 
         .page-header h1 span {
             background: #FFEB3B;
             color: #000000;
@@ -95,7 +95,7 @@
             border-radius: 40px;
             letter-spacing: 0.5px;
         }
-
+ 
         .level-badge {
             background: #1976D2;
             color: white;
@@ -108,7 +108,7 @@
             align-items: center;
             gap: 8px;
         }
-
+ 
         .chat-card {
             background: #FFFFFF;
             border-radius: 32px;
@@ -117,7 +117,7 @@
             border: 1px solid rgba(0,0,0,0.05);
             margin-bottom: 30px;
         }
-
+ 
         .chat-header {
             background: #0056B3;
             padding: 18px 24px;
@@ -128,7 +128,7 @@
             justify-content: space-between;
             gap: 15px;
         }
-
+ 
         .chat-header h2 {
             font-weight: 600;
             font-size: 1.4rem;
@@ -138,12 +138,12 @@
             align-items: center;
             gap: 8px;
         }
-
+ 
         .chat-header h2::before {
             content: "🤖";
             font-size: 1.6rem;
         }
-
+ 
         .chat-tag {
             background: #FFEB3B;
             color: #000000;
@@ -153,12 +153,12 @@
             border-radius: 40px;
             letter-spacing: 0.3px;
         }
-
+ 
         .chat-content {
             padding: 24px;
             background: #FFFFFF;
         }
-
+ 
         #chatbox { 
             width: 100%; 
             height: 450px; 
@@ -170,7 +170,7 @@
             margin-bottom: 20px;
             box-shadow: inset 0 2px 8px rgba(0,86,179,0.05);
         }
-
+ 
         .user-msg { 
             color: #000000; 
             margin: 15px 0;
@@ -181,7 +181,7 @@
             box-shadow: 0 4px 8px rgba(0,86,179,0.08);
             font-family: 'Segoe UI', Roboto, sans-serif;
         }
-
+ 
         .bot-msg { 
             color: #000000; 
             margin: 15px 0;
@@ -193,15 +193,15 @@
             font-family: 'Segoe UI', Roboto, sans-serif;
             line-height: 1.5;
         }
-
+ 
         .bot-msg strong {
             color: #0056B3;
         }
-
+ 
         .user-msg strong {
             color: #1976D2;
         }
-
+ 
         .thinking { 
             color: #666666;
             background-color: #f5f7fc;
@@ -210,7 +210,7 @@
             border-left: 6px solid #1976D2;
             font-style: italic; 
         }
-
+ 
         .error { 
             color: #b71c1c;
             background-color: #ffebee;
@@ -219,13 +219,13 @@
             border-left: 6px solid #b71c1c;
             margin: 15px 0;
         }
-
+ 
         .input-area {
             display: flex;
             gap: 12px;
             margin-top: 10px;
         }
-
+ 
         #user-input { 
             flex: 1;
             padding: 16px 20px;
@@ -239,18 +239,18 @@
             background: #FFFFFF;
             color: #000000;
         }
-
+ 
         #user-input:focus {
             border-color: #1976D2;
             box-shadow: 0 4px 0 #0d3d70;
             outline: none;
         }
-
+ 
         #user-input::placeholder {
             color: #999999;
             font-style: italic;
         }
-
+ 
         #send-btn { 
             padding: 16px 32px;
             background: #FFEB3B;
@@ -265,40 +265,40 @@
             box-shadow: 0 4px 12px rgba(255,235,59,0.4);
             font-family: 'Segoe UI', Roboto, sans-serif;
         }
-
+ 
         #send-btn:hover { 
             background: #f1df2c;
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(255,235,59,0.5);
         }
-
+ 
         #send-btn:active {
             transform: translateY(2px);
             border-bottom-width: 2px;
         }
-
+ 
         #send-btn:disabled {
             opacity: 0.4;
             transform: translateY(2px);
             border-bottom-width: 2px;
             cursor: default;
         }
-
+ 
         .bot-msg ul, .bot-msg ol {
             margin: 10px 0 10px 20px;
             padding-left: 10px;
         }
-
+ 
         .bot-msg li {
             margin: 5px 0;
             color: #000000;
         }
-
+ 
         .bot-msg em {
             color: #0056B3;
             font-style: italic;
         }
-
+ 
         #topBtn {
             display: none;
             position: fixed;
@@ -320,18 +320,18 @@
             transition: 0.1s;
             border-bottom: 4px solid #0d3d70;
         }
-
+ 
         #topBtn:hover {
             background-color: #0056B3;
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(0,0,0,0.4);
         }
-
+ 
         #topBtn:active {
             transform: translateY(2px);
             border-bottom-width: 2px;
         }
-
+ 
         @media (max-width: 600px) {
             .page-header h1 { font-size: 1.8rem; }
             .chat-header h2 { font-size: 1.2rem; }
@@ -339,13 +339,13 @@
             #send-btn { width: 100%; }
             #chatbox { height: 350px; }
         }
-
+ 
         @media (max-width: 500px) {
             .page-header { flex-direction: column; align-items: flex-start; }
             .page-header h1 { font-size: 1.5rem; }
             .chat-header { flex-direction: column; align-items: flex-start; }
         }
-
+ 
         /* ========== TRONC COMMUN STYLES (BLUE/YELLOW - MATCHING ASSISTANT) ========== */
         .tronc-card {
             background: #FFFFFF;
@@ -357,7 +357,7 @@
             display: flex;
             flex-direction: column;
         }
-
+ 
         .tronc-header {
             background: #0056B3;
             padding: 18px 24px;
@@ -368,7 +368,7 @@
             justify-content: space-between;
             gap: 15px;
         }
-
+ 
         .tronc-header h2 {
             font-weight: 600;
             font-size: 1.4rem;
@@ -378,12 +378,12 @@
             align-items: center;
             gap: 8px;
         }
-
+ 
         .tronc-header h2::before {
             content: "📚";
             font-size: 1.6rem;
         }
-
+ 
         .tronc-badge {
             background: #FFEB3B;
             color: #000000;
@@ -393,7 +393,7 @@
             border-radius: 40px;
             letter-spacing: 0.3px;
         }
-
+ 
         .tronc-content {
             padding: 24px;
             background: #FFFFFF;
@@ -401,7 +401,7 @@
             display: flex;
             flex-direction: column;
         }
-
+ 
         .dropdown-label {
             font-weight: 700;
             font-size: 0.85rem;
@@ -417,7 +417,7 @@
             border-radius: 40px;
             width: fit-content;
         }
-
+ 
         select {
             width: 100%;
             padding: 14px 20px;
@@ -437,13 +437,13 @@
             background-size: 1.2rem;
             margin-bottom: 20px;
         }
-
+ 
         select:hover, select:focus {
             border-color: #1976D2;
             outline: none;
             box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
         }
-
+ 
         .theme-display {
             background: #f5f7fc;
             border-radius: 24px;
@@ -453,7 +453,7 @@
             margin-top: 0.5rem;
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.02), 0 4px 12px rgba(0,86,179,0.08);
         }
-
+ 
         .theme-title {
             font-size: 1.6rem;
             font-weight: 700;
@@ -464,7 +464,7 @@
             margin-bottom: 1.2rem;
             font-family: 'Segoe UI', Roboto, sans-serif;
         }
-
+ 
         .theme-content {
             color: #1e2a3a;
             font-size: 0.95rem;
@@ -478,7 +478,7 @@
             font-weight: 400;
             border: 1px solid #e3f2fd;
         }
-
+ 
         .tronc-footer {
             margin-top: 1.8rem;
             text-align: center;
@@ -487,7 +487,7 @@
             border-top: 1px solid #eef4fe;
             padding-top: 1.2rem;
         }
-
+ 
         @media (max-width: 850px) {
             .dashboard {
                 flex-direction: column;
@@ -530,7 +530,7 @@
                     <option value="15">16. Le temps</option>
                     <option value="16">17. La vérité</option>
                 </select>
-
+ 
                 <div class="theme-display" id="themeDisplayPanel">
                     <div class="theme-title" id="themeTitle">La liberté</div>
                     <div class="theme-content" id="themeImaginaryContent">
@@ -544,7 +544,7 @@
             </div>
         </div>
     </div>
-
+ 
     <!-- RIGHT COLUMN: ORIGINAL ASSISTANT (now on the right, vertically centered) -->
     <div class="assistant-wrapper">
         <div class="bac-container">
@@ -557,7 +557,7 @@
                     <span>🎓</span> CEFR C1-C2
                 </div>
             </div>
-
+ 
             <div class="chat-card">
                 <div class="chat-header">
                     <h2>BeSpellBee Assistant</h2>
@@ -603,10 +603,10 @@
         </div>
     </div>
 </div>
-
+ 
 <!-- Back to top button -->
 <button id="topBtn" title="Go to top">↑</button>
-
+ 
 <!-- ========== ORIGINAL ASSISTANT SCRIPT - COMPLETELY UNMODIFIED ========== -->
 <script>
     // Get HTML elements
@@ -705,7 +705,7 @@
         .then(response => response.json())
         .then(data => console.log('✅ API Health:', data))
         .catch(error => console.error('❌ API Health check failed:', error));
-
+ 
     // Back to top button functionality
     const btn = document.getElementById("topBtn");
     window.onscroll = function() {
@@ -719,7 +719,7 @@
         window.scrollTo({top: 0, behavior: 'smooth'});
     };
 </script>
-
+ 
 <!-- ========== TRONC COMMUN SCRIPT (unchanged) ========== -->
 <script>
     const imaginaryContents = [
@@ -843,14 +843,14 @@
     .quiz-result.fail { background: #ffcdd2; border-left: 6px solid #b71c1c; display: block; }
     @media (max-width: 600px) { .lesson-content iframe { height: 350px; } .nav-row { flex-direction: column; align-items: stretch; } .nav-row button, .nav-row a { text-align: center; } }
 </style>
-
+ 
 <div class="lms-wrapper" id="lmsWrapper">
     <div class="lms-header">
         <h2>📘 French bac prep– Full Course</h2>
         <span class="lms-badge">🔒 PREMIUM</span>
     </div>
     <div class="lms-body">
-
+ 
         <div id="lmsGate" class="lms-gate">
             <h3>🔐 Enter your access code</h3>
             <p style="color: #666;">Purchase access to unlock the full course.</p>
@@ -858,7 +858,7 @@
             <button onclick="unlockLMS()">Unlock Course</button>
             <div id="lmsGateError" class="error"></div>
         </div>
-
+ 
         <div id="lmsViews" style="display: none;">
             <div id="viewDashboard" class="lms-view active"><div id="dashboardContent"></div></div>
             <div id="viewLesson" class="lms-view">
@@ -870,10 +870,10 @@
                 <div id="quizContent"></div>
             </div>
         </div>
-
+ 
     </div>
 </div>
-
+ 
 <!-- Hidden form for Web3Forms (Key Inserted) -->
 <form id="reportForm" action="https://api.web3forms.com/submit" method="POST" style="display:none;">
     <input type="hidden" name="access_key" value="587c378a-3c75-498e-b3bc-b7fd96ad2278">
@@ -883,14 +883,14 @@
     <input type="hidden" name="redirect" value="false">
     <textarea name="message" id="reportBody"></textarea>
 </form>
-
+ 
 <script>
     // ============================================================
     // 0. CUSTOMIZE THESE
     // ============================================================
     const ACCESS_CODE = 'BeLMS*17';          // <-- Change this to your own password (e.g., B2PREMIUM2025)
     // The Web3Forms dashboard will send reports to your registered email.
-
+ 
     // ============================================================
     // 1. COURSE DATA (Edit this to build your course)
     // ============================================================
@@ -975,7 +975,7 @@
             }
         ]
     };
-
+ 
     // ============================================================
     // 2. STATE & HELPERS
     // ============================================================
@@ -983,32 +983,32 @@
         const saved = localStorage.getItem('lmsProgress');
         return saved ? JSON.parse(saved) : {};
     }
-
+ 
     function saveProgress(prog) {
         localStorage.setItem('lmsProgress', JSON.stringify(prog));
     }
-
+ 
     function isCompleted(lessonId) {
         const prog = getProgress();
         return prog[lessonId] && prog[lessonId].completed === true;
     }
-
+ 
     function markCompleted(lessonId) {
         const prog = getProgress();
         prog[lessonId] = { completed: true };
         saveProgress(prog);
     }
-
+ 
     function showView(viewId) {
         document.querySelectorAll('.lms-view').forEach(v => v.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
     }
-
+ 
     function showDashboard() {
         showView('viewDashboard');
         renderDashboard();
     }
-
+ 
     // ============================================================
     // 3. GENERATE REPORT
     // ============================================================
@@ -1016,7 +1016,7 @@
         const prog = getProgress();
         let report = "=== Progress Report ===\n";
         report += "Generated: " + new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString() + "\n\n";
-
+ 
         courseData.modules.forEach(mod => {
             report += `📌 ${mod.title}\n`;
             mod.lessons.forEach(lesson => {
@@ -1037,7 +1037,7 @@
         report += "=== End of Report ===";
         return report;
     }
-
+ 
     // ============================================================
     // 4. DOWNLOAD & SEND PROGRESS
     // ============================================================
@@ -1049,19 +1049,19 @@
         a.download = `progress_${new Date().toISOString().slice(0,10)}.txt`;
         a.click();
     }
-
+ 
     function sendProgress() {
         const report = generateReport();
         document.getElementById('reportSubject').value = 'Progress Report – B2 Exam Prep Course';
         document.getElementById('reportBody').value = report;
-
+ 
         const form = document.getElementById('reportForm');
         const btn = document.querySelector('[onclick="sendProgress()"]');
         if (btn) {
             btn.innerText = '📤 Sending...';
             btn.disabled = true;
         }
-
+ 
         fetch(form.action, {
             method: 'POST',
             body: new FormData(form),
@@ -1086,7 +1086,7 @@
             }
         });
     }
-
+ 
     // ============================================================
     // 5. RENDER DASHBOARD
     // ============================================================
@@ -1105,7 +1105,7 @@
             <div id="moduleList"></div>
         `;
         container.innerHTML = html;
-
+ 
         const moduleList = document.getElementById('moduleList');
         let listHtml = '';
         courseData.modules.forEach(mod => {
@@ -1132,7 +1132,7 @@
         });
         moduleList.innerHTML = listHtml;
     }
-
+ 
     // ============================================================
     // 6. OPEN LESSON / QUIZ
     // ============================================================
@@ -1147,7 +1147,7 @@
             renderLesson(lesson, moduleId);
         }
     }
-
+ 
     function renderLesson(lesson, moduleId) {
         const container = document.getElementById('lessonContent');
         const done = isCompleted(lesson.id);
@@ -1162,13 +1162,13 @@
             </div>
         `;
     }
-
+ 
     function markLessonComplete(lessonId) {
         markCompleted(lessonId);
         alert('✅ Lesson marked as complete!');
         showDashboard();
     }
-
+ 
     function renderQuiz(quiz) {
         const container = document.getElementById('quizContent');
         let html = `<h2 style="color: #0056B3;">🧠 ${quiz.title}</h2>`;
@@ -1193,7 +1193,7 @@
         `;
         container.innerHTML = html;
     }
-
+ 
     // ============================================================
     // 7. SUBMIT QUIZ
     // ============================================================
@@ -1204,31 +1204,31 @@
             if (found) { quizData = found; break; }
         }
         if (!quizData) return;
-
+ 
         const questions = quizData.questions;
         let score = 0;
         let allAnswered = true;
-
+ 
         for (let i = 0; i < questions.length; i++) {
             const selected = document.querySelector(`input[name="q${i}"]:checked`);
             if (!selected) { allAnswered = false; continue; }
             if (parseInt(selected.value) === questions[i].correct) score++;
         }
-
+ 
         const resultDiv = document.getElementById('quizResult');
         if (!allAnswered) {
             resultDiv.className = 'quiz-result fail';
             resultDiv.innerHTML = '<p style="color:#b71c1c;">⚠️ Please answer all questions before submitting.</p>';
             return;
         }
-
+ 
         const total = questions.length;
         const passed = score >= total * 0.6;
-
+ 
         const prog = getProgress();
         prog[quizId] = { completed: true, score: score, total: total };
         saveProgress(prog);
-
+ 
         if (passed) {
             resultDiv.className = 'quiz-result pass';
             resultDiv.innerHTML = `<h3>✅ You scored ${score}/${total}. Well done!</h3>`;
@@ -1238,7 +1238,7 @@
         }
         document.querySelectorAll('#quizForm input[type="radio"]').forEach(el => el.disabled = true);
     }
-
+ 
     // ============================================================
     // 8. PASSWORD GATE
     // ============================================================
@@ -1256,7 +1256,7 @@
             input.focus();
         }
     }
-
+ 
     document.addEventListener('DOMContentLoaded', function() {
         if (localStorage.getItem('lmsUnlocked') === 'true') {
             document.getElementById('lmsGate').style.display = 'none';
@@ -1264,7 +1264,7 @@
             renderDashboard();
         }
     });
-
+ 
     document.getElementById('lmsPassword').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') unlockLMS();
     });
