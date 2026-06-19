@@ -214,64 +214,65 @@
         renderDashboard();
     }
     function renderDashboard() {
-    const container = document.getElementById('dashboardContent');
-    if (!container) return;
-    let html = `
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
-            <h2 style="color: #0056B3; border-left: 6px solid #FFEB3B; padding-left: 16px; margin:0;">📋 Course Dashboard</h2>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <button onclick="sendProgress()" style="background:#FFEB3B; color:#000; border:none; padding:10px 20px; border-radius:40px; cursor:pointer; font-weight:600; border-bottom:4px solid #c5a605;">
-                    📤 Send Progress to Teacher
-                </button>
+        const container = document.getElementById('dashboardContent');
+        if (!container) return;
+        let html = `
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+                <h2 style="color: #0056B3; border-left: 6px solid #FFEB3B; padding-left: 16px; margin:0;">📋 Course Dashboard</h2>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button onclick="sendProgress()" style="background:#FFEB3B; color:#000; border:none; padding:10px 20px; border-radius:40px; cursor:pointer; font-weight:600; border-bottom:4px solid #c5a605;">
+                        📤 Send Progress to Teacher
+                    </button>
+                </div>
             </div>
-        </div>
-        <div id="moduleList"></div>
-    `;
-    container.innerHTML = html;
+            <div id="moduleList"></div>
+        `;
+        container.innerHTML = html;
 
-    const moduleList = document.getElementById('moduleList');
-    let listHtml = '';
-    // ✅ Use window.courseData – not a separate "data" variable
-    if (window.courseData && window.courseData.modules) {
-        window.courseData.modules.forEach(mod => {
-            listHtml += `<div class="module-card"><h3>📌 ${mod.title}</h3>`;
-            mod.lessons.forEach(lesson => {
-                const done = isCompleted(lesson.id) ? 'done' : '';
-                let label = isCompleted(lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson');
-                if (lesson.type === 'quiz') {
-                    const prog = getProgress();
-                    const data2 = prog[lesson.id];
-                    if (data2 && data2.completed) {
-                        label = `✅ Completed (${data2.score}/${data2.total})`;
+        const moduleList = document.getElementById('moduleList');
+        let listHtml = '';
+        // Always read from the global window object
+        const data = window.courseData;
+        if (data && data.modules) {
+            data.modules.forEach(mod => {
+                listHtml += `<div class="module-card"><h3>📌 ${mod.title}</h3>`;
+                mod.lessons.forEach(lesson => {
+                    const done = isCompleted(lesson.id) ? 'done' : '';
+                    let label = isCompleted(lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson');
+                    if (lesson.type === 'quiz') {
+                        const prog = getProgress();
+                        const data2 = prog[lesson.id];
+                        if (data2 && data2.completed) {
+                            label = `✅ Completed (${data2.score}/${data2.total})`;
+                        }
                     }
-                }
-                const icon = lesson.type === 'quiz' ? '🧠' : '📖';
-                listHtml += `
-                    <div class="lesson-item" onclick="openLesson('${mod.id}','${lesson.id}')">
-                        <span>${icon} ${lesson.title}</span>
-                        <span class="status ${done}">${label}</span>
-                    </div>
-                `;
+                    const icon = lesson.type === 'quiz' ? '🧠' : '📖';
+                    listHtml += `
+                        <div class="lesson-item" onclick="openLesson('${mod.id}','${lesson.id}')">
+                            <span>${icon} ${lesson.title}</span>
+                            <span class="status ${done}">${label}</span>
+                        </div>
+                    `;
+                });
+                listHtml += `</div>`;
             });
-            listHtml += `</div>`;
-        });
-    } else {
-        listHtml = '<p style="color:red;">❌ Course data missing – please contact support.</p>';
+        } else {
+            listHtml = '<p style="color:red;">❌ Course data missing – please contact support.</p>';
+        }
+        moduleList.innerHTML = listHtml;
     }
-    moduleList.innerHTML = listHtml;
-}
-   function openLesson(moduleId, lessonId) {
-    const data = window.courseData;   // ✅ get from window
-    const module = data.modules.find(m => m.id === moduleId);
-    const lesson = module.lessons.find(l => l.id === lessonId);
-    if (lesson.type === 'quiz') {
-        showView('viewQuiz');
-        renderQuiz(lesson);
-    } else {
-        showView('viewLesson');
-        renderLesson(lesson, moduleId);
+    function openLesson(moduleId, lessonId) {
+        const data = window.courseData;
+        const module = data.modules.find(m => m.id === moduleId);
+        const lesson = module.lessons.find(l => l.id === lessonId);
+        if (lesson.type === 'quiz') {
+            showView('viewQuiz');
+            renderQuiz(lesson);
+        } else {
+            showView('viewLesson');
+            renderLesson(lesson, moduleId);
+        }
     }
-}
     function renderLesson(lesson, moduleId) {
         const container = document.getElementById('lessonContent');
         const done = isCompleted(lesson.id);
@@ -316,16 +317,13 @@
         container.innerHTML = html;
     }
     function submitQuiz(quizId) {
-       function submitQuiz(quizId) {
-    let quizData = null;
-    const data = window.courseData;   // ✅ get from window
-    for (let m of data.modules) {
-        const found = m.lessons.find(l => l.id === quizId);
-        if (found) { quizData = found; break; }
-    }
-    if (!quizData) return;
-    // ... rest of the function (unchanged)
-}
+        let quizData = null;
+        const data = window.courseData;
+        for (let m of data.modules) {
+            const found = m.lessons.find(l => l.id === quizId);
+            if (found) { quizData = found; break; }
+        }
+        if (!quizData) return;
 
         const questions = quizData.questions;
         let score = 0;
@@ -360,16 +358,12 @@
         }
         document.querySelectorAll('#quizForm input[type="radio"]').forEach(el => el.disabled = true);
     }
-   function generateReport() {
-    const prog = getProgress();
-    let report = "=== Progress Report ===\n";
-    report += "Generated: " + new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString() + "\n\n";
-    const data = window.courseData;   // ✅ get from window
-    data.modules.forEach(mod => {
-        // ... rest unchanged
-    });
-    // ...
-}
+    function generateReport() {
+        const prog = getProgress();
+        let report = "=== Progress Report ===\n";
+        report += "Generated: " + new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString() + "\n\n";
+        const data = window.courseData;
+        data.modules.forEach(mod => {
             report += `📌 ${mod.title}\n`;
             mod.lessons.forEach(lesson => {
                 const data2 = prog[lesson.id];
