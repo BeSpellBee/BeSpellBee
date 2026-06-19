@@ -789,7 +789,7 @@
     updateThemeDisplay(0);
     selectEl.selectedIndex = 0;
 </script>
-    <!-- ========== UPDATED LMS: Web3Forms Integration (Key Inserted) ========== -->
+   <!-- ========== LMS: Password Protected (Working Gate) ========== -->
 <style>
     .lms-wrapper {
         max-width: 1100px;
@@ -851,6 +851,7 @@
     </div>
     <div class="lms-body">
 
+        <!-- PASSWORD GATE -->
         <div id="lmsGate" class="lms-gate">
             <h3>🔐 Enter your access code</h3>
             <p style="color: #666;">Purchase access to unlock the full course.</p>
@@ -859,6 +860,7 @@
             <div id="lmsGateError" class="error"></div>
         </div>
 
+        <!-- COURSE VIEWS (hidden by default) -->
         <div id="lmsViews" style="display: none;">
             <div id="viewDashboard" class="lms-view active"><div id="dashboardContent"></div></div>
             <div id="viewLesson" class="lms-view">
@@ -874,7 +876,7 @@
     </div>
 </div>
 
-<!-- Hidden form for Web3Forms (Key Inserted) -->
+<!-- Hidden form for Web3Forms -->
 <form id="reportForm" action="https://api.web3forms.com/submit" method="POST" style="display:none;">
     <input type="hidden" name="access_key" value="587c378a-3c75-498e-b3bc-b7fd96ad2278">
     <input type="hidden" name="subject" id="reportSubject" value="Progress Report – B2 Exam Prep Course">
@@ -886,15 +888,14 @@
 
 <script>
     // ============================================================
-    // 0. CUSTOMIZE THESE
+    // YOUR PASSWORD (change this to whatever you want)
     // ============================================================
-    const ACCESS_CODE = 'BeLms17';          // <-- Change this to your own password (e.g., B2PREMIUM2025)
-    // The Web3Forms dashboard will send reports to your registered email.
+    const ACCESS_CODE = 'BeLMS*17';
 
     // ============================================================
-    // 1. COURSE DATA (Edit this to build your course)
+    // YOUR COURSE DATA (now explicitly attached to window for safety)
     // ============================================================
-    const courseData = {
+    window.courseData = {
         modules: [
             {
                 id: 'm1',
@@ -929,7 +930,7 @@
                             
                             <h3>🔹 Practice Activity</h3>
                             <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-                        
+                        `
                     },
                     {
                         id: 'q1',
@@ -977,126 +978,39 @@
     };
 
     // ============================================================
-    // 2. STATE & HELPERS
+    // LMS FUNCTIONS (using window.courseData)
     // ============================================================
     function getProgress() {
         const saved = localStorage.getItem('lmsProgress');
         return saved ? JSON.parse(saved) : {};
     }
-
     function saveProgress(prog) {
         localStorage.setItem('lmsProgress', JSON.stringify(prog));
     }
-
     function isCompleted(lessonId) {
         const prog = getProgress();
         return prog[lessonId] && prog[lessonId].completed === true;
     }
-
     function markCompleted(lessonId) {
         const prog = getProgress();
         prog[lessonId] = { completed: true };
         saveProgress(prog);
     }
-
     function showView(viewId) {
         document.querySelectorAll('.lms-view').forEach(v => v.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
     }
-
     function showDashboard() {
         showView('viewDashboard');
         renderDashboard();
     }
-
-    // ============================================================
-    // 3. GENERATE REPORT
-    // ============================================================
-    function generateReport() {
-        const prog = getProgress();
-        let report = "=== Progress Report ===\n";
-        report += "Generated: " + new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString() + "\n\n";
-
-        courseData.modules.forEach(mod => {
-            report += `📌 ${mod.title}\n`;
-            mod.lessons.forEach(lesson => {
-                const data = prog[lesson.id];
-                if (lesson.type === 'quiz') {
-                    if (data && data.completed) {
-                        report += `  🧠 ${lesson.title}: ✅ Completed (Score: ${data.score}/${data.total})\n`;
-                    } else {
-                        report += `  🧠 ${lesson.title}: ⬜ Not started\n`;
-                    }
-                } else {
-                    const status = data && data.completed ? "✅ Completed" : "⬜ Not started";
-                    report += `  📖 ${lesson.title}: ${status}\n`;
-                }
-            });
-            report += "\n";
-        });
-        report += "=== End of Report ===";
-        return report;
-    }
-
-    // ============================================================
-    // 4. DOWNLOAD & SEND PROGRESS
-    // ============================================================
-    function downloadProgress() {
-        const report = generateReport();
-        const blob = new Blob([report], { type: 'text/plain' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `progress_${new Date().toISOString().slice(0,10)}.txt`;
-        a.click();
-    }
-
-    function sendProgress() {
-        const report = generateReport();
-        document.getElementById('reportSubject').value = 'Progress Report – B2 Exam Prep Course';
-        document.getElementById('reportBody').value = report;
-
-        const form = document.getElementById('reportForm');
-        const btn = document.querySelector('[onclick="sendProgress()"]');
-        if (btn) {
-            btn.innerText = '📤 Sending...';
-            btn.disabled = true;
-        }
-
-        fetch(form.action, {
-            method: 'POST',
-            body: new FormData(form),
-            headers: { 'Accept': 'application/json' }
-        })
-        .then(response => {
-            if (response.ok) {
-                alert('✅ Progress report sent successfully! Your teacher will receive it shortly.');
-            } else {
-                alert('❌ Sending failed. Please use the Download button and email it manually.');
-            }
-            if (btn) {
-                btn.innerText = '📤 Send Progress to Teacher';
-                btn.disabled = false;
-            }
-        })
-        .catch(() => {
-            alert('❌ Network error. Please use the Download button and email it manually.');
-            if (btn) {
-                btn.innerText = '📤 Send Progress to Teacher';
-                btn.disabled = false;
-            }
-        });
-    }
-
-    // ============================================================
-    // 5. RENDER DASHBOARD
-    // ============================================================
     function renderDashboard() {
         const container = document.getElementById('dashboardContent');
+        if (!container) return;
         let html = `
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
                 <h2 style="color: #0056B3; border-left: 6px solid #FFEB3B; padding-left: 16px; margin:0;">📋 Course Dashboard</h2>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    
                     <button onclick="sendProgress()" style="background:#FFEB3B; color:#000; border:none; padding:10px 20px; border-radius:40px; cursor:pointer; font-weight:600; border-bottom:4px solid #c5a605;">
                         📤 Send Progress to Teacher
                     </button>
@@ -1108,36 +1022,39 @@
 
         const moduleList = document.getElementById('moduleList');
         let listHtml = '';
-        courseData.modules.forEach(mod => {
-            listHtml += `<div class="module-card"><h3>📌 ${mod.title}</h3>`;
-            mod.lessons.forEach(lesson => {
-                const done = isCompleted(lesson.id) ? 'done' : '';
-                let label = isCompleted(lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson');
-                if (lesson.type === 'quiz') {
-                    const prog = getProgress();
-                    const data = prog[lesson.id];
-                    if (data && data.completed) {
-                        label = `✅ Completed (${data.score}/${data.total})`;
+        // Always read from the global window object
+        const data = window.courseData;
+        if (data && data.modules) {
+            data.modules.forEach(mod => {
+                listHtml += `<div class="module-card"><h3>📌 ${mod.title}</h3>`;
+                mod.lessons.forEach(lesson => {
+                    const done = isCompleted(lesson.id) ? 'done' : '';
+                    let label = isCompleted(lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson');
+                    if (lesson.type === 'quiz') {
+                        const prog = getProgress();
+                        const data2 = prog[lesson.id];
+                        if (data2 && data2.completed) {
+                            label = `✅ Completed (${data2.score}/${data2.total})`;
+                        }
                     }
-                }
-                const icon = lesson.type === 'quiz' ? '🧠' : '📖';
-                listHtml += `
-                    <div class="lesson-item" onclick="openLesson('${mod.id}','${lesson.id}')">
-                        <span>${icon} ${lesson.title}</span>
-                        <span class="status ${done}">${label}</span>
-                    </div>
-                `;
+                    const icon = lesson.type === 'quiz' ? '🧠' : '📖';
+                    listHtml += `
+                        <div class="lesson-item" onclick="openLesson('${mod.id}','${lesson.id}')">
+                            <span>${icon} ${lesson.title}</span>
+                            <span class="status ${done}">${label}</span>
+                        </div>
+                    `;
+                });
+                listHtml += `</div>`;
             });
-            listHtml += `</div>`;
-        });
+        } else {
+            listHtml = '<p style="color:red;">❌ Course data missing – please contact support.</p>';
+        }
         moduleList.innerHTML = listHtml;
     }
-
-    // ============================================================
-    // 6. OPEN LESSON / QUIZ
-    // ============================================================
     function openLesson(moduleId, lessonId) {
-        const module = courseData.modules.find(m => m.id === moduleId);
+        const data = window.courseData;
+        const module = data.modules.find(m => m.id === moduleId);
         const lesson = module.lessons.find(l => l.id === lessonId);
         if (lesson.type === 'quiz') {
             showView('viewQuiz');
@@ -1147,7 +1064,6 @@
             renderLesson(lesson, moduleId);
         }
     }
-
     function renderLesson(lesson, moduleId) {
         const container = document.getElementById('lessonContent');
         const done = isCompleted(lesson.id);
@@ -1162,13 +1078,11 @@
             </div>
         `;
     }
-
     function markLessonComplete(lessonId) {
         markCompleted(lessonId);
         alert('✅ Lesson marked as complete!');
         showDashboard();
     }
-
     function renderQuiz(quiz) {
         const container = document.getElementById('quizContent');
         let html = `<h2 style="color: #0056B3;">🧠 ${quiz.title}</h2>`;
@@ -1193,13 +1107,10 @@
         `;
         container.innerHTML = html;
     }
-
-    // ============================================================
-    // 7. SUBMIT QUIZ
-    // ============================================================
     function submitQuiz(quizId) {
         let quizData = null;
-        for (let m of courseData.modules) {
+        const data = window.courseData;
+        for (let m of data.modules) {
             const found = m.lessons.find(l => l.id === quizId);
             if (found) { quizData = found; break; }
         }
@@ -1238,18 +1149,89 @@
         }
         document.querySelectorAll('#quizForm input[type="radio"]').forEach(el => el.disabled = true);
     }
+    function generateReport() {
+        const prog = getProgress();
+        let report = "=== Progress Report ===\n";
+        report += "Generated: " + new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString() + "\n\n";
+        const data = window.courseData;
+        data.modules.forEach(mod => {
+            report += `📌 ${mod.title}\n`;
+            mod.lessons.forEach(lesson => {
+                const data2 = prog[lesson.id];
+                if (lesson.type === 'quiz') {
+                    if (data2 && data2.completed) {
+                        report += `  🧠 ${lesson.title}: ✅ Completed (Score: ${data2.score}/${data2.total})\n`;
+                    } else {
+                        report += `  🧠 ${lesson.title}: ⬜ Not started\n`;
+                    }
+                } else {
+                    const status = data2 && data2.completed ? "✅ Completed" : "⬜ Not started";
+                    report += `  📖 ${lesson.title}: ${status}\n`;
+                }
+            });
+            report += "\n";
+        });
+        report += "=== End of Report ===";
+        return report;
+    }
+    function downloadProgress() {
+        const report = generateReport();
+        const blob = new Blob([report], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `progress_${new Date().toISOString().slice(0,10)}.txt`;
+        a.click();
+    }
+    function sendProgress() {
+        const report = generateReport();
+        document.getElementById('reportSubject').value = 'Progress Report – B2 Exam Prep Course';
+        document.getElementById('reportBody').value = report;
+        const form = document.getElementById('reportForm');
+        const btn = document.querySelector('[onclick="sendProgress()"]');
+        if (btn) {
+            btn.innerText = '📤 Sending...';
+            btn.disabled = true;
+        }
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('✅ Progress report sent successfully!');
+            } else {
+                alert('❌ Sending failed. Please use the Download button.');
+            }
+            if (btn) {
+                btn.innerText = '📤 Send Progress to Teacher';
+                btn.disabled = false;
+            }
+        })
+        .catch(() => {
+            alert('❌ Network error. Please use the Download button.');
+            if (btn) {
+                btn.innerText = '📤 Send Progress to Teacher';
+                btn.disabled = false;
+            }
+        });
+    }
 
     // ============================================================
-    // 8. PASSWORD GATE
+    // UNLOCK FUNCTION (works reliably now)
     // ============================================================
     function unlockLMS() {
         const input = document.getElementById('lmsPassword');
         const error = document.getElementById('lmsGateError');
-        if (input.value.trim() === ACCESS_CODE) {
+        const entered = input.value.trim();
+
+        if (entered === ACCESS_CODE) {
+            // Hide gate, show course
             document.getElementById('lmsGate').style.display = 'none';
             document.getElementById('lmsViews').style.display = 'block';
             localStorage.setItem('lmsUnlocked', 'true');
             renderDashboard();
+            error.innerText = '';
         } else {
             error.innerText = '❌ Incorrect access code. Please try again.';
             input.value = '';
@@ -1257,16 +1239,21 @@
         }
     }
 
+    // Allow Enter key on the password field
+    document.getElementById('lmsPassword').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') unlockLMS();
+    });
+
+    // ============================================================
+    // ON PAGE LOAD: Check if user already unlocked
+    // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
         if (localStorage.getItem('lmsUnlocked') === 'true') {
             document.getElementById('lmsGate').style.display = 'none';
             document.getElementById('lmsViews').style.display = 'block';
             renderDashboard();
         }
-    });
-
-    document.getElementById('lmsPassword').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') unlockLMS();
+        // Otherwise, gate stays visible – user must enter password.
     });
 </script>
 <!-- ========== END LMS ========== -->
