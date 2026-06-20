@@ -1248,7 +1248,7 @@
         if (input.value.trim() === ACCESS_CODE) {
             document.getElementById('lmsGate').style.display = 'none';
             document.getElementById('lmsViews').style.display = 'block';
-            localStorage.setItem('lmsUnlocked', 'true');
+            localStorage.setItem('lmsUnlocked', 'false');
             renderDashboard();
         } else {
             error.innerText = '❌ Incorrect access code. Please try again.';
