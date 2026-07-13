@@ -392,6 +392,11 @@
             transform: scale(1.02);
         }
 
+        .modal-btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .modal-btn-cancel {
             background: transparent;
             color: #888;
@@ -437,6 +442,23 @@
             color: #aaa;
             font-size: 0.95rem;
             line-height: 1.6;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #000;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* Responsive */
@@ -628,7 +650,7 @@
                 <div class="teacher-name-display" id="modalTeacherName">Teacher Name</div>
                 <div class="teacher-subject-display" id="modalTeacherSubject">Subject</div>
 
-                <form id="bookingFormElement" onsubmit="sendBooking(event)">
+                <form id="bookingFormElement">
                     <div class="form-group">
                         <label for="studentName">Your Full Name *</label>
                         <input type="text" id="studentName" placeholder="e.g. Sarah Ahmed" required>
@@ -664,8 +686,11 @@
                         <textarea id="message" placeholder="Any specific topics or questions..."></textarea>
                     </div>
 
+                    <!-- Hidden field for teacher name -->
+                    <input type="hidden" id="hiddenTeacherName" value="">
+
                     <div class="modal-btn-group">
-                        <button type="submit" class="modal-btn-submit">
+                        <button type="button" class="modal-btn-submit" id="submitBookingBtn" onclick="sendBooking()">
                             <i class="fas fa-paper-plane"></i> Send Booking
                         </button>
                         <button type="button" class="modal-btn-cancel" onclick="closeModal()">
@@ -727,12 +752,15 @@
                 selectedTeacher = teacher;
                 document.getElementById('modalTeacherName').textContent = teacher.name;
                 document.getElementById('modalTeacherSubject').textContent = teacher.subject;
+                document.getElementById('hiddenTeacherName').value = teacher.name;
                 document.getElementById('bookingForm').style.display = 'block';
                 document.getElementById('formSuccess').classList.remove('active');
                 document.getElementById('bookingModal').classList.add('active');
                 
                 // Reset form
                 document.getElementById('bookingFormElement').reset();
+                document.getElementById('submitBookingBtn').disabled = false;
+                document.getElementById('submitBookingBtn').innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking';
             }
         };
 
@@ -749,71 +777,72 @@
         });
 
         // ------------------------------------------------------------
-        // SEND BOOKING EMAIL - UPDATED WITH YOUR EMAIL!
+        // SEND BOOKING - USING YOUR FORMSPREE ENDPOINT!
         // ------------------------------------------------------------
-        window.sendBooking = function(event) {
-            event.preventDefault();
-
-            if (!selectedTeacher) {
-                alert('Please select a teacher first.');
-                return;
-            }
-
+        window.sendBooking = function() {
+            const submitBtn = document.getElementById('submitBookingBtn');
+            
             // Get form data
             const studentName = document.getElementById('studentName').value.trim();
             const studentEmail = document.getElementById('studentEmail').value.trim();
             const studentPhone = document.getElementById('studentPhone').value.trim() || 'Not provided';
             const timeSlot = document.getElementById('timeSlot').value;
             const message = document.getElementById('message').value.trim() || 'No additional notes';
+            const teacherName = document.getElementById('hiddenTeacherName').value;
 
             if (!studentName || !studentEmail || !timeSlot) {
                 alert('Please fill in all required fields.');
                 return;
             }
 
-            // YOUR EMAIL ADDRESS
-            const yourEmail = 'hendaharabii@gmail.com';
+            if (!teacherName) {
+                alert('Please select a teacher first.');
+                return;
+            }
 
-            // Construct email content
-            const subject = `📚 New Lesson Booking - ${selectedTeacher.name}`;
-            const body = `
-                🎓 NEW LESSON BOOKING
-                ════════════════════════════
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Sending...';
 
-                👩‍🏫 Teacher: ${selectedTeacher.name}
-                📖 Subject: ${selectedTeacher.subject}
-                📍 City: ${selectedTeacher.city}
+            // Prepare data for Formspree
+            const formData = {
+                name: studentName,
+                email: studentEmail,
+                phone: studentPhone,
+                teacher: teacherName,
+                time_slot: timeSlot,
+                message: message
+            };
 
-                ─── Student Details ───
-                👤 Name: ${studentName}
-                📧 Email: ${studentEmail}
-                📞 Phone: ${studentPhone}
-
-                ─── Booking Details ───
-                🕐 Time: ${timeSlot}
-                📝 Notes: ${message}
-
-                ──────────────────────
-                📅 Booking submitted via BeSpellBee website
-            `;
-
-            // Encode for mailto
-            const mailtoLink = `mailto:${encodeURIComponent(yourEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-            // Open email client
-            window.location.href = mailtoLink;
-
-            // Show success message
-            document.getElementById('bookingForm').style.display = 'none';
-            document.getElementById('successTeacherName').textContent = selectedTeacher.name;
-            document.getElementById('formSuccess').classList.add('active');
-
-            // Log to console for debugging
-            console.log('📅 Booking Details:');
-            console.log(`Teacher: ${selectedTeacher.name}`);
-            console.log(`Student: ${studentName} (${studentEmail})`);
-            console.log(`Time: ${timeSlot}`);
-            console.log(`Email sent to: ${yourEmail}`);
+            // YOUR FORMSPREE ENDPOINT
+            fetch('https://formspree.io/f/xbdnjqal', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Show success message
+                    document.getElementById('bookingForm').style.display = 'none';
+                    document.getElementById('successTeacherName').textContent = teacherName;
+                    document.getElementById('formSuccess').classList.add('active');
+                    
+                    console.log('✅ Booking sent successfully!');
+                    console.log(`Teacher: ${teacherName}`);
+                    console.log(`Student: ${studentName} (${studentEmail})`);
+                    console.log(`Time: ${timeSlot}`);
+                } else {
+                    throw new Error('Failed to send booking');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Sorry, there was an error sending your booking. Please try again or contact us directly.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking';
+            });
         };
 
         // Close modal with Escape key
@@ -921,25 +950,4 @@
             if (!isDragging) return;
             const endX = e.changedTouches[0].clientX;
             const diff = startX - endX;
-            if (Math.abs(diff) > 40) {
-                if (diff > 0) {
-                    document.getElementById('nextBtn').click();
-                } else {
-                    document.getElementById('prevBtn').click();
-                }
-            }
-            isDragging = false;
-        });
-
-        // ------------------------------------------------------------
-        // INIT
-        // ------------------------------------------------------------
-        buildCards();
-        buildDots();
-        const firstDot = document.querySelector('.dot');
-        if (firstDot) firstDot.classList.add('active');
-        track.style.transform = 'translateX(0%)';
-    </script>
-
-</body>
-</html>
+            if (Math.abs(diff) > 40)
