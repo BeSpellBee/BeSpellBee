@@ -294,7 +294,6 @@
             }
         }
 
-        /* Keep your existing logo and image styles */
         h1 {
             margin-bottom: 0;
         }
@@ -397,9 +396,9 @@
         </svg>BeSpellBee
     </h1>
 
-    <!-- ====== NEW: TEACHER CAROUSEL - NOW VISIBLE IMMEDIATELY! ====== -->
+    <!-- ====== TEACHER CAROUSEL - NOW WITH 2 TEACHERS! ====== -->
     <section class="teacher-carousel-section">
-        <h2>🎨 Meet Your Teacher</h2>
+        <h2>🎓 Meet Your Teachers</h2>
         <p class="subhead">Explore profiles and choose the mentor who inspires you</p>
 
         <div class="carousel-container">
@@ -418,7 +417,7 @@
         <div class="carousel-dots" id="dotsContainer"></div>
     </section>
 
-    <!-- ====== YOUR EXISTING IMAGE (MOVED BELOW CAROUSEL) ====== -->
+    <!-- ====== YOUR EXISTING IMAGE ====== -->
     <center>
         <img src="images4/meet.png.png" width="600" style="margin-top: -20px;">
     </center>
@@ -426,31 +425,29 @@
     <!-- ====== CAROUSEL JAVASCRIPT ====== -->
     <script>
         // ------------------------------------------------------------
-        // TEACHER DATA — Based on Arij Dhibi's resume and cover letter
-        // Add more teachers here as you recruit them!
+        // TEACHER DATA — NOW WITH 2 TEACHERS!
         // ------------------------------------------------------------
         const teachers = [
             {
                 id: 1,
                 name: "Arij Dhibi",
-                city: "Hassi El Frid, Kasserine, Tunisia",  // CITY at the top!
+                city: "Hassi El Frid, Kasserine, Tunisia",
                 subject: "Visual Arts & Ceramics",
                 bio: "A dedicated Visual Arts Educator with a Research Master's in Ceramics and Art Therapy. I design inclusive, creative projects that help students explore self-expression through <strong>ceramics, drawing, and calligraphy</strong>. I believe art is a universal language that builds confidence and emotional growth.",
                 credentials: ["🎓 Master's in Visual Arts", "🏺 Ceramics Specialist", "🧠 Art Therapy Trained"],
                 emoji: "🎨",
                 coverLetterExcerpt: "Passionate about teaching and holding a Master's degree from ISAMS, I bring classroom experience from 'Borj El Ilm' private school and have led over 15 creative workshops. I specialize in supporting students with special needs through art therapy approaches, creating a caring and inclusive environment."
+            },
+            {
+                id: 2,
+                name: "Chaima Douiri",
+                city: "Tunis, Tunisia",
+                subject: "History & Geography",
+                bio: "A dedicated and experienced educator with a <strong>Bachelor's in History</strong> from the Faculty of Humanities and Social Sciences of Tunis. With over 8 years of teaching experience across primary and middle school levels, I bring history and geography to life through engaging storytelling and interactive discussions.",
+                credentials: ["📜 Bachelor's in History", "🏫 8+ Years Experience", "🌍 Social Sciences Specialist"],
+                emoji: "📚",
+                coverLetterExcerpt: "I have taught History and Geography to students in grades 5 through 9, and I believe that understanding our past is the key to building a better future. My classroom is a place where curiosity is encouraged and every student's voice matters."
             }
-            // === ADD MORE TEACHERS HERE AS YOU RECRUIT THEM ===
-            // {
-            //     id: 2,
-            //     name: "Next Teacher Name",
-            //     city: "City, Country",
-            //     subject: "Subject",
-            //     bio: "Their bio...",
-            //     credentials: ["Credential 1", "Credential 2"],
-            //     emoji: "📚",
-            //     coverLetterExcerpt: "From their cover letter..."
-            // },
         ];
 
         // ------------------------------------------------------------
