@@ -974,4 +974,284 @@
             const sub = document.getElementById('videoModalSub');
 
             title.textContent = `🎬 Meet ${teacher.name}`;
-            sub.textContent = `${teacher.subject}
+            sub.textContent = `${teacher.subject} • Watch this short introduction`;
+
+            if (teacher.hasVideo && teacher.videoUrl) {
+                // Embedded video from YouTube/Vimeo
+                let videoHtml = '';
+                if (teacher.videoUrl.includes('youtube') || teacher.videoUrl.includes('youtu.be')) {
+                    const videoId = teacher.videoUrl.split('v=')[1] || teacher.videoUrl.split('/').pop();
+                    videoHtml = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                } else if (teacher.videoUrl.includes('vimeo')) {
+                    const videoId = teacher.videoUrl.split('/').pop();
+                    videoHtml = `<iframe src="https://player.vimeo.com/video/${videoId}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+                } else {
+                    // Direct video file
+                    videoHtml = `<video controls autoplay><source src="${teacher.videoUrl}" type="video/mp4">Your browser does not support the video tag.</video>`;
+                }
+                wrapper.innerHTML = videoHtml;
+            } else {
+                // Placeholder - teacher hasn't uploaded a video yet
+                wrapper.innerHTML = `
+                    <div class="video-placeholder">
+                        <i class="fas fa-video-slash"></i>
+                        <p><strong>${teacher.name}</strong> is preparing their introduction video.<br>Check back soon!</p>
+                        <span style="font-size:0.8rem; color:#666; margin-top:0.5rem;">🎥 Coming soon</span>
+                    </div>
+                `;
+            }
+
+            document.getElementById('videoModal').classList.add('active');
+        };
+
+        window.closeVideoModal = function() {
+            document.getElementById('videoModal').classList.remove('active');
+            // Stop video when closing
+            const wrapper = document.getElementById('videoWrapper');
+            wrapper.innerHTML = '';
+        };
+
+        // Close video modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeVideoModal();
+                closeModal();
+            }
+        });
+
+        // ------------------------------------------------------------
+        // BOOKING FUNCTION
+        // ------------------------------------------------------------
+        let selectedTeacher = null;
+
+        window.bookTeacher = function(teacherName) {
+            const teacher = teachers.find(t => t.name === teacherName);
+            if (teacher) {
+                selectedTeacher = teacher;
+                document.getElementById('modalTeacherName').textContent = teacher.name;
+                document.getElementById('modalTeacherSubject').textContent = teacher.subject;
+                document.getElementById('hiddenTeacherName').value = teacher.name;
+                document.getElementById('bookingForm').style.display = 'block';
+                document.getElementById('formSuccess').classList.remove('active');
+                document.getElementById('bookingModal').classList.add('active');
+                
+                document.getElementById('bookingFormElement').reset();
+                document.getElementById('submitBookingBtn').disabled = false;
+                document.getElementById('submitBookingBtn').innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking';
+            }
+        };
+
+        window.closeModal = function() {
+            document.getElementById('bookingModal').classList.remove('active');
+            selectedTeacher = null;
+        };
+
+        document.getElementById('bookingModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // ------------------------------------------------------------
+        // SEND BOOKING - FORMSPREE
+        // ------------------------------------------------------------
+        window.sendBooking = function() {
+            const submitBtn = document.getElementById('submitBookingBtn');
+            
+            const studentName = document.getElementById('studentName').value.trim();
+            const studentEmail = document.getElementById('studentEmail').value.trim();
+            const studentPhone = document.getElementById('studentPhone').value.trim() || 'Not provided';
+            const timeSlot = document.getElementById('timeSlot').value;
+            const message = document.getElementById('message').value.trim() || 'No additional notes';
+            const teacherName = document.getElementById('hiddenTeacherName').value;
+
+            if (!studentName || !studentEmail || !timeSlot) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            if (!teacherName) {
+                alert('Please select a teacher first.');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Sending...';
+
+            const formData = {
+                name: studentName,
+                email: studentEmail,
+                phone: studentPhone,
+                teacher: teacherName,
+                time_slot: timeSlot,
+                message: message
+            };
+
+            fetch('https://formspree.io/f/xbdnjqal', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('bookingForm').style.display = 'none';
+                    document.getElementById('successTeacherName').textContent = teacherName;
+                    document.getElementById('formSuccess').classList.add('active');
+                    
+                    console.log('✅ Booking sent successfully!');
+                    console.log(`Teacher: ${teacherName}`);
+                    console.log(`Student: ${studentName} (${studentEmail})`);
+                    console.log(`Time: ${timeSlot}`);
+                } else {
+                    throw new Error('Failed to send booking');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Sorry, there was an error sending your booking. Please try again or contact us directly.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking';
+            });
+        };
+
+        // ------------------------------------------------------------
+        // BUILD CARDS
+        // ------------------------------------------------------------
+        const track = document.getElementById('carouselTrack');
+        const dotsContainer = document.getElementById('dotsContainer');
+        let currentIndex = 0;
+
+        function buildCards() {
+            let cardsHTML = '';
+            teachers.forEach((teacher, index) => {
+                const fullBio = teacher.bio + `<br><br><em style="color:#88dddd; font-size:0.9rem;">"${teacher.coverLetterExcerpt}"</em>`;
+                
+                const videoBadge = teacher.hasVideo ? 
+                    `<span class="video-badge"><i class="fas fa-video"></i> Video Available</span>` : 
+                    `<span class="video-badge" style="color:#666; border-color:#333;"><i class="fas fa-clock"></i> Video Coming Soon</span>`;
+
+                const videoButton = teacher.hasVideo ? 
+                    `<button class="btn-video" onclick="openVideo('${teacher.name}')">
+                        <i class="fas fa-play"></i> Watch Intro
+                    </button>` : 
+                    `<button class="btn-video" onclick="openVideo('${teacher.name}')" style="color:#666; border-color:#333;">
+                        <i class="fas fa-clock"></i> Coming Soon
+                    </button>`;
+                
+                cardsHTML += `
+                    <div class="teacher-card" data-index="${index}">
+                        <div class="card-inner">
+                            <div class="profile-pic" onclick="openVideo('${teacher.name}')" title="Click to watch introduction">
+                                ${teacher.emoji}
+                                <div class="play-overlay"><i class="fas fa-play"></i></div>
+                            </div>
+                            <h3 class="teacher-name">${teacher.name}</h3>
+                            ${videoBadge}
+                            <div class="teacher-city">
+                                <i class="fas fa-map-pin"></i> ${teacher.city}
+                            </div>
+                            <div class="teacher-subject">${teacher.subject}</div>
+                            <div class="teacher-credentials">
+                                ${teacher.credentials.map(c => `<span>${c}</span>`).join('')}
+                            </div>
+                            <p class="teacher-bio">${fullBio}</p>
+                            <div class="btn-group">
+                                ${videoButton}
+                                <button class="btn-book" onclick="bookTeacher('${teacher.name}')">
+                                    <i class="fas fa-calendar-check"></i> Book a Lesson
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            track.innerHTML = cardsHTML;
+        }
+
+        function buildDots() {
+            let dotsHTML = '';
+            teachers.forEach((_, index) => {
+                dotsHTML += `<button class="dot" data-index="${index}" aria-label="Go to teacher ${index + 1}"></button>`;
+            });
+            dotsContainer.innerHTML = dotsHTML;
+        }
+
+        // ------------------------------------------------------------
+        // CAROUSEL LOGIC
+        // ------------------------------------------------------------
+        function updateCarousel(index) {
+            const total = teachers.length;
+            if (index < 0) index = total - 1;
+            if (index >= total) index = 0;
+            currentIndex = index;
+
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+        }
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            updateCarousel(currentIndex - 1);
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            updateCarousel(currentIndex + 1);
+        });
+
+        dotsContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('dot')) {
+                const index = parseInt(e.target.dataset.index, 10);
+                updateCarousel(index);
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                document.getElementById('prevBtn').click();
+                e.preventDefault();
+            } else if (e.key === 'ArrowRight') {
+                document.getElementById('nextBtn').click();
+                e.preventDefault();
+            }
+        });
+
+        // Touch/swipe support
+        let startX = 0;
+        let isDragging = false;
+        const container = document.querySelector('.carousel-container');
+        container.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+        });
+        container.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            const endX = e.changedTouches[0].clientX;
+            const diff = startX - endX;
+            if (Math.abs(diff) > 40) {
+                if (diff > 0) {
+                    document.getElementById('nextBtn').click();
+                } else {
+                    document.getElementById('prevBtn').click();
+                }
+            }
+            isDragging = false;
+        });
+
+        // ------------------------------------------------------------
+        // INIT
+        // ------------------------------------------------------------
+        buildCards();
+        buildDots();
+        const firstDot = document.querySelector('.dot');
+        if (firstDot) firstDot.classList.add('active');
+        track.style.transform = 'translateX(0%)';
+    </script>
+
+</body>
+</html>
