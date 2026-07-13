@@ -14,147 +14,554 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
 	
-    <title>Home page </title>
+    <title>BeSpellBee - Home</title>
 	<link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
 	<link rel="stylesheet" href="search.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <style>
+        /* ---------- CAROUSEL STYLES (Matching your black/aqua theme) ---------- */
+        .teacher-carousel-section {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .teacher-carousel-section h2 {
+            color: #00ffff;
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .teacher-carousel-section .subhead {
+            color: #aaa;
+            text-align: center;
+            font-size: 1.05rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #1a3a3a;
+            padding-bottom: 1rem;
+        }
+
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid #1a4a4a;
+            padding: 10px 0;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            gap: 0;
+        }
+
+        .teacher-card {
+            min-width: 100%;
+            padding: 0 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .card-inner {
+            background: #0d0d0d;
+            border: 1px solid #1a4a4a;
+            border-radius: 16px;
+            padding: 2rem 1.8rem;
+            width: 100%;
+            max-width: 520px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.05);
+            transition: box-shadow 0.3s, border-color 0.3s;
+        }
+
+        .card-inner:hover {
+            box-shadow: 0 12px 48px rgba(0, 255, 255, 0.1);
+            border-color: #00ffff;
+        }
+
+        /* Profile Picture */
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0a2a2a, #1a4a4a);
+            margin: 0 auto 1rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.2rem;
+            color: #00ffff;
+            border: 3px solid #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+        }
+
+        .teacher-name {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.3px;
+        }
+
+        /* CITY - prominently displayed at the top! */
+        .teacher-city {
+            display: inline-block;
+            background: rgba(0, 255, 255, 0.12);
+            color: #00ffff;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.35rem 1.4rem;
+            border-radius: 40px;
+            margin-top: 0.2rem;
+            margin-bottom: 0.8rem;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            letter-spacing: 0.5px;
+        }
+
+        .teacher-city i {
+            margin-right: 8px;
+            color: #00ffff;
+        }
+
+        .teacher-subject {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #88dddd;
+            background: rgba(0, 255, 255, 0.06);
+            display: inline-block;
+            padding: 0.25rem 1.4rem;
+            border-radius: 30px;
+            margin-bottom: 0.8rem;
+            border: 1px solid rgba(0, 255, 255, 0.08);
+        }
+
+        .teacher-bio {
+            color: #ccc;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin: 0.8rem 0 1.2rem 0;
+            padding: 0 0.2rem;
+            min-height: 75px;
+        }
+
+        .teacher-bio strong {
+            color: #00ffff;
+        }
+
+        .teacher-credentials {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin: 0.5rem 0 1.2rem 0;
+        }
+
+        .teacher-credentials span {
+            background: rgba(0, 255, 255, 0.06);
+            color: #88dddd;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.9rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.08);
+        }
+
+        .btn-book {
+            background: transparent;
+            color: #00ffff;
+            border: 2px solid #00ffff;
+            padding: 0.7rem 2.2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.05);
+        }
+
+        .btn-book:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.25);
+            transform: scale(1.02);
+        }
+
+        .btn-book i {
+            margin-right: 8px;
+        }
+
+        /* Navigation Arrows */
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #00ffff;
+            width: 44px;
+            height: 44px;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #00ffff;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+            backdrop-filter: blur(4px);
+        }
+
+        .carousel-btn:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .carousel-btn.prev {
+            left: 8px;
+        }
+
+        .carousel-btn.next {
+            right: 8px;
+        }
+
+        /* Dots */
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 1.8rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 20px;
+            background: #1a3a3a;
+            border: 1px solid #1a4a4a;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 0;
+        }
+
+        .dot.active {
+            background: #00ffff;
+            width: 32px;
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 680px) {
+            .teacher-carousel-section h2 {
+                font-size: 1.6rem;
+            }
+            .carousel-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 0.9rem;
+            }
+            .carousel-btn.prev {
+                left: 4px;
+            }
+            .carousel-btn.next {
+                right: 4px;
+            }
+            .card-inner {
+                padding: 1.5rem 1rem;
+            }
+            .teacher-name {
+                font-size: 1.3rem;
+            }
+            .profile-pic {
+                width: 90px;
+                height: 90px;
+                font-size: 2.5rem;
+            }
+            .teacher-bio {
+                font-size: 0.88rem;
+                min-height: 60px;
+            }
+        }
+
+        @media (max-width: 440px) {
+            .carousel-btn {
+                display: none;
+            }
+        }
+    </style>
 </head>
-<body 
 
-style="background-color:black;"> 
+<body style="background-color:black;">
 
-  
-<a href= "Abouts.html" target="_blank"  style="color:aqua;float:left">About</a>(&nbsp;)(&nbsp;)
-<a href= "services.html" target="_blank" style="color:aqua"> Services</a>(&nbsp;)(&nbsp;) 
-<a href= "Contact.html" target="_blank"style="color:aqua"> Contact</a>(&nbsp;) (&nbsp;)
-<a href= "B2-exam-preparation.html" target="_blank"style="color:aqua">B2 exam </a>(&nbsp;)(&nbsp;)
-<a href= "Activities-for-adults.html" target="_blank"style="color:aqua">A1</a>(&nbsp;)(&nbsp;)
-<a href = "French-bac.html" target="_blank" style="color:aqua">French bac</a>
-	
-<div style="display: flex; justify-content: flex-end; align-items: center; gap: 15px; float:right;">
-
-    <!-- Search FIRST -->
-    <div style="display: flex; gap: 5px;">
-        <input type="text" id="courseInput" placeholder="Search (e.g. beginner, advanced...)"
-		style=" padding: 8px 12px; border: 1px solid #444; border-radius: 6px;
-			background-color: #111; color: white; outline: none; transition: 0.2s; ">
-			<button onclick="executeSearch()"
-		 style=" padding: 8px 14px; background-color: #00ffff; color: #000; border: none; 
-				border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; ">
-				Search</button>
+    <!-- ====== YOUR EXISTING NAVIGATION (PRESERVED) ====== -->
+    <a href="Abouts.html" target="_blank" style="color:aqua;float:left">About</a>(&nbsp;)(&nbsp;)
+    <a href="services.html" target="_blank" style="color:aqua"> Services</a>(&nbsp;)(&nbsp;) 
+    <a href="Contact.html" target="_blank" style="color:aqua"> Contact</a>(&nbsp;) (&nbsp;)
+    <a href="B2-exam-preparation.html" target="_blank" style="color:aqua">B2 exam </a>(&nbsp;)(&nbsp;)
+    <a href="Activities-for-adults.html" target="_blank" style="color:aqua">A1</a>(&nbsp;)(&nbsp;)
+    <a href="French-bac.html" target="_blank" style="color:aqua">French bac</a>
+    
+    <div style="display: flex; justify-content: flex-end; align-items: center; gap: 15px; float:right;">
+        <div style="display: flex; gap: 5px;">
+            <input type="text" id="courseInput" placeholder="Search (e.g. beginner, advanced...)"
+            style="padding: 8px 12px; border: 1px solid #444; border-radius: 6px;
+                background-color: #111; color: white; outline: none; transition: 0.2s; ">
+            <button onclick="executeSearch()"
+            style="padding: 8px 14px; background-color: #00ffff; color: #000; border: none; 
+                border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; ">
+                Search</button>
+        </div>
+        <a href="Coveted.html" target="_blank" style="color:aqua;">Fiction</a>
     </div>
 
-    <!-- Book NOW SECOND -->
-    <a href="Coveted.html" target="_blank" style="color:aqua;">Fiction</a>
-
-</div>
-
-<script>
-	fetch('https://bespellbee.github.io/BeSpellBee/Services.html')
-.then(function (data) {
-  return data.text();
-})
-.then(function (html) {
-  document.getElementById('content').innerHTML = html;
-  var scripts = document.getElementById("content").querySelectorAll("script");
-  for (var i = 0; i < scripts.length; i++) {
-    if (scripts[i].innerText) {
-      eval(scripts[i].innerText);
-    } else {
-      fetch(scripts[i].src).then(function (data) {
-        data.text().then(function (r) {
-          eval(r);
+    <!-- ====== YOUR EXISTING SCRIPTS (PRESERVED) ====== -->
+    <script>
+        fetch('https://bespellbee.github.io/BeSpellBee/Services.html')
+        .then(function (data) {
+            return data.text();
         })
-      });
+        .then(function (html) {
+            document.getElementById('content').innerHTML = html;
+            var scripts = document.getElementById("content").querySelectorAll("script");
+            for (var i = 0; i < scripts.length; i++) {
+                if (scripts[i].innerText) {
+                    eval(scripts[i].innerText);
+                } else {
+                    fetch(scripts[i].src).then(function (data) {
+                        data.text().then(function (r) {
+                            eval(r);
+                        })
+                    });
+                }
+                scripts[i].parentNode.removeChild(scripts[i]);
+            }
+        });
+    </script>
 
-    }
-    // To not repeat the element
-    scripts[i].parentNode.removeChild(scripts[i]);
-  }
-});
-</script>
-<script>
-function executeSearch() {
-    var query = document.getElementById("courseInput").value.toLowerCase().trim();
-    
-    // This links your keywords to the existing 'name' tags in your services page
-    if (query.includes("beginner")) {
-        window.location.href = "services.html#A1/A2/B1";
-    } 
-    else if (query.includes("advanced")) {
-        window.location.href = "services.html#B2";
-    } 
-    else if (query.includes("baccalaureate") || query.includes("preparation") || query.includes("bac")) {
-        window.location.href = "services.html#Bac";
-    } 
-    else {
-        alert("No match found. Try 'beginner', 'advanced', or 'baccalaureate'.");
-    }
-}
-	
-document.getElementById("courseInput").addEventListener("keypress", function(event) {
-  if (event.key === "Enter") {
-    executeSearch(); // This runs your search function automatically!
-  }
-});
-</script>
+    <script>
+        function executeSearch() {
+            var query = document.getElementById("courseInput").value.toLowerCase().trim();
+            if (query.includes("beginner")) {
+                window.location.href = "services.html#A1/A2/B1";
+            } 
+            else if (query.includes("advanced")) {
+                window.location.href = "services.html#B2";
+            } 
+            else if (query.includes("baccalaureate") || query.includes("preparation") || query.includes("bac")) {
+                window.location.href = "services.html#Bac";
+            } 
+            else {
+                alert("No match found. Try 'beginner', 'advanced', or 'baccalaureate'.");
+            }
+        }
+        
+        document.getElementById("courseInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                executeSearch();
+            }
+        });
+    </script>
 
-  <h1> <svg>
-        <defs> 
-            <linearGradient id="gradient" 
-                x1="0%" y1="0%" x2="100%" y2="0%"> 
-                <stop offset="0%" 
-                   style="stop-color:aqua;"/>
-			
-                <stop offset="50%" 
-                    style="stop-color:white;" /> 
-				<stop offset="100%" 
-                    style="stop-color:yellow;" /> 
-				
-            </linearGradient> 
-        </defs> 
-          
-        <text x="0" y="50" 
-            fill="url(#gradient)" 
-            font-size="45"> 
-           BeSpellBee
-        </text> 
-    </svg>BeSpellBee</h1>
-        <center>
-  <img src="images4/meet.png.png" width="600" style="margin-top: -60px;">
-</center>      
+    <!-- ====== YOUR EXISTING LOGO ====== -->
+    <h1>
+        <svg>
+            <defs> 
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%"> 
+                    <stop offset="0%" style="stop-color:aqua;"/>
+                    <stop offset="50%" style="stop-color:white;" /> 
+                    <stop offset="100%" style="stop-color:yellow;" /> 
+                </linearGradient> 
+            </defs> 
+            <text x="0" y="50" fill="url(#gradient)" font-size="45">BeSpellBee</text> 
+        </svg>BeSpellBee
+    </h1>
 
+    <center>
+        <img src="images4/meet.png.png" width="600" style="margin-top: -60px;">
+    </center>
+
+    <!-- ====== NEW: TEACHER CAROUSEL SECTION ====== -->
+    <section class="teacher-carousel-section">
+        <h2>🎨 Meet Your Teacher</h2>
+        <p class="subhead">Explore profiles and choose the mentor who inspires you</p>
+
+        <div class="carousel-container">
+            <div class="carousel-track" id="carouselTrack">
+                <!-- Cards will be injected by JavaScript -->
+            </div>
+
+            <button class="carousel-btn prev" id="prevBtn" aria-label="Previous">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-btn next" id="nextBtn" aria-label="Next">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div class="carousel-dots" id="dotsContainer"></div>
+    </section>
+
+    <!-- ====== CAROUSEL JAVASCRIPT ====== -->
+    <script>
+        // ------------------------------------------------------------
+        // TEACHER DATA — Based on Arij Dhibi's resume and cover letter
+        // Add more teachers here as you recruit them!
+        // ------------------------------------------------------------
+        const teachers = [
+            {
+                id: 1,
+                name: "Arij Dhibi",
+                city: "Hassi El Frid, Kasserine, Tunisia",  // CITY at the top!
+                subject: "Visual Arts & Ceramics",
+                bio: "A dedicated Visual Arts Educator with a Research Master's in Ceramics and Art Therapy. I design inclusive, creative projects that help students explore self-expression through <strong>ceramics, drawing, and calligraphy</strong>. I believe art is a universal language that builds confidence and emotional growth.",
+                credentials: ["🎓 Master's in Visual Arts", "🏺 Ceramics Specialist", "🧠 Art Therapy Trained"],
+                emoji: "🎨",
+                // Extract from cover letter:
+                coverLetterExcerpt: "Passionate about teaching and holding a Master's degree from ISAMS, I bring classroom experience from 'Borj El Ilm' private school and have led over 15 creative workshops. I specialize in supporting students with special needs through art therapy approaches, creating a caring and inclusive environment."
+            }
+            // === ADD MORE TEACHERS HERE AS YOU RECRUIT THEM ===
+            // {
+            //     id: 2,
+            //     name: "Next Teacher Name",
+            //     city: "City, Country",
+            //     subject: "Subject",
+            //     bio: "Their bio...",
+            //     credentials: ["Credential 1", "Credential 2"],
+            //     emoji: "📚",
+            //     coverLetterExcerpt: "From their cover letter..."
+            // },
+        ];
+
+        // ------------------------------------------------------------
+        // BUILD THE CARDS
+        // ------------------------------------------------------------
+        const track = document.getElementById('carouselTrack');
+        const dotsContainer = document.getElementById('dotsContainer');
+        let currentIndex = 0;
+
+        function buildCards() {
+            let cardsHTML = '';
+            teachers.forEach((teacher, index) => {
+                // Combine bio + cover letter excerpt for a rich profile
+                const fullBio = teacher.bio + `<br><br><em style="color:#88dddd; font-size:0.9rem;">"${teacher.coverLetterExcerpt}"</em>`;
+                
+                cardsHTML += `
+                    <div class="teacher-card" data-index="${index}">
+                        <div class="card-inner">
+                            <div class="profile-pic">${teacher.emoji}</div>
+                            <h3 class="teacher-name">${teacher.name}</h3>
+                            <div class="teacher-city">
+                                <i class="fas fa-map-pin"></i> ${teacher.city}
+                            </div>
+                            <div class="teacher-subject">${teacher.subject}</div>
+                            <div class="teacher-credentials">
+                                ${teacher.credentials.map(c => `<span>${c}</span>`).join('')}
+                            </div>
+                            <p class="teacher-bio">${fullBio}</p>
+                            <button class="btn-book" onclick="bookTeacher('${teacher.name}')">
+                                <i class="fas fa-calendar-check"></i> Book a Lesson
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            track.innerHTML = cardsHTML;
+        }
+
+        function buildDots() {
+            let dotsHTML = '';
+            teachers.forEach((_, index) => {
+                dotsHTML += `<button class="dot" data-index="${index}" aria-label="Go to teacher ${index + 1}"></button>`;
+            });
+            dotsContainer.innerHTML = dotsHTML;
+        }
+
+        // ------------------------------------------------------------
+        // CAROUSEL LOGIC
+        // ------------------------------------------------------------
+        function updateCarousel(index) {
+            const total = teachers.length;
+            if (index < 0) index = total - 1;
+            if (index >= total) index = 0;
+            currentIndex = index;
+
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+        }
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            updateCarousel(currentIndex - 1);
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            updateCarousel(currentIndex + 1);
+        });
+
+        dotsContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('dot')) {
+                const index = parseInt(e.target.dataset.index, 10);
+                updateCarousel(index);
+            }
+        });
+
+        // Book function
+        window.bookTeacher = function(name) {
+            alert(`✨ You've selected ${name}! \nWe'll send you available time slots shortly.`);
+            // Replace with your actual booking link:
+            // window.location.href = "booking.html?teacher=" + encodeURIComponent(name);
+        };
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                document.getElementById('prevBtn').click();
+                e.preventDefault();
+            } else if (e.key === 'ArrowRight') {
+                document.getElementById('nextBtn').click();
+                e.preventDefault();
+            }
+        });
+
+        // Touch/swipe support
+        let startX = 0;
+        let isDragging = false;
+        const container = document.querySelector('.carousel-container');
+        container.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+        });
+        container.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            const endX = e.changedTouches[0].clientX;
+            const diff = startX - endX;
+            if (Math.abs(diff) > 40) {
+                if (diff > 0) {
+                    document.getElementById('nextBtn').click();
+                } else {
+                    document.getElementById('prevBtn').click();
+                }
+            }
+            isDragging = false;
+        });
+
+        // ------------------------------------------------------------
+        // INIT
+        // ------------------------------------------------------------
+        buildCards();
+        buildDots();
+        const firstDot = document.querySelector('.dot');
+        if (firstDot) firstDot.classList.add('active');
+        track.style.transform = 'translateX(0%)';
+    </script>
 
 </body>
 </html>
-
-  </body>
-  </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
