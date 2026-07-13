@@ -23,26 +23,26 @@
         /* ---------- CAROUSEL STYLES (Matching your black/aqua theme) ---------- */
         .teacher-carousel-section {
             max-width: 1100px;
-            margin: 40px auto;
+            margin: 20px auto 30px auto;
             padding: 0 20px;
         }
 
         .teacher-carousel-section h2 {
             color: #00ffff;
             text-align: center;
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.2rem;
             text-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
         }
 
         .teacher-carousel-section .subhead {
             color: #aaa;
             text-align: center;
-            font-size: 1.05rem;
-            margin-bottom: 2rem;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
             border-bottom: 2px solid #1a3a3a;
-            padding-bottom: 1rem;
+            padding-bottom: 0.8rem;
         }
 
         .carousel-container {
@@ -233,8 +233,8 @@
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin-top: 1.8rem;
-            padding-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            padding-bottom: 0.3rem;
         }
 
         .dot {
@@ -292,6 +292,22 @@
             .carousel-btn {
                 display: none;
             }
+        }
+
+        /* Keep your existing logo and image styles */
+        h1 {
+            margin-bottom: 0;
+        }
+        h1 svg {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        h1 {
+            color: transparent;
+            font-size: 0;
+        }
+        h1 svg text {
+            font-size: 45px;
         }
     </style>
 </head>
@@ -381,11 +397,7 @@
         </svg>BeSpellBee
     </h1>
 
-    <center>
-        <img src="images4/meet.png.png" width="600" style="margin-top: -60px;">
-    </center>
-
-    <!-- ====== NEW: TEACHER CAROUSEL SECTION ====== -->
+    <!-- ====== NEW: TEACHER CAROUSEL - NOW VISIBLE IMMEDIATELY! ====== -->
     <section class="teacher-carousel-section">
         <h2>🎨 Meet Your Teacher</h2>
         <p class="subhead">Explore profiles and choose the mentor who inspires you</p>
@@ -406,6 +418,11 @@
         <div class="carousel-dots" id="dotsContainer"></div>
     </section>
 
+    <!-- ====== YOUR EXISTING IMAGE (MOVED BELOW CAROUSEL) ====== -->
+    <center>
+        <img src="images4/meet.png.png" width="600" style="margin-top: -20px;">
+    </center>
+
     <!-- ====== CAROUSEL JAVASCRIPT ====== -->
     <script>
         // ------------------------------------------------------------
@@ -421,7 +438,6 @@
                 bio: "A dedicated Visual Arts Educator with a Research Master's in Ceramics and Art Therapy. I design inclusive, creative projects that help students explore self-expression through <strong>ceramics, drawing, and calligraphy</strong>. I believe art is a universal language that builds confidence and emotional growth.",
                 credentials: ["🎓 Master's in Visual Arts", "🏺 Ceramics Specialist", "🧠 Art Therapy Trained"],
                 emoji: "🎨",
-                // Extract from cover letter:
                 coverLetterExcerpt: "Passionate about teaching and holding a Master's degree from ISAMS, I bring classroom experience from 'Borj El Ilm' private school and have led over 15 creative workshops. I specialize in supporting students with special needs through art therapy approaches, creating a caring and inclusive environment."
             }
             // === ADD MORE TEACHERS HERE AS YOU RECRUIT THEM ===
@@ -447,7 +463,6 @@
         function buildCards() {
             let cardsHTML = '';
             teachers.forEach((teacher, index) => {
-                // Combine bio + cover letter excerpt for a rich profile
                 const fullBio = teacher.bio + `<br><br><em style="color:#88dddd; font-size:0.9rem;">"${teacher.coverLetterExcerpt}"</em>`;
                 
                 cardsHTML += `
@@ -513,7 +528,6 @@
             }
         });
 
-        // Book function
         window.bookTeacher = function(name) {
             alert(`✨ You've selected ${name}! \nWe'll send you available time slots shortly.`);
             // Replace with your actual booking link:
