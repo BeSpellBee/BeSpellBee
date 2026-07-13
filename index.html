@@ -180,6 +180,8 @@
             cursor: pointer;
             transition: all 0.3s;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.05);
+            text-decoration: none;
+            display: inline-block;
         }
 
         .btn-book:hover {
@@ -396,7 +398,7 @@
         </svg>BeSpellBee
     </h1>
 
-    <!-- ====== TEACHER CAROUSEL - NOW WITH 2 TEACHERS! ====== -->
+    <!-- ====== TEACHER CAROUSEL ====== -->
     <section class="teacher-carousel-section">
         <h2>🎓 Meet Your Teachers</h2>
         <p class="subhead">Explore profiles and choose the mentor who inspires you</p>
@@ -425,7 +427,7 @@
     <!-- ====== CAROUSEL JAVASCRIPT ====== -->
     <script>
         // ------------------------------------------------------------
-        // TEACHER DATA — NOW WITH 2 TEACHERS!
+        // TEACHER DATA
         // ------------------------------------------------------------
         const teachers = [
             {
@@ -449,6 +451,17 @@
                 coverLetterExcerpt: "I have taught History and Geography to students in grades 5 through 9, and I believe that understanding our past is the key to building a better future. My classroom is a place where curiosity is encouraged and every student's voice matters."
             }
         ];
+
+        // ------------------------------------------------------------
+        // BOOKING FUNCTION - DIRECT TO ZOOM SCHEDULER!
+        // ------------------------------------------------------------
+        window.bookTeacher = function(teacherName) {
+            // Your Zoom scheduler link
+            const zoomSchedulerLink = "https://scheduler.zoom.us/be-spellbee/30-minutes-avec-be";
+            
+            // Open the Zoom scheduler in a new tab
+            window.open(zoomSchedulerLink, "_blank");
+        };
 
         // ------------------------------------------------------------
         // BUILD THE CARDS
@@ -524,12 +537,6 @@
                 updateCarousel(index);
             }
         });
-
-        window.bookTeacher = function(name) {
-            alert(`✨ You've selected ${name}! \nWe'll send you available time slots shortly.`);
-            // Replace with your actual booking link:
-            // window.location.href = "booking.html?teacher=" + encodeURIComponent(name);
-        };
 
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
