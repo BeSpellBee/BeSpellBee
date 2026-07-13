@@ -254,7 +254,7 @@
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
         }
 
-        /* Booking Modal */
+        /* ====== BOOKING MODAL WITH FORM ====== */
         .booking-modal {
             display: none;
             position: fixed;
@@ -267,6 +267,7 @@
             justify-content: center;
             align-items: center;
             backdrop-filter: blur(8px);
+            padding: 20px;
         }
 
         .booking-modal.active {
@@ -278,11 +279,12 @@
             border: 2px solid #00ffff;
             border-radius: 20px;
             padding: 2.5rem 2.5rem;
-            max-width: 450px;
-            width: 90%;
-            text-align: center;
+            max-width: 480px;
+            width: 100%;
             box-shadow: 0 0 60px rgba(0, 255, 255, 0.15);
             animation: modalFadeIn 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         @keyframes modalFadeIn {
@@ -298,28 +300,68 @@
 
         .booking-modal-content h2 {
             color: #00ffff;
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.6rem;
+            margin-bottom: 0.3rem;
+            text-align: center;
         }
 
         .booking-modal-content .teacher-name-display {
             color: #fff;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            margin: 0.5rem 0 0.3rem 0;
+            text-align: center;
+            margin-bottom: 0.2rem;
         }
 
         .booking-modal-content .teacher-subject-display {
             color: #88dddd;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            text-align: center;
             margin-bottom: 1.5rem;
         }
 
-        .booking-modal-content p {
-            color: #aaa;
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #88dddd;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            background: #1a1a1a;
+            border: 1px solid #2a4a4a;
+            border-radius: 8px;
+            color: #fff;
             font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 1.8rem;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.05);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .form-group select option {
+            background: #1a1a1a;
+            color: #fff;
         }
 
         .modal-btn-group {
@@ -327,21 +369,24 @@
             gap: 12px;
             justify-content: center;
             flex-wrap: wrap;
+            margin-top: 1.5rem;
         }
 
-        .modal-btn-confirm {
+        .modal-btn-submit {
             background: #00ffff;
             color: #000;
             border: none;
-            padding: 0.8rem 2rem;
+            padding: 0.8rem 2.5rem;
             border-radius: 60px;
             font-weight: 700;
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s;
+            flex: 1;
+            min-width: 120px;
         }
 
-        .modal-btn-confirm:hover {
+        .modal-btn-submit:hover {
             background: #66ffff;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
             transform: scale(1.02);
@@ -357,6 +402,8 @@
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s;
+            flex: 1;
+            min-width: 100px;
         }
 
         .modal-btn-cancel:hover {
@@ -364,6 +411,35 @@
             color: #ff4444;
         }
 
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 1.5rem 0;
+        }
+
+        .form-success.active {
+            display: block;
+        }
+
+        .form-success i {
+            font-size: 3rem;
+            color: #00ff88;
+            margin-bottom: 1rem;
+        }
+
+        .form-success h3 {
+            color: #00ff88;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-success p {
+            color: #aaa;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
         @media (max-width: 680px) {
             .teacher-carousel-section h2 {
                 font-size: 1.6rem;
@@ -398,7 +474,14 @@
                 padding: 1.8rem 1.5rem;
             }
             .booking-modal-content h2 {
-                font-size: 1.4rem;
+                font-size: 1.3rem;
+            }
+            .modal-btn-group {
+                flex-direction: column;
+            }
+            .modal-btn-submit,
+            .modal-btn-cancel {
+                width: 100%;
             }
         }
 
@@ -536,19 +619,70 @@
         <img src="images4/meet.png.png" width="600" style="margin-top: -20px;">
     </center>
 
-    <!-- ====== BOOKING CONFIRMATION MODAL ====== -->
+    <!-- ====== BOOKING MODAL WITH FORM ====== -->
     <div class="booking-modal" id="bookingModal">
         <div class="booking-modal-content">
-            <h2>📚 Confirm Booking</h2>
-            <div class="teacher-name-display" id="modalTeacherName">Teacher Name</div>
-            <div class="teacher-subject-display" id="modalTeacherSubject">Subject</div>
-            <p>You are about to book a 30-minute lesson with this teacher. Click "Confirm" to proceed to the Zoom scheduler.</p>
-            <div class="modal-btn-group">
-                <button class="modal-btn-confirm" onclick="confirmBooking()">
-                    ✅ Confirm & Book
-                </button>
-                <button class="modal-btn-cancel" onclick="closeModal()">
-                    ❌ Cancel
+            <!-- Booking Form -->
+            <div id="bookingForm">
+                <h2>📚 Book a Lesson</h2>
+                <div class="teacher-name-display" id="modalTeacherName">Teacher Name</div>
+                <div class="teacher-subject-display" id="modalTeacherSubject">Subject</div>
+
+                <form id="bookingFormElement" onsubmit="sendBooking(event)">
+                    <div class="form-group">
+                        <label for="studentName">Your Full Name *</label>
+                        <input type="text" id="studentName" placeholder="e.g. Sarah Ahmed" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="studentEmail">Your Email *</label>
+                        <input type="email" id="studentEmail" placeholder="e.g. sarah@email.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="studentPhone">Phone Number</label>
+                        <input type="tel" id="studentPhone" placeholder="e.g. +216 12 345 678">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="timeSlot">Preferred Time Slot *</label>
+                        <select id="timeSlot" required>
+                            <option value="">Select a time...</option>
+                            <option value="9:00 AM - 9:30 AM">9:00 AM - 9:30 AM</option>
+                            <option value="10:00 AM - 10:30 AM">10:00 AM - 10:30 AM</option>
+                            <option value="11:00 AM - 11:30 AM">11:00 AM - 11:30 AM</option>
+                            <option value="12:00 PM - 12:30 PM">12:00 PM - 12:30 PM</option>
+                            <option value="2:00 PM - 2:30 PM">2:00 PM - 2:30 PM</option>
+                            <option value="3:00 PM - 3:30 PM">3:00 PM - 3:30 PM</option>
+                            <option value="4:00 PM - 4:30 PM">4:00 PM - 4:30 PM</option>
+                            <option value="5:00 PM - 5:30 PM">5:00 PM - 5:30 PM</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Additional Notes</label>
+                        <textarea id="message" placeholder="Any specific topics or questions..."></textarea>
+                    </div>
+
+                    <div class="modal-btn-group">
+                        <button type="submit" class="modal-btn-submit">
+                            <i class="fas fa-paper-plane"></i> Send Booking
+                        </button>
+                        <button type="button" class="modal-btn-cancel" onclick="closeModal()">
+                            ❌ Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Success Message (hidden initially) -->
+            <div class="form-success" id="formSuccess">
+                <i class="fas fa-check-circle"></i>
+                <h3>✅ Booking Sent!</h3>
+                <p>Your lesson request has been sent to <strong id="successTeacherName">Teacher</strong>.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #666;">You will receive a confirmation email shortly.</p>
+                <button class="modal-btn-submit" onclick="closeModal()" style="margin-top: 1.5rem;">
+                    Close
                 </button>
             </div>
         </div>
@@ -583,34 +717,22 @@
         ];
 
         // ------------------------------------------------------------
-        // BOOKING FUNCTION - SHOWS MODAL WITH TEACHER NAME
+        // BOOKING FUNCTION - OPENS MODAL
         // ------------------------------------------------------------
         let selectedTeacher = null;
 
         window.bookTeacher = function(teacherName) {
-            // Find the teacher in the array
             const teacher = teachers.find(t => t.name === teacherName);
             if (teacher) {
                 selectedTeacher = teacher;
                 document.getElementById('modalTeacherName').textContent = teacher.name;
                 document.getElementById('modalTeacherSubject').textContent = teacher.subject;
+                document.getElementById('bookingForm').style.display = 'block';
+                document.getElementById('formSuccess').classList.remove('active');
                 document.getElementById('bookingModal').classList.add('active');
-            }
-        };
-
-        // Confirm booking - opens Zoom scheduler
-        window.confirmBooking = function() {
-            if (selectedTeacher) {
-                const zoomLink = "https://scheduler.zoom.us/be-spellbee/30-minutes-avec-be";
-                // Open Zoom in new tab
-                window.open(zoomLink, "_blank");
-                // Log the booking so you know which teacher was selected
-                console.log(`📅 Booking confirmed for: ${selectedTeacher.name} (${selectedTeacher.subject})`);
-                closeModal();
-                // Optional: Show a thank you message
-                setTimeout(() => {
-                    alert(`✅ You've booked a lesson with ${selectedTeacher.name}!\nYou will receive a confirmation email from Zoom shortly.`);
-                }, 300);
+                
+                // Reset form
+                document.getElementById('bookingFormElement').reset();
             }
         };
 
@@ -622,6 +744,81 @@
         // Close modal when clicking outside
         document.getElementById('bookingModal').addEventListener('click', function(e) {
             if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // ------------------------------------------------------------
+        // SEND BOOKING EMAIL - UPDATED WITH YOUR EMAIL!
+        // ------------------------------------------------------------
+        window.sendBooking = function(event) {
+            event.preventDefault();
+
+            if (!selectedTeacher) {
+                alert('Please select a teacher first.');
+                return;
+            }
+
+            // Get form data
+            const studentName = document.getElementById('studentName').value.trim();
+            const studentEmail = document.getElementById('studentEmail').value.trim();
+            const studentPhone = document.getElementById('studentPhone').value.trim() || 'Not provided';
+            const timeSlot = document.getElementById('timeSlot').value;
+            const message = document.getElementById('message').value.trim() || 'No additional notes';
+
+            if (!studentName || !studentEmail || !timeSlot) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // YOUR EMAIL ADDRESS
+            const yourEmail = 'hendaharabii@gmail.com';
+
+            // Construct email content
+            const subject = `📚 New Lesson Booking - ${selectedTeacher.name}`;
+            const body = `
+                🎓 NEW LESSON BOOKING
+                ════════════════════════════
+
+                👩‍🏫 Teacher: ${selectedTeacher.name}
+                📖 Subject: ${selectedTeacher.subject}
+                📍 City: ${selectedTeacher.city}
+
+                ─── Student Details ───
+                👤 Name: ${studentName}
+                📧 Email: ${studentEmail}
+                📞 Phone: ${studentPhone}
+
+                ─── Booking Details ───
+                🕐 Time: ${timeSlot}
+                📝 Notes: ${message}
+
+                ──────────────────────
+                📅 Booking submitted via BeSpellBee website
+            `;
+
+            // Encode for mailto
+            const mailtoLink = `mailto:${encodeURIComponent(yourEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+            // Open email client
+            window.location.href = mailtoLink;
+
+            // Show success message
+            document.getElementById('bookingForm').style.display = 'none';
+            document.getElementById('successTeacherName').textContent = selectedTeacher.name;
+            document.getElementById('formSuccess').classList.add('active');
+
+            // Log to console for debugging
+            console.log('📅 Booking Details:');
+            console.log(`Teacher: ${selectedTeacher.name}`);
+            console.log(`Student: ${studentName} (${studentEmail})`);
+            console.log(`Time: ${timeSlot}`);
+            console.log(`Email sent to: ${yourEmail}`);
+        };
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
                 closeModal();
             }
         });
