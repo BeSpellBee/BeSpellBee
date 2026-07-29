@@ -45,6 +45,52 @@
             padding-bottom: 0.8rem;
         }
 
+        /* ---------- SUBJECT FILTER BUTTONS ---------- */
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .filter-btn {
+            background: transparent;
+            color: #88dddd;
+            border: 1px solid #1a4a4a;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .filter-btn:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: #00ffff;
+            color: #000;
+            border-color: #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .filter-btn i {
+            margin-right: 8px;
+        }
+
+        .filter-count {
+            color: #666;
+            font-size: 0.8rem;
+            margin-left: 4px;
+        }
+
         .carousel-container {
             position: relative;
             overflow: hidden;
@@ -52,6 +98,7 @@
             background: rgba(20, 20, 20, 0.6);
             border: 1px solid #1a4a4a;
             padding: 10px 0;
+            min-height: 450px;
         }
 
         .carousel-track {
@@ -255,6 +302,26 @@
             margin-right: 8px;
         }
 
+        /* No results message */
+        .no-results {
+            display: none;
+            text-align: center;
+            color: #666;
+            padding: 3rem 1rem;
+            font-size: 1.1rem;
+        }
+
+        .no-results i {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .no-results.active {
+            display: block;
+        }
+
         /* Navigation Arrows */
         .carousel-btn {
             position: absolute;
@@ -288,6 +355,10 @@
 
         .carousel-btn.next {
             right: 8px;
+        }
+
+        .carousel-btn.hidden {
+            display: none;
         }
 
         .carousel-dots {
@@ -705,6 +776,13 @@
             .btn-video {
                 width: 100%;
             }
+            .filter-container {
+                gap: 6px;
+            }
+            .filter-btn {
+                font-size: 0.75rem;
+                padding: 0.35rem 1rem;
+            }
         }
 
         @media (max-width: 440px) {
@@ -815,14 +893,26 @@
         </svg>BeSpellBee
     </h1>
 
-    <!-- ====== TEACHER CAROUSEL ====== -->
+    <!-- ====== TEACHER CAROUSEL WITH SUBJECT FILTER ====== -->
     <section class="teacher-carousel-section">
         <h2>🎓 Meet Your Teachers</h2>
-        <p class="subhead">Watch introductions, explore profiles, and choose the mentor who inspires you</p>
+        <p class="subhead">Browse by subject, watch introductions, and choose the mentor who inspires you</p>
+
+        <!-- ====== SUBJECT FILTER BUTTONS ====== -->
+        <div class="filter-container" id="filterContainer">
+            <!-- Buttons will be injected by JavaScript -->
+        </div>
 
         <div class="carousel-container">
             <div class="carousel-track" id="carouselTrack">
                 <!-- Cards will be injected by JavaScript -->
+            </div>
+
+            <!-- No results message -->
+            <div class="no-results" id="noResults">
+                <i class="fas fa-search"></i>
+                No teachers found for this subject yet.<br>
+                <span style="font-size: 0.9rem; color: #555;">Check back soon or browse all teachers!</span>
             </div>
 
             <button class="carousel-btn prev" id="prevBtn" aria-label="Previous">
@@ -857,7 +947,7 @@
         </div>
     </div>
 
-    <!-- ====== BOOKING MODAL WITH FORM ====== -->
+    <!-- ====== BOOKING MODAL ====== -->
     <div class="booking-modal" id="bookingModal">
         <div class="booking-modal-content">
             <div id="bookingForm">
@@ -929,7 +1019,7 @@
     <!-- ====== CAROUSEL JAVASCRIPT ====== -->
     <script>
         // ------------------------------------------------------------
-        // TEACHER DATA - ADD VIDEO LINKS HERE!
+        // TEACHER DATA - NOW WITH 5 TEACHERS!
         // ------------------------------------------------------------
         const teachers = [
             {
@@ -941,10 +1031,8 @@
                 credentials: ["🎓 Master's in Visual Arts", "🏺 Ceramics Specialist", "🧠 Art Therapy Trained"],
                 emoji: "🎨",
                 coverLetterExcerpt: "Passionate about teaching and holding a Master's degree from ISAMS, I bring classroom experience from 'Borj El Ilm' private school and have led over 15 creative workshops.",
-                // 🔴 ADD YOUR VIDEO LINKS HERE:
-                videoUrl: "", // YouTube or Vimeo URL, or leave empty for placeholder
-                videoTitle: "Meet Arij Dhibi - Visual Arts Teacher",
-                hasVideo: false // Change to true when you add a video
+                videoUrl: "",
+                hasVideo: false
             },
             {
                 id: 2,
@@ -955,12 +1043,128 @@
                 credentials: ["📜 Bachelor's in History", "🏫 8+ Years Experience", "🌍 Social Sciences Specialist"],
                 emoji: "📚",
                 coverLetterExcerpt: "I have taught History and Geography to students in grades 5 through 9, and I believe that understanding our past is the key to building a better future.",
-                // 🔴 ADD YOUR VIDEO LINKS HERE:
-                videoUrl: "", // YouTube or Vimeo URL, or leave empty for placeholder
-                videoTitle: "Meet Chaima Douiri - History & Geography Teacher",
-                hasVideo: false // Change to true when you add a video
+                videoUrl: "",
+                hasVideo: false
+            },
+            {
+                id: 3,
+                name: "Safa Chihi",
+                city: "Tunis, Tunisia",
+                subject: "Engineering & Technology",
+                bio: "A passionate engineer with a <strong>Licence in Mechanical Engineering (Mechatronics)</strong> from ISET Béja. I specialize in <strong>3D modeling, SolidWorks, and robotics</strong>. I love helping students understand how things work and inspiring the next generation of innovators.",
+                credentials: ["⚙️ Mechanical Engineer", "🔧 SolidWorks Expert", "🤖 Robotics Club Member"],
+                emoji: "🔬",
+                coverLetterExcerpt: "I bring real-world engineering experience to the classroom. From designing complex 3D models to building robots, I make technology exciting and accessible for all students.",
+                videoUrl: "",
+                hasVideo: false
+            },
+            {
+                id: 4,
+                name: "Belkis Shimi",
+                city: "Sousse, Tunisia",
+                subject: "Physical Education & Sports",
+                bio: "A dedicated <strong>Physical Education teacher</strong> with a Licence in Sports Science from ISSEP Gafsa. I specialize in <strong>fitness, bodybuilding, and adaptive physical activities</strong>. I believe sport builds character, discipline, and confidence.",
+                credentials: ["🏋️ Fitness Trainer", "🥇 Bodybuilding Coach (2nd Degree)", "📋 TRM Certified"],
+                emoji: "🏃‍♀️",
+                coverLetterExcerpt: "I create engaging, inclusive PE programs that help every student discover their potential. Whether it's team sports or individual fitness, I make movement fun and rewarding.",
+                videoUrl: "",
+                hasVideo: false
+            },
+            {
+                id: 5,
+                name: "Emna Fadhlaoui",
+                city: "Tunisia",
+                subject: "Physical Education & Sports",
+                bio: "An experienced <strong>Physical Education teacher</strong> with a Diploma in PE from the Higher Institute of Physical Education and Sports. I am also a <strong>certified Judo Coach (2nd Dan)</strong> with 5+ years of experience teaching in private and international schools.",
+                credentials: ["🎓 Diploma in PE", "🥋 Judo Coach (2nd Dan)", "🏫 5+ Years Experience"],
+                emoji: "🤸‍♀️",
+                coverLetterExcerpt: "I believe in using sport to teach teamwork, discipline, and resilience. My goal is to help every student develop a lifelong love for physical activity.",
+                videoUrl: "",
+                hasVideo: false
             }
         ];
+
+        // ------------------------------------------------------------
+        // FILTER SYSTEM
+        // ------------------------------------------------------------
+        let currentFilter = 'All';
+        let filteredTeachers = [...teachers];
+        let currentIndex = 0;
+
+        function getSubjects() {
+            const subjects = ['All'];
+            teachers.forEach(teacher => {
+                if (!subjects.includes(teacher.subject)) {
+                    subjects.push(teacher.subject);
+                }
+            });
+            return subjects;
+        }
+
+        function buildFilters() {
+            const container = document.getElementById('filterContainer');
+            const subjects = getSubjects();
+            const emojiMap = {
+                'All': '🔵',
+                'Visual Arts & Ceramics': '🎨',
+                'History & Geography': '📚',
+                'Engineering & Technology': '⚙️',
+                'Physical Education & Sports': '🏃‍♀️'
+            };
+
+            let html = '';
+            subjects.forEach(subject => {
+                const count = subject === 'All' ? teachers.length : teachers.filter(t => t.subject === subject).length;
+                const emoji = emojiMap[subject] || '📖';
+                html += `
+                    <button class="filter-btn ${subject === 'All' ? 'active' : ''}" 
+                            data-filter="${subject}" 
+                            onclick="filterTeachers('${subject}')">
+                        ${emoji} ${subject} <span class="filter-count">(${count})</span>
+                    </button>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function filterTeachers(subject) {
+            currentFilter = subject;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.filter === subject);
+            });
+
+            // Filter teachers
+            if (subject === 'All') {
+                filteredTeachers = [...teachers];
+            } else {
+                filteredTeachers = teachers.filter(t => t.subject === subject);
+            }
+
+            // Reset carousel to first position
+            currentIndex = 0;
+            
+            // Rebuild cards and dots
+            buildCards();
+            buildDots();
+            updateCarousel(0);
+
+            // Show/hide no results message
+            const noResults = document.getElementById('noResults');
+            const track = document.getElementById('carouselTrack');
+            if (filteredTeachers.length === 0) {
+                noResults.classList.add('active');
+                track.style.display = 'none';
+                document.getElementById('prevBtn').classList.add('hidden');
+                document.getElementById('nextBtn').classList.add('hidden');
+            } else {
+                noResults.classList.remove('active');
+                track.style.display = 'flex';
+                document.getElementById('prevBtn').classList.remove('hidden');
+                document.getElementById('nextBtn').classList.remove('hidden');
+            }
+        }
 
         // ------------------------------------------------------------
         // VIDEO FUNCTIONS
@@ -977,7 +1181,6 @@
             sub.textContent = `${teacher.subject} • Watch this short introduction`;
 
             if (teacher.hasVideo && teacher.videoUrl) {
-                // Embedded video from YouTube/Vimeo
                 let videoHtml = '';
                 if (teacher.videoUrl.includes('youtube') || teacher.videoUrl.includes('youtu.be')) {
                     const videoId = teacher.videoUrl.split('v=')[1] || teacher.videoUrl.split('/').pop();
@@ -986,12 +1189,10 @@
                     const videoId = teacher.videoUrl.split('/').pop();
                     videoHtml = `<iframe src="https://player.vimeo.com/video/${videoId}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
                 } else {
-                    // Direct video file
                     videoHtml = `<video controls autoplay><source src="${teacher.videoUrl}" type="video/mp4">Your browser does not support the video tag.</video>`;
                 }
                 wrapper.innerHTML = videoHtml;
             } else {
-                // Placeholder - teacher hasn't uploaded a video yet
                 wrapper.innerHTML = `
                     <div class="video-placeholder">
                         <i class="fas fa-video-slash"></i>
@@ -1006,9 +1207,7 @@
 
         window.closeVideoModal = function() {
             document.getElementById('videoModal').classList.remove('active');
-            // Stop video when closing
-            const wrapper = document.getElementById('videoWrapper');
-            wrapper.innerHTML = '';
+            document.getElementById('videoWrapper').innerHTML = '';
         };
 
         // Close video modal with Escape key
@@ -1121,11 +1320,10 @@
         // ------------------------------------------------------------
         const track = document.getElementById('carouselTrack');
         const dotsContainer = document.getElementById('dotsContainer');
-        let currentIndex = 0;
 
         function buildCards() {
             let cardsHTML = '';
-            teachers.forEach((teacher, index) => {
+            filteredTeachers.forEach((teacher, index) => {
                 const fullBio = teacher.bio + `<br><br><em style="color:#88dddd; font-size:0.9rem;">"${teacher.coverLetterExcerpt}"</em>`;
                 
                 const videoBadge = teacher.hasVideo ? 
@@ -1168,11 +1366,12 @@
                 `;
             });
             track.innerHTML = cardsHTML;
+            track.style.display = filteredTeachers.length > 0 ? 'flex' : 'none';
         }
 
         function buildDots() {
             let dotsHTML = '';
-            teachers.forEach((_, index) => {
+            filteredTeachers.forEach((_, index) => {
                 dotsHTML += `<button class="dot" data-index="${index}" aria-label="Go to teacher ${index + 1}"></button>`;
             });
             dotsContainer.innerHTML = dotsHTML;
@@ -1182,7 +1381,9 @@
         // CAROUSEL LOGIC
         // ------------------------------------------------------------
         function updateCarousel(index) {
-            const total = teachers.length;
+            const total = filteredTeachers.length;
+            if (total === 0) return;
+            
             if (index < 0) index = total - 1;
             if (index >= total) index = 0;
             currentIndex = index;
@@ -1193,6 +1394,10 @@
             dots.forEach((dot, i) => {
                 dot.classList.toggle('active', i === currentIndex);
             });
+
+            // Update arrow visibility
+            document.getElementById('prevBtn').classList.toggle('hidden', total <= 1);
+            document.getElementById('nextBtn').classList.toggle('hidden', total <= 1);
         }
 
         document.getElementById('prevBtn').addEventListener('click', () => {
@@ -1246,11 +1451,12 @@
         // ------------------------------------------------------------
         // INIT
         // ------------------------------------------------------------
-        buildCards();
-        buildDots();
-        const firstDot = document.querySelector('.dot');
-        if (firstDot) firstDot.classList.add('active');
-        track.style.transform = 'translateX(0%)';
+        function init() {
+            buildFilters();
+            filterTeachers('All');
+        }
+
+        init();
     </script>
 
 </body>
