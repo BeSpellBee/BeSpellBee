@@ -302,7 +302,6 @@
             margin-right: 8px;
         }
 
-        /* No results message */
         .no-results {
             display: none;
             text-align: center;
@@ -322,7 +321,6 @@
             display: block;
         }
 
-        /* Navigation Arrows */
         .carousel-btn {
             position: absolute;
             top: 50%;
@@ -717,7 +715,6 @@
             margin-top: 0.2rem;
         }
 
-        /* Responsive */
         @media (max-width: 680px) {
             .teacher-carousel-section h2 {
                 font-size: 1.6rem;
@@ -898,7 +895,6 @@
         <h2>🎓 Meet Your Teachers</h2>
         <p class="subhead">Browse by subject, watch introductions, and choose the mentor who inspires you</p>
 
-        <!-- ====== SUBJECT FILTER BUTTONS ====== -->
         <div class="filter-container" id="filterContainer">
             <!-- Buttons will be injected by JavaScript -->
         </div>
@@ -908,7 +904,6 @@
                 <!-- Cards will be injected by JavaScript -->
             </div>
 
-            <!-- No results message -->
             <div class="no-results" id="noResults">
                 <i class="fas fa-search"></i>
                 No teachers found for this subject yet.<br>
@@ -1019,7 +1014,7 @@
     <!-- ====== CAROUSEL JAVASCRIPT ====== -->
     <script>
         // ------------------------------------------------------------
-        // TEACHER DATA - 13 UNIQUE TEACHERS!
+        // TEACHER DATA - 14 TEACHERS IN 8 CLEAN CATEGORIES!
         // ------------------------------------------------------------
         const teachers = [
             {
@@ -1050,7 +1045,7 @@
                 id: 3,
                 name: "Safa Chihi",
                 city: "Tunis, Tunisia",
-                subject: "Engineering & Technology",
+                subject: "Engineering & Mechanics",
                 bio: "A passionate engineer with a <strong>Licence in Mechanical Engineering (Mechatronics)</strong> from ISET Béja. I specialize in <strong>3D modeling, SolidWorks, and robotics</strong>. I love helping students understand how things work and inspiring the next generation of innovators.",
                 credentials: ["⚙️ Mechanical Engineer", "🔧 SolidWorks Expert", "🤖 Robotics Club Member"],
                 emoji: "🔬",
@@ -1120,6 +1115,18 @@
             },
             {
                 id: 9,
+                name: "Oumaima Allani",
+                city: "Tunis, Tunisia",
+                subject: "Law & Civics",
+                bio: "A dynamic and self-taught legal professional with a <strong>Master's in Public Law</strong> and professional training in Private Law. I have experience in banking, fiscal consultancy, and arbitration. I bring real-world legal expertise to the classroom, making law accessible and engaging for students.",
+                credentials: ["⚖️ Master's in Public Law", "📋 Private Law Training", "🏛️ Arbitration & Mediation Experience"],
+                emoji: "📜",
+                coverLetterExcerpt: "I believe law is the foundation of a just society. My goal is to help students understand their rights and responsibilities while developing critical thinking skills through real-world legal cases.",
+                videoUrl: "",
+                hasVideo: false
+            },
+            {
+                id: 10,
                 name: "Nour Bouchaala",
                 city: "Tunis, Tunisia",
                 subject: "English Language",
@@ -1131,10 +1138,10 @@
                 hasVideo: false
             },
             {
-                id: 10,
+                id: 11,
                 name: "Oumayma Medfai",
                 city: "Ariana, Tunis, Tunisia",
-                subject: "English & Professional Communication",
+                subject: "English Language",
                 bio: "A dedicated English graduate with <strong>2+ years of experience in customer service and order processing</strong>. I specialize in professional English communication, problem-solving, and cross-cultural interaction. I bring real-world business English expertise to the classroom.",
                 credentials: ["🎓 English National Degree", "💼 2+ Years Customer Service", "📞 Communication Specialist"],
                 emoji: "💬",
@@ -1143,10 +1150,10 @@
                 hasVideo: false
             },
             {
-                id: 11,
+                id: 12,
                 name: "Abdurrahmen Neji",
                 city: "Halfaouin, Tunis, Tunisia",
-                subject: "Computer Science & Cybersecurity",
+                subject: "Computer Science & IT",
                 bio: "A creative and hardworking <strong>Computer Science graduate</strong> currently pursuing a Master's in Information Systems Security. I have strong expertise in web development, cybersecurity, and automation testing. I am passionate about using technology to solve problems and educate the next generation.",
                 credentials: ["🖥️ Licence in Business Computing", "🔐 Master's in Info Systems Security", "🌐 CCNA Certified"],
                 emoji: "💻",
@@ -1155,10 +1162,10 @@
                 hasVideo: false
             },
             {
-                id: 12,
+                id: 13,
                 name: "Yassine Braiek",
                 city: "Ben Arous, Tunisia",
-                subject: "Web Development & IT",
+                subject: "Computer Science & IT",
                 bio: "A passionate web developer with a <strong>Licence in Computer Science</strong> from ISIM Gabès. I have strong expertise in Angular, Spring Boot, Java, and modern web frameworks. I love teaching coding and web development through hands-on projects.",
                 credentials: ["🎓 Licence in Computer Science", "🌐 Angular & Spring Boot Expert", "💻 Full-Stack Developer"],
                 emoji: "⚡",
@@ -1167,10 +1174,10 @@
                 hasVideo: false
             },
             {
-                id: 13,
+                id: 14,
                 name: "Ibtissem Hajji",
                 city: "Tunis, Tunisia",
-                subject: "Mechanical Engineering & Technology",
+                subject: "Engineering & Mechanics",
                 bio: "A dedicated <strong>Mechanical Engineering technician</strong> with a Higher Technical Diploma from ISET Le Kef. I have extensive experience in quality control, inventory management, and supply chain logistics. I am also a certified trainer in educational technology.",
                 credentials: ["🔧 Higher Tech Diploma in Mechanical Engineering", "📊 Quality Control Specialist", "🎓 Certified Trainer"],
                 emoji: "⚙️",
@@ -1204,15 +1211,12 @@
                 'All': '🔵',
                 'Visual Arts & Ceramics': '🎨',
                 'History & Geography': '📚',
-                'Engineering & Technology': '⚙️',
+                'Engineering & Mechanics': '⚙️',
                 'Physical Education & Sports': '🏃‍♀️',
                 'Arabic Language & Literature': '📖',
                 'Law & Civics': '⚖️',
                 'English Language': '🌍',
-                'English & Professional Communication': '💬',
-                'Computer Science & Cybersecurity': '💻',
-                'Web Development & IT': '⚡',
-                'Mechanical Engineering & Technology': '🔧'
+                'Computer Science & IT': '💻'
             };
 
             let html = '';
