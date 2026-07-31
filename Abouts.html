@@ -34,9 +34,36 @@
 
    margin-bottom: -100px;}
 
-   
+   /* --- FIX: Medium-sized background image --- */
+   .demo-bg {
+     width: 500px;
+     height: 500px;
+     max-width: 70%;
+     max-height: 70vh;
+     opacity: 0.15;
+     display: block;
+     margin: 0 auto;
+     mix-blend-mode: screen;
+   }
 
- 
+   /* --- Responsive adjustment for mobile --- */
+   @media (max-width: 768px) {
+     .demo-bg {
+       width: 350px;
+       height: 350px;
+       max-width: 80%;
+       max-height: 50vh;
+     }
+   }
+
+   @media (max-width: 480px) {
+     .demo-bg {
+       width: 250px;
+       height: 250px;
+       max-width: 90%;
+       max-height: 40vh;
+     }
+   }
 
 </style>
 
@@ -54,11 +81,10 @@
 
 <div class="demo-wrap">
 
-  <!-- ====== ONLY THIS LINE CHANGED ====== -->
-  <!-- Changed from "images3/logo.png.png" to "images3/original.logo.jpg" -->
+  <!-- Background image - now medium sized! -->
   <img
     class="demo-bg"
-    src="images3/original.logo.jpg" width="600" height="600" />                                                                                                                                                                                                      
+    src="images3/original.logo.jpg" />                                                                                                                                                                                                      
 
   
 
