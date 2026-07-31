@@ -51,15 +51,60 @@
         .millionaire-game .reset-area { text-align: center; margin: 0 0 18px 0; }
         .millionaire-game .reset-btn, .relative-game .reset-btn { background: transparent; border: 2px solid #0056B3; color: #0056B3; font-weight: 600; padding: 8px 30px; border-radius: 40px; font-size: 1rem; cursor: pointer; transition: 0.1s; }
 
-        /* JEOPARDY GAME */
+        /* ============================================================
+           JEOPARDY GAME - FIXED FOR CUT-OFF HEADERS
+           ============================================================ */
         .relative-game { display: block; max-width: 1000px; margin: 40px auto 40px auto; }
-        .relative-game .game-container { width: 100%; background: #FFFFFF; border-radius: 32px; box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35); overflow-x: auto; overflow-y: visible; }
+        .relative-game .game-container { width: 100%; background: #FFFFFF; border-radius: 32px; box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35); overflow-x: auto; overflow-y: visible; padding-bottom: 4px; }
         .relative-game .game-container > h1 { background: #0056B3; margin: 0; padding: 18px 22px; font-size: 1.4rem; font-weight: 600; text-align: left; color: white; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .relative-game .board-section { padding: 24px 20px; background: #FFFFFF; }
+        .relative-game .board-section { padding: 24px 20px; background: #FFFFFF; min-width: 0; }
         .relative-game .board { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
         .relative-game .board-row { display: flex; gap: 12px; justify-content: center; flex-wrap: nowrap; }
-        .relative-game .category-header { background: #0056B3; border-radius: 16px; padding: 15px 8px; text-align: center; font-weight: 700; font-size: 1rem; text-transform: uppercase; color: #FFFFFF; width: 25%; min-width: 100px; word-break: break-word; line-height: 1.3; box-shadow: 0 6px 0 #0d3d70; }
-        .relative-game .cell { background: #1976D2; border-radius: 16px; width: 25%; min-width: 100px; aspect-ratio: 1 / 0.8; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: #FFFFFF; box-shadow: 0 8px 0 #0d3d70; cursor: pointer; }
+
+        /* --- FIXED: Category headers with proper wrapping --- */
+        .relative-game .category-header {
+            background: #0056B3;
+            border-radius: 16px;
+            padding: 15px 8px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            color: #FFFFFF;
+            width: 25%;
+            min-width: 120px;
+            max-width: 180px;
+            word-break: break-word;
+            line-height: 1.3;
+            box-shadow: 0 6px 0 #0d3d70;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: normal;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+
+        /* --- FIXED: Cells with proper sizing --- */
+        .relative-game .cell {
+            background: #1976D2;
+            border-radius: 16px;
+            width: 25%;
+            min-width: 120px;
+            max-width: 180px;
+            aspect-ratio: 1 / 0.8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            box-shadow: 0 8px 0 #0d3d70;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
         .relative-game .cell.used .used-mark { font-size: 1.5rem; display: flex; flex-direction: column; align-items: center; line-height: 1.2; }
         .relative-game .question-panel { margin-top: 28px; background: #f5f7fc; border-radius: 24px; padding: 20px; }
         .relative-game .options { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 20px 0; }
@@ -71,9 +116,8 @@
         .relative-game .feedback.incorrect { border-left-color: #b71c1c; background: #ffebee; }
 
         /* ============================================================
-           SIMPLIFIED LUMI ACTIVITY STYLING – SAME AS ADULT PAGE
+           LUMI ACTIVITY STYLING
            ============================================================ */
-       /* Activity card - matches game-card from B2 page */
         .activity-card {
             background: #FFFFFF;
             border-radius: 32px;
@@ -83,7 +127,6 @@
             margin-bottom: 30px;
         }
 
-        /* Activity header - matches header from B2 page */
         .activity-header {
             background: #0056B3;
             padding: 18px 24px;
@@ -120,8 +163,6 @@
             letter-spacing: 0.3px;
         }
 
-
-        /* Colored divider between activities */
         .activity-divider {
             height: 4px;
             background: linear-gradient(90deg, #FFEB3B, #1976D2, #0056B3);
@@ -137,7 +178,7 @@
             margin: 30px 0;
             border-radius: 2px;
         }
-         /* Iframe wrapper - matches B2 page styling */
+
         .iframe-wrapper {
             padding: 24px;
             background: #FFFFFF;
@@ -152,21 +193,92 @@
             box-shadow: 0 4px 12px rgba(0,86,179,0.08);
         }
 
-        /* Responsive */
+        /* ============================================================
+           RESPONSIVE - FIXED
+           ============================================================ */
+        @media (max-width: 850px) {
+            .relative-game .category-header {
+                min-width: 100px;
+                font-size: 0.85rem;
+                padding: 12px 6px;
+            }
+            .relative-game .cell {
+                min-width: 100px;
+                font-size: 1.7rem;
+            }
+        }
+
         @media (max-width: 700px) {
             .activity-card iframe { height: 450px; }
-            .relative-game .category-header { min-width: 85px; font-size: 0.75rem; }
-            .relative-game .cell { min-width: 85px; font-size: 1.5rem; }
-            .relative-game .question-panel { margin-top: 20px; }
+            .relative-game .category-header {
+                min-width: 85px;
+                font-size: 0.7rem;
+                padding: 10px 4px;
+            }
+            .relative-game .cell {
+                min-width: 85px;
+                font-size: 1.4rem;
+            }
+            .relative-game .board-row {
+                gap: 8px;
+            }
+            .relative-game .question-panel {
+                margin-top: 20px;
+                padding: 16px;
+            }
         }
+
         @media (max-width: 550px) {
             .activity-card iframe { height: 350px; }
-            .relative-game .category-header { min-width: 75px; font-size: 0.65rem; }
-            .relative-game .cell { min-width: 75px; font-size: 1.3rem; }
+            .relative-game .category-header {
+                min-width: 70px;
+                font-size: 0.55rem;
+                padding: 8px 3px;
+                border-radius: 10px;
+            }
+            .relative-game .cell {
+                min-width: 70px;
+                font-size: 1.1rem;
+                border-radius: 10px;
+                box-shadow: 0 4px 0 #0d3d70;
+            }
+            .relative-game .board-row {
+                gap: 5px;
+            }
+            .relative-game .board-section {
+                padding: 16px 10px;
+            }
+            .relative-game .game-container {
+                border-radius: 20px;
+            }
         }
-        @media (max-width: 480px) {
-            .relative-game .category-header { min-width: 65px; font-size: 0.55rem; }
-            .relative-game .cell { min-width: 65px; font-size: 1.1rem; }
+
+        @media (max-width: 420px) {
+            .relative-game .category-header {
+                min-width: 55px;
+                font-size: 0.45rem;
+                padding: 6px 2px;
+                border-radius: 8px;
+            }
+            .relative-game .cell {
+                min-width: 55px;
+                font-size: 0.9rem;
+                border-radius: 8px;
+                box-shadow: 0 3px 0 #0d3d70;
+            }
+            .relative-game .board-row {
+                gap: 4px;
+            }
+            .relative-game .board-section {
+                padding: 12px 6px;
+            }
+            .relative-game .game-container {
+                border-radius: 16px;
+            }
+            .relative-game .game-container > h1 {
+                font-size: 1rem;
+                padding: 12px 14px;
+            }
         }
 
         /* Additional styles */
@@ -199,7 +311,7 @@
         </div>
     </div>
 
-    <!-- JEOPARDY GAME -->
+    <!-- JEOPARDY GAME - FIXED -->
     <div class="relative-game">
         <div class="game-container">
             <h1>RELATIVE CLAUSES</h1>
@@ -219,9 +331,7 @@
     <!-- DIVIDER BETWEEN GAMES AND LUMI ACTIVITIES -->
     <div class="section-divider"></div>
 
-    <!-- ========== LUMI ACTIVITIES – SIMPLIFIED, CONSISTENT, SAME AS ADULT PAGE ========== -->
-
-    <!-- 1. Mixed conditionals -->
+    <!-- ========== LUMI ACTIVITIES ========== -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>Mixed conditionals</h2>
@@ -232,7 +342,6 @@
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 2. The future perfect / continuous -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>The future perfect / The future continuous</h2>
@@ -243,7 +352,6 @@
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 3. The present perfect / progressive -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>The present perfect / The present perfect progressive</h2>
@@ -254,7 +362,6 @@
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 4. Order of adjectives -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>The order of adjectives</h2>
@@ -265,7 +372,6 @@
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 5. Expressing the future -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>Expressing the future with: will / going to / present simple / present progressive</h2>
@@ -276,7 +382,6 @@
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 6. 4 ways to express regrets – shorter iframe -->
     <div class="activity-card regrets-activity">
         <div class="activity-header">
             <h2>4 ways to express regrets</h2>
@@ -287,7 +392,6 @@
     </div>
     <div class="activity-divider"></div>
 
-    <!-- 7. The definite article / zero article with geographical locations -->
     <div class="activity-card">
         <div class="activity-header">
             <h2>The definite article / zero article with geographical locations</h2>
@@ -296,7 +400,6 @@
         <div class="iframe-wrapper">
         <iframe src="https://app.lumi.education/api/v1/run/ahsD6O/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
     </div>
-    <!-- No divider after last activity -->
 
 </div> <!-- end games-container -->
 
@@ -398,7 +501,7 @@
             boardDiv.appendChild(row);
         }
     }
-    function onCellClick(e) { const cell = e.currentTarget; if (cell.classList.contains('used')) return; const catIdx = cell.dataset.cat, points = parseInt(cell.dataset.points); const q = questionsData.find(qd => qd.category === parseInt(catIdx) && qd.points === points); if (!q) { alert('Question data missing'); return; } currentCellKey = `${catIdx}-${pts}`; currentQuestion = q; selectedOptions = []; questionDisplay.innerText = q.question; optionsContainer.innerHTML = ''; q.options.forEach((optText, idx) => { const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = optText; btn.dataset.optionLetter = optText[0]; btn.addEventListener('click', toggleOption); optionsContainer.appendChild(btn); }); feedbackMessage.innerText = 'Select the correct option(s) and click CHECK'; explanationMessage.innerText = ''; feedbackArea.className = 'feedback'; submitBtn.disabled = false; }
+    function onCellClick(e) { const cell = e.currentTarget; if (cell.classList.contains('used')) return; const catIdx = cell.dataset.cat, points = parseInt(cell.dataset.points); const q = questionsData.find(qd => qd.category === parseInt(catIdx) && qd.points === points); if (!q) { alert('Question data missing'); return; } const pts = points; currentCellKey = `${catIdx}-${pts}`; currentQuestion = q; selectedOptions = []; questionDisplay.innerText = q.question; optionsContainer.innerHTML = ''; q.options.forEach((optText, idx) => { const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = optText; btn.dataset.optionLetter = optText[0]; btn.addEventListener('click', toggleOption); optionsContainer.appendChild(btn); }); feedbackMessage.innerText = 'Select the correct option(s) and click CHECK'; explanationMessage.innerText = ''; feedbackArea.className = 'feedback'; submitBtn.disabled = false; }
     function toggleOption(e) { const btn = e.currentTarget, letter = btn.dataset.optionLetter; if (btn.classList.contains('selected')) { btn.classList.remove('selected'); selectedOptions = selectedOptions.filter(l => l !== letter); } else { btn.classList.add('selected'); selectedOptions.push(letter); } }
     function onSubmit() { if (!currentQuestion) { feedbackMessage.innerText = '⚠️ First select a question from the board.'; return; } const selectedSorted = [...selectedOptions].sort(), correctSorted = [...currentQuestion.correct].sort(); const isCorrect = (selectedSorted.length === correctSorted.length) && selectedSorted.every((val, i) => val === correctSorted[i]); if (currentCellKey) usedCells[currentCellKey] = true; document.querySelectorAll('.relative-game .option-btn').forEach(btn => btn.disabled = true); submitBtn.disabled = true; feedbackArea.classList.remove('correct', 'incorrect'); if (isCorrect) { feedbackMessage.innerText = '✅ SAFE! You chose exactly the right answers. You move forward.'; feedbackArea.classList.add('correct'); } else { feedbackMessage.innerText = '❌ OH NO! You fell down a hole (wrong selection).'; feedbackArea.classList.add('incorrect'); } explanationMessage.innerText = currentQuestion.explanation; renderBoard(); }
     function resetGame() { usedCells = {}; currentQuestion = null; currentCellKey = null; selectedOptions = []; questionDisplay.innerText = 'Select a value on the board'; optionsContainer.innerHTML = ''; feedbackMessage.innerText = 'Select options and click CHECK'; explanationMessage.innerText = ''; feedbackArea.className = 'feedback'; submitBtn.disabled = false; renderBoard(); }
@@ -508,7 +611,7 @@ topBtn.onclick = function() { window.scrollTo({top: 0, behavior: 'smooth'}); };
 
 <script>
     // ============================================================
-    // LMS JavaScript (unchanged from your original)
+    // LMS JavaScript
     // ============================================================
     const ACCESS_CODE = 'beLMS';
 
