@@ -52,7 +52,7 @@
         .millionaire-game .reset-btn, .relative-game .reset-btn { background: transparent; border: 2px solid #0056B3; color: #0056B3; font-weight: 600; padding: 8px 30px; border-radius: 40px; font-size: 1rem; cursor: pointer; transition: 0.1s; }
 
         /* ============================================================
-           JEOPARDY GAME - COMPLETELY FIXED
+           JEOPARDY GAME - COMPLETELY FIXED WITH PROPER SPACING
            ============================================================ */
         .relative-game {
             display: block;
@@ -65,9 +65,8 @@
             background: #FFFFFF;
             border-radius: 32px;
             box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35);
-            overflow-x: auto;
-            overflow-y: visible;
-            padding: 0 0 4px 0;
+            overflow: hidden;
+            padding: 0;
         }
 
         .relative-game .game-container > h1 {
@@ -87,14 +86,17 @@
         .relative-game .board-section {
             padding: 24px 20px;
             background: #FFFFFF;
-            min-width: 0;
+            overflow-x: auto;
+            overflow-y: visible;
+            -webkit-overflow-scrolling: touch;
         }
 
         .relative-game .board {
             display: flex;
             flex-direction: column;
             gap: 12px;
-            min-width: 0;
+            min-width: 600px;
+            width: 100%;
         }
 
         .relative-game .board-row {
@@ -102,25 +104,25 @@
             gap: 12px;
             justify-content: center;
             flex-wrap: nowrap;
+            width: 100%;
         }
 
-        /* --- FIXED: Category headers - proper text wrapping --- */
+        /* --- FIXED: Category headers with proper sizing and no cut-off --- */
         .relative-game .category-header {
             background: #0056B3;
             border-radius: 16px;
             padding: 15px 8px;
             text-align: center;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.95rem;
             text-transform: uppercase;
             color: #FFFFFF;
-            width: 25%;
-            min-width: 110px;
-            max-width: 180px;
+            flex: 1 1 0;
+            min-width: 100px;
+            max-width: 200px;
             word-break: break-word;
             line-height: 1.3;
             box-shadow: 0 6px 0 #0d3d70;
-            flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -129,28 +131,28 @@
             hyphens: auto;
         }
 
-        /* --- FIXED: Cells - no cut-off --- */
+        /* --- FIXED: Cells with proper sizing and no cut-off --- */
         .relative-game .cell {
             background: #1976D2;
             border-radius: 16px;
-            width: 25%;
-            min-width: 110px;
-            max-width: 180px;
-            height: 88px;
+            flex: 1 1 0;
+            min-width: 100px;
+            max-width: 200px;
+            height: 85px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 800;
             color: #FFFFFF;
             box-shadow: 0 8px 0 #0d3d70;
             cursor: pointer;
             flex-shrink: 0;
-            transition: all 0.1s ease;
+            transition: all 0.15s ease;
         }
 
         .relative-game .cell:hover {
-            transform: scale(1.02);
+            transform: scale(1.03);
             background: #1a86e0;
         }
 
@@ -167,7 +169,7 @@
         }
 
         .relative-game .cell.used .used-mark {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -362,29 +364,32 @@
            ============================================================ */
         @media (max-width: 900px) {
             .relative-game .category-header {
-                min-width: 100px;
-                font-size: 0.85rem;
+                min-width: 80px;
+                font-size: 0.8rem;
                 padding: 12px 6px;
             }
             .relative-game .cell {
-                min-width: 100px;
-                height: 78px;
-                font-size: 1.6rem;
+                min-width: 80px;
+                height: 72px;
+                font-size: 1.5rem;
+            }
+            .relative-game .board {
+                min-width: 480px;
             }
         }
 
         @media (max-width: 750px) {
             .activity-card iframe { height: 450px; }
             .relative-game .category-header {
-                min-width: 85px;
-                font-size: 0.7rem;
+                min-width: 70px;
+                font-size: 0.65rem;
                 padding: 10px 4px;
                 border-radius: 12px;
             }
             .relative-game .cell {
-                min-width: 85px;
-                height: 68px;
-                font-size: 1.3rem;
+                min-width: 70px;
+                height: 62px;
+                font-size: 1.2rem;
                 border-radius: 12px;
                 box-shadow: 0 6px 0 #0d3d70;
             }
@@ -402,21 +407,24 @@
                 grid-template-columns: 1fr;
                 gap: 10px;
             }
+            .relative-game .board {
+                min-width: 400px;
+            }
         }
 
         @media (max-width: 550px) {
             .activity-card iframe { height: 350px; }
             .relative-game .category-header {
-                min-width: 65px;
-                font-size: 0.55rem;
+                min-width: 55px;
+                font-size: 0.5rem;
                 padding: 8px 3px;
                 border-radius: 10px;
                 line-height: 1.2;
             }
             .relative-game .cell {
-                min-width: 65px;
-                height: 55px;
-                font-size: 1rem;
+                min-width: 55px;
+                height: 48px;
+                font-size: 0.9rem;
                 border-radius: 10px;
                 box-shadow: 0 4px 0 #0d3d70;
             }
@@ -433,20 +441,26 @@
                 font-size: 1.1rem;
                 padding: 14px 16px;
             }
+            .relative-game .board {
+                min-width: 320px;
+            }
+            .relative-game .cell.used .used-mark {
+                font-size: 0.8rem;
+            }
         }
 
         @media (max-width: 420px) {
             .relative-game .category-header {
-                min-width: 50px;
+                min-width: 45px;
                 font-size: 0.4rem;
                 padding: 5px 2px;
                 border-radius: 6px;
                 line-height: 1.1;
             }
             .relative-game .cell {
-                min-width: 50px;
-                height: 42px;
-                font-size: 0.75rem;
+                min-width: 45px;
+                height: 38px;
+                font-size: 0.7rem;
                 border-radius: 6px;
                 box-shadow: 0 3px 0 #0d3d70;
             }
@@ -460,7 +474,7 @@
                 border-radius: 14px;
             }
             .relative-game .game-container > h1 {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
                 padding: 10px 12px;
             }
             .relative-game .question-panel {
@@ -468,19 +482,25 @@
                 margin-top: 14px;
             }
             .relative-game .question-text {
-                font-size: 0.85rem;
+                font-size: 0.8rem;
             }
             .relative-game .option-btn {
                 padding: 10px 14px;
-                font-size: 0.8rem;
+                font-size: 0.75rem;
             }
             .relative-game .submit-btn {
-                font-size: 0.9rem;
-                padding: 10px 24px;
+                font-size: 0.85rem;
+                padding: 10px 20px;
             }
             .relative-game .feedback {
-                padding: 12px 14px;
-                font-size: 0.85rem;
+                padding: 10px 12px;
+                font-size: 0.8rem;
+            }
+            .relative-game .board {
+                min-width: 260px;
+            }
+            .relative-game .cell.used .used-mark {
+                font-size: 0.6rem;
             }
         }
 
@@ -660,14 +680,14 @@
     loadQuestion(0);
 })();
 
-// JEOPARDY GAME SCRIPT - UPDATED WITH FIXED CATEGORY NAMES
+// JEOPARDY GAME SCRIPT - WITH FULL CATEGORY NAMES
 (function() {
-    // --- FIXED: Shorter category names to prevent cut-off ---
+    // --- FULL CATEGORY NAMES (no shortening) ---
     const categories = [
-        { name: "NON-<br>IDENTIFYING" },
+        { name: "NON-IDENTIFYING" },
         { name: "IDENTIFYING" },
-        { name: "WHOSE &<br>WHOM" },
-        { name: "MIXED" }
+        { name: "WHOSE & WHOM" },
+        { name: "MIXED CHALLENGES" }
     ];
 
     const questionsData = [
@@ -697,7 +717,7 @@
     function renderBoard() {
         boardDiv.innerHTML = '';
         const headerRow = document.createElement('div'); headerRow.className = 'board-row';
-        categories.forEach(cat => { const header = document.createElement('div'); header.className = 'category-header'; header.innerHTML = cat.name; headerRow.appendChild(header); });
+        categories.forEach(cat => { const header = document.createElement('div'); header.className = 'category-header'; header.textContent = cat.name; headerRow.appendChild(header); });
         boardDiv.appendChild(headerRow);
         const pointValues = [100, 200, 300, 400, 500];
         for (let rowIdx = 0; rowIdx < pointValues.length; rowIdx++) {
