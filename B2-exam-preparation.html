@@ -52,16 +52,59 @@
         .millionaire-game .reset-btn, .relative-game .reset-btn { background: transparent; border: 2px solid #0056B3; color: #0056B3; font-weight: 600; padding: 8px 30px; border-radius: 40px; font-size: 1rem; cursor: pointer; transition: 0.1s; }
 
         /* ============================================================
-           JEOPARDY GAME - FIXED FOR CUT-OFF HEADERS
+           JEOPARDY GAME - COMPLETELY FIXED
            ============================================================ */
-        .relative-game { display: block; max-width: 1000px; margin: 40px auto 40px auto; }
-        .relative-game .game-container { width: 100%; background: #FFFFFF; border-radius: 32px; box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35); overflow-x: auto; overflow-y: visible; padding-bottom: 4px; }
-        .relative-game .game-container > h1 { background: #0056B3; margin: 0; padding: 18px 22px; font-size: 1.4rem; font-weight: 600; text-align: left; color: white; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .relative-game .board-section { padding: 24px 20px; background: #FFFFFF; min-width: 0; }
-        .relative-game .board { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-        .relative-game .board-row { display: flex; gap: 12px; justify-content: center; flex-wrap: nowrap; }
+        .relative-game {
+            display: block;
+            max-width: 1000px;
+            margin: 40px auto 40px auto;
+        }
 
-        /* --- FIXED: Category headers with proper wrapping --- */
+        .relative-game .game-container {
+            width: 100%;
+            background: #FFFFFF;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35);
+            overflow-x: auto;
+            overflow-y: visible;
+            padding: 0 0 4px 0;
+        }
+
+        .relative-game .game-container > h1 {
+            background: #0056B3;
+            margin: 0;
+            padding: 18px 22px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-align: left;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .relative-game .board-section {
+            padding: 24px 20px;
+            background: #FFFFFF;
+            min-width: 0;
+        }
+
+        .relative-game .board {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .relative-game .board-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: nowrap;
+        }
+
+        /* --- FIXED: Category headers - proper text wrapping --- */
         .relative-game .category-header {
             background: #0056B3;
             border-radius: 16px;
@@ -72,7 +115,7 @@
             text-transform: uppercase;
             color: #FFFFFF;
             width: 25%;
-            min-width: 120px;
+            min-width: 110px;
             max-width: 180px;
             word-break: break-word;
             line-height: 1.3;
@@ -86,14 +129,14 @@
             hyphens: auto;
         }
 
-        /* --- FIXED: Cells with proper sizing --- */
+        /* --- FIXED: Cells - no cut-off --- */
         .relative-game .cell {
             background: #1976D2;
             border-radius: 16px;
             width: 25%;
-            min-width: 120px;
+            min-width: 110px;
             max-width: 180px;
-            aspect-ratio: 1 / 0.8;
+            height: 88px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -103,17 +146,138 @@
             box-shadow: 0 8px 0 #0d3d70;
             cursor: pointer;
             flex-shrink: 0;
+            transition: all 0.1s ease;
         }
 
-        .relative-game .cell.used .used-mark { font-size: 1.5rem; display: flex; flex-direction: column; align-items: center; line-height: 1.2; }
-        .relative-game .question-panel { margin-top: 28px; background: #f5f7fc; border-radius: 24px; padding: 20px; }
-        .relative-game .options { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 20px 0; }
-        .relative-game .option-btn { background: #FFFFFF; border: 2px solid #dde3ed; border-radius: 40px; padding: 14px 20px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 0 #cbd2df; text-align: center; }
-        .relative-game .option-btn.selected { background: #1976D2; color: white; border-color: #0056B3; }
-        .relative-game .submit-btn { background: #FFEB3B; border: none; color: #000000; font-weight: 700; font-size: 1.2rem; padding: 14px 40px; border-radius: 60px; border-bottom: 4px solid #c5a605; cursor: pointer; }
-        .relative-game .feedback { background: #FFFFFF; border-radius: 16px; padding: 16px 20px; margin-top: 20px; border-left: 6px solid #1976D2; }
-        .relative-game .feedback.correct { border-left-color: #2e7d32; background: #e8f5e9; }
-        .relative-game .feedback.incorrect { border-left-color: #b71c1c; background: #ffebee; }
+        .relative-game .cell:hover {
+            transform: scale(1.02);
+            background: #1a86e0;
+        }
+
+        .relative-game .cell.used {
+            background: #2c3e50;
+            box-shadow: 0 4px 0 #1a252f;
+            cursor: default;
+            opacity: 0.6;
+        }
+
+        .relative-game .cell.used:hover {
+            transform: none;
+            background: #2c3e50;
+        }
+
+        .relative-game .cell.used .used-mark {
+            font-size: 1.3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.2;
+        }
+
+        .relative-game .question-panel {
+            margin-top: 28px;
+            background: #f5f7fc;
+            border-radius: 24px;
+            padding: 20px;
+        }
+
+        .relative-game .question-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #000;
+            padding: 8px 4px;
+        }
+
+        .relative-game .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin: 20px 0;
+        }
+
+        .relative-game .option-btn {
+            background: #FFFFFF;
+            border: 2px solid #dde3ed;
+            border-radius: 40px;
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #cbd2df;
+            text-align: center;
+            transition: all 0.15s ease;
+        }
+
+        .relative-game .option-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #cbd2df;
+        }
+
+        .relative-game .option-btn.selected {
+            background: #1976D2;
+            color: white;
+            border-color: #0056B3;
+            box-shadow: 0 4px 0 #0d3d70;
+        }
+
+        .relative-game .option-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .relative-game .submit-btn {
+            background: #FFEB3B;
+            border: none;
+            color: #000000;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 14px 40px;
+            border-radius: 60px;
+            border-bottom: 4px solid #c5a605;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .relative-game .submit-btn:hover {
+            transform: translateY(-2px);
+            background: #f5e12e;
+        }
+
+        .relative-game .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .relative-game .feedback {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-top: 20px;
+            border-left: 6px solid #1976D2;
+        }
+
+        .relative-game .feedback.correct {
+            border-left-color: #2e7d32;
+            background: #e8f5e9;
+        }
+
+        .relative-game .feedback.incorrect {
+            border-left-color: #b71c1c;
+            background: #ffebee;
+        }
+
+        .relative-game .feedback .explanation {
+            margin-top: 8px;
+            font-style: italic;
+            color: #555;
+        }
+
+        .relative-game .footer {
+            margin-top: 24px;
+            text-align: center;
+        }
 
         /* ============================================================
            LUMI ACTIVITY STYLING
@@ -196,7 +360,7 @@
         /* ============================================================
            RESPONSIVE - FIXED
            ============================================================ */
-        @media (max-width: 850px) {
+        @media (max-width: 900px) {
             .relative-game .category-header {
                 min-width: 100px;
                 font-size: 0.85rem;
@@ -204,41 +368,55 @@
             }
             .relative-game .cell {
                 min-width: 100px;
-                font-size: 1.7rem;
+                height: 78px;
+                font-size: 1.6rem;
             }
         }
 
-        @media (max-width: 700px) {
+        @media (max-width: 750px) {
             .activity-card iframe { height: 450px; }
             .relative-game .category-header {
                 min-width: 85px;
                 font-size: 0.7rem;
                 padding: 10px 4px;
+                border-radius: 12px;
             }
             .relative-game .cell {
                 min-width: 85px;
-                font-size: 1.4rem;
+                height: 68px;
+                font-size: 1.3rem;
+                border-radius: 12px;
+                box-shadow: 0 6px 0 #0d3d70;
             }
             .relative-game .board-row {
                 gap: 8px;
             }
             .relative-game .question-panel {
-                margin-top: 20px;
+                margin-top: 18px;
                 padding: 16px;
+            }
+            .relative-game .question-text {
+                font-size: 1rem;
+            }
+            .relative-game .options {
+                grid-template-columns: 1fr;
+                gap: 10px;
             }
         }
 
         @media (max-width: 550px) {
             .activity-card iframe { height: 350px; }
             .relative-game .category-header {
-                min-width: 70px;
+                min-width: 65px;
                 font-size: 0.55rem;
                 padding: 8px 3px;
                 border-radius: 10px;
+                line-height: 1.2;
             }
             .relative-game .cell {
-                min-width: 70px;
-                font-size: 1.1rem;
+                min-width: 65px;
+                height: 55px;
+                font-size: 1rem;
                 border-radius: 10px;
                 box-shadow: 0 4px 0 #0d3d70;
             }
@@ -246,38 +424,63 @@
                 gap: 5px;
             }
             .relative-game .board-section {
-                padding: 16px 10px;
+                padding: 14px 10px;
             }
             .relative-game .game-container {
                 border-radius: 20px;
+            }
+            .relative-game .game-container > h1 {
+                font-size: 1.1rem;
+                padding: 14px 16px;
             }
         }
 
         @media (max-width: 420px) {
             .relative-game .category-header {
-                min-width: 55px;
-                font-size: 0.45rem;
-                padding: 6px 2px;
-                border-radius: 8px;
+                min-width: 50px;
+                font-size: 0.4rem;
+                padding: 5px 2px;
+                border-radius: 6px;
+                line-height: 1.1;
             }
             .relative-game .cell {
-                min-width: 55px;
-                font-size: 0.9rem;
-                border-radius: 8px;
+                min-width: 50px;
+                height: 42px;
+                font-size: 0.75rem;
+                border-radius: 6px;
                 box-shadow: 0 3px 0 #0d3d70;
             }
             .relative-game .board-row {
-                gap: 4px;
+                gap: 3px;
             }
             .relative-game .board-section {
-                padding: 12px 6px;
+                padding: 10px 5px;
             }
             .relative-game .game-container {
-                border-radius: 16px;
+                border-radius: 14px;
             }
             .relative-game .game-container > h1 {
-                font-size: 1rem;
+                font-size: 0.9rem;
+                padding: 10px 12px;
+            }
+            .relative-game .question-panel {
+                padding: 12px;
+                margin-top: 14px;
+            }
+            .relative-game .question-text {
+                font-size: 0.85rem;
+            }
+            .relative-game .option-btn {
+                padding: 10px 14px;
+                font-size: 0.8rem;
+            }
+            .relative-game .submit-btn {
+                font-size: 0.9rem;
+                padding: 10px 24px;
+            }
+            .relative-game .feedback {
                 padding: 12px 14px;
+                font-size: 0.85rem;
             }
         }
 
@@ -457,9 +660,16 @@
     loadQuestion(0);
 })();
 
-// JEOPARDY GAME SCRIPT
+// JEOPARDY GAME SCRIPT - UPDATED WITH FIXED CATEGORY NAMES
 (function() {
-    const categories = [{ name: "NON-<br>IDENTIFYING" }, { name: "IDENTIFYING" }, { name: "WHOSE & WHOM" }, { name: "MIXED CHALLENGES" }];
+    // --- FIXED: Shorter category names to prevent cut-off ---
+    const categories = [
+        { name: "NON-<br>IDENTIFYING" },
+        { name: "IDENTIFYING" },
+        { name: "WHOSE &<br>WHOM" },
+        { name: "MIXED" }
+    ];
+
     const questionsData = [
         { category: 0, points: 100, question: "My sister, ____ lives in London, is a data analyst.", options: ["A) that", "B) who", "C) which"], correct: ["B"], explanation: "Non‑identifying clause (with commas): use 'who' for people. 'That' is not used in non‑identifying clauses." },
         { category: 0, points: 200, question: "Elon Musk, ____ companies include Tesla and SpaceX, is a controversial figure.", options: ["A) who", "B) whose", "C) that"], correct: ["B"], explanation: "Possessive 'whose' shows the companies belong to him. Non‑identifying." },
@@ -501,7 +711,7 @@
             boardDiv.appendChild(row);
         }
     }
-    function onCellClick(e) { const cell = e.currentTarget; if (cell.classList.contains('used')) return; const catIdx = cell.dataset.cat, points = parseInt(cell.dataset.points); const q = questionsData.find(qd => qd.category === parseInt(catIdx) && qd.points === points); if (!q) { alert('Question data missing'); return; } const pts = points; currentCellKey = `${catIdx}-${pts}`; currentQuestion = q; selectedOptions = []; questionDisplay.innerText = q.question; optionsContainer.innerHTML = ''; q.options.forEach((optText, idx) => { const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = optText; btn.dataset.optionLetter = optText[0]; btn.addEventListener('click', toggleOption); optionsContainer.appendChild(btn); }); feedbackMessage.innerText = 'Select the correct option(s) and click CHECK'; explanationMessage.innerText = ''; feedbackArea.className = 'feedback'; submitBtn.disabled = false; }
+    function onCellClick(e) { const cell = e.currentTarget; if (cell.classList.contains('used')) return; const catIdx = parseInt(cell.dataset.cat), points = parseInt(cell.dataset.points); const q = questionsData.find(qd => qd.category === catIdx && qd.points === points); if (!q) { alert('Question data missing'); return; } const pts = points; currentCellKey = `${catIdx}-${pts}`; currentQuestion = q; selectedOptions = []; questionDisplay.innerText = q.question; optionsContainer.innerHTML = ''; q.options.forEach((optText) => { const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = optText; btn.dataset.optionLetter = optText[0]; btn.addEventListener('click', toggleOption); optionsContainer.appendChild(btn); }); feedbackMessage.innerText = 'Select the correct option(s) and click CHECK'; explanationMessage.innerText = ''; feedbackArea.className = 'feedback'; submitBtn.disabled = false; }
     function toggleOption(e) { const btn = e.currentTarget, letter = btn.dataset.optionLetter; if (btn.classList.contains('selected')) { btn.classList.remove('selected'); selectedOptions = selectedOptions.filter(l => l !== letter); } else { btn.classList.add('selected'); selectedOptions.push(letter); } }
     function onSubmit() { if (!currentQuestion) { feedbackMessage.innerText = '⚠️ First select a question from the board.'; return; } const selectedSorted = [...selectedOptions].sort(), correctSorted = [...currentQuestion.correct].sort(); const isCorrect = (selectedSorted.length === correctSorted.length) && selectedSorted.every((val, i) => val === correctSorted[i]); if (currentCellKey) usedCells[currentCellKey] = true; document.querySelectorAll('.relative-game .option-btn').forEach(btn => btn.disabled = true); submitBtn.disabled = true; feedbackArea.classList.remove('correct', 'incorrect'); if (isCorrect) { feedbackMessage.innerText = '✅ SAFE! You chose exactly the right answers. You move forward.'; feedbackArea.classList.add('correct'); } else { feedbackMessage.innerText = '❌ OH NO! You fell down a hole (wrong selection).'; feedbackArea.classList.add('incorrect'); } explanationMessage.innerText = currentQuestion.explanation; renderBoard(); }
     function resetGame() { usedCells = {}; currentQuestion = null; currentCellKey = null; selectedOptions = []; questionDisplay.innerText = 'Select a value on the board'; optionsContainer.innerHTML = ''; feedbackMessage.innerText = 'Select options and click CHECK'; explanationMessage.innerText = ''; feedbackArea.className = 'feedback'; submitBtn.disabled = false; renderBoard(); }
