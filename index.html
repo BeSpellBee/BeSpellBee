@@ -98,13 +98,14 @@
             background: rgba(20, 20, 20, 0.6);
             border: 1px solid #1a4a4a;
             padding: 10px 0;
-            min-height: 450px;
+            min-height: 500px;
         }
 
         .carousel-track {
             display: flex;
             transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             gap: 0;
+            align-items: stretch;
         }
 
         .teacher-card {
@@ -112,18 +113,42 @@
             padding: 0 15px;
             display: flex;
             justify-content: center;
+            align-items: stretch;
+            box-sizing: border-box;
         }
 
         .card-inner {
             background: #0d0d0d;
             border: 1px solid #1a4a4a;
             border-radius: 16px;
-            padding: 2rem 1.8rem;
+            padding: 1.8rem 1.5rem;
             width: 100%;
             max-width: 520px;
             text-align: center;
             box-shadow: 0 8px 32px rgba(0, 255, 255, 0.05);
             transition: box-shadow 0.3s, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 480px;
+            max-height: 560px;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        /* Custom scrollbar for card-inner */
+        .card-inner::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .card-inner::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 4px;
+        }
+
+        .card-inner::-webkit-scrollbar-thumb {
+            background: #00ffff;
+            border-radius: 4px;
         }
 
         .card-inner:hover {
@@ -132,21 +157,22 @@
         }
 
         .profile-pic {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             background: linear-gradient(135deg, #0a2a2a, #1a4a4a);
-            margin: 0 auto 1rem auto;
+            margin: 0 auto 0.8rem auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3.2rem;
+            font-size: 2.8rem;
             color: #00ffff;
             border: 3px solid #00ffff;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
             cursor: pointer;
             transition: all 0.3s;
             position: relative;
+            flex-shrink: 0;
         }
 
         .profile-pic:hover {
@@ -156,26 +182,28 @@
 
         .profile-pic .play-overlay {
             position: absolute;
-            bottom: -8px;
-            right: -8px;
+            bottom: -6px;
+            right: -6px;
             background: #00ffff;
             color: #000;
-            width: 36px;
-            height: 36px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
             border: 2px solid #0d0d0d;
         }
 
         .teacher-name {
-            font-size: 1.7rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: #fff;
             letter-spacing: -0.3px;
+            margin-bottom: 0.1rem;
+            flex-shrink: 0;
         }
 
         .teacher-city {
@@ -183,85 +211,112 @@
             background: rgba(0, 255, 255, 0.12);
             color: #00ffff;
             font-weight: 600;
-            font-size: 1rem;
-            padding: 0.35rem 1.4rem;
+            font-size: 0.85rem;
+            padding: 0.2rem 1.2rem;
             border-radius: 40px;
-            margin-top: 0.2rem;
-            margin-bottom: 0.8rem;
+            margin-top: 0.1rem;
+            margin-bottom: 0.4rem;
             border: 1px solid rgba(0, 255, 255, 0.2);
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
+            flex-shrink: 0;
         }
 
         .teacher-city i {
-            margin-right: 8px;
+            margin-right: 6px;
             color: #00ffff;
         }
 
         .teacher-subject {
-            font-size: 0.95rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: #88dddd;
             background: rgba(0, 255, 255, 0.06);
             display: inline-block;
-            padding: 0.25rem 1.4rem;
+            padding: 0.15rem 1.2rem;
             border-radius: 30px;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.5rem;
             border: 1px solid rgba(0, 255, 255, 0.08);
-        }
-
-        .teacher-bio {
-            color: #ccc;
-            font-size: 0.95rem;
-            line-height: 1.7;
-            margin: 0.8rem 0 1.2rem 0;
-            padding: 0 0.2rem;
-            min-height: 75px;
-        }
-
-        .teacher-bio strong {
-            color: #00ffff;
+            flex-shrink: 0;
         }
 
         .teacher-credentials {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 8px;
-            margin: 0.5rem 0 1.2rem 0;
+            gap: 6px;
+            margin: 0.2rem 0 0.5rem 0;
+            flex-shrink: 0;
         }
 
         .teacher-credentials span {
             background: rgba(0, 255, 255, 0.06);
             color: #88dddd;
-            font-size: 0.75rem;
-            padding: 0.2rem 0.9rem;
+            font-size: 0.65rem;
+            padding: 0.15rem 0.7rem;
             border-radius: 20px;
             border: 1px solid rgba(0, 255, 255, 0.08);
+            white-space: nowrap;
+        }
+
+        .teacher-bio {
+            color: #ccc;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            margin: 0.3rem 0 0.5rem 0;
+            padding: 0 0.2rem;
+            flex: 1;
+            overflow-y: auto;
+            min-height: 60px;
+            max-height: 100px;
+        }
+
+        /* Custom scrollbar for bio */
+        .teacher-bio::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .teacher-bio::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 3px;
+        }
+
+        .teacher-bio::-webkit-scrollbar-thumb {
+            background: #00ffff;
+            border-radius: 3px;
+        }
+
+        .teacher-bio strong {
+            color: #00ffff;
+        }
+
+        .teacher-bio em {
+            font-size: 0.8rem;
         }
 
         .btn-group {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-top: 0.5rem;
+            margin-top: 0.3rem;
+            flex-shrink: 0;
         }
 
         .btn-book {
             background: transparent;
             color: #00ffff;
             border: 2px solid #00ffff;
-            padding: 0.7rem 2.2rem;
+            padding: 0.5rem 1.5rem;
             border-radius: 60px;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.8rem;
             cursor: pointer;
             transition: all 0.3s;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.05);
             text-decoration: none;
             display: inline-block;
             flex: 1;
-            min-width: 120px;
+            min-width: 100px;
         }
 
         .btn-book:hover {
@@ -272,23 +327,23 @@
         }
 
         .btn-book i {
-            margin-right: 8px;
+            margin-right: 6px;
         }
 
         .btn-video {
             background: transparent;
             color: #88dddd;
             border: 1px solid #2a4a4a;
-            padding: 0.7rem 2.2rem;
+            padding: 0.5rem 1.5rem;
             border-radius: 60px;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.8rem;
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
             display: inline-block;
             flex: 1;
-            min-width: 120px;
+            min-width: 100px;
         }
 
         .btn-video:hover {
@@ -299,7 +354,7 @@
         }
 
         .btn-video i {
-            margin-right: 8px;
+            margin-right: 6px;
         }
 
         .no-results {
@@ -327,13 +382,13 @@
             transform: translateY(-50%);
             background: rgba(0, 0, 0, 0.7);
             border: 1px solid #00ffff;
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             border-radius: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: #00ffff;
             cursor: pointer;
             transition: all 0.3s;
@@ -348,11 +403,11 @@
         }
 
         .carousel-btn.prev {
-            left: 8px;
+            left: 4px;
         }
 
         .carousel-btn.next {
-            right: 8px;
+            right: 4px;
         }
 
         .carousel-btn.hidden {
@@ -362,14 +417,15 @@
         .carousel-dots {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-top: 1.5rem;
+            gap: 8px;
+            margin-top: 1.2rem;
             padding-bottom: 0.3rem;
+            flex-wrap: wrap;
         }
 
         .dot {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             border-radius: 20px;
             background: #1a3a3a;
             border: 1px solid #1a4a4a;
@@ -380,7 +436,7 @@
 
         .dot.active {
             background: #00ffff;
-            width: 32px;
+            width: 28px;
             border-color: #00ffff;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
         }
@@ -409,7 +465,7 @@
             background: #0d0d0d;
             border: 2px solid #00ffff;
             border-radius: 20px;
-            padding: 2rem;
+            padding: 1.5rem;
             max-width: 700px;
             width: 100%;
             box-shadow: 0 0 80px rgba(0, 255, 255, 0.15);
@@ -418,16 +474,16 @@
 
         .video-modal-content h3 {
             color: #00ffff;
-            font-size: 1.3rem;
-            margin-bottom: 0.3rem;
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
             text-align: center;
         }
 
         .video-modal-content .video-sub {
             color: #88dddd;
             text-align: center;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
         }
 
         .video-wrapper {
@@ -462,19 +518,19 @@
             justify-content: center;
             background: linear-gradient(135deg, #0a2a2a, #1a4a4a);
             color: #88dddd;
-            font-size: 1rem;
+            font-size: 0.9rem;
             text-align: center;
             padding: 20px;
         }
 
         .video-placeholder i {
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: #00ffff;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
         }
 
         .video-placeholder p {
-            max-width: 300px;
+            max-width: 280px;
             line-height: 1.6;
         }
 
@@ -482,13 +538,13 @@
             background: transparent;
             color: #888;
             border: 1px solid #444;
-            padding: 0.7rem 2rem;
+            padding: 0.6rem 1.8rem;
             border-radius: 60px;
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.3s;
-            margin-top: 1.2rem;
+            margin-top: 1rem;
             display: inline-block;
         }
 
@@ -521,8 +577,8 @@
             background: #0d0d0d;
             border: 2px solid #00ffff;
             border-radius: 20px;
-            padding: 2.5rem 2.5rem;
-            max-width: 480px;
+            padding: 2rem 2rem;
+            max-width: 450px;
             width: 100%;
             box-shadow: 0 0 60px rgba(0, 255, 255, 0.15);
             animation: modalFadeIn 0.3s ease;
@@ -543,48 +599,48 @@
 
         .booking-modal-content h2 {
             color: #00ffff;
-            font-size: 1.6rem;
-            margin-bottom: 0.3rem;
+            font-size: 1.4rem;
+            margin-bottom: 0.2rem;
             text-align: center;
         }
 
         .booking-modal-content .teacher-name-display {
             color: #fff;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
             text-align: center;
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.1rem;
         }
 
         .booking-modal-content .teacher-subject-display {
             color: #88dddd;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             text-align: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
         }
 
         .form-group {
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
         }
 
         .form-group label {
             display: block;
             color: #88dddd;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             font-weight: 600;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.2rem;
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 10px 14px;
+            padding: 8px 12px;
             background: #1a1a1a;
             border: 1px solid #2a4a4a;
             border-radius: 8px;
             color: #fff;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             transition: border-color 0.3s;
             box-sizing: border-box;
         }
@@ -599,7 +655,7 @@
 
         .form-group textarea {
             resize: vertical;
-            min-height: 60px;
+            min-height: 50px;
         }
 
         .form-group select option {
@@ -609,24 +665,24 @@
 
         .modal-btn-group {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-top: 1.5rem;
+            margin-top: 1.2rem;
         }
 
         .modal-btn-submit {
             background: #00ffff;
             color: #000;
             border: none;
-            padding: 0.8rem 2.5rem;
+            padding: 0.7rem 2rem;
             border-radius: 60px;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s;
             flex: 1;
-            min-width: 120px;
+            min-width: 100px;
         }
 
         .modal-btn-submit:hover {
@@ -644,14 +700,14 @@
             background: transparent;
             color: #888;
             border: 1px solid #444;
-            padding: 0.8rem 2rem;
+            padding: 0.7rem 1.8rem;
             border-radius: 60px;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s;
             flex: 1;
-            min-width: 100px;
+            min-width: 80px;
         }
 
         .modal-btn-cancel:hover {
@@ -670,27 +726,27 @@
         }
 
         .form-success i {
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: #00ff88;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
         }
 
         .form-success h3 {
             color: #00ff88;
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            margin-bottom: 0.4rem;
         }
 
         .form-success p {
             color: #aaa;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             line-height: 1.6;
         }
 
         .loading-spinner {
             display: inline-block;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border: 2px solid #000;
             border-top: 2px solid transparent;
             border-radius: 50%;
@@ -708,83 +764,171 @@
             display: inline-block;
             background: rgba(0, 255, 255, 0.1);
             color: #00ffff;
-            font-size: 0.7rem;
-            padding: 0.15rem 0.7rem;
+            font-size: 0.6rem;
+            padding: 0.1rem 0.6rem;
             border-radius: 20px;
             border: 1px solid rgba(0, 255, 255, 0.15);
-            margin-top: 0.2rem;
+            margin-top: 0.1rem;
+            flex-shrink: 0;
         }
 
-        @media (max-width: 680px) {
-            .teacher-carousel-section h2 {
-                font-size: 1.6rem;
-            }
-            .carousel-btn {
-                width: 36px;
-                height: 36px;
-                font-size: 0.9rem;
-            }
-            .carousel-btn.prev {
-                left: 4px;
-            }
-            .carousel-btn.next {
-                right: 4px;
-            }
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 768px) {
             .card-inner {
-                padding: 1.5rem 1rem;
+                padding: 1.2rem 1rem;
+                min-height: 400px;
+                max-height: 480px;
             }
-            .teacher-name {
-                font-size: 1.3rem;
-            }
+
             .profile-pic {
-                width: 90px;
-                height: 90px;
-                font-size: 2.5rem;
+                width: 80px;
+                height: 80px;
+                font-size: 2.2rem;
             }
+
             .profile-pic .play-overlay {
-                width: 28px;
-                height: 28px;
-                font-size: 0.7rem;
+                width: 26px;
+                height: 26px;
+                font-size: 0.65rem;
                 bottom: -4px;
                 right: -4px;
             }
+
+            .teacher-name {
+                font-size: 1.2rem;
+            }
+
+            .teacher-city {
+                font-size: 0.75rem;
+                padding: 0.15rem 1rem;
+            }
+
+            .teacher-subject {
+                font-size: 0.7rem;
+                padding: 0.1rem 1rem;
+            }
+
+            .teacher-credentials span {
+                font-size: 0.55rem;
+                padding: 0.1rem 0.6rem;
+            }
+
             .teacher-bio {
-                font-size: 0.88rem;
-                min-height: 60px;
+                font-size: 0.75rem;
+                min-height: 50px;
+                max-height: 80px;
             }
-            .booking-modal-content,
-            .video-modal-content {
-                padding: 1.8rem 1.5rem;
-            }
-            .booking-modal-content h2 {
-                font-size: 1.3rem;
-            }
-            .modal-btn-group {
-                flex-direction: column;
-            }
-            .modal-btn-submit,
-            .modal-btn-cancel {
-                width: 100%;
-            }
-            .btn-group {
-                flex-direction: column;
-            }
+
             .btn-book,
             .btn-video {
-                width: 100%;
+                font-size: 0.7rem;
+                padding: 0.4rem 1rem;
+                min-width: 80px;
             }
-            .filter-container {
-                gap: 6px;
-            }
+
             .filter-btn {
-                font-size: 0.75rem;
-                padding: 0.35rem 1rem;
+                font-size: 0.7rem;
+                padding: 0.3rem 1rem;
+            }
+
+            .carousel-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 0.8rem;
             }
         }
 
-        @media (max-width: 440px) {
+        @media (max-width: 480px) {
+            .teacher-carousel-section {
+                padding: 0 10px;
+            }
+
+            .card-inner {
+                padding: 1rem 0.8rem;
+                min-height: 360px;
+                max-height: 420px;
+            }
+
+            .profile-pic {
+                width: 65px;
+                height: 65px;
+                font-size: 1.8rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .profile-pic .play-overlay {
+                width: 22px;
+                height: 22px;
+                font-size: 0.55rem;
+                bottom: -3px;
+                right: -3px;
+            }
+
+            .teacher-name {
+                font-size: 1rem;
+            }
+
+            .teacher-city {
+                font-size: 0.65rem;
+                padding: 0.1rem 0.8rem;
+            }
+
+            .teacher-subject {
+                font-size: 0.6rem;
+                padding: 0.1rem 0.8rem;
+                margin-bottom: 0.3rem;
+            }
+
+            .teacher-credentials {
+                gap: 4px;
+                margin: 0.1rem 0 0.3rem 0;
+            }
+
+            .teacher-credentials span {
+                font-size: 0.5rem;
+                padding: 0.08rem 0.5rem;
+                white-space: normal;
+            }
+
+            .teacher-bio {
+                font-size: 0.65rem;
+                min-height: 40px;
+                max-height: 60px;
+                line-height: 1.5;
+            }
+
+            .teacher-bio em {
+                font-size: 0.6rem;
+            }
+
+            .btn-group {
+                gap: 5px;
+            }
+
+            .btn-book,
+            .btn-video {
+                font-size: 0.6rem;
+                padding: 0.3rem 0.8rem;
+                min-width: 60px;
+            }
+
+            .filter-btn {
+                font-size: 0.6rem;
+                padding: 0.2rem 0.8rem;
+            }
+
             .carousel-btn {
-                display: none;
+                width: 28px;
+                height: 28px;
+                font-size: 0.7rem;
+            }
+
+            .carousel-container {
+                min-height: 380px;
+            }
+
+            .booking-modal-content {
+                padding: 1.5rem 1.2rem;
             }
         }
 
@@ -890,7 +1034,7 @@
         </svg>BeSpellBee
     </h1>
 
-    <!-- ====== TEACHER CAROUSEL WITH SUBJECT FILTER ====== -->
+    <!-- ====== TEACHER CAROUSEL ====== -->
     <section class="teacher-carousel-section">
         <h2>🎓 Meet Your Teachers</h2>
         <p class="subhead">Browse by subject, watch introductions, and choose the mentor who inspires you</p>
@@ -1424,7 +1568,7 @@
         function buildCards() {
             let cardsHTML = '';
             filteredTeachers.forEach((teacher, index) => {
-                const fullBio = teacher.bio + `<br><br><em style="color:#88dddd; font-size:0.9rem;">"${teacher.coverLetterExcerpt}"</em>`;
+                const fullBio = teacher.bio + `<br><br><em style="color:#88dddd; font-size:0.8rem;">"${teacher.coverLetterExcerpt}"</em>`;
                 
                 const videoBadge = teacher.hasVideo ? 
                     `<span class="video-badge"><i class="fas fa-video"></i> Video Available</span>` : 
