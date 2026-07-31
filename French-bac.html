@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-	
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N3F5GM52DZ"></script>
@@ -10,1695 +9,1435 @@
       gtag('js', new Date());
       gtag('config', 'G-N3F5GM52DZ');
     </script>
-	  
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-	
-    <title>BeSpellBee - Home</title>
-	<link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
-	<link rel="stylesheet" href="search.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>French BAC LLCE + Tronc commun Philo | 17 thèmes</title>
+    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
+    
     <style>
-        /* ---------- CAROUSEL STYLES (Matching your black/aqua theme) ---------- */
-        .teacher-carousel-section {
-            max-width: 1100px;
-            margin: 20px auto 30px auto;
-            padding: 0 20px;
-        }
-
-        .teacher-carousel-section h2 {
-            color: #00ffff;
-            text-align: center;
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.2rem;
-            text-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-        }
-
-        .teacher-carousel-section .subhead {
-            color: #aaa;
-            text-align: center;
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #1a3a3a;
-            padding-bottom: 0.8rem;
-        }
-
-        /* ---------- SUBJECT FILTER BUTTONS ---------- */
-        .filter-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 2rem;
-        }
-
-        .filter-btn {
-            background: transparent;
-            color: #88dddd;
-            border: 1px solid #1a4a4a;
-            padding: 0.5rem 1.5rem;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: inherit;
-        }
-
-        .filter-btn:hover {
-            border-color: #00ffff;
-            color: #00ffff;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.05);
-            transform: translateY(-2px);
-        }
-
-        .filter-btn.active {
-            background: #00ffff;
-            color: #000;
-            border-color: #00ffff;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
-        }
-
-        .filter-btn i {
-            margin-right: 8px;
-        }
-
-        .filter-count {
-            color: #666;
-            font-size: 0.8rem;
-            margin-left: 4px;
-        }
-
-        .carousel-container {
-            position: relative;
-            overflow: hidden;
-            border-radius: 16px;
-            background: rgba(20, 20, 20, 0.6);
-            border: 1px solid #1a4a4a;
-            padding: 10px 0;
-            min-height: 500px;
-        }
-
-        .carousel-track {
-            display: flex;
-            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            gap: 0;
-            align-items: stretch;
-        }
-
-        .teacher-card {
-            min-width: 100%;
-            padding: 0 15px;
-            display: flex;
-            justify-content: center;
-            align-items: stretch;
-            box-sizing: border-box;
-        }
-
-        .card-inner {
-            background: #0d0d0d;
-            border: 1px solid #1a4a4a;
-            border-radius: 16px;
-            padding: 1.8rem 1.5rem;
-            width: 100%;
-            max-width: 520px;
-            text-align: center;
-            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.05);
-            transition: box-shadow 0.3s, border-color 0.3s;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            min-height: 480px;
-            max-height: 560px;
-            overflow-y: auto;
-            box-sizing: border-box;
-        }
-
-        /* Custom scrollbar for card-inner */
-        .card-inner::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .card-inner::-webkit-scrollbar-track {
-            background: #1a1a1a;
-            border-radius: 4px;
-        }
-
-        .card-inner::-webkit-scrollbar-thumb {
-            background: #00ffff;
-            border-radius: 4px;
-        }
-
-        .card-inner:hover {
-            box-shadow: 0 12px 48px rgba(0, 255, 255, 0.1);
-            border-color: #00ffff;
-        }
-
-        .profile-pic {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #0a2a2a, #1a4a4a);
-            margin: 0 auto 0.8rem auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.8rem;
-            color: #00ffff;
-            border: 3px solid #00ffff;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            flex-shrink: 0;
-        }
-
-        .profile-pic:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
-        }
-
-        .profile-pic .play-overlay {
-            position: absolute;
-            bottom: -6px;
-            right: -6px;
-            background: #00ffff;
-            color: #000;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-            border: 2px solid #0d0d0d;
-        }
-
-        .teacher-name {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: -0.3px;
-            margin-bottom: 0.1rem;
-            flex-shrink: 0;
-        }
-
-        .teacher-city {
-            display: inline-block;
-            background: rgba(0, 255, 255, 0.12);
-            color: #00ffff;
-            font-weight: 600;
-            font-size: 0.85rem;
-            padding: 0.2rem 1.2rem;
-            border-radius: 40px;
-            margin-top: 0.1rem;
-            margin-bottom: 0.4rem;
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            letter-spacing: 0.3px;
-            flex-shrink: 0;
-        }
-
-        .teacher-city i {
-            margin-right: 6px;
-            color: #00ffff;
-        }
-
-        .teacher-subject {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #88dddd;
-            background: rgba(0, 255, 255, 0.06);
-            display: inline-block;
-            padding: 0.15rem 1.2rem;
-            border-radius: 30px;
-            margin-bottom: 0.5rem;
-            border: 1px solid rgba(0, 255, 255, 0.08);
-            flex-shrink: 0;
-        }
-
-        .teacher-credentials {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 6px;
-            margin: 0.2rem 0 0.5rem 0;
-            flex-shrink: 0;
-        }
-
-        .teacher-credentials span {
-            background: rgba(0, 255, 255, 0.06);
-            color: #88dddd;
-            font-size: 0.65rem;
-            padding: 0.15rem 0.7rem;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 255, 255, 0.08);
-            white-space: nowrap;
-        }
-
-        .teacher-bio {
-            color: #ccc;
-            font-size: 0.85rem;
-            line-height: 1.6;
-            margin: 0.3rem 0 0.5rem 0;
-            padding: 0 0.2rem;
-            flex: 1;
-            overflow-y: auto;
-            min-height: 60px;
-            max-height: 100px;
-        }
-
-        /* Custom scrollbar for bio */
-        .teacher-bio::-webkit-scrollbar {
-            width: 3px;
-        }
-
-        .teacher-bio::-webkit-scrollbar-track {
-            background: #1a1a1a;
-            border-radius: 3px;
-        }
-
-        .teacher-bio::-webkit-scrollbar-thumb {
-            background: #00ffff;
-            border-radius: 3px;
-        }
-
-        .teacher-bio strong {
-            color: #00ffff;
-        }
-
-        .teacher-bio em {
-            font-size: 0.8rem;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 0.3rem;
-            flex-shrink: 0;
-        }
-
-        .btn-book {
-            background: transparent;
-            color: #00ffff;
-            border: 2px solid #00ffff;
-            padding: 0.5rem 1.5rem;
-            border-radius: 60px;
-            font-weight: 700;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.05);
-            text-decoration: none;
-            display: inline-block;
-            flex: 1;
-            min-width: 100px;
-        }
-
-        .btn-book:hover {
-            background: #00ffff;
-            color: #000;
-            box-shadow: 0 0 40px rgba(0, 255, 255, 0.25);
-            transform: scale(1.02);
-        }
-
-        .btn-book i {
-            margin-right: 6px;
-        }
-
-        .btn-video {
-            background: transparent;
-            color: #88dddd;
-            border: 1px solid #2a4a4a;
-            padding: 0.5rem 1.5rem;
-            border-radius: 60px;
-            font-weight: 700;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-            flex: 1;
-            min-width: 100px;
-        }
-
-        .btn-video:hover {
-            background: rgba(0, 255, 255, 0.1);
-            border-color: #00ffff;
-            color: #00ffff;
-            transform: scale(1.02);
-        }
-
-        .btn-video i {
-            margin-right: 6px;
-        }
-
-        .no-results {
-            display: none;
-            text-align: center;
-            color: #666;
-            padding: 3rem 1rem;
-            font-size: 1.1rem;
-        }
-
-        .no-results i {
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .no-results.active {
-            display: block;
-        }
-
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid #00ffff;
-            width: 40px;
-            height: 40px;
-            border-radius: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            color: #00ffff;
-            cursor: pointer;
-            transition: all 0.3s;
-            z-index: 10;
-            backdrop-filter: blur(4px);
-        }
-
-        .carousel-btn:hover {
-            background: #00ffff;
-            color: #000;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
-        }
-
-        .carousel-btn.prev {
-            left: 4px;
-        }
-
-        .carousel-btn.next {
-            right: 4px;
-        }
-
-        .carousel-btn.hidden {
-            display: none;
-        }
-
-        .carousel-dots {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 1.2rem;
-            padding-bottom: 0.3rem;
-            flex-wrap: wrap;
-        }
-
-        .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 20px;
-            background: #1a3a3a;
-            border: 1px solid #1a4a4a;
-            cursor: pointer;
-            transition: all 0.3s;
+        /* ========== GLOBAL STYLES ========== */
+        * {
+            margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
-
-        .dot.active {
-            background: #00ffff;
-            width: 28px;
-            border-color: #00ffff;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-        }
-
-        /* ====== VIDEO MODAL ====== */
-        .video-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.92);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(10px);
+ 
+        body {
+            background: linear-gradient(145deg, #1E90FF 0%, #87CEEB 100%);
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
             padding: 20px;
         }
-
-        .video-modal.active {
+ 
+        /* TWO-COLUMN LAYOUT - same level alignment */
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: stretch;
         }
-
-        .video-modal-content {
-            background: #0d0d0d;
-            border: 2px solid #00ffff;
-            border-radius: 20px;
-            padding: 1.5rem;
-            max-width: 700px;
+ 
+        .tronc-wrapper {
+            flex: 1;
+            min-width: 320px;
+        }
+ 
+        .assistant-wrapper {
+            flex: 1;
+            min-width: 320px;
+            /* vertically center the assistant card */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+ 
+        .assistant-wrapper .bac-container {
             width: 100%;
-            box-shadow: 0 0 80px rgba(0, 255, 255, 0.15);
-            animation: modalFadeIn 0.3s ease;
+            margin: 0;
         }
-
-        .video-modal-content h3 {
-            color: #00ffff;
+ 
+        /* ========== ORIGINAL ASSISTANT STYLES (COMPLETELY UNTOUCHED) ========== */
+        .bac-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+ 
+        .page-header {
+            background: #0056B3;
+            border-radius: 32px 32px 0 0;
+            padding: 24px 32px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+ 
+        .page-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+ 
+        .page-header h1 span {
+            background: #FFEB3B;
+            color: #000000;
             font-size: 1.2rem;
-            margin-bottom: 0.2rem;
-            text-align: center;
+            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: 40px;
+            letter-spacing: 0.5px;
         }
-
-        .video-modal-content .video-sub {
-            color: #88dddd;
-            text-align: center;
-            font-size: 0.85rem;
-            margin-bottom: 0.8rem;
+ 
+        .level-badge {
+            background: #1976D2;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: inset 0 -2px 0 #0d4175;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
+ 
+        .chat-card {
+            background: #FFFFFF;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35);
             overflow: hidden;
-            border-radius: 12px;
-            background: #000;
-            border: 1px solid #1a4a4a;
+            border: 1px solid rgba(0,0,0,0.05);
+            margin-bottom: 30px;
         }
-
-        .video-wrapper video,
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+ 
+        .chat-header {
+            background: #0056B3;
+            padding: 18px 24px;
+            color: white;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+ 
+        .chat-header h2 {
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: 0.5px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+ 
+        .chat-header h2::before {
+            content: "🤖";
+            font-size: 1.6rem;
+        }
+ 
+        .chat-tag {
+            background: #FFEB3B;
+            color: #000000;
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 5px 14px;
+            border-radius: 40px;
+            letter-spacing: 0.3px;
+        }
+ 
+        .chat-content {
+            padding: 24px;
+            background: #FFFFFF;
+        }
+ 
+        #chatbox { 
+            width: 100%; 
+            height: 450px; 
+            border: 2px solid #eef4fe;
+            border-radius: 24px;
+            padding: 20px; 
+            overflow-y: scroll;
+            background: #f5f7fc;
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 8px rgba(0,86,179,0.05);
+        }
+ 
+        .user-msg { 
+            color: #000000; 
+            margin: 15px 0;
+            background-color: #e3f2fd;
+            padding: 14px 18px;
+            border-radius: 20px 20px 4px 20px;
+            border-left: 6px solid #1976D2;
+            box-shadow: 0 4px 8px rgba(0,86,179,0.08);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+ 
+        .bot-msg { 
+            color: #000000; 
+            margin: 15px 0;
+            background-color: #FFFFFF;
+            padding: 14px 18px;
+            border-radius: 20px 20px 20px 4px;
+            border-left: 6px solid #FFEB3B;
+            box-shadow: 0 4px 8px rgba(0,86,179,0.08);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.5;
+        }
+ 
+        .bot-msg strong {
+            color: #0056B3;
+        }
+ 
+        .user-msg strong {
+            color: #1976D2;
+        }
+ 
+        .thinking { 
+            color: #666666;
+            background-color: #f5f7fc;
+            padding: 14px 18px;
+            border-radius: 20px;
+            border-left: 6px solid #1976D2;
+            font-style: italic; 
+        }
+ 
+        .error { 
+            color: #b71c1c;
+            background-color: #ffebee;
+            padding: 14px 18px;
+            border-radius: 20px;
+            border-left: 6px solid #b71c1c;
+            margin: 15px 0;
+        }
+ 
+        .input-area {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+        }
+ 
+        #user-input { 
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid #dde3ed;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            outline: none;
+            box-shadow: 0 4px 0 #cbd2df;
+            transition: all 0.1s ease;
+            background: #FFFFFF;
+            color: #000000;
+        }
+ 
+        #user-input:focus {
+            border-color: #1976D2;
+            box-shadow: 0 4px 0 #0d3d70;
+            outline: none;
+        }
+ 
+        #user-input::placeholder {
+            color: #999999;
+            font-style: italic;
+        }
+ 
+        #send-btn { 
+            padding: 16px 32px;
+            background: #FFEB3B;
             border: none;
+            color: #000000;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 60px;
+            border-bottom: 4px solid #c5a605;
+            cursor: pointer;
+            transition: 0.1s;
+            box-shadow: 0 4px 12px rgba(255,235,59,0.4);
+            font-family: 'Segoe UI', Roboto, sans-serif;
         }
-
-        .video-placeholder {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
+ 
+        #send-btn:hover { 
+            background: #f1df2c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255,235,59,0.5);
+        }
+ 
+        #send-btn:active {
+            transform: translateY(2px);
+            border-bottom-width: 2px;
+        }
+ 
+        #send-btn:disabled {
+            opacity: 0.4;
+            transform: translateY(2px);
+            border-bottom-width: 2px;
+            cursor: default;
+        }
+ 
+        .bot-msg ul, .bot-msg ol {
+            margin: 10px 0 10px 20px;
+            padding-left: 10px;
+        }
+ 
+        .bot-msg li {
+            margin: 5px 0;
+            color: #000000;
+        }
+ 
+        .bot-msg em {
+            color: #0056B3;
+            font-style: italic;
+        }
+ 
+        #topBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            z-index: 99;
+            font-size: 24px;
+            border: none;
+            outline: none;
+            background-color: #1976D2;
+            color: white;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            line-height: 50px;
+            padding: 0;
+            transition: 0.1s;
+            border-bottom: 4px solid #0d3d70;
+        }
+ 
+        #topBtn:hover {
+            background-color: #0056B3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+ 
+        #topBtn:active {
+            transform: translateY(2px);
+            border-bottom-width: 2px;
+        }
+ 
+        @media (max-width: 600px) {
+            .page-header h1 { font-size: 1.8rem; }
+            .chat-header h2 { font-size: 1.2rem; }
+            .input-area { flex-direction: column; }
+            #send-btn { width: 100%; }
+            #chatbox { height: 350px; }
+        }
+ 
+        @media (max-width: 500px) {
+            .page-header { flex-direction: column; align-items: flex-start; }
+            .page-header h1 { font-size: 1.5rem; }
+            .chat-header { flex-direction: column; align-items: flex-start; }
+        }
+ 
+        /* ========== TRONC COMMUN STYLES (BLUE/YELLOW - MATCHING ASSISTANT) ========== */
+        .tronc-card {
+            background: #FFFFFF;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
             height: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #0a2a2a, #1a4a4a);
-            color: #88dddd;
-            font-size: 0.9rem;
-            text-align: center;
-            padding: 20px;
         }
-
-        .video-placeholder i {
-            font-size: 2.5rem;
-            color: #00ffff;
-            margin-bottom: 0.8rem;
-        }
-
-        .video-placeholder p {
-            max-width: 280px;
-            line-height: 1.6;
-        }
-
-        .modal-close-btn {
-            background: transparent;
-            color: #888;
-            border: 1px solid #444;
-            padding: 0.6rem 1.8rem;
-            border-radius: 60px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 1rem;
-            display: inline-block;
-        }
-
-        .modal-close-btn:hover {
-            border-color: #ff4444;
-            color: #ff4444;
-        }
-
-        /* ====== BOOKING MODAL ====== */
-        .booking-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(8px);
-            padding: 20px;
-        }
-
-        .booking-modal.active {
+ 
+        .tronc-header {
+            background: #0056B3;
+            padding: 18px 24px;
+            color: white;
             display: flex;
-        }
-
-        .booking-modal-content {
-            background: #0d0d0d;
-            border: 2px solid #00ffff;
-            border-radius: 20px;
-            padding: 2rem 2rem;
-            max-width: 450px;
-            width: 100%;
-            box-shadow: 0 0 60px rgba(0, 255, 255, 0.15);
-            animation: modalFadeIn 0.3s ease;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .booking-modal-content h2 {
-            color: #00ffff;
-            font-size: 1.4rem;
-            margin-bottom: 0.2rem;
-            text-align: center;
-        }
-
-        .booking-modal-content .teacher-name-display {
-            color: #fff;
-            font-size: 1.2rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 0.1rem;
-        }
-
-        .booking-modal-content .teacher-subject-display {
-            color: #88dddd;
-            font-size: 0.85rem;
-            text-align: center;
-            margin-bottom: 1.2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            color: #88dddd;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 0.2rem;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 8px 12px;
-            background: #1a1a1a;
-            border: 1px solid #2a4a4a;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 0.85rem;
-            transition: border-color 0.3s;
-            box-sizing: border-box;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #00ffff;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.05);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 50px;
-        }
-
-        .form-group select option {
-            background: #1a1a1a;
-            color: #fff;
-        }
-
-        .modal-btn-group {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
             flex-wrap: wrap;
-            margin-top: 1.2rem;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
         }
-
-        .modal-btn-submit {
-            background: #00ffff;
-            color: #000;
-            border: none;
-            padding: 0.7rem 2rem;
-            border-radius: 60px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            flex: 1;
-            min-width: 100px;
-        }
-
-        .modal-btn-submit:hover {
-            background: #66ffff;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
-            transform: scale(1.02);
-        }
-
-        .modal-btn-submit:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .modal-btn-cancel {
-            background: transparent;
-            color: #888;
-            border: 1px solid #444;
-            padding: 0.7rem 1.8rem;
-            border-radius: 60px;
+ 
+        .tronc-header h2 {
             font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
+            font-size: 1.4rem;
+            letter-spacing: 0.5px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+ 
+        .tronc-header h2::before {
+            content: "📚";
+            font-size: 1.6rem;
+        }
+ 
+        .tronc-badge {
+            background: #FFEB3B;
+            color: #000000;
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 5px 14px;
+            border-radius: 40px;
+            letter-spacing: 0.3px;
+        }
+ 
+        .tronc-content {
+            padding: 24px;
+            background: #FFFFFF;
             flex: 1;
-            min-width: 80px;
+            display: flex;
+            flex-direction: column;
         }
-
-        .modal-btn-cancel:hover {
-            border-color: #ff4444;
-            color: #ff4444;
+ 
+        .dropdown-label {
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #0056B3;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #eef4fe;
+            padding: 8px 16px;
+            border-radius: 40px;
+            width: fit-content;
         }
-
-        .form-success {
-            display: none;
-            text-align: center;
-            padding: 1.5rem 0;
+ 
+        select {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-family: 'Segoe UI', Roboto, system-ui;
+            background-color: #ffffff;
+            border: 2px solid #dde3ed;
+            border-radius: 60px;
+            cursor: pointer;
+            appearance: none;
+            transition: all 0.2s ease;
+            color: #000000;
+            font-weight: 500;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%230056B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+            background-repeat: no-repeat;
+            background-position: right 20px center;
+            background-size: 1.2rem;
+            margin-bottom: 20px;
         }
-
-        .form-success.active {
-            display: block;
+ 
+        select:hover, select:focus {
+            border-color: #1976D2;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
         }
-
-        .form-success i {
-            font-size: 2.5rem;
-            color: #00ff88;
-            margin-bottom: 0.8rem;
+ 
+        .theme-display {
+            background: #f5f7fc;
+            border-radius: 24px;
+            border: 1px solid #eef4fe;
+            padding: 1.5rem;
+            transition: all 0.25s;
+            margin-top: 0.5rem;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.02), 0 4px 12px rgba(0,86,179,0.08);
         }
-
-        .form-success h3 {
-            color: #00ff88;
-            font-size: 1.2rem;
-            margin-bottom: 0.4rem;
+ 
+        .theme-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #0056B3;
+            border-left: 6px solid #FFEB3B;
+            padding-left: 1rem;
+            margin-bottom: 1.2rem;
+            font-family: 'Segoe UI', Roboto, sans-serif;
         }
-
-        .form-success p {
-            color: #aaa;
-            font-size: 0.9rem;
+ 
+        .theme-content {
+            color: #1e2a3a;
+            font-size: 0.95rem;
             line-height: 1.6;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border: 2px solid #000;
-            border-top: 2px solid transparent;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .video-badge {
-            display: inline-block;
-            background: rgba(0, 255, 255, 0.1);
-            color: #00ffff;
-            font-size: 0.6rem;
-            padding: 0.1rem 0.6rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: #FFFFFF;
+            padding: 1.2rem;
             border-radius: 20px;
-            border: 1px solid rgba(0, 255, 255, 0.15);
-            margin-top: 0.1rem;
-            flex-shrink: 0;
+            font-family: 'Segoe UI', 'Courier New', monospace;
+            font-weight: 400;
+            border: 1px solid #e3f2fd;
         }
-
-        /* ====== RESPONSIVE ====== */
-        @media (max-width: 768px) {
-            .card-inner {
-                padding: 1.2rem 1rem;
-                min-height: 400px;
-                max-height: 480px;
-            }
-
-            .profile-pic {
-                width: 80px;
-                height: 80px;
-                font-size: 2.2rem;
-            }
-
-            .profile-pic .play-overlay {
-                width: 26px;
-                height: 26px;
-                font-size: 0.65rem;
-                bottom: -4px;
-                right: -4px;
-            }
-
-            .teacher-name {
-                font-size: 1.2rem;
-            }
-
-            .teacher-city {
-                font-size: 0.75rem;
-                padding: 0.15rem 1rem;
-            }
-
-            .teacher-subject {
-                font-size: 0.7rem;
-                padding: 0.1rem 1rem;
-            }
-
-            .teacher-credentials span {
-                font-size: 0.55rem;
-                padding: 0.1rem 0.6rem;
-            }
-
-            .teacher-bio {
-                font-size: 0.75rem;
-                min-height: 50px;
-                max-height: 80px;
-            }
-
-            .btn-book,
-            .btn-video {
-                font-size: 0.7rem;
-                padding: 0.4rem 1rem;
-                min-width: 80px;
-            }
-
-            .filter-btn {
-                font-size: 0.7rem;
-                padding: 0.3rem 1rem;
-            }
-
-            .carousel-btn {
-                width: 32px;
-                height: 32px;
-                font-size: 0.8rem;
-            }
+ 
+        .tronc-footer {
+            margin-top: 1.8rem;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #6c757d;
+            border-top: 1px solid #eef4fe;
+            padding-top: 1.2rem;
         }
-
-        @media (max-width: 480px) {
-            .teacher-carousel-section {
-                padding: 0 10px;
+ 
+        @media (max-width: 850px) {
+            .dashboard {
+                flex-direction: column;
             }
-
-            .card-inner {
-                padding: 1rem 0.8rem;
-                min-height: 360px;
-                max-height: 420px;
+            .theme-title {
+                font-size: 1.3rem;
             }
-
-            .profile-pic {
-                width: 65px;
-                height: 65px;
-                font-size: 1.8rem;
-                margin-bottom: 0.5rem;
-            }
-
-            .profile-pic .play-overlay {
-                width: 22px;
-                height: 22px;
-                font-size: 0.55rem;
-                bottom: -3px;
-                right: -3px;
-            }
-
-            .teacher-name {
-                font-size: 1rem;
-            }
-
-            .teacher-city {
-                font-size: 0.65rem;
-                padding: 0.1rem 0.8rem;
-            }
-
-            .teacher-subject {
-                font-size: 0.6rem;
-                padding: 0.1rem 0.8rem;
-                margin-bottom: 0.3rem;
-            }
-
-            .teacher-credentials {
-                gap: 4px;
-                margin: 0.1rem 0 0.3rem 0;
-            }
-
-            .teacher-credentials span {
-                font-size: 0.5rem;
-                padding: 0.08rem 0.5rem;
-                white-space: normal;
-            }
-
-            .teacher-bio {
-                font-size: 0.65rem;
-                min-height: 40px;
-                max-height: 60px;
-                line-height: 1.5;
-            }
-
-            .teacher-bio em {
-                font-size: 0.6rem;
-            }
-
-            .btn-group {
-                gap: 5px;
-            }
-
-            .btn-book,
-            .btn-video {
-                font-size: 0.6rem;
-                padding: 0.3rem 0.8rem;
-                min-width: 60px;
-            }
-
-            .filter-btn {
-                font-size: 0.6rem;
-                padding: 0.2rem 0.8rem;
-            }
-
-            .carousel-btn {
-                width: 28px;
-                height: 28px;
-                font-size: 0.7rem;
-            }
-
-            .carousel-container {
-                min-height: 380px;
-            }
-
-            .booking-modal-content {
-                padding: 1.5rem 1.2rem;
-            }
-        }
-
-        h1 {
-            margin-bottom: 0;
-        }
-        h1 svg {
-            display: inline-block;
-            vertical-align: middle;
-        }
-        h1 {
-            color: transparent;
-            font-size: 0;
-        }
-        h1 svg text {
-            font-size: 45px;
         }
     </style>
 </head>
-
-<body style="background-color:black;">
-
-    <!-- ====== YOUR EXISTING NAVIGATION (PRESERVED) ====== -->
-    <a href="Abouts.html" target="_blank" style="color:aqua;float:left">About</a>(&nbsp;)(&nbsp;)
-    <a href="services.html" target="_blank" style="color:aqua"> Services</a>(&nbsp;)(&nbsp;) 
-    <a href="Contact.html" target="_blank" style="color:aqua"> Contact</a>(&nbsp;) (&nbsp;)
-    <a href="B2-exam-preparation.html" target="_blank" style="color:aqua">B2 exam </a>(&nbsp;)(&nbsp;)
-    <a href="Activities-for-adults.html" target="_blank" style="color:aqua">A1</a>(&nbsp;)(&nbsp;)
-    <a href="French-bac.html" target="_blank" style="color:aqua">French bac</a>
-    
-    <div style="display: flex; justify-content: flex-end; align-items: center; gap: 15px; float:right;">
-        <div style="display: flex; gap: 5px;">
-            <input type="text" id="courseInput" placeholder="Search (e.g. beginner, advanced...)"
-            style="padding: 8px 12px; border: 1px solid #444; border-radius: 6px;
-                background-color: #111; color: white; outline: none; transition: 0.2s; ">
-            <button onclick="executeSearch()"
-            style="padding: 8px 14px; background-color: #00ffff; color: #000; border: none; 
-                border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; ">
-                Search</button>
+<body>
+<div class="dashboard">
+    <!-- LEFT COLUMN: TRONC COMMUN PHILOSOPHIE (now on the left) -->
+    <div class="tronc-wrapper">
+        <div class="tronc-card">
+            <div class="tronc-header">
+                <h2>Tronc commun – Bac français</h2>
+                <span class="tronc-badge">✧ Philosophie · 17 thèmes</span>
+            </div>
+            <div class="tronc-content">
+                <div class="dropdown-label">
+                    <i>📖</i> PARCOURIR LES THÈMES
+                </div>
+                <select id="philoThemeSelect" aria-label="Liste des 17 thèmes de philosophie">
+                    <option value="0">1. La liberté</option>
+                    <option value="1">2. Le bonheur</option>
+                    <option value="2">3. La conscience</option>
+                    <option value="3">4. Le devoir</option>
+                    <option value="4">5. L'État</option>
+                    <option value="5">6. La justice</option>
+                    <option value="6">7. L'inconscient</option>
+                    <option value="7">8. Le langage</option>
+                    <option value="8">9. L'art</option>
+                    <option value="9">10. La nature</option>
+                    <option value="10">11. La raison</option>
+                    <option value="11">12. La religion</option>
+                    <option value="12">13. La science</option>
+                    <option value="13">14. La technique</option>
+                    <option value="14">15. Le travail</option>
+                    <option value="15">16. Le temps</option>
+                    <option value="16">17. La vérité</option>
+                </select>
+ 
+                <div class="theme-display" id="themeDisplayPanel">
+                    <div class="theme-title" id="themeTitle">La liberté</div>
+                    <div class="theme-content" id="themeImaginaryContent">
+                        <!-- Temporary content, will be replaced by script -->
+                    </div>
+                </div>
+                <div class="tronc-footer">
+                    ⚜️ Programme officiel — chaque thème avec trame réflexive <br>
+                    📚 <em>« Connais-toi toi-même » – Socrate</em>
+                </div>
+            </div>
         </div>
-        <a href="Coveted.html" target="_blank" style="color:aqua;">Fiction</a>
     </div>
-
-    <!-- ====== YOUR EXISTING SCRIPTS (PRESERVED) ====== -->
-    <script>
-        fetch('https://bespellbee.github.io/BeSpellBee/Services.html')
-        .then(function (data) {
-            return data.text();
-        })
-        .then(function (html) {
-            document.getElementById('content').innerHTML = html;
-            var scripts = document.getElementById("content").querySelectorAll("script");
-            for (var i = 0; i < scripts.length; i++) {
-                if (scripts[i].innerText) {
-                    eval(scripts[i].innerText);
-                } else {
-                    fetch(scripts[i].src).then(function (data) {
-                        data.text().then(function (r) {
-                            eval(r);
-                        })
-                    });
-                }
-                scripts[i].parentNode.removeChild(scripts[i]);
-            }
-        });
-    </script>
-
-    <script>
-        function executeSearch() {
-            var query = document.getElementById("courseInput").value.toLowerCase().trim();
-            if (query.includes("beginner")) {
-                window.location.href = "services.html#A1/A2/B1";
-            } 
-            else if (query.includes("advanced")) {
-                window.location.href = "services.html#B2";
-            } 
-            else if (query.includes("baccalaureate") || query.includes("preparation") || query.includes("bac")) {
-                window.location.href = "services.html#Bac";
-            } 
-            else {
-                alert("No match found. Try 'beginner', 'advanced', or 'baccalaureate'.");
-            }
+ 
+    <!-- RIGHT COLUMN: ORIGINAL ASSISTANT (now on the right, vertically centered) -->
+    <div class="assistant-wrapper">
+        <div class="bac-container">
+            <div class="page-header">
+                <h1>
+                    FRENCH BAC LLCE
+                    <span>advanced</span>
+                </h1>
+                <div class="level-badge">
+                    <span>🎓</span> CEFR C1-C2
+                </div>
+            </div>
+ 
+            <div class="chat-card">
+                <div class="chat-header">
+                    <h2>BeSpellBee Assistant</h2>
+                    <span class="chat-tag">LLCE specialist</span>
+                </div>
+                
+                <div class="chat-content">
+                    <div id="chatbox">
+                        <div class="bot-msg">
+                            <strong>Assistant:</strong> Welcome! I'm your <strong>LLCE (English specialty) BAC assistant</strong> BeSpellBee! ✨
+                            <br><br>
+                            I can help you with:
+                            <br>
+                            <strong>📚 Curriculum Units:</strong><br>
+                            • Africa: The Danger of a Single Story (Adichie, Conrad, Achebe)<br>
+                            • Sparking Debates with Modern Art (cummings)<br>
+                            • Emotions in Literature (Austen, Porter)<br>
+                            • Bildungsroman & Coming-of-Age (Dickens, Rowling, Angelou)<br>
+                            • And all 12 LLCE units!
+                            <br><br>
+                            <strong>✍️ Exam Preparation:</strong><br>
+                            • Written synthesis (500 words)<br>
+                            • Oral portfolio (6-8 documents)<br>
+                            • Grand Oral presentation<br>
+                            • Translation practice (EN↔FR)
+                            <br><br>
+                            <strong>🎯 How to use me:</strong><br>
+                            1. Ask about specific authors/works<br>
+                            2. Request analysis in BAC exam format<br>
+                            3. Get portfolio/document suggestions<br>
+                            4. Practice translation challenges
+                            <br><br>
+                            <em>Try: "Analyze e.e. cummings' poetry" or "How to structure my Grand Oral on postcolonial literature"</em>
+                        </div>
+                    </div>
+                    
+                    <div class="input-area">
+                        <input type="text" id="user-input" placeholder="Ask about Shakespeare, Adichie, cummings, Austen, Conrad...">
+                        <button id="send-btn">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<!-- Back to top button -->
+<button id="topBtn" title="Go to top">↑</button>
+ 
+<!-- ========== ORIGINAL ASSISTANT SCRIPT - COMPLETELY UNMODIFIED ========== -->
+<script>
+    // Get HTML elements
+    const chatbox = document.getElementById('chatbox');
+    const input = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    
+    // Your Render API URL
+    const API_URL = "https://bac-chatbot-api.onrender.com/chat";
+    
+    // Function to add messages to chatbox
+    function appendMessage(sender, text, isBot = false, isError = false) {
+        const div = document.createElement('div');
+        if (isError) {
+            div.className = 'error';
+        } else {
+            div.className = isBot ? 'bot-msg' : 'user-msg';
         }
         
-        document.getElementById("courseInput").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                executeSearch();
-            }
-        });
-    </script>
-
-    <!-- ====== YOUR EXISTING LOGO ====== -->
-    <h1>
-        <svg>
-            <defs> 
-                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%"> 
-                    <stop offset="0%" style="stop-color:aqua;"/>
-                    <stop offset="50%" style="stop-color:white;" /> 
-                    <stop offset="100%" style="stop-color:yellow;" /> 
-                </linearGradient> 
-            </defs> 
-            <text x="0" y="50" fill="url(#gradient)" font-size="45">BeSpellBee</text> 
-        </svg>BeSpellBee
-    </h1>
-
-    <!-- ====== TEACHER CAROUSEL ====== -->
-    <section class="teacher-carousel-section">
-        <h2>🎓 Meet Your Teachers</h2>
-        <p class="subhead">Browse by subject, watch introductions, and choose the mentor who inspires you</p>
-
-        <div class="filter-container" id="filterContainer">
-            <!-- Buttons will be injected by JavaScript -->
-        </div>
-
-        <div class="carousel-container">
-            <div class="carousel-track" id="carouselTrack">
-                <!-- Cards will be injected by JavaScript -->
-            </div>
-
-            <div class="no-results" id="noResults">
-                <i class="fas fa-search"></i>
-                No teachers found for this subject yet.<br>
-                <span style="font-size: 0.9rem; color: #555;">Check back soon or browse all teachers!</span>
-            </div>
-
-            <button class="carousel-btn prev" id="prevBtn" aria-label="Previous">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="carousel-btn next" id="nextBtn" aria-label="Next">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        </div>
-
-        <div class="carousel-dots" id="dotsContainer"></div>
-    </section>
-
-    <!-- ====== YOUR EXISTING IMAGE ====== -->
-    <center>
-        <img src="images4/meet.png.png" width="600" style="margin-top: -20px;">
-    </center>
-
-    <!-- ====== VIDEO MODAL ====== -->
-    <div class="video-modal" id="videoModal">
-        <div class="video-modal-content">
-            <h3 id="videoModalTitle">🎬 Teacher Introduction</h3>
-            <p class="video-sub" id="videoModalSub">Watch this short video to learn more about your teacher</p>
-            <div class="video-wrapper" id="videoWrapper">
-                <!-- Video will be injected here -->
-            </div>
-            <div style="text-align: center;">
-                <button class="modal-close-btn" onclick="closeVideoModal()">
-                    <i class="fas fa-times"></i> Close
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ====== BOOKING MODAL ====== -->
-    <div class="booking-modal" id="bookingModal">
-        <div class="booking-modal-content">
-            <div id="bookingForm">
-                <h2>📚 Book a Lesson</h2>
-                <div class="teacher-name-display" id="modalTeacherName">Teacher Name</div>
-                <div class="teacher-subject-display" id="modalTeacherSubject">Subject</div>
-
-                <form id="bookingFormElement">
-                    <div class="form-group">
-                        <label for="studentName">Your Full Name *</label>
-                        <input type="text" id="studentName" placeholder="e.g. Sarah Ahmed" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="studentEmail">Your Email *</label>
-                        <input type="email" id="studentEmail" placeholder="e.g. sarah@email.com" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="studentPhone">Phone Number</label>
-                        <input type="tel" id="studentPhone" placeholder="e.g. +216 12 345 678">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="timeSlot">Preferred Time Slot *</label>
-                        <select id="timeSlot" required>
-                            <option value="">Select a time...</option>
-                            <option value="9:00 AM - 9:30 AM">9:00 AM - 9:30 AM</option>
-                            <option value="10:00 AM - 10:30 AM">10:00 AM - 10:30 AM</option>
-                            <option value="11:00 AM - 11:30 AM">11:00 AM - 11:30 AM</option>
-                            <option value="12:00 PM - 12:30 PM">12:00 PM - 12:30 PM</option>
-                            <option value="2:00 PM - 2:30 PM">2:00 PM - 2:30 PM</option>
-                            <option value="3:00 PM - 3:30 PM">3:00 PM - 3:30 PM</option>
-                            <option value="4:00 PM - 4:30 PM">4:00 PM - 4:30 PM</option>
-                            <option value="5:00 PM - 5:30 PM">5:00 PM - 5:30 PM</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="message">Additional Notes</label>
-                        <textarea id="message" placeholder="Any specific topics or questions..."></textarea>
-                    </div>
-
-                    <input type="hidden" id="hiddenTeacherName" value="">
-
-                    <div class="modal-btn-group">
-                        <button type="button" class="modal-btn-submit" id="submitBookingBtn" onclick="sendBooking()">
-                            <i class="fas fa-paper-plane"></i> Send Booking
-                        </button>
-                        <button type="button" class="modal-btn-cancel" onclick="closeModal()">
-                            ❌ Cancel
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="form-success" id="formSuccess">
-                <i class="fas fa-check-circle"></i>
-                <h3>✅ Booking Sent!</h3>
-                <p>Your lesson request has been sent to <strong id="successTeacherName">Teacher</strong>.</p>
-                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #666;">You will receive a confirmation email shortly.</p>
-                <button class="modal-btn-submit" onclick="closeModal()" style="margin-top: 1.5rem;">
-                    Close
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ====== CAROUSEL JAVASCRIPT ====== -->
-    <script>
-        // ------------------------------------------------------------
-        // TEACHER DATA - 14 TEACHERS IN 8 CLEAN CATEGORIES!
-        // ------------------------------------------------------------
-        const teachers = [
-            {
-                id: 1,
-                name: "Arij Dhibi",
-                city: "Hassi El Frid, Kasserine, Tunisia",
-                subject: "Visual Arts & Ceramics",
-                bio: "A dedicated Visual Arts Educator with a Research Master's in Ceramics and Art Therapy. I design inclusive, creative projects that help students explore self-expression through <strong>ceramics, drawing, and calligraphy</strong>. I believe art is a universal language that builds confidence and emotional growth.",
-                credentials: ["🎓 Master's in Visual Arts", "🏺 Ceramics Specialist", "🧠 Art Therapy Trained"],
-                emoji: "🎨",
-                coverLetterExcerpt: "Passionate about teaching and holding a Master's degree from ISAMS, I bring classroom experience from 'Borj El Ilm' private school and have led over 15 creative workshops.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 2,
-                name: "Chaima Douiri",
-                city: "Tunis, Tunisia",
-                subject: "History & Geography",
-                bio: "A dedicated and experienced educator with a <strong>Bachelor's in History</strong> from the Faculty of Humanities and Social Sciences of Tunis. With over 8 years of teaching experience across primary and middle school levels, I bring history and geography to life through engaging storytelling and interactive discussions.",
-                credentials: ["📜 Bachelor's in History", "🏫 8+ Years Experience", "🌍 Social Sciences Specialist"],
-                emoji: "📚",
-                coverLetterExcerpt: "I have taught History and Geography to students in grades 5 through 9, and I believe that understanding our past is the key to building a better future.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 3,
-                name: "Safa Chihi",
-                city: "Tunis, Tunisia",
-                subject: "Engineering & Mechanics",
-                bio: "A passionate engineer with a <strong>Licence in Mechanical Engineering (Mechatronics)</strong> from ISET Béja. I specialize in <strong>3D modeling, SolidWorks, and robotics</strong>. I love helping students understand how things work and inspiring the next generation of innovators.",
-                credentials: ["⚙️ Mechanical Engineer", "🔧 SolidWorks Expert", "🤖 Robotics Club Member"],
-                emoji: "🔬",
-                coverLetterExcerpt: "I bring real-world engineering experience to the classroom. From designing complex 3D models to building robots, I make technology exciting and accessible for all students.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 4,
-                name: "Belkis Shimi",
-                city: "Sousse, Tunisia",
-                subject: "Physical Education & Sports",
-                bio: "A dedicated <strong>Physical Education teacher</strong> with a Licence in Sports Science from ISSEP Gafsa. I specialize in <strong>fitness, bodybuilding, and adaptive physical activities</strong>. I believe sport builds character, discipline, and confidence.",
-                credentials: ["🏋️ Fitness Trainer", "🥇 Bodybuilding Coach (2nd Degree)", "📋 TRM Certified"],
-                emoji: "🏃‍♀️",
-                coverLetterExcerpt: "I create engaging, inclusive PE programs that help every student discover their potential. Whether it's team sports or individual fitness, I make movement fun and rewarding.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 5,
-                name: "Emna Fadhlaoui",
-                city: "Tunisia",
-                subject: "Physical Education & Sports",
-                bio: "An experienced <strong>Physical Education teacher</strong> with a Diploma in PE from the Higher Institute of Physical Education and Sports. I am also a <strong>certified Judo Coach (2nd Dan)</strong> with 5+ years of experience teaching in private and international schools.",
-                credentials: ["🎓 Diploma in PE", "🥋 Judo Coach (2nd Dan)", "🏫 5+ Years Experience"],
-                emoji: "🤸‍♀️",
-                coverLetterExcerpt: "I believe in using sport to teach teamwork, discipline, and resilience. My goal is to help every student develop a lifelong love for physical activity.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 6,
-                name: "Chadia Charfi",
-                city: "Bizerte, Tunisia",
-                subject: "Arabic Language & Literature",
-                bio: "A dedicated Arabic Language teacher with a <strong>Master's in Arabic Literature</strong> from ISLT Tunis. I specialize in creating interactive, engaging lessons using modern educational technology (Canva, PowerPoint, AI tools). I believe in making grammar simple and learning dynamic.",
-                credentials: ["🎓 Master's in Arabic Literature", "💻 EdTech Specialist", "📝 Linguistic Corrector"],
-                emoji: "📖",
-                coverLetterExcerpt: "I design innovative educational materials that simplify Arabic grammar and make learning enjoyable. My goal is to help students master the language with confidence.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 7,
-                name: "Salim Anoun",
-                city: "Tunis, Tunisia",
-                subject: "Arabic Language & Literature",
-                bio: "A passionate Arabic teacher with a <strong>Licence in Arabic Literature</strong> from the Faculty of Humanities. I have deep expertise in Arabic grammar, morphology, and prosody. I strive to create a stimulating learning environment where students develop both linguistic and cultural appreciation.",
-                credentials: ["📜 Licence in Arabic Literature", "📚 Grammar & Morphology Expert", "🎓 Poetry Specialist"],
-                emoji: "✍️",
-                coverLetterExcerpt: "I am passionate about transmitting the beauty of the Arabic language. My approach combines traditional methods with creative activities to keep students engaged and motivated.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 8,
-                name: "Sarra Chaabi",
-                city: "Ghardimaou, Jendouba, Tunisia",
-                subject: "Law & Civics",
-                bio: "A dedicated legal professional with a <strong>Master's in Public Law</strong>. I have experience in legal research, court proceedings, and administrative processes. I am passionate about teaching law and civics to help students understand their rights and responsibilities.",
-                credentials: ["⚖️ Master's in Public Law", "📋 Legal Research Specialist", "🏛️ Court Experience"],
-                emoji: "⚖️",
-                coverLetterExcerpt: "I believe that understanding the law is essential for every citizen. I aim to make legal concepts accessible and engaging for students at all levels.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 9,
-                name: "Oumaima Allani",
-                city: "Tunis, Tunisia",
-                subject: "Law & Civics",
-                bio: "A dynamic and self-taught legal professional with a <strong>Master's in Public Law</strong> and professional training in Private Law. I have experience in banking, fiscal consultancy, and arbitration. I bring real-world legal expertise to the classroom, making law accessible and engaging for students.",
-                credentials: ["⚖️ Master's in Public Law", "📋 Private Law Training", "🏛️ Arbitration & Mediation Experience"],
-                emoji: "📜",
-                coverLetterExcerpt: "I believe law is the foundation of a just society. My goal is to help students understand their rights and responsibilities while developing critical thinking skills through real-world legal cases.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 10,
-                name: "Nour Bouchaala",
-                city: "Tunis, Tunisia",
-                subject: "English Language",
-                bio: "A passionate English teacher with an <strong>Undergraduate Degree in English Civilization and Literature</strong>. I am certified by the British Council in Teaching English to Refugees and Displaced Learners. I believe in using language as a tool for intercultural communication and personal growth.",
-                credentials: ["🎓 English Civilization & Literature", "🇬🇧 British Council Certified", "🌍 Cultural Mediator"],
-                emoji: "🌍",
-                coverLetterExcerpt: "I am deeply committed to helping students master English through engaging, culturally sensitive teaching. I believe language learning opens doors to new opportunities.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 11,
-                name: "Oumayma Medfai",
-                city: "Ariana, Tunis, Tunisia",
-                subject: "English Language",
-                bio: "A dedicated English graduate with <strong>2+ years of experience in customer service and order processing</strong>. I specialize in professional English communication, problem-solving, and cross-cultural interaction. I bring real-world business English expertise to the classroom.",
-                credentials: ["🎓 English National Degree", "💼 2+ Years Customer Service", "📞 Communication Specialist"],
-                emoji: "💬",
-                coverLetterExcerpt: "I combine my English language expertise with professional communication experience to prepare students for the global workplace. I believe in practical, real-world learning.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 12,
-                name: "Abdurrahmen Neji",
-                city: "Halfaouin, Tunis, Tunisia",
-                subject: "Computer Science & IT",
-                bio: "A creative and hardworking <strong>Computer Science graduate</strong> currently pursuing a Master's in Information Systems Security. I have strong expertise in web development, cybersecurity, and automation testing. I am passionate about using technology to solve problems and educate the next generation.",
-                credentials: ["🖥️ Licence in Business Computing", "🔐 Master's in Info Systems Security", "🌐 CCNA Certified"],
-                emoji: "💻",
-                coverLetterExcerpt: "I bring real-world technical expertise to the classroom. From building secure networks to developing applications, I make technology exciting and accessible for all students.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 13,
-                name: "Yassine Braiek",
-                city: "Ben Arous, Tunisia",
-                subject: "Computer Science & IT",
-                bio: "A passionate web developer with a <strong>Licence in Computer Science</strong> from ISIM Gabès. I have strong expertise in Angular, Spring Boot, Java, and modern web frameworks. I love teaching coding and web development through hands-on projects.",
-                credentials: ["🎓 Licence in Computer Science", "🌐 Angular & Spring Boot Expert", "💻 Full-Stack Developer"],
-                emoji: "⚡",
-                coverLetterExcerpt: "I believe that coding is a superpower. My teaching focuses on practical projects that help students build real-world applications while learning the fundamentals.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 14,
-                name: "Ibtissem Hajji",
-                city: "Tunis, Tunisia",
-                subject: "Engineering & Mechanics",
-                bio: "A dedicated <strong>Mechanical Engineering technician</strong> with a Higher Technical Diploma from ISET Le Kef. I have extensive experience in quality control, inventory management, and supply chain logistics. I am also a certified trainer in educational technology.",
-                credentials: ["🔧 Higher Tech Diploma in Mechanical Engineering", "📊 Quality Control Specialist", "🎓 Certified Trainer"],
-                emoji: "⚙️",
-                coverLetterExcerpt: "I combine my engineering expertise with a passion for education. I believe in making technical subjects accessible and inspiring students to pursue careers in science and technology.",
-                videoUrl: "",
-                hasVideo: false
-            }
-        ];
-
-        // ------------------------------------------------------------
-        // FILTER SYSTEM
-        // ------------------------------------------------------------
-        let currentFilter = 'All';
-        let filteredTeachers = [...teachers];
-        let currentIndex = 0;
-
-        function getSubjects() {
-            const subjects = ['All'];
-            teachers.forEach(teacher => {
-                if (!subjects.includes(teacher.subject)) {
-                    subjects.push(teacher.subject);
-                }
-            });
-            return subjects;
-        }
-
-        function buildFilters() {
-            const container = document.getElementById('filterContainer');
-            const subjects = getSubjects();
-            const emojiMap = {
-                'All': '🔵',
-                'Visual Arts & Ceramics': '🎨',
-                'History & Geography': '📚',
-                'Engineering & Mechanics': '⚙️',
-                'Physical Education & Sports': '🏃‍♀️',
-                'Arabic Language & Literature': '📖',
-                'Law & Civics': '⚖️',
-                'English Language': '🌍',
-                'Computer Science & IT': '💻'
-            };
-
-            let html = '';
-            subjects.forEach(subject => {
-                const count = subject === 'All' ? teachers.length : teachers.filter(t => t.subject === subject).length;
-                const emoji = emojiMap[subject] || '📖';
-                html += `
-                    <button class="filter-btn ${subject === 'All' ? 'active' : ''}" 
-                            data-filter="${subject}" 
-                            onclick="filterTeachers('${subject}')">
-                        ${emoji} ${subject} <span class="filter-count">(${count})</span>
-                    </button>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function filterTeachers(subject) {
-            currentFilter = subject;
+        // Format text with line breaks and bold
+        const formattedText = text
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/\n/g, '<br>');
+        
+        div.innerHTML = `<strong>${sender}:</strong> ${formattedText}`;
+        chatbox.appendChild(div);
+        chatbox.scrollTop = chatbox.scrollHeight;
+    }
+    
+    // Function to send message to API
+    async function sendMessage() {
+        const message = input.value.trim();
+        if (!message) return;
+        
+        appendMessage("You", message, false);
+        input.value = '';
+        input.disabled = true;
+        sendBtn.disabled = true;
+        
+        const thinkingDiv = document.createElement('div');
+        thinkingDiv.className = 'bot-msg thinking';
+        thinkingDiv.innerHTML = '<strong>Assistant:</strong> Thinking...';
+        chatbox.appendChild(thinkingDiv);
+        
+        try {
+            console.log('🔄 Sending to API:', message);
             
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.filter === subject);
-            });
-
-            if (subject === 'All') {
-                filteredTeachers = [...teachers];
-            } else {
-                filteredTeachers = teachers.filter(t => t.subject === subject);
-            }
-
-            currentIndex = 0;
-            buildCards();
-            buildDots();
-            updateCarousel(0);
-
-            const noResults = document.getElementById('noResults');
-            const track = document.getElementById('carouselTrack');
-            if (filteredTeachers.length === 0) {
-                noResults.classList.add('active');
-                track.style.display = 'none';
-                document.getElementById('prevBtn').classList.add('hidden');
-                document.getElementById('nextBtn').classList.add('hidden');
-            } else {
-                noResults.classList.remove('active');
-                track.style.display = 'flex';
-                document.getElementById('prevBtn').classList.remove('hidden');
-                document.getElementById('nextBtn').classList.remove('hidden');
-            }
-        }
-
-        // ------------------------------------------------------------
-        // VIDEO FUNCTIONS
-        // ------------------------------------------------------------
-        window.openVideo = function(teacherName) {
-            const teacher = teachers.find(t => t.name === teacherName);
-            if (!teacher) return;
-
-            const wrapper = document.getElementById('videoWrapper');
-            const title = document.getElementById('videoModalTitle');
-            const sub = document.getElementById('videoModalSub');
-
-            title.textContent = `🎬 Meet ${teacher.name}`;
-            sub.textContent = `${teacher.subject} • Watch this short introduction`;
-
-            if (teacher.hasVideo && teacher.videoUrl) {
-                let videoHtml = '';
-                if (teacher.videoUrl.includes('youtube') || teacher.videoUrl.includes('youtu.be')) {
-                    const videoId = teacher.videoUrl.split('v=')[1] || teacher.videoUrl.split('/').pop();
-                    videoHtml = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-                } else if (teacher.videoUrl.includes('vimeo')) {
-                    const videoId = teacher.videoUrl.split('/').pop();
-                    videoHtml = `<iframe src="https://player.vimeo.com/video/${videoId}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
-                } else {
-                    videoHtml = `<video controls autoplay><source src="${teacher.videoUrl}" type="video/mp4">Your browser does not support the video tag.</video>`;
-                }
-                wrapper.innerHTML = videoHtml;
-            } else {
-                wrapper.innerHTML = `
-                    <div class="video-placeholder">
-                        <i class="fas fa-video-slash"></i>
-                        <p><strong>${teacher.name}</strong> is preparing their introduction video.<br>Check back soon!</p>
-                        <span style="font-size:0.8rem; color:#666; margin-top:0.5rem;">🎥 Coming soon</span>
-                    </div>
-                `;
-            }
-
-            document.getElementById('videoModal').classList.add('active');
-        };
-
-        window.closeVideoModal = function() {
-            document.getElementById('videoModal').classList.remove('active');
-            document.getElementById('videoWrapper').innerHTML = '';
-        };
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeVideoModal();
-                closeModal();
-            }
-        });
-
-        // ------------------------------------------------------------
-        // BOOKING FUNCTION
-        // ------------------------------------------------------------
-        let selectedTeacher = null;
-
-        window.bookTeacher = function(teacherName) {
-            const teacher = teachers.find(t => t.name === teacherName);
-            if (teacher) {
-                selectedTeacher = teacher;
-                document.getElementById('modalTeacherName').textContent = teacher.name;
-                document.getElementById('modalTeacherSubject').textContent = teacher.subject;
-                document.getElementById('hiddenTeacherName').value = teacher.name;
-                document.getElementById('bookingForm').style.display = 'block';
-                document.getElementById('formSuccess').classList.remove('active');
-                document.getElementById('bookingModal').classList.add('active');
-                
-                document.getElementById('bookingFormElement').reset();
-                document.getElementById('submitBookingBtn').disabled = false;
-                document.getElementById('submitBookingBtn').innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking';
-            }
-        };
-
-        window.closeModal = function() {
-            document.getElementById('bookingModal').classList.remove('active');
-            selectedTeacher = null;
-        };
-
-        document.getElementById('bookingModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
-
-        // ------------------------------------------------------------
-        // SEND BOOKING - FORMSPREE
-        // ------------------------------------------------------------
-        window.sendBooking = function() {
-            const submitBtn = document.getElementById('submitBookingBtn');
-            
-            const studentName = document.getElementById('studentName').value.trim();
-            const studentEmail = document.getElementById('studentEmail').value.trim();
-            const studentPhone = document.getElementById('studentPhone').value.trim() || 'Not provided';
-            const timeSlot = document.getElementById('timeSlot').value;
-            const message = document.getElementById('message').value.trim() || 'No additional notes';
-            const teacherName = document.getElementById('hiddenTeacherName').value;
-
-            if (!studentName || !studentEmail || !timeSlot) {
-                alert('Please fill in all required fields.');
-                return;
-            }
-
-            if (!teacherName) {
-                alert('Please select a teacher first.');
-                return;
-            }
-
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="loading-spinner"></span> Sending...';
-
-            const formData = {
-                name: studentName,
-                email: studentEmail,
-                phone: studentPhone,
-                teacher: teacherName,
-                time_slot: timeSlot,
-                message: message
-            };
-
-            fetch('https://formspree.io/f/xbdnjqal', {
+            const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData)
-            })
-            .then(response => {
-                if (response.ok) {
-                    document.getElementById('bookingForm').style.display = 'none';
-                    document.getElementById('successTeacherName').textContent = teacherName;
-                    document.getElementById('formSuccess').classList.add('active');
-                    
-                    console.log('✅ Booking sent successfully!');
-                    console.log(`Teacher: ${teacherName}`);
-                    console.log(`Student: ${studentName} (${studentEmail})`);
-                    console.log(`Time: ${timeSlot}`);
-                } else {
-                    throw new Error('Failed to send booking');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Sorry, there was an error sending your booking. Please try again or contact us directly.');
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking';
+                body: JSON.stringify({
+                    message: message
+                })
             });
-        };
-
-        // ------------------------------------------------------------
-        // BUILD CARDS
-        // ------------------------------------------------------------
-        const track = document.getElementById('carouselTrack');
-        const dotsContainer = document.getElementById('dotsContainer');
-
-        function buildCards() {
-            let cardsHTML = '';
-            filteredTeachers.forEach((teacher, index) => {
-                const fullBio = teacher.bio + `<br><br><em style="color:#88dddd; font-size:0.8rem;">"${teacher.coverLetterExcerpt}"</em>`;
-                
-                const videoBadge = teacher.hasVideo ? 
-                    `<span class="video-badge"><i class="fas fa-video"></i> Video Available</span>` : 
-                    `<span class="video-badge" style="color:#666; border-color:#333;"><i class="fas fa-clock"></i> Video Coming Soon</span>`;
-
-                const videoButton = teacher.hasVideo ? 
-                    `<button class="btn-video" onclick="openVideo('${teacher.name}')">
-                        <i class="fas fa-play"></i> Watch Intro
-                    </button>` : 
-                    `<button class="btn-video" onclick="openVideo('${teacher.name}')" style="color:#666; border-color:#333;">
-                        <i class="fas fa-clock"></i> Coming Soon
-                    </button>`;
-                
-                cardsHTML += `
-                    <div class="teacher-card" data-index="${index}">
-                        <div class="card-inner">
-                            <div class="profile-pic" onclick="openVideo('${teacher.name}')" title="Click to watch introduction">
-                                ${teacher.emoji}
-                                <div class="play-overlay"><i class="fas fa-play"></i></div>
-                            </div>
-                            <h3 class="teacher-name">${teacher.name}</h3>
-                            ${videoBadge}
-                            <div class="teacher-city">
-                                <i class="fas fa-map-pin"></i> ${teacher.city}
-                            </div>
-                            <div class="teacher-subject">${teacher.subject}</div>
-                            <div class="teacher-credentials">
-                                ${teacher.credentials.map(c => `<span>${c}</span>`).join('')}
-                            </div>
-                            <p class="teacher-bio">${fullBio}</p>
-                            <div class="btn-group">
-                                ${videoButton}
-                                <button class="btn-book" onclick="bookTeacher('${teacher.name}')">
-                                    <i class="fas fa-calendar-check"></i> Book a Lesson
-                                </button>
-                            </div>
-                        </div>
+            
+            console.log('📥 Response status:', response.status);
+            chatbox.removeChild(thinkingDiv);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('✅ API response:', data);
+                appendMessage("Assistant", data.reply, true);
+            } else {
+                const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+                console.error('❌ API error:', error);
+                appendMessage("Assistant", `Error: ${error.error || 'Server error'}`, true, true);
+            }
+        } catch (error) {
+            console.error('❌ Network error:', error);
+            chatbox.removeChild(thinkingDiv);
+            appendMessage("Assistant", "Error: Could not connect to the server. Please check your internet connection.", true, true);
+        }
+        
+        input.disabled = false;
+        sendBtn.disabled = false;
+        input.focus();
+    }
+    
+    // Event listeners
+    sendBtn.addEventListener('click', sendMessage);
+    
+    input.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    });
+    
+    input.focus();
+    
+    // Test API connection
+    console.log('🔌 Testing API connection...');
+    fetch(API_URL.replace('/chat', '/health'))
+        .then(response => response.json())
+        .then(data => console.log('✅ API Health:', data))
+        .catch(error => console.error('❌ API Health check failed:', error));
+ 
+    // Back to top button functionality
+    const btn = document.getElementById("topBtn");
+    window.onscroll = function() {
+        if (window.scrollY > 400) {
+            btn.style.display = "block";
+        } else {
+            btn.style.display = "none";
+        }
+    };
+    btn.onclick = function() {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    };
+</script>
+ 
+<!-- ========== TRONC COMMUN SCRIPT (unchanged) ========== -->
+<script>
+    const imaginaryContents = [
+        // 0: La liberté
+        "L'homme est soumis au déterminisme naturel: tout dans la nature, obéissant à des lois naturelles, résulte de causes nécessaires. On n'est pas libre de voler ou marcher sur l'eau. Réduit à la seule liberté physique, il s'ensuit qu'on n'est pas plus libre qu'une pierre qui tombe sans rencontrer d'obstacles. Pour autant, l'on est libre physiquement lorsque l'on exerce notre liberté de mouvement contrairement à ceux qui sont enchaînés. De plus, l'absence de contrainte qu'est la liberté physique, pour Aristote et Leibniz, consiste dans la spontanéité de mouvement due à une cause interne et non à une contrainte externe. C'est faire ce que je veux et peux sans contrainte.\n\nDe même, la liberté politique désigne un être libre à sa volonté, qui est soi-même son propre maître, indépendant à l'égard de tout pouvoir. Néanmoins, l'homme, comme \"animal politique\" selon Aristote, ne vit pas seul. A la condition d'obéir à une loi égale pour tous (isonomie), il est citoyen libre en société. Quant à Thomas Hobbes, il est d'ailleurs indispensable, pour se conserver, qu'on se dépouille d'une partie de notre liberté au profit d'un souverain absolu qui arbitre entre nous. Toutefois, pour Rousseau cette soumission doit être libre en ce que le citoyen obéit librement à une loi comme l'expression d'une volonté générale, une loi qu'on s'est nous-même donnée conformément à ce que la raison pratique exige universellement de chacun(Kant). Pour Hegel cependant, la liberté n'est pas un statut juridique, mais le résultat d'un processus historique de libération par le travail. Le maître qui ne travaille pas devient davantage dépendant de l'esclave qui, en transformant lui-même et la nature, devient le nouveau maître en définitive.\n\nAu sens moral, la liberté pour les Anciens et les stoïciens réside dans une volonté intérieure indépendante de toute contrainte physique ou du corps. Nous avons, dit, Descartes, une expérience de liberté comme spontanéité de la volonté. Ainsi, pour rester libre, il faut détacher la volonté des biens ou des corps extérieurs dont notre corps est sous l'influence. La liberté n'est pas faire ce que je veux, puisque on dépend d'un cours de la nature dont on ignore (Spinoza), mais vouloir ce que je peux. C'est supposer ma responsabilité à l'égard de mes actes(Saint  Augustin) en tout d'abord et en deuxième lieu envers l'autre (Levinas), en choisissant entre le mal et le bien par le biais du libre arbitre, bien qu'on soit déterminés.",
+        // 1: Le bonheur
+        "",
+        // 2: La conscience
+        "",
+        // 3: Le devoir
+        "",
+        // 4: L'État
+        "",
+        // 5: La justice
+        "",
+        // 6: L'inconscient
+        "",
+        // 7: Le langage
+        "",
+        // 8: L'art
+        "",
+        // 9: La nature
+        "",
+        // 10: La raison
+        "",
+        // 11: La religion
+        "",
+        // 12: La science
+        "",
+        // 13: La technique
+        "",
+        // 14: Le travail
+        "",
+        // 15: Le temps
+        "",
+        // 16: La vérité
+        ""
+    ];
+    
+    const themeTitles = [
+        "La liberté", "Le bonheur", "La conscience", "Le devoir", "L'État",
+        "La justice", "L'inconscient", "Le langage", "L'art", "La nature",
+        "La raison", "La religion", "La science", "La technique", "Le travail",
+        "Le temps", "La vérité"
+    ];
+    
+    const selectEl = document.getElementById("philoThemeSelect");
+    const themeTitleEl = document.getElementById("themeTitle");
+    const themeContentEl = document.getElementById("themeImaginaryContent");
+    
+    function updateThemeDisplay(selectedIndex) {
+        if (selectedIndex >= 0 && selectedIndex < themeTitles.length) {
+            themeTitleEl.textContent = themeTitles[selectedIndex];
+            themeContentEl.textContent = imaginaryContents[selectedIndex];
+        } else {
+            themeTitleEl.textContent = themeTitles[0];
+            themeContentEl.textContent = imaginaryContents[0];
+        }
+    }
+    
+    selectEl.addEventListener("change", (event) => {
+        const idx = parseInt(event.target.value, 10);
+        if (!isNaN(idx)) updateThemeDisplay(idx);
+    });
+    
+    // Initialize with first theme (La liberté)
+    updateThemeDisplay(0);
+    selectEl.selectedIndex = 0;
+</script>
+    <!-- ========== UPDATED LMS: Web3Forms Integration (Key Inserted) ========== -->
+<style>
+    .lms-wrapper {
+        max-width: 1100px;
+        margin: 60px auto 20px auto;
+        background: #FFFFFF;
+        border-radius: 32px;
+        box-shadow: 0 20px 35px -8px rgba(0,0,0,0.35);
+        overflow: hidden;
+        border: 4px solid #FFEB3B;
+        font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+    .lms-header {
+        background: #0056B3;
+        padding: 18px 24px;
+        color: white;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+    .lms-header h2 { font-weight: 600; font-size: 1.4rem; margin: 0; display: flex; align-items: center; gap: 8px; }
+    .lms-badge { background: #FFEB3B; color: #000; font-size: 0.95rem; font-weight: 700; padding: 5px 14px; border-radius: 40px; }
+    .lms-body { padding: 24px; background: #FFFFFF; }
+    .lms-gate { background: #f5f7fc; border-radius: 24px; padding: 30px 20px; text-align: center; max-width: 500px; margin: 0 auto; border: 2px solid #eef4fe; }
+    .lms-gate input { padding: 14px 20px; border: 2px solid #dde3ed; border-radius: 60px; font-size: 1rem; width: 100%; max-width: 300px; outline: none; margin: 10px 0; }
+    .lms-gate input:focus { border-color: #1976D2; box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2); }
+    .lms-gate button { padding: 14px 32px; background: #1976D2; border: none; color: white; font-weight: 700; font-size: 1.1rem; border-radius: 60px; border-bottom: 4px solid #0d3d70; cursor: pointer; }
+    .lms-gate button:hover { background: #0056B3; }
+    .lms-gate .error { color: #b71c1c; margin-top: 10px; }
+    .lms-view { display: none; }
+    .lms-view.active { display: block; }
+    .module-card { background: #f5f7fc; border-radius: 24px; padding: 20px; margin-bottom: 20px; border-left: 6px solid #FFEB3B; }
+    .module-card h3 { color: #0056B3; margin-top: 0; }
+    .lesson-item { display: flex; justify-content: space-between; align-items: center; background: #FFFFFF; padding: 12px 18px; border-radius: 16px; border: 1px solid #eef4fe; margin: 8px 0; cursor: pointer; }
+    .lesson-item:hover { background: #e3f2fd; }
+    .lesson-item .status { font-size: 0.8rem; padding: 4px 12px; border-radius: 40px; background: #eef4fe; color: #666; }
+    .lesson-item .status.done { background: #c8e6c9; color: #1d6b2c; }
+    .lesson-content { background: #f5f7fc; padding: 24px; border-radius: 24px; line-height: 1.7; }
+    .lesson-content iframe { width: 100%; height: 500px; border: 2px solid #eef4fe; border-radius: 16px; background: #FFFFFF; margin-top: 15px; }
+    .nav-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 24px; padding-top: 20px; border-top: 2px solid #eef4fe; }
+    .nav-row button, .nav-row a { background: #1976D2; color: white; padding: 12px 28px; border-radius: 60px; border: none; font-weight: 600; cursor: pointer; border-bottom: 4px solid #0d3d70; text-decoration: none; }
+    .nav-row button:hover, .nav-row a:hover { background: #0056B3; }
+    .nav-row .complete-btn { background: #FFEB3B; color: #000; border-bottom: 4px solid #c5a605; }
+    .nav-row .complete-btn:hover { background: #f1df2c; }
+    .question-block { background: #FFFFFF; padding: 20px; border-radius: 24px; margin-bottom: 20px; border-left: 6px solid #1976D2; }
+    .question-block label { display: block; margin: 8px 0; padding: 10px 16px; background: #f5f7fc; border-radius: 40px; cursor: pointer; }
+    .question-block label:hover { background: #e3f2fd; }
+    .quiz-result { margin-top: 20px; padding: 20px; border-radius: 24px; display: none; }
+    .quiz-result.pass { background: #c8e6c9; border-left: 6px solid #1d6b2c; display: block; }
+    .quiz-result.fail { background: #ffcdd2; border-left: 6px solid #b71c1c; display: block; }
+    @media (max-width: 600px) { .lesson-content iframe { height: 350px; } .nav-row { flex-direction: column; align-items: stretch; } .nav-row button, .nav-row a { text-align: center; } }
+</style>
+ 
+<div class="lms-wrapper" id="lmsWrapper">
+    <div class="lms-header">
+        <h2>📘 French bac prep– Full Course</h2>
+        <span class="lms-badge">🔒 PREMIUM</span>
+    </div>
+    <div class="lms-body">
+ 
+        <div id="lmsGate" class="lms-gate">
+            <h3>🔐 Enter your access code</h3>
+            <p style="color: #666;">Purchase access to unlock the full course.</p>
+            <input type="password" id="lmsPassword" placeholder="Your access code..."><br>
+            <button onclick="unlockLMS()">Unlock Course</button>
+            <div id="lmsGateError" class="error"></div>
+        </div>
+ 
+        <div id="lmsViews" style="display: none;">
+            <div id="viewDashboard" class="lms-view active"><div id="dashboardContent"></div></div>
+            <div id="viewLesson" class="lms-view">
+                <button onclick="showDashboard()" style="background: none; border: none; color: #0056B3; font-weight: 600; cursor: pointer; margin-bottom: 16px;">← Back to Dashboard</button>
+                <div id="lessonContent"></div>
+            </div>
+            <div id="viewQuiz" class="lms-view">
+                <button onclick="showDashboard()" style="background: none; border: none; color: #0056B3; font-weight: 600; cursor: pointer; margin-bottom: 16px;">← Back to Dashboard</button>
+                <div id="quizContent"></div>
+            </div>
+        </div>
+ 
+    </div>
+</div>
+ 
+<!-- Hidden form for Web3Forms (Key Inserted) -->
+<form id="reportForm" action="https://api.web3forms.com/submit" method="POST" style="display:none;">
+    <input type="hidden" name="access_key" value="587c378a-3c75-498e-b3bc-b7fd96ad2278">
+    <input type="hidden" name="subject" id="reportSubject" value="Progress Report – B2 Exam Prep Course">
+    <input type="hidden" name="from_name" value="B2 Student">
+    <input type="hidden" name="replyto" value="student@example.com">
+    <input type="hidden" name="redirect" value="false">
+    <textarea name="message" id="reportBody"></textarea>
+</form>
+ 
+<script>
+    // ============================================================
+    // 0. CUSTOMIZE THESE
+    // ============================================================
+    const ACCESS_CODE = 'BeLMS*17';          // <-- Change this to your own password (e.g., B2PREMIUM2025)
+    // The Web3Forms dashboard will send reports to your registered email.
+ 
+    // ============================================================
+    // 1. COURSE DATA (Edit this to build your course)
+    // ============================================================
+    const courseData = {
+        modules: [
+            {
+                id: 'm1',
+                title: 'Module 1: American literature',
+                lessons: [
+                    {
+                        id: 'l1',
+                        title: 'Major movements outline',
+                        type: 'lesson',
+                        content: `
+                            <h2>🔹 Romanticism</h2>
+                            <h3>Period</h3> 1800-1860<br>
+                            <h3>Characteristics</h3> 
+                            - Feelings, intuition, idealism: importance of <strong>inner experience</strong>, and of the power
+                            of <strong>imagination.</strong><br> 
+                            - Breakaway from the artificiality of civilisation and <strong>communion with nature</strong>
+                            to reach <strong>spirituality.</strong><br>
+                            - Importance of <strong>individual liberty</strong> and <strong>value of man as an individual.</strong>
+                            <h3>Prominent Authors</h3>
+                            --<strong>Washington Irving</strong>(short stories)<br>
+                            --<strong>Edgar Allan Poe</strong>(The Fall of the House of Usher, 1839), (The Tell-Tale Heart, 1843)<br>
+                            --<strong>Herman Melville</strong>(Moby Dick, 1851)<br>
+                            --<strong>Nathaniel Hawthorne</strong>(The Scarlett Letter, 1950)
+                             <h2>🔹 Transcendentalism(American Renaissance)</h2>
+                             <h3>Period</h3> 1840-1860<br>
+                             <h3>Characteristics</h3>
+                             - Everything in the world, including human beings, is <strong>a reflection of the divine</strong>.
+                             As such, man must use his intuitions to contemplate the divine spirit <strong>which is present
+                             in both nature and the human soul</strong>.<br>
+                             - <strong>Autonomy and individualism are stronger than social authority and traditions</strong>.
+                             <h3>Prominent Authors</h3>
+                             --<strong>Ralph Waldo Emerson</strong>(essays)<br>
+                             --<strong>Walt Whitman</strong>(Leaves of Grass, 1855)<br>
+                             --<strong>Henry David Thoreau</strong>(Walden, 1854)<br>
+                              <h2>🔹 Realism-Naturalism</h2>
+                              <h3>Period</h3> 1850-1900<br>
+                              <h3>Characteristics</h3>
+                              - Depiction of ordinary people's day-to-day lives in the most realistic way.<br>
+                              - Attempts to account for life from a psychological/social point of view.<br>
+                              - Feeling of disenchantment illustrated through an assortment of recurrent subjects
+                              such as expansion of cities, industries replacing farms, high society and corrupted politicians.
+                               <h3>Prominent Authors</h3>
+                               --<strong>Mark Twain</strong>(Huckleberry Finn)<br>
+                               --<strong>Stephen Crane(naturalist)</strong>(The Red Badge of Courage, 1895)<br>
+                               --<strong>Henry James(realist)</strong>(The Ambassadors, 1903)<br>
+                               --<strong>Theodore Dreiser(naturalist)</strong><br>
+                               --<strong>Kate Chopin</strong><br>
+                               --<strong>Jack London</strong><br>
+                               <h2>🔹 Modernism</h2>
+                               <h3>Period</h3> 1900-1950<br>
+                               <h3>Characteristics</h3>
+                               - <strong>No more belief in an absolute truth and breakaway from traditional concepts</strong>.<br>
+                               - <strong>Stream of consciousness</strong>: multitude of thoughs: influence of <strong>Freud's
+                               unconscious</strong> accounting for
+                               the complexity of the human mind.<br>
+                               - <strong>Pessismism and uncertainties: no more belief in the American Dream</strong>.
+                            
+                            <h3>🔹 Practice Activity</h3>
+                            <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                        `
+                    },
+                    {
+                        id: 'q1',
+                        title: 'Tenses Quiz',
+                        type: 'quiz',
+                        questions: [
+                            { question: 'She ______ to work every day by bus.', options: ['A) go', 'B) goes', 'C) is going'], correct: 1 },
+                            { question: 'Listen! Someone ______ the piano.', options: ['A) play', 'B) plays', 'C) is playing'], correct: 2 },
+                            { question: 'I ______ him for years.', options: ['A) know', 'B) have known', 'C) knew'], correct: 1 }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'm2',
+                title: 'Module 2: British literature',
+                lessons: [
+                    {
+                        id: 'l2',
+                        title: 'Major movements outline',
+                        type: 'lesson',
+                        content: `
+                            <h2>🔹 Renaissance</h2>
+                            <h3>Period</h3> 1485-1660<br>
+                            <h3>Characteristics</h3> 
+                            - Born at the same time as the dynasty of <strong>the Tudors</strong>, this movement developed
+                            during the <strong>Elizabethan </strong>age 
+                            (Elizabeth I, 1558-1603) and the <strong>Jacobean</strong> age(James I, 1603-1625).<br>
+                            - Quickly shifting political landscape and transnational movement.
+                            <h3>Prominent Authors</h3>
+                            --<strong>Francis Bacon</strong><br>
+                            --<strong>Andrew Marvell</strong><br>
+                            --<strong>Ben Jonson</strong><br>
+                            --<strong>Shakespeare</strong>
+                             <h2>🔹 Neolclassicism</h2>
+                             <h3>Period</h3> 1660-1798<br>
+                             <h3>Characteristics</h3>
+                             - <strong>The Age of Enlightenment</strong>: importance of senses and logic.<br>
+                             - Emphasising <strong>harmony</strong>, stability and wisdom. According to <strong>John Locke</strong>, 
+                             there is a deal between the government and the people, whereby the former governs and in so doing 
+                             protects the inalienable, natural rights of the latter such as life, liberty and property.
+                             <h3>Prominent Authors</h3>
+                             --<strong>John Milton</strong><br>
+                             --<strong>Alexander Pope</strong><br>
+                             --<strong>Samuel Johnson</strong><br>
+                             --<strong>Daniel Defoe</strong> (Robinson Crusoe, 1719)<br>
+                             --<strong>Jonathan Swift</strong> (Gulliver's Travels, 1726)<br><br>
+                             <h2>🔹 Romanticism</h2>
+                             <h3>Period</h3> 1850-1900<br>
+                             <h3>Characteristics</h3>
+                             - It's possible to find <strong>comfort in nature</strong> instead of the urban environment.<br>
+                             - <strong>Evil comes from society rather than human nature: human beings are fundamentally good.</strong>
+                             <h3>Prominent Authors</h3>
+                             --<strong>Jane Austen</strong> (Pride and Prejudice, 1813)<br>
+                             --<strong>Mary Shelley</strong> (Frankenstein, 1818)<br>
+                             --<strong>Robert Burns</strong><br>
+                             --<strong>William Wordsworth</strong><br>
+                             --<strong>Samuel Coleridge</strong><br>
+                             --<strong>William Blake</strong><br>
+                             --<strong>John Keats</strong><br>
+                             <h2>🔹 The Victorian Era</h2>
+                             <h3>Period</h3> 1832-1901<br>
+                             <h3>Characteristics</h3>
+                             - <strong>Conflicts: the have # the have-nots</strong>.<br>
+                             - <strong>Urban life # rural life</strong>.<br>
+                             - Love triangles.<br>
+                             - <strong>Vile aristocrats</strong>.<br>
+                             - Epistolary exchanges and misdirected letters.<br>
+                             - <strong>Bildungsroman</strong>.<br>
+                             - <strong>Political novels</strong><br>
+                             - Detective stories<br>
+                             <h3>Prominent Authors</h3>
+                             --<strong>Charlotte Brontë</strong><br>
+                             --<strong>Robert Louis Stevenson</strong> (The strange case of Dr Jekyll and Mr Hyde, 1886)<br>
+                             --<strong>George Eliot</strong> (Pride and Prejudice, 1813)<br>
+                             --<strong>Oscar Wilde</strong> (The Importance of Being Earnest, 1895)<br>
+                             --<strong>Charles Dickens</strong> (Great Expectations, 1861)<br>
+                             <h2>🔹 Modernism</h2>
+                             <h3>Period</h3> 1901-1960<br>
+                             <h3>Characteristics</h3>
+                             - Uncertainties:no more belief in an absolute truth, coupled with a quest for a new meaning.
+                             - Breakaway from the past: search for <strong>new forms</strong> of expression
+                             through experimentation, especially in the aftermath of WWI.<br>
+                             - The past is still held in veneration by authors such as James Joyce(ULysses) much like his American 
+                             counterpart T.S. Eliot(The Waste Land) through the use of Greek myths.
+                             -Fragmented narratives: reality is rendered through the multitude of the streams of
+                             consciousness of the characters
+                             <h3>Prominent Authors</h3>
+                             --<strong>George Orwell (Animal Farm, 1945) + (1984, 1949)</strong><br>
+                             --<strong>Virginia Woolf</strong><br>
+                             --<strong>Harper Lee</strong> (To Kill a Mocking Bird, 1960)<br>
+                             <h2>🔹 Postmodernism</h2>
+                             <h3>Period</h3> Late 20th century<br>
+                             <h3>Characteristics</h3>
+                             - Trying to define it goes against its "no terms/boundaries" policy.
+                             - <strong>Radical nihilistic espistemological break with past knowledge or truth</strong>: broad skepticism: general suspicion of reason,
+                             truth and idealogy, uncoupled with a search for new meaning: a sense of resignation towards
+                             the lack of meaning.
+                             - <strong>The past is no longer held in high esteem: it is demoted to the level of pop
+                             mass-consumed art</strong>.
+                             -Fragmented narratives: reality is rendered through the multitude of the streams of
+                             consciousness of the characters.
+                             <h3>Prominent Authors</h3>
+                             --<strong>Ian McEwan (Atonement, 2001)</strong><br>
+                             --<strong>Haddon Mark (The Curious Incident of the Dog in the Night-Time, 2003)</strong><br>
+                           
+                             <h3>🔹 Practice Activity</h3>
+                            <iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                        `
+                    },
+                    {
+                        id: 'q2',
+                        title: 'Vocabulary Quiz',
+                        type: 'quiz',
+                        questions: [
+                            { question: 'To "break the ice" means to:', options: ['A) Start a conversation', 'B) Break something frozen', 'C) End a fight'], correct: 0 },
+                            { question: 'If something "costs an arm and a leg", it is:', options: ['A) Cheap', 'B) Expensive', 'C) Free'], correct: 1 }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'm1',
+                title: 'Module 3: ',
+                lessons: [
+                    {
+                        id: 'l1',
+                        title: '',
+                        type: 'lesson',
+                        content: `
+                            <h2>🔹 Romanticism</h2>
+                            <h3>Period</h3> 1800-1860<br>
+                            <h3>Characteristics</h3> 
+                            - Feelings, intuition, idealism: importance of <strong>inner experience</strong>, and of the power of <strong>imagination.</strong><br> 
+                            - Breakaway from the artificiality of civilisation and <strong>communion with nature</strong> to reach <strong>spirituality.</strong><br>
+                            - Importance of <strong>individual liberty</strong> and <strong>value of man as an individual.</strong>
+                            <h3>Prominent Authors</h3>
+                            --<strong>Washington Irving</strong>(short stories)<br>
+                            --<strong>Edgar Allan Poe</strong>(The Fall of the House of Usher, 1839), (The Tell-Tale Heart, 1843)<br>
+                            --<strong>Herman Melville</strong>(Moby Dick, 1851)<br>
+                            --<strong>Nathaniel Hawthorne</strong>(The Scarlett Letter, 1950)
+                             <h2>🔹 Transcendentalism(American Renaissance)</h2>
+                             <h3>Period</h3> 1840-1860<br>
+                             <h3>Characteristics</h3>
+                             - Everything in the world, including human beings, is <strong>a reflection of the divine</strong>. As such, man must use his intuitions to contemplate the divine spirit <strong>which is present in both nature and the human soul</strong>.<br>
+                             - <strong>Autonomy and individualism are stronger that social authority and traditions</strong>.
+                             <h3>Prominent Authors</h3>
+                             --<strong>Ralph Waldo Emerson</strong>(essays)<br>
+                             --<strong>Walt Whitman</strong>(Leaves of Grass, 1855)<br>
+                             --<strong>Henry David Thoreau</strong>(Walden, 1854)<br>
+                              <h2>🔹 Realism-Naturalism</h2>
+                              <h3>Period</h3> 1850-1900<br>
+                              <h3>Characteristics</h3>
+                              - Depiction of ordinary people's day-to-day lives in the most realistic way.<br>
+                              - Attempts to account for life from a psychological/social point of view.<br>
+                              - Feeling of disenchantment illustrated through an assortment of recurrent subjects such as expansion of cities, industries replacing farms, high society and corrupted politicians.
+                               <h3>Prominent Authors</h3>
+                               --<strong>Mark Twain</strong>(Huckleberry Finn)<br>
+                               --<strong>Stephen Crane(naturalist)</strong>(The Red Badge of Courage, 1895)<br>
+                               --<strong>Henry James(realist)</strong>(The Ambassadors, 1903)<br>
+                               --<strong>Theodore Drreiser(naturalist)</strong><br>
+                               --<strong>Kate Chopin</strong><br>
+                               --<strong>Jack London</strong><br>
+                               <h2>🔹 Modernism</h2>
+                               <h3>Period</h3> 1900-1950<br>
+                               <h3>Characteristics</h3>
+                               - No more belief in an absolute truth and breakaway from traditional concepts.<br>
+                               - <strong>Stream of consciousness</strong>: multitude of thoughs: influence of <strong>Freud's unconscious</strong> accounting for
+                               the comlexity of the human mind.<br>
+                               - <strong>Pessismism and uncertainties: no more belief in the American Dream</strong>.
+                            
+                            <h3>🔹 Practice Activity</h3>
+                            <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                        `
+                    },
+                    {
+                        id: 'q1',
+                        title: 'Tenses Quiz',
+                        type: 'quiz',
+                        questions: [
+                            { question: 'She ______ to work every day by bus.', options: ['A) go', 'B) goes', 'C) is going'], correct: 1 },
+                            { question: 'Listen! Someone ______ the piano.', options: ['A) play', 'B) plays', 'C) is playing'], correct: 2 },
+                            { question: 'I ______ him for years.', options: ['A) know', 'B) have known', 'C) knew'], correct: 1 }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+ 
+    // ============================================================
+    // 2. STATE & HELPERS
+    // ============================================================
+    function getProgress() {
+        const saved = localStorage.getItem('lmsProgress');
+        return saved ? JSON.parse(saved) : {};
+    }
+ 
+    function saveProgress(prog) {
+        localStorage.setItem('lmsProgress', JSON.stringify(prog));
+    }
+ 
+    function isCompleted(lessonId) {
+        const prog = getProgress();
+        return prog[lessonId] && prog[lessonId].completed === true;
+    }
+ 
+    function markCompleted(lessonId) {
+        const prog = getProgress();
+        prog[lessonId] = { completed: true };
+        saveProgress(prog);
+    }
+ 
+    function showView(viewId) {
+        document.querySelectorAll('.lms-view').forEach(v => v.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+    }
+ 
+    function showDashboard() {
+        showView('viewDashboard');
+        renderDashboard();
+    }
+ 
+    // ============================================================
+    // 3. GENERATE REPORT
+    // ============================================================
+    function generateReport() {
+        const prog = getProgress();
+        let report = "=== Progress Report ===\n";
+        report += "Generated: " + new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString() + "\n\n";
+ 
+        courseData.modules.forEach(mod => {
+            report += `📌 ${mod.title}\n`;
+            mod.lessons.forEach(lesson => {
+                const data = prog[lesson.id];
+                if (lesson.type === 'quiz') {
+                    if (data && data.completed) {
+                        report += `  🧠 ${lesson.title}: ✅ Completed (Score: ${data.score}/${data.total})\n`;
+                    } else {
+                        report += `  🧠 ${lesson.title}: ⬜ Not started\n`;
+                    }
+                } else {
+                    const status = data && data.completed ? "✅ Completed" : "⬜ Not started";
+                    report += `  📖 ${lesson.title}: ${status}\n`;
+                }
+            });
+            report += "\n";
+        });
+        report += "=== End of Report ===";
+        return report;
+    }
+ 
+    // ============================================================
+    // 4. DOWNLOAD & SEND PROGRESS
+    // ============================================================
+    function downloadProgress() {
+        const report = generateReport();
+        const blob = new Blob([report], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `progress_${new Date().toISOString().slice(0,10)}.txt`;
+        a.click();
+    }
+ 
+    function sendProgress() {
+        const report = generateReport();
+        document.getElementById('reportSubject').value = 'Progress Report – B2 Exam Prep Course';
+        document.getElementById('reportBody').value = report;
+ 
+        const form = document.getElementById('reportForm');
+        const btn = document.querySelector('[onclick="sendProgress()"]');
+        if (btn) {
+            btn.innerText = '📤 Sending...';
+            btn.disabled = true;
+        }
+ 
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('✅ Progress report sent successfully! Your teacher will receive it shortly.');
+            } else {
+                alert('❌ Sending failed. Please use the Download button and email it manually.');
+            }
+            if (btn) {
+                btn.innerText = '📤 Send Progress to Teacher';
+                btn.disabled = false;
+            }
+        })
+        .catch(() => {
+            alert('❌ Network error. Please use the Download button and email it manually.');
+            if (btn) {
+                btn.innerText = '📤 Send Progress to Teacher';
+                btn.disabled = false;
+            }
+        });
+    }
+ 
+    // ============================================================
+    // 5. RENDER DASHBOARD
+    // ============================================================
+    function renderDashboard() {
+        const container = document.getElementById('dashboardContent');
+        let html = `
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+                <h2 style="color: #0056B3; border-left: 6px solid #FFEB3B; padding-left: 16px; margin:0;">📋 Course Dashboard</h2>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    
+                    <button onclick="sendProgress()" style="background:#FFEB3B; color:#000; border:none; padding:10px 20px; border-radius:40px; cursor:pointer; font-weight:600; border-bottom:4px solid #c5a605;">
+                        📤 Send Progress to Teacher
+                    </button>
+                </div>
+            </div>
+            <div id="moduleList"></div>
+        `;
+        container.innerHTML = html;
+ 
+        const moduleList = document.getElementById('moduleList');
+        let listHtml = '';
+        courseData.modules.forEach(mod => {
+            listHtml += `<div class="module-card"><h3>📌 ${mod.title}</h3>`;
+            mod.lessons.forEach(lesson => {
+                const done = isCompleted(lesson.id) ? 'done' : '';
+                let label = isCompleted(lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson');
+                if (lesson.type === 'quiz') {
+                    const prog = getProgress();
+                    const data = prog[lesson.id];
+                    if (data && data.completed) {
+                        label = `✅ Completed (${data.score}/${data.total})`;
+                    }
+                }
+                const icon = lesson.type === 'quiz' ? '🧠' : '📖';
+                listHtml += `
+                    <div class="lesson-item" onclick="openLesson('${mod.id}','${lesson.id}')">
+                        <span>${icon} ${lesson.title}</span>
+                        <span class="status ${done}">${label}</span>
                     </div>
                 `;
             });
-            track.innerHTML = cardsHTML;
-            track.style.display = filteredTeachers.length > 0 ? 'flex' : 'none';
+            listHtml += `</div>`;
+        });
+        moduleList.innerHTML = listHtml;
+    }
+ 
+    // ============================================================
+    // 6. OPEN LESSON / QUIZ
+    // ============================================================
+    function openLesson(moduleId, lessonId) {
+        const module = courseData.modules.find(m => m.id === moduleId);
+        const lesson = module.lessons.find(l => l.id === lessonId);
+        if (lesson.type === 'quiz') {
+            showView('viewQuiz');
+            renderQuiz(lesson);
+        } else {
+            showView('viewLesson');
+            renderLesson(lesson, moduleId);
         }
-
-        function buildDots() {
-            let dotsHTML = '';
-            filteredTeachers.forEach((_, index) => {
-                dotsHTML += `<button class="dot" data-index="${index}" aria-label="Go to teacher ${index + 1}"></button>`;
-            });
-            dotsContainer.innerHTML = dotsHTML;
+    }
+ 
+    function renderLesson(lesson, moduleId) {
+        const container = document.getElementById('lessonContent');
+        const done = isCompleted(lesson.id);
+        container.innerHTML = `
+            <h2 style="color: #0056B3;">${lesson.title}</h2>
+            <div class="lesson-content">${lesson.content}</div>
+            <div class="nav-row">
+                <button onclick="showDashboard()">← Dashboard</button>
+                <div>
+                    ${!done ? `<button class="complete-btn" onclick="markLessonComplete('${lesson.id}')">✅ Mark as Complete</button>` : '<span style="color:#1d6b2c; font-weight:600;">✅ Completed</span>'}
+                </div>
+            </div>
+        `;
+    }
+ 
+    function markLessonComplete(lessonId) {
+        markCompleted(lessonId);
+        alert('✅ Lesson marked as complete!');
+        showDashboard();
+    }
+ 
+    function renderQuiz(quiz) {
+        const container = document.getElementById('quizContent');
+        let html = `<h2 style="color: #0056B3;">🧠 ${quiz.title}</h2>`;
+        html += `<form id="quizForm">`;
+        quiz.questions.forEach((q, idx) => {
+            html += `
+                <div class="question-block">
+                    <p><strong>${idx+1}. ${q.question}</strong></p>
+                    ${q.options.map((opt, oi) => `
+                        <label><input type="radio" name="q${idx}" value="${oi}"> ${opt}</label>
+                    `).join('')}
+                </div>
+            `;
+        });
+        html += `
+                <button type="button" class="complete-btn" style="background:#FFEB3B; color:#000; border:none; padding:14px 32px; border-radius:60px; font-weight:700; cursor:pointer; border-bottom:4px solid #c5a605;" onclick="submitQuiz('${quiz.id}')">✅ Check Answers</button>
+            </form>
+            <div id="quizResult" class="quiz-result"></div>
+            <div class="nav-row" style="margin-top:20px;">
+                <button onclick="showDashboard()">← Dashboard</button>
+            </div>
+        `;
+        container.innerHTML = html;
+    }
+ 
+    // ============================================================
+    // 7. SUBMIT QUIZ
+    // ============================================================
+    function submitQuiz(quizId) {
+        let quizData = null;
+        for (let m of courseData.modules) {
+            const found = m.lessons.find(l => l.id === quizId);
+            if (found) { quizData = found; break; }
         }
-
-        // ------------------------------------------------------------
-        // CAROUSEL LOGIC
-        // ------------------------------------------------------------
-        function updateCarousel(index) {
-            const total = filteredTeachers.length;
-            if (total === 0) return;
-            
-            if (index < 0) index = total - 1;
-            if (index >= total) index = 0;
-            currentIndex = index;
-
-            track.style.transform = `translateX(-${currentIndex * 100}%)`;
-
-            const dots = document.querySelectorAll('.dot');
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === currentIndex);
-            });
-
-            document.getElementById('prevBtn').classList.toggle('hidden', total <= 1);
-            document.getElementById('nextBtn').classList.toggle('hidden', total <= 1);
+        if (!quizData) return;
+ 
+        const questions = quizData.questions;
+        let score = 0;
+        let allAnswered = true;
+ 
+        for (let i = 0; i < questions.length; i++) {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            if (!selected) { allAnswered = false; continue; }
+            if (parseInt(selected.value) === questions[i].correct) score++;
         }
-
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            updateCarousel(currentIndex - 1);
-        });
-
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            updateCarousel(currentIndex + 1);
-        });
-
-        dotsContainer.addEventListener('click', (e) => {
-            if (e.target.classList.contains('dot')) {
-                const index = parseInt(e.target.dataset.index, 10);
-                updateCarousel(index);
-            }
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') {
-                document.getElementById('prevBtn').click();
-                e.preventDefault();
-            } else if (e.key === 'ArrowRight') {
-                document.getElementById('nextBtn').click();
-                e.preventDefault();
-            }
-        });
-
-        let startX = 0;
-        let isDragging = false;
-        const container = document.querySelector('.carousel-container');
-        container.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-            isDragging = true;
-        });
-        container.addEventListener('touchend', (e) => {
-            if (!isDragging) return;
-            const endX = e.changedTouches[0].clientX;
-            const diff = startX - endX;
-            if (Math.abs(diff) > 40) {
-                if (diff > 0) {
-                    document.getElementById('nextBtn').click();
-                } else {
-                    document.getElementById('prevBtn').click();
-                }
-            }
-            isDragging = false;
-        });
-
-        // ------------------------------------------------------------
-        // INIT
-        // ------------------------------------------------------------
-        function init() {
-            buildFilters();
-            filterTeachers('All');
+ 
+        const resultDiv = document.getElementById('quizResult');
+        if (!allAnswered) {
+            resultDiv.className = 'quiz-result fail';
+            resultDiv.innerHTML = '<p style="color:#b71c1c;">⚠️ Please answer all questions before submitting.</p>';
+            return;
         }
-
-        init();
-    </script>
-
+ 
+        const total = questions.length;
+        const passed = score >= total * 0.6;
+ 
+        const prog = getProgress();
+        prog[quizId] = { completed: true, score: score, total: total };
+        saveProgress(prog);
+ 
+        if (passed) {
+            resultDiv.className = 'quiz-result pass';
+            resultDiv.innerHTML = `<h3>✅ You scored ${score}/${total}. Well done!</h3>`;
+        } else {
+            resultDiv.className = 'quiz-result fail';
+            resultDiv.innerHTML = `<h3>❌ You scored ${score}/${total}. Review the lessons and try again.</h3>`;
+        }
+        document.querySelectorAll('#quizForm input[type="radio"]').forEach(el => el.disabled = true);
+    }
+ 
+    // ============================================================
+    // 8. PASSWORD GATE
+    // ============================================================
+    function unlockLMS() {
+        const input = document.getElementById('lmsPassword');
+        const error = document.getElementById('lmsGateError');
+        if (input.value.trim() === ACCESS_CODE) {
+            document.getElementById('lmsGate').style.display = 'none';
+            document.getElementById('lmsViews').style.display = 'block';
+            localStorage.setItem('lmsUnlocked', 'false');
+            renderDashboard();
+        } else {
+            error.innerText = '❌ Incorrect access code. Please try again.';
+            input.value = '';
+            input.focus();
+        }
+    }
+ 
+    document.addEventListener('DOMContentLoaded', function() {
+        if (localStorage.getItem('lmsUnlocked') === 'true') {
+            document.getElementById('lmsGate').style.display = 'none';
+            document.getElementById('lmsViews').style.display = 'block';
+            renderDashboard();
+        }
+    });
+ 
+    document.getElementById('lmsPassword').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') unlockLMS();
+    });
+</script>
+<!-- ========== END LMS ========== -->
 </body>
 </html>
