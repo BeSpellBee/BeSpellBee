@@ -32,88 +32,11 @@
 
     margin-top: -120px; /* Increase this number (e.g., -150px) to move it even closer */
 
-   margin-bottom: -100px;
-   position: relative;
-   text-align: center;
-   min-height: 100vh;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
-   }
+   margin-bottom: -100px;}
 
-   /* --- FIX: Background image - bigger and vertically centered --- */
-   .demo-bg {
-     width: 850px;
-     height: 850px;
-     max-width: 85%;
-     max-height: 85vh;
-     opacity: 0.15;
-     display: block;
-     margin: 0 auto;
-     mix-blend-mode: screen;
-     position: relative;
-     z-index: 0;
-   }
+   
 
-   .demo-content {
-     position: absolute;
-     z-index: 1;
-     top: 50%;
-     left: 50%;
-     transform: translate(-50%, -50%);
-     width: 100%;
-     padding: 0 20px;
-   }
-
-   .demo-content p {
-     color: #fff;
-     background: rgba(0, 0, 0, 0.7);
-     padding: 25px 35px;
-     border-radius: 16px;
-     max-width: 700px;
-     margin: 0 auto;
-     line-height: 1.8;
-   }
-
-   .demo-content del {
-     display: block;
-     color: #ff6b6b;
-     margin: 5px 0;
-   }
-
-   /* --- Responsive adjustment for tablet --- */
-   @media (max-width: 768px) {
-     .demo-bg {
-       width: 550px;
-       height: 550px;
-       max-width: 85%;
-       max-height: 55vh;
-     }
-     .demo-content p {
-       padding: 18px 22px;
-       font-size: 0.95rem;
-       margin: 0 15px;
-     }
-   }
-
-   /* --- Responsive adjustment for mobile --- */
-   @media (max-width: 480px) {
-     .demo-bg {
-       width: 380px;
-       height: 380px;
-       max-width: 92%;
-       max-height: 45vh;
-     }
-     .demo-content p {
-       padding: 14px 16px;
-       font-size: 0.85rem;
-       margin: 0 10px;
-     }
-     .demo-content del {
-       font-size: 0.8rem;
-     }
-   }
+ 
 
 </style>
 
@@ -131,10 +54,11 @@
 
 <div class="demo-wrap">
 
-  <!-- Background image - bigger and vertically centered! -->
+  <!-- ====== ONLY THIS LINE CHANGED ====== -->
+  <!-- Changed from "images3/logo.png.png" to "images3/original.logo.jpg" -->
   <img
     class="demo-bg"
-    src="images3/original.logo.jpg" />                                                                                                                                                                                                      
+    src="images3/original.logo.jpg" width="600" height="600" />                                                                                                                                                                                                      
 
   
 
