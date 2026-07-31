@@ -1,99 +1,281 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-N3F5GM52DZ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-N3F5GM52DZ');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N3F5GM52DZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N3F5GM52DZ');
+    </script>
     
-<link rel="stylesheet" href="stylesheet.css">   
+    <link rel="stylesheet" href="stylesheet.css">   
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, width=device-width">
+    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
+    <title>Services</title>
     
-<meta name="viewport" content="initial-scale=1, maximum-scale=1">
-    
-<link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
-
-<title> Services </title>
-     
-     
-    
-</head>
-    
-<body>
-    
-     <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P6BJFG5B"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-    
-<a name="top"><h2>Services<h2></a>
-    
-<a href="#A1/A2/B1"> Beginners</a>
-<br/>
-<a href="#B2"> Advanced students</a>
-<br/>
-<a href="#Bac"> Baccalaureate preparation </a>
-<br/>
-
-<br></br>
-     <center><img src= "images2/graduate.png.jpg" width=700 </a></center>
-              
-                                                                                                                                              
-<a id="A1/A2/B1"></a><h3>A1/A2/B1</h3>
-    
-<p>We offer online courses for beginning students seeking to get better at English and  improve foundational communication skills.</p>
-    <center><img src= "images2/CEFR-levels.png" width=500 height=600 </a></center>
-    
-                                           
-<a id="B2"></a><h3>Advanced students</h3>
-    
-<p>Our main focus is on students seeking to pass B2/C1 international exams and earn scholarships enabling them to access selective universties.</p>
-       <center><img src= "images2/Advanced.png" width=700 height=600 </a></center>
-<a id="Bac"></a><h3>Baccalaureate preparation</h3>
- 
-<p>We offer preparation for passing the French baccalaureate exam.</p>
-    
-
-<button id="topBtn" title="Go to top" style="display: none; position: fixed; bottom: 20px; right: 30px; z-index: 99; font-size: 24px; border: none; outline: none; background-color: #2196F3; color: white; cursor: pointer; border-radius: 50%; width: 50px; height: 50px; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); line-height: 50px; padding: 0;">↑</button>
-
-<script>
-    const btn = document.getElementById("topBtn");
-    window.onscroll = function() {
-        if (window.scrollY > 400) {
-            btn.style.display = "block";
-        } else {
-            btn.style.display = "none";
+    <style>
+        /* Global Reset & Base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-    };
-    btn.onclick = function() {
-        window.scrollTo({top: 0, behavior: 'smooth'});
-    };
-</script>
- 
-     
+
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #f4f7fc;
+            padding: 20px;
+            color: #333;
+        }
+
+        /* Container for all content */
+        .services-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px 25px;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -8px rgba(0,0,0,0.15);
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #0056B3;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #FFEB3B;
+            padding-bottom: 12px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: #0056B3;
+            margin-top: 40px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        /* Navigation links */
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px 25px;
+            margin-bottom: 30px;
+            padding: 15px 0;
+            border-bottom: 2px solid #eef4fe;
+        }
+
+        .nav-links a {
+            color: #0056B3;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 1.05rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #1976D2;
+            text-decoration: underline;
+        }
+
+        /* ====== IMAGES - FIXED FOR RESPONSIVENESS ====== */
+        .services-container img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 15px auto;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid #eef4fe;
+        }
+
+        /* Remove fixed widths from inline styles via class override */
+        .img-fluid {
+            width: 100% !important;
+            max-width: 700px !important;
+            height: auto !important;
+        }
+
+        .img-medium {
+            width: 100% !important;
+            max-width: 550px !important;
+            height: auto !important;
+        }
+
+        .img-small {
+            width: 100% !important;
+            max-width: 450px !important;
+            height: auto !important;
+        }
+
+        /* Back to Top Button */
+        #topBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 99;
+            font-size: 24px;
+            border: none;
+            outline: none;
+            background-color: #1976D2;
+            color: white;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.25);
+            line-height: 50px;
+            padding: 0;
+            text-align: center;
+            transition: background 0.2s;
+        }
+
+        #topBtn:hover {
+            background-color: #0056B3;
+        }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            .services-container {
+                padding: 20px 15px;
+                border-radius: 24px;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            h3 {
+                font-size: 1.3rem;
+                margin-top: 30px;
+            }
+
+            p {
+                font-size: 0.95rem;
+            }
+
+            .nav-links {
+                gap: 10px 18px;
+            }
+
+            .nav-links a {
+                font-size: 0.95rem;
+            }
+
+            #topBtn {
+                width: 44px;
+                height: 44px;
+                font-size: 20px;
+                line-height: 44px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .services-container {
+                padding: 15px 10px;
+                border-radius: 18px;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            h3 {
+                font-size: 1.1rem;
+                margin-top: 25px;
+            }
+
+            p {
+                font-size: 0.88rem;
+            }
+
+            .nav-links {
+                gap: 8px 12px;
+                padding: 10px 0;
+            }
+
+            .nav-links a {
+                font-size: 0.85rem;
+            }
+
+            #topBtn {
+                width: 38px;
+                height: 38px;
+                font-size: 16px;
+                line-height: 38px;
+                bottom: 12px;
+                right: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="services-container">
+
+        <h2>📚 Services</h2>
+
+        <!-- Navigation Links -->
+        <div class="nav-links">
+            <a href="#A1/A2/B1">🔹 Beginners (A1/A2/B1)</a>
+            <a href="#B2">🔹 Advanced (B2)</a>
+            <a href="#Bac">🔹 Baccalaureate Prep</a>
+        </div>
+
+        <!-- Top Image -->
+        <img src="images2/graduate.png.jpg" alt="Graduate" class="img-fluid">
+
+        <!-- A1/A2/B1 Section -->
+        <a id="A1/A2/B1"></a>
+        <h3>🔹 A1 / A2 / B1 – Beginners</h3>
+        <p>We offer online courses for beginning students seeking to get better at English and improve foundational communication skills.</p>
+        <img src="images2/CEFR-levels.png" alt="CEFR Levels" class="img-medium">
+
+        <!-- B2 Section -->
+        <a id="B2"></a>
+        <h3>🔹 B2 – Advanced Students</h3>
+        <p>Our main focus is on students seeking to pass B2/C1 international exams and earn scholarships enabling them to access selective universities.</p>
+        <img src="images2/Advanced.png" alt="Advanced" class="img-fluid">
+
+        <!-- Baccalaureate Section -->
+        <a id="Bac"></a>
+        <h3>🔹 Baccalaureate Preparation</h3>
+        <p>We offer preparation for passing the French baccalaureate exam.</p>
+        <!-- Add an image here if you have one for Bac -->
+
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="topBtn" title="Go to top">↑</button>
+
+    <script>
+        const btn = document.getElementById("topBtn");
+        window.onscroll = function() {
+            if (window.scrollY > 400) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+        btn.onclick = function() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        };
+    </script>
+
 </body>
-<html/>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</html>
