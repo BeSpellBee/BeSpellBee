@@ -27,20 +27,96 @@
  <style>
 
   /* This tells the middle section to move UP to touch the small logo */
-
   .demo-wrap {
+    margin-top: -120px;
+    margin-bottom: -100px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
 
-    margin-top: -120px; /* Increase this number (e.g., -150px) to move it even closer */
+  /* --- FIX: Control the background image size and position --- */
+  .demo-bg {
+    max-width: 80%;
+    max-height: 80vh;
+    height: auto;
+    width: auto;
+    opacity: 0.15;
+    display: block;
+    margin: 0 auto;
+    /* --- This makes the white background transparent! --- */
+    mix-blend-mode: screen;
+  }
 
-   margin-bottom: -100px;}
+  .demo-content {
+    position: relative;
+    z-index: 1;
+    margin-top: -50px;
+  }
 
-   
+  .demo-content p {
+    color: #fff;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px 30px;
+    border-radius: 16px;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
 
- 
+  .demo-content del {
+    display: block;
+    color: #ff6b6b;
+    margin: 5px 0;
+  }
+
+  /* --- FIX: Responsive adjustments --- */
+  @media (max-width: 768px) {
+    .demo-wrap {
+      margin-top: -80px;
+      margin-bottom: -50px;
+    }
+
+    .demo-bg {
+      max-width: 95%;
+      max-height: 60vh;
+      opacity: 0.12;
+    }
+
+    .demo-content {
+      margin-top: -30px;
+    }
+
+    .demo-content p {
+      padding: 15px 20px;
+      font-size: 0.95rem;
+      margin: 0 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .demo-wrap {
+      margin-top: -60px;
+      margin-bottom: -30px;
+    }
+
+    .demo-bg {
+      max-width: 100%;
+      max-height: 50vh;
+      opacity: 0.10;
+    }
+
+    .demo-content p {
+      padding: 12px 15px;
+      font-size: 0.85rem;
+    }
+
+    .demo-content del {
+      font-size: 0.8rem;
+    }
+  }
 
 </style>
-
- 
 
    
 
@@ -54,8 +130,6 @@
 
 <div class="demo-wrap">
 
-  <!-- ====== ONLY THIS LINE CHANGED ====== -->
-  <!-- Changed from "images3/logo.png.png" to "images3/original.logo.jpg" -->
   <img
     class="demo-bg"
     src="images3/original.logo.jpg" width="600" height="600" />                                                                                                                                                                                                      
