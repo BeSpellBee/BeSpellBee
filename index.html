@@ -20,172 +20,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
-        /* ---------- HERO SECTION WITH AVATAR VIDEO ---------- */
-        .hero-section {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 1200px;
-            margin: 30px auto 20px auto;
-            padding: 0 30px;
-            gap: 40px;
-            flex-wrap: wrap;
-        }
-
-        .hero-left {
-            flex: 1;
-            min-width: 280px;
-            text-align: left;
-        }
-
-        .hero-left h1 {
-            margin-bottom: 0;
-            text-align: left;
-        }
-
-        .hero-left h1 svg text {
-            font-size: 50px;
-        }
-
-        .hero-tagline {
-            color: #aaa;
-            font-size: 1.1rem;
-            margin-top: 0.5rem;
-            margin-bottom: 1.2rem;
-            line-height: 1.6;
-        }
-
-        .hero-cta {
-            display: inline-block;
-            background: #00ffff;
-            color: #000;
-            padding: 0.8rem 2rem;
-            border-radius: 60px;
-            font-weight: 700;
-            font-size: 1rem;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
-            margin-top: 0.5rem;
-        }
-
-        .hero-cta:hover {
-            background: #66ffff;
-            box-shadow: 0 0 50px rgba(0, 255, 255, 0.35);
-            transform: translateY(-2px);
-        }
-
-        .hero-cta i {
-            margin-right: 8px;
-        }
-
-        .hero-right {
-            flex: 0 0 420px;
-            min-width: 300px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .avatar-video-container {
-            width: 100%;
-            max-width: 420px;
-            background: #0d0d0d;
-            border: 2px solid #00ffff;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 0 60px rgba(0, 255, 255, 0.15);
-            position: relative;
-            aspect-ratio: 16 / 9;
-        }
-
-        .avatar-video-container iframe {
-            width: 100%;
-            height: 100%;
-            display: block;
-            border: none;
-            object-fit: cover;
-        }
-
-        .avatar-placeholder {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #0a2a2a, #1a4a4a);
-            color: #88dddd;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .avatar-placeholder i {
-            font-size: 3rem;
-            color: #00ffff;
-            margin-bottom: 1rem;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.1); }
-        }
-
-        .avatar-placeholder p {
-            font-size: 0.9rem;
-            color: #aaa;
-            max-width: 250px;
-            line-height: 1.5;
-        }
-
-        .avatar-label {
-            display: inline-block;
-            background: rgba(0, 255, 255, 0.15);
-            color: #00ffff;
-            font-size: 0.7rem;
-            padding: 0.2rem 1rem;
-            border-radius: 30px;
-            border: 1px solid rgba(0, 255, 255, 0.25);
-            margin-top: 0.8rem;
-            letter-spacing: 0.5px;
-        }
-
-        .hero-socials {
-            display: flex;
-            gap: 15px;
-            margin-top: 1rem;
-            justify-content: center;
-        }
-
-        .hero-socials a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(0, 255, 255, 0.08);
-            border: 1px solid #1a4a4a;
-            color: #88dddd;
-            font-size: 1.2rem;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-
-        .hero-socials a:hover {
-            background: #00ffff;
-            color: #000;
-            border-color: #00ffff;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
-            transform: translateY(-3px);
-        }
-
-        /* ---------- CAROUSEL STYLES ---------- */
+        /* ---------- CAROUSEL STYLES (Matching your black/aqua theme) ---------- */
         .teacher-carousel-section {
             max-width: 1100px;
             margin: 20px auto 30px auto;
@@ -301,6 +136,7 @@
             box-sizing: border-box;
         }
 
+        /* Custom scrollbar for card-inner */
         .card-inner::-webkit-scrollbar {
             width: 4px;
         }
@@ -434,6 +270,7 @@
             max-height: 100px;
         }
 
+        /* Custom scrollbar for bio */
         .teacher-bio::-webkit-scrollbar {
             width: 3px;
         }
@@ -602,53 +439,6 @@
             width: 28px;
             border-color: #00ffff;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-        }
-
-        /* ====== FOOTER SOCIALS ====== */
-        .footer-socials {
-            text-align: center;
-            padding: 2rem 1rem;
-            border-top: 1px solid #1a3a3a;
-            margin-top: 2rem;
-        }
-
-        .footer-socials p {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .footer-social-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .footer-social-link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #88dddd;
-            text-decoration: none;
-            font-size: 0.9rem;
-            padding: 0.5rem 1.5rem;
-            border: 1px solid #1a4a4a;
-            border-radius: 40px;
-            transition: all 0.3s;
-            background: rgba(0, 255, 255, 0.03);
-        }
-
-        .footer-social-link:hover {
-            background: #00ffff;
-            color: #000;
-            border-color: #00ffff;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .footer-social-link i {
-            font-size: 1.1rem;
         }
 
         /* ====== VIDEO MODAL ====== */
@@ -983,33 +773,6 @@
         }
 
         /* ====== RESPONSIVE ====== */
-        @media (max-width: 900px) {
-            .hero-section {
-                flex-direction: column;
-                text-align: center;
-                gap: 25px;
-                padding: 0 20px;
-            }
-
-            .hero-left {
-                text-align: center;
-            }
-
-            .hero-left h1 {
-                text-align: center;
-            }
-
-            .hero-left h1 svg text {
-                font-size: 38px;
-            }
-
-            .hero-right {
-                flex: 0 0 auto;
-                width: 100%;
-                max-width: 420px;
-            }
-        }
-
         @media (max-width: 768px) {
             .card-inner {
                 padding: 1.2rem 1rem;
@@ -1072,19 +835,6 @@
                 width: 32px;
                 height: 32px;
                 font-size: 0.8rem;
-            }
-
-            .hero-left h1 svg text {
-                font-size: 32px;
-            }
-
-            .hero-tagline {
-                font-size: 0.95rem;
-            }
-
-            .hero-cta {
-                font-size: 0.85rem;
-                padding: 0.6rem 1.5rem;
             }
         }
 
@@ -1180,35 +930,6 @@
             .booking-modal-content {
                 padding: 1.5rem 1.2rem;
             }
-
-            .hero-section {
-                padding: 0 15px;
-                gap: 20px;
-            }
-
-            .hero-left h1 svg text {
-                font-size: 26px;
-            }
-
-            .hero-tagline {
-                font-size: 0.8rem;
-            }
-
-            .hero-cta {
-                font-size: 0.75rem;
-                padding: 0.5rem 1.2rem;
-            }
-
-            .hero-socials a {
-                width: 38px;
-                height: 38px;
-                font-size: 1rem;
-            }
-
-            .footer-social-link {
-                font-size: 0.75rem;
-                padding: 0.4rem 1rem;
-            }
         }
 
         h1 {
@@ -1230,7 +951,7 @@
 
 <body style="background-color:black;">
 
-    <!-- ====== NAVIGATION ====== -->
+    <!-- ====== YOUR EXISTING NAVIGATION (PRESERVED) ====== -->
     <a href="Abouts.html" target="_blank" style="color:aqua;float:left">About</a>(&nbsp;)(&nbsp;)
     <a href="services.html" target="_blank" style="color:aqua"> Services</a>(&nbsp;)(&nbsp;) 
     <a href="Contact.html" target="_blank" style="color:aqua"> Contact</a>(&nbsp;) (&nbsp;)
@@ -1251,7 +972,30 @@
         <a href="Coveted.html" target="_blank" style="color:aqua;">Fiction</a>
     </div>
 
-    <!-- ====== SEARCH SCRIPTS ====== -->
+    <!-- ====== YOUR EXISTING SCRIPTS (PRESERVED) ====== -->
+    <script>
+        fetch('https://bespellbee.github.io/BeSpellBee/Services.html')
+        .then(function (data) {
+            return data.text();
+        })
+        .then(function (html) {
+            document.getElementById('content').innerHTML = html;
+            var scripts = document.getElementById("content").querySelectorAll("script");
+            for (var i = 0; i < scripts.length; i++) {
+                if (scripts[i].innerText) {
+                    eval(scripts[i].innerText);
+                } else {
+                    fetch(scripts[i].src).then(function (data) {
+                        data.text().then(function (r) {
+                            eval(r);
+                        })
+                    });
+                }
+                scripts[i].parentNode.removeChild(scripts[i]);
+            }
+        });
+    </script>
+
     <script>
         function executeSearch() {
             var query = document.getElementById("courseInput").value.toLowerCase().trim();
@@ -1276,7 +1020,7 @@
         });
     </script>
 
-    <!-- ====== LOGO - OUTSIDE HERO SECTION (Original Position) ====== -->
+    <!-- ====== YOUR EXISTING LOGO ====== -->
     <h1>
         <svg>
             <defs> 
@@ -1290,43 +1034,8 @@
         </svg>BeSpellBee
     </h1>
 
-    <!-- ====== HERO SECTION WITH AVATAR VIDEO ====== -->
-    <section class="hero-section">
-        <div class="hero-left">
-            <!-- Logo removed from here - now only the tagline and CTA -->
-           
-        </div>
-        
-        <div class="hero-right">
-            <!-- AVATAR PROMOTIONAL VIDEO - YouTube Shorts Embed -->
-            <div class="avatar-video-container">
-                <iframe 
-                    src="https://www.youtube.com/embed/8rf1p0XpNLQ?autoplay=1&loop=1&playlist=8rf1p0XpNLQ&controls=0&modestbranding=1&rel=0" 
-                    allow="encrypted-media; accelerometer; gyroscope; picture-in-picture" 
-                    allowfullscreen>
-                </iframe>
-                <!-- Placeholder hidden since we have a real video -->
-                <div class="avatar-placeholder" id="avatarPlaceholder" style="display:none;">
-                    <i class="fas fa-user-astronaut"></i>
-                    <p><strong>Your Promotional Video</strong><br>Add your avatar video here</p>
-                </div>
-            </div>
-            <span class="avatar-label">🎬 WATCH INTRO</span>
-            
-            <!-- SOCIAL MEDIA LINKS -->
-            <div class="hero-socials">
-                <a href="https://www.instagram.com/bespellbee/" target="_blank" rel="noopener" title="Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="https://facebook.com/BeSpellBee.org" target="_blank" rel="noopener" title="Facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
     <!-- ====== TEACHER CAROUSEL ====== -->
-    <section class="teacher-carousel-section" id="teacher-carousel">
+    <section class="teacher-carousel-section">
         <h2>🎓 Meet Your Teachers</h2>
         <p class="subhead">Browse by subject, watch introductions, and choose the mentor who inspires you</p>
 
@@ -1356,23 +1065,10 @@
         <div class="carousel-dots" id="dotsContainer"></div>
     </section>
 
-    <!-- ====== IMAGE ====== -->
-    <div style="text-align: center; padding: 0 15px; margin: 10px 0;">
-        <img src="images4/meet.png.png" alt="Meet Your Teachers" style="max-width: 100%; height: auto; width: 100%; max-width: 600px; display: inline-block;">
-    </div>
-
-    <!-- ====== FOOTER SOCIALS ====== -->
-    <div class="footer-socials">
-        <p>📲 Follow BeSpellBee on social media</p>
-        <div class="footer-social-links">
-            <a href="https://www.instagram.com/bespellbee/" target="_blank" rel="noopener" class="footer-social-link">
-                <i class="fab fa-instagram"></i> @bespellbee
-            </a>
-            <a href="https://facebook.com/BeSpellBee.org" target="_blank" rel="noopener" class="footer-social-link">
-                <i class="fab fa-facebook-f"></i> BeSpellBee.org
-            </a>
-        </div>
-    </div>
+    <!-- ====== YOUR EXISTING IMAGE ====== -->
+    376     <div style="text-align: center; padding: 0 15px; margin: 10px 0;">
+377         <img src="images4/meet.png.png" alt="Meet Your Teachers" style="max-width: 100%; height: auto; width: 100%; max-width: 600px; display: inline-block;">
+378     </div>
 
     <!-- ====== VIDEO MODAL ====== -->
     <div class="video-modal" id="videoModal">
