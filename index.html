@@ -97,7 +97,7 @@
             overflow: hidden;
             box-shadow: 0 0 60px rgba(0, 255, 255, 0.15);
             position: relative;
-            aspect-ratio: 9 / 16;
+            aspect-ratio: 16 / 9;
         }
 
         .avatar-video-container iframe {
@@ -105,6 +105,7 @@
             height: 100%;
             display: block;
             border: none;
+            object-fit: cover;
         }
 
         .avatar-placeholder {
@@ -1636,9 +1637,6 @@
                 hasVideo: false
             }
         ];
-
-        // --- Avatar video handling ---
-        // The YouTube iframe handles everything, so we just need to make sure the placeholder stays hidden.
 
         // ------------------------------------------------------------
         // FILTER SYSTEM
