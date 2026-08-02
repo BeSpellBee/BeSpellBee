@@ -136,6 +136,7 @@
             box-sizing: border-box;
         }
 
+        /* Custom scrollbar for card-inner */
         .card-inner::-webkit-scrollbar {
             width: 4px;
         }
@@ -269,6 +270,7 @@
             max-height: 100px;
         }
 
+        /* Custom scrollbar for bio */
         .teacher-bio::-webkit-scrollbar {
             width: 3px;
         }
@@ -437,6 +439,54 @@
             width: 28px;
             border-color: #00ffff;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        /* ====== SOCIAL MEDIA BUTTONS (from the avatar section) ====== */
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 10px 0 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #88dddd;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.5rem 1.8rem;
+            border: 1px solid #1a4a4a;
+            border-radius: 40px;
+            transition: all 0.3s;
+            background: rgba(0, 255, 255, 0.03);
+            font-weight: 500;
+        }
+
+        .social-btn:hover {
+            background: #00ffff;
+            color: #000;
+            border-color: #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .social-btn i {
+            font-size: 1.2rem;
+        }
+
+        .social-btn.instagram:hover {
+            background: #E4405F;
+            border-color: #E4405F;
+            color: #fff;
+        }
+
+        .social-btn.facebook:hover {
+            background: #1877F2;
+            border-color: #1877F2;
+            color: #fff;
         }
 
         /* ====== VIDEO MODAL ====== */
@@ -770,60 +820,6 @@
             flex-shrink: 0;
         }
 
-        /* ====== HERO VIDEO SECTION ====== */
-        .hero-video-section {
-            max-width: 800px;
-            margin: 10px auto 20px auto;
-            padding: 0 20px;
-            text-align: center;
-        }
-
-        .hero-video-wrapper {
-            position: relative;
-            background: #0d0d0d;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.08);
-            border: 1px solid #1a4a4a;
-            padding: 4px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero-video-wrapper video {
-            display: block;
-            width: 100%;
-            height: auto;
-            border-radius: 12px;
-            background: #000;
-            max-height: 400px;
-            object-fit: cover;
-        }
-
-        .hero-video-wrapper video::-webkit-media-controls-panel {
-            background: rgba(0, 0, 0, 0.7);
-        }
-
-        .hero-video-wrapper video::-webkit-media-controls-play-button {
-            color: #00ffff;
-        }
-
-        .hero-video-caption {
-            color: #88dddd;
-            font-size: 0.9rem;
-            margin-top: 0.6rem;
-        }
-
-        .hero-video-caption a {
-            color: #00ffff;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .hero-video-caption a:hover {
-            text-decoration: underline;
-        }
-
         /* ====== RESPONSIVE ====== */
         @media (max-width: 768px) {
             .card-inner {
@@ -889,11 +885,9 @@
                 font-size: 0.8rem;
             }
 
-            .hero-video-wrapper video {
-                max-height: 300px;
-            }
-            .hero-video-caption {
-                font-size: 0.8rem;
+            .social-btn {
+                font-size: 0.85rem;
+                padding: 0.4rem 1.2rem;
             }
         }
 
@@ -990,20 +984,13 @@
                 padding: 1.5rem 1.2rem;
             }
 
-            .hero-video-section {
-                padding: 0 10px;
-                margin: 10px auto 15px auto;
+            .social-btn {
+                font-size: 0.75rem;
+                padding: 0.35rem 1rem;
             }
-            .hero-video-wrapper {
-                border-radius: 12px;
-                padding: 3px;
-            }
-            .hero-video-wrapper video {
-                max-height: 200px;
-                border-radius: 10px;
-            }
-            .hero-video-caption {
-                font-size: 0.7rem;
+
+            .social-btn i {
+                font-size: 1rem;
             }
         }
 
@@ -1109,29 +1096,15 @@
         </svg>BeSpellBee
     </h1>
 
-    <!-- ====== HERO VIDEO SECTION ====== -->
-    <section class="hero-video-section">
-        <div class="hero-video-wrapper">
-            <video 
-                id="promoVideo"
-                width="100%" 
-                height="auto" 
-                controls 
-                playsinline 
-                preload="metadata" 
-                poster="images4/video-poster.jpg"
-                style="border-radius: 16px; display: block; width: 100%; height: auto; max-height: 400px; object-fit: cover;"
-            >
-                <source src="videos/bespellbee-promo.mp4" type="video/mp4">
-                Your browser does not support the video tag. 
-                <a href="https://www.facebook.com/BeSpellBee.org" target="_blank">Watch on Facebook</a>
-            </video>
-        </div>
-        <p class="hero-video-caption">
-            🎬 Watch our founder introduce BeSpellBee – 
-            <a href="https://www.facebook.com/BeSpellBee.org" target="_blank">Follow us on Facebook</a>
-        </p>
-    </section>
+    <!-- ====== SOCIAL MEDIA BUTTONS (Placed after the logo) ====== -->
+    <div class="social-buttons">
+        <a href="https://www.instagram.com/bespellbee/" target="_blank" rel="noopener" class="social-btn instagram">
+            <i class="fab fa-instagram"></i> @bespellbee
+        </a>
+        <a href="https://facebook.com/BeSpellBee.org" target="_blank" rel="noopener" class="social-btn facebook">
+            <i class="fab fa-facebook-f"></i> BeSpellBee.org
+        </a>
+    </div>
 
     <!-- ====== TEACHER CAROUSEL ====== -->
     <section class="teacher-carousel-section">
@@ -1260,7 +1233,7 @@
         // TEACHER DATA - 19 TEACHERS IN 10 CATEGORIES!
         // ------------------------------------------------------------
         const teachers = [
-            // ====== EXISTING 14 TEACHERS ======
+            // ====== EXISTING 14 TEACHERS (UNCHANGED) ======
             {
                 id: 1,
                 name: "Arij Dhibi",
@@ -1531,8 +1504,8 @@
                 'Law & Civics': '⚖️',
                 'English Language': '🌍',
                 'Computer Science & IT': '💻',
-                'Economics & Accounting': '📊',
-                'Philosophy & Primary Education': '🧠'
+                'Economics & Accounting': '📊',     // NEW
+                'Philosophy & Primary Education': '🧠'  // NEW
             };
 
             let html = '';
