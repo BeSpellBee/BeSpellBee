@@ -2,7 +2,6 @@
 <html lang="en">
     
 <head>
-    
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N3F5GM52DZ"></script>
     <script>
@@ -24,192 +23,125 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --primary-yellow: #FFD700;
-            --primary-blue: #2B65EC;
-            --dark-bg: #1a1a1a;
-            --soft-white: #f9f9f9;
-        }
-
         body {
-            background: #eef2f5;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 40px 20px;
+            padding: 20px;
         }
 
-        /* Main container */
-        .contact-container {
-            max-width: 1000px;
+        /* Outer Container with Top Yellow Border Band */
+        .page-card {
+            background: #ffffff;
             width: 100%;
-            margin: 0 auto;
-            background: white;
+            max-width: 900px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            border-top: 6px solid #FFD700;
+            padding: 30px 40px 40px 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* YELLOW BORDERED CONTAINER - matches your good.jpg */
-        .yellow-border-container {
-            border: 3px solid var(--primary-yellow);
-            border-radius: 20px;
-            margin: 24px;
-            padding: 32px 28px 40px 28px;
-            background: white;
-        }
-
-        /* LOGO - centered at the top */
+        /* Logo Styling */
         .logo-wrapper {
-            text-align: center;
             margin-bottom: 24px;
+            text-align: center;
         }
 
         .contact-logo {
-            width: 100px;
-            height: 100px;
+            max-width: 180px;
+            height: auto;
             object-fit: contain;
-            border-radius: 50%;
-            background: #fff8e7;
-            padding: 8px;
         }
 
-        /* Headline */
-        .headline {
+        /* Inner Blue Container */
+        .blue-card {
+            background-color: #3B82F6;
+            border-radius: 16px;
+            width: 100%;
+            padding: 24px 24px 32px 24px;
+            box-sizing: border-box;
+        }
+
+        /* Headline inside the blue box */
+        .headline-text {
+            color: #ffffff;
             text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .headline h2 {
-            font-size: 1.6rem;
+            font-size: 1.35rem;
             font-weight: 700;
-            color: #1e2a36;
-            margin-bottom: 8px;
+            margin-bottom: 20px;
+            line-height: 1.4;
         }
 
-        .headline p {
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        /* Features row - One to one, 30 mins, Zoom Meeting with checkmarks */
-        .features-row {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            margin-bottom: 32px;
-            flex-wrap: wrap;
-        }
-
-        .feature {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--soft-white);
-            padding: 8px 20px;
-            border-radius: 40px;
-            font-weight: 500;
-            color: #333;
-        }
-
-        .feature i {
-            color: var(--primary-yellow);
-            font-size: 1.1rem;
-        }
-
-        .feature .check {
-            background: var(--primary-yellow);
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            color: #1e2a36;
-        }
-
-        /* Iframe wrapper - centered */
+        /* Iframe Wrapper */
         .iframe-wrapper {
             width: 100%;
-            display: flex;
-            justify-content: center;
-            margin-top: 16px;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
         .iframe-wrapper iframe {
-            max-width: 100%;
-            width: 750px;
-            height: 560px;
+            width: 100%;
+            height: 620px;
             border: none;
-            border-radius: 16px;
+            display: block;
         }
 
-        /* Responsive adjustments */
+        /* Responsive Styles */
         @media (max-width: 768px) {
-            .yellow-border-container {
-                margin: 16px;
-                padding: 20px 16px 28px 16px;
+            .page-card {
+                padding: 16px 12px 20px 12px;
+                border-top-width: 4px;
             }
 
-            .headline h2 {
-                font-size: 1.3rem;
+            .blue-card {
+                padding: 16px 12px 20px 12px;
+                border-radius: 12px;
             }
 
-            .features-row {
-                gap: 12px;
+            .headline-text {
+                font-size: 1.1rem;
+                margin-bottom: 16px;
             }
 
-            .feature {
-                padding: 5px 14px;
-                font-size: 0.85rem;
+            .contact-logo {
+                max-width: 140px;
             }
 
             .iframe-wrapper iframe {
-                height: 480px;
+                height: 520px;
             }
         }
     </style>
     <title>Be SpellBee | Free Trial Session</title>
-    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
 </head>
 <body>
 
-<div class="contact-container">
-    <!-- YELLOW BORDERED CONTAINER -->
-    <div class="yellow-border-container">
+<div class="page-card">
+    <!-- LOGO -->
+    <div class="logo-wrapper">
+        <img src="images3/original.logo.jpg.jpg" class="contact-logo" alt="Be SpellBee Logo">
+    </div>
+
+    <!-- BLUE CONTAINER -->
+    <div class="blue-card">
+        <h2 class="headline-text">Can't make up your mind? Book a free 30-minute trial session</h2>
         
-        <!-- LOGO - centered at the top -->
-        <div class="logo-wrapper">
-            <img src="images3/original.logo.jpg.jpg" class="contact-logo" alt="Be SpellBee Logo">
-        </div>
-
-        <!-- HEADLINE -->
-        <div class="headline">
-            <h2>Can't make up your mind? <br>Book a free 30-minute trial session</h2>
-        </div>
-
-        <!-- FEATURES ROW (One to one, 30 mins, Zoom Meeting) -->
-        <div class="features-row">
-            <div class="feature">
-                <i class="fas fa-user-check check"></i>
-                <span>One to one</span>
-            </div>
-            <div class="feature">
-                <i class="fas fa-clock check"></i>
-                <span>30 mins</span>
-            </div>
-            <div class="feature">
-                <i class="fab fa-zoom check"></i>
-                <span>Zoom Meeting</span>
-            </div>
-        </div>
-
-        <!-- ZOOM SCHEDULER IFRAME - centered -->
+        <!-- ZOOM SCHEDULER IFRAME -->
         <div class="iframe-wrapper">
-            <iframe src="https://scheduler.zoom.us/be-spellbee/30-minutes-avec-be?embed=true" frameborder="0" title="Zoom Scheduler"></iframe>
+            <iframe 
+                src="https://scheduler.zoom.us/be-spellbee/30-minutes-avec-be?embed=true" 
+                frameborder="0" 
+                title="Zoom Scheduler">
+            </iframe>
         </div>
     </div>
 </div>
