@@ -1,8 +1,7 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-  
+
 <head>
-  
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N3F5GM52DZ"></script>
     <script>
@@ -11,79 +10,176 @@
       gtag('js', new Date());
       gtag('config', 'G-N3F5GM52DZ');
     </script>
-  
-    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
+    <link rel="stylesheet" href="stylesheet.css">
+    
+    <title>About</title>
 
-<link rel="stylesheet" href="stylesheet.css">
+    <style>
+        /* Global Reset & Base matching Services Page */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #f4f7fc;
+            padding: 20px;
+            color: #333;
+        }
 
- 
+        /* Top Header Logo Styling */
+        .header-logo {
+            display: block;
+            margin-bottom: 20px;
+            max-width: 250px;
+            height: auto;
+        }
 
-<title> About </title>
+        /* Container for all content matching .services-container */
+        .about-container {
+            position: relative;
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px 25px;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -8px rgba(0,0,0,0.15);
+            overflow: hidden; /* Contains background image neatly inside container */
+        }
 
- <style>
+        h2 {
+            font-size: 2rem;
+            color: #0056B3;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #FFEB3B;
+            padding-bottom: 12px;
+        }
 
-  /* This tells the middle section to move UP to touch the small logo */
+        /* Demo Background Overlay Wrapper */
+        .demo-wrap {
+            position: relative;
+            min-height: 400px;
+        }
 
-  .demo-wrap {
+        .demo-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.08; /* Semi-transparent background logo */
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            pointer-events: none;
+            z-index: 1;
+        }
 
-    margin-top: -120px; /* Increase this number (e.g., -150px) to move it even closer */
+        .demo-content {
+            position: relative;
+            z-index: 2;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #444;
+        }
 
-   margin-bottom: -100px;}
+        .demo-content ul {
+            list-style: none;
+            margin-top: 15px;
+            padding-left: 0;
+        }
 
-   
+        .demo-content li {
+            margin-bottom: 8px;
+        }
 
- 
+        /* Side iframe section */
+        .side-iframe {
+            margin-top: 25px;
+            float: right;
+            border: 2px dashed #0056B3;
+            border-radius: 12px;
+            position: relative;
+            z-index: 999;
+        }
 
-</style>
+        /* ====== RESPONSIVE MATCHING SERVICES ====== */
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
 
- 
+            .about-container {
+                padding: 20px 15px;
+                border-radius: 24px;
+            }
 
-   
+            h2 {
+                font-size: 1.6rem;
+            }
 
-<link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
+            .demo-content {
+                font-size: 0.95rem;
+            }
+        }
 
+        @media (max-width: 480px) {
+            .about-container {
+                padding: 15px 10px;
+                border-radius: 18px;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            .demo-content {
+                font-size: 0.88rem;
+            }
+        }
+    </style>
 </head>
-
-<img src="images3/original.logo.png" width="250" height="100" align="left;top">
-
-    
-
-<div class="demo-wrap">
-
-  <img
-
-    class="demo-bg"
-
-    src="images3/original.logo.png" width="600" height="600" />                                                                                                                                                                                                      
-
-  
-
-  <div class="demo-content">
-
-    
 
 <body>
 
+    <!-- Header Logo -->
+    <img src="images3/original.logo.png" alt="BeSpellBee Logo" class="header-logo">
 
+    <!-- Outer Card Layout Matched to Services Page -->
+    <div class="about-container">
+        
+        <h2>🐝 About Us</h2>
 
-<p> 
+        <div class="demo-wrap">
+            <!-- Transparent Background Image -->
+            <img class="demo-bg" src="images3/original.logo.png" alt="Background Logo">
 
-BeSpellBee is an educational institution that offers a diverse range of training courses to students. We believe that success is within everyone's reach provided that sound teaching methods, relevant materials, professionalism and strong rapport are present.<br>
+            <!-- Content Area -->
+            <div class="demo-content">
+                <p>
+                    <strong>BeSpellBee</strong> is an educational institution that offers a diverse range of training courses to students. We believe that success is within everyone's reach provided that sound teaching methods, relevant materials, professionalism and strong rapport are present.
+                </p>
+                <br>
+                <p><strong>What we don't do at BeSpellBee is:</strong></p>
+                <ul>
+                    <li><del>judge people on their past school experiences</del></li>
+                    <li><del>force them to choose career paths they are not interested in</del></li>
+                    <li><del>compare students to one another</del></li>
+                </ul>
+            </div>
+        </div>
 
-What we don't do at BeSpellBee is:<br></br><del> judge people on their past school experiences<br></br> force them to choose career paths they are not interested in<br></br>compare students to one another<br></br></del></small></p>
+        <!-- Attached Iframe & Transparent Image Block -->
+        <iframe src="services.html" class="side-iframe" width="200" height="150">
+            <img src="https://lh3.googleusercontent.com/drive-viewer/AKGpihZmEBKUVGt8UtVXpWTa8-uI2sU3lim_KltSJ9-OqHvXfBSrmKklEtitlF_2co2kQ0qDBGRu1GZPJcifJYsdIFLRzpqviZWwi9E=s2560" width="40" height="40" alt="Icon">
+        </iframe>
 
-
-
-  </div>
-
-</div>
-
-<iframe src="services.html" style="border:ridge;border:dashed;position: relative; z-index: 999;" align="right"> <img  src="https://lh3.googleusercontent.com/drive-viewer/AKGpihZmEBKUVGt8UtVXpWTa8-uI2sU3lim_KltSJ9-OqHvXfBSrmKklEtitlF_2co2kQ0qDBGRu1GZPJcifJYsdIFLRzpqviZWwi9E=s2560" width="40" height="40" align="left;top"></iframe>
+    </div>
 
 </body>
-
 </html>
