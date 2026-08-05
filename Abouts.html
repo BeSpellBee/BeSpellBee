@@ -19,7 +19,6 @@
     <title>About</title>
 
     <style>
-        /* Global Reset & Base matching Services Page */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -33,25 +32,21 @@
             color: #333;
         }
 
-        /* Container matching .services-container */
         .about-container {
             max-width: 1100px;
             margin: 0 auto;
             background: #fff;
-            padding: 30px 25px;
+            padding: 30px 25px 40px 25px;
             border-radius: 32px;
             box-shadow: 0 20px 35px -8px rgba(0,0,0,0.15);
             position: relative;
             overflow: hidden;
         }
 
-        /* Adjusted demo-wrap margins for vertical balance */
         .demo-wrap {
-            margin-top: -120px;
-            margin-bottom: -40px;
+            margin-top: -80px;
         }
 
-        /* Paragraph adjustments: Centered text & responsive word-wrap */
         .demo-content {
             text-align: center;
             max-width: 750px;
@@ -60,19 +55,19 @@
             overflow-wrap: break-word;
         }
 
-        /* Modern Floating Card Iframe - Kept at bottom-right */
+        /* Positioned absolutely so it doesn't push down container height */
         .modern-iframe {
-            float: right;
+            position: absolute;
+            bottom: 25px;
+            right: 25px;
             border: none;
-            width: 300px;
-            height: 200px;
+            width: 280px;
+            height: 170px;
             border-radius: 16px;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             background: #ffffff;
-            position: relative;
             z-index: 999;
-            margin-top: -30px;
         }
 
         .modern-iframe:hover {
@@ -80,36 +75,31 @@
             box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.18);
         }
 
-        /* Clearfix to ensure container encapsulates floated iframe smoothly */
-        .about-container::after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        /* ====== RESPONSIVE MATCHING SERVICES PAGE ====== */
         @media (max-width: 768px) {
             body {
                 padding: 12px;
             }
 
             .about-container {
-                padding: 20px 15px;
+                padding: 20px 15px 30px 15px;
                 border-radius: 24px;
             }
 
             .modern-iframe {
-                float: none;
+                position: relative;
+                bottom: auto;
+                right: auto;
                 display: block;
-                margin: 20px auto 0 auto;
+                margin: 25px auto 0 auto;
                 width: 100%;
                 max-width: 350px;
+                height: 180px;
             }
         }
 
         @media (max-width: 480px) {
             .about-container {
-                padding: 15px 10px;
+                padding: 15px 10px 25px 10px;
                 border-radius: 18px;
             }
         }
@@ -118,7 +108,6 @@
 
 <body>
 
-    <!-- EVERYTHING WRAPPED INSIDE THE SERVICES-STYLE CONTAINER -->
     <div class="about-container">
 
         <img src="images3/original.logo.png" width="250" height="100" align="left;top">
@@ -134,7 +123,7 @@
         </div>
 
         <iframe class="modern-iframe" src="services.html"> 
-            <img src="https://lh3.googleusercontent.com/drive-viewer/AKGpihZmEBKUVGt8UtVXpWTa8-uI2sU3lim_KltSJ9-OqHvXfBSrmKklEtitlF_2co2kQ0qDBGRu1GZPJcifJYsdIFLRzpqviZWwi9E=s2560" width="40" height="40" align="left;top">
+            <img src="https://lh3.googleusercontent.com/drive-viewer/AKGpihZmEBKUVGt8UtVXpWTa8-uI2sU3lim_KltSJ9-OqHvXfBSrmKklEtitlF_2co2kQ0qDBGRu1GZPJcifJYsdIFLRzpqviZWwi9E=s2560" width="40" height="40">
         </iframe>
 
     </div>
