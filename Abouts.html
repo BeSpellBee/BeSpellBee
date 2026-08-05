@@ -38,57 +38,26 @@
             max-width: 1100px;
             margin: 0 auto;
             background: #fff;
-            padding: 35px 25px;
+            padding: 30px 25px;
             border-radius: 32px;
             box-shadow: 0 20px 35px -8px rgba(0,0,0,0.15);
             position: relative;
             overflow: hidden;
         }
 
-        /* Top Header Logo */
-        .top-logo {
-            display: block;
-            margin-bottom: 20px;
-            max-width: 250px;
-            height: auto;
-        }
-
-        /* Content Wrapper with Watermark */
+        /* Your existing demo-wrap CSS */
         .demo-wrap {
-            position: relative;
-            padding: 20px 10px;
+            margin-top: -120px;
+            margin-bottom: -100px;
         }
 
-        /* Responsive Watermark Logo */
-        .demo-bg {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            max-width: 500px;
-            height: auto;
-            opacity: 0.12;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        /* Centered & Cleaned Text Content */
+        /* Paragraph adjustments: Centered text & responsive word-wrap */
         .demo-content {
-            position: relative;
-            z-index: 2;
             text-align: center;
             max-width: 750px;
             margin: 0 auto;
-            font-size: 1.05rem;
-            line-height: 1.7;
-            color: #333;
             word-wrap: break-word;
             overflow-wrap: break-word;
-        }
-
-        .demo-content p {
-            margin-bottom: 15px;
         }
 
         /* Modern Floating Card Iframe - Kept at bottom-right */
@@ -103,7 +72,7 @@
             background: #ffffff;
             position: relative;
             z-index: 999;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         .modern-iframe:hover {
@@ -111,14 +80,14 @@
             box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.18);
         }
 
-        /* Clearfix to encapsulate floated iframe cleanly */
+        /* Clearfix to ensure container encapsulates floated iframe smoothly */
         .about-container::after {
             content: "";
             display: table;
             clear: both;
         }
 
-        /* ====== RESPONSIVE MOBILE FIXES ====== */
+        /* ====== RESPONSIVE MATCHING SERVICES PAGE ====== */
         @media (max-width: 768px) {
             body {
                 padding: 12px;
@@ -129,21 +98,10 @@
                 border-radius: 24px;
             }
 
-            .top-logo {
-                max-width: 200px;
-                margin: 0 auto 15px auto;
-            }
-
-            .demo-content {
-                font-size: 0.98rem;
-                line-height: 1.6;
-                padding: 0 5px;
-            }
-
             .modern-iframe {
                 float: none;
                 display: block;
-                margin: 25px auto 0 auto;
+                margin: 20px auto 0 auto;
                 width: 100%;
                 max-width: 350px;
             }
@@ -151,16 +109,8 @@
 
         @media (max-width: 480px) {
             .about-container {
-                padding: 18px 12px;
+                padding: 15px 10px;
                 border-radius: 18px;
-            }
-
-            .top-logo {
-                max-width: 170px;
-            }
-
-            .demo-content {
-                font-size: 0.90rem;
             }
         }
     </style>
@@ -171,29 +121,20 @@
     <!-- EVERYTHING WRAPPED INSIDE THE SERVICES-STYLE CONTAINER -->
     <div class="about-container">
 
-        <!-- Top Header Logo -->
-        <img class="top-logo" src="images3/original.logo.png" width="250" height="100" alt="BeSpellBee Logo">
+        <img src="images3/original.logo.png" width="250" height="100" align="left;top">
 
-        <!-- Main Body Content with Watermark -->
         <div class="demo-wrap">
-            <img class="demo-bg" src="images3/original.logo.png" alt="Background Watermark">
+            <img class="demo-bg" src="images3/original.logo.png" width="600" height="600" />
             
             <div class="demo-content">
-                <p>
-                    BeSpellBee is an educational institution that offers a diverse range of training courses to students. We believe that success is within everyone's reach provided that sound teaching methods, relevant materials, professionalism and strong rapport are present.
-                </p>
-                <p>
-                    <strong>What we don't do at BeSpellBee is:</strong><br>
-                    <del>judge people on their past school experiences</del><br>
-                    <del>force them to choose career paths they are not interested in</del><br>
-                    <del>compare students to one another</del>
-                </p>
+                <p> 
+                BeSpellBee is an educational institution that offers a diverse range of training courses to students. We believe that success is within everyone's reach provided that sound teaching methods, relevant materials, professionalism and strong rapport are present.<br><br>
+                What we don't do at BeSpellBee is:<br><del> judge people on their past school experiences</del><br><del> force them to choose career paths they are not interested in</del><br><del>compare students to one another</del></p>
             </div>
         </div>
 
-        <!-- Modern Floating Card Frame (Bottom Right) -->
         <iframe class="modern-iframe" src="services.html"> 
-            <img src="https://lh3.googleusercontent.com/drive-viewer/AKGpihZmEBKUVGt8UtVXpWTa8-uI2sU3lim_KltSJ9-OqHvXfBSrmKklEtitlF_2co2kQ0qDBGRu1GZPJcifJYsdIFLRzpqviZWwi9E=s2560" width="40" height="40" alt="Fallback Icon">
+            <img src="https://lh3.googleusercontent.com/drive-viewer/AKGpihZmEBKUVGt8UtVXpWTa8-uI2sU3lim_KltSJ9-OqHvXfBSrmKklEtitlF_2co2kQ0qDBGRu1GZPJcifJYsdIFLRzpqviZWwi9E=s2560" width="40" height="40" align="left;top">
         </iframe>
 
     </div>
