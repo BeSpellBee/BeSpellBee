@@ -16,7 +16,7 @@
     <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
     <link rel="stylesheet" href="stylesheet.css">
     
-    <title>About</title>
+    <title>About Us | BeSpellBee</title>
 
     <style>
         /* Global Reset & Base matching Services Page */
@@ -33,84 +33,172 @@
             color: #333;
         }
 
-        /* Container matching .services-container */
+        /* Outer Container matching Services Page */
         .about-container {
             max-width: 1100px;
             margin: 0 auto;
             background: #fff;
-            padding: 30px 25px;
+            padding: 35px 30px;
             border-radius: 32px;
             box-shadow: 0 20px 35px -8px rgba(0,0,0,0.15);
             position: relative;
             overflow: hidden;
         }
 
-        /* Your existing demo-wrap CSS */
+        /* Top Header Logo */
+        .top-logo {
+            display: block;
+            max-width: 220px;
+            height: auto;
+            margin-bottom: 25px;
+        }
+
+        /* Page Heading matching Services Page H2 */
+        h2 {
+            font-size: 2rem;
+            color: #0056B3;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #FFEB3B;
+            padding-bottom: 12px;
+        }
+
+        /* Background Watermark */
         .demo-wrap {
-            margin-top: -120px;
-            margin-bottom: -100px;
-        }
-
-        /* Paragraph adjustments: Centered text & responsive word-wrap */
-        .demo-content {
-            text-align: center;
-            max-width: 750px;
-            margin: 0 auto;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        /* Modern Floating Card Iframe - Kept at bottom-right */
-        .modern-iframe {
-            float: right;
-            border: none;
-            width: 300px;
-            height: 200px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            background: #ffffff;
             position: relative;
-            z-index: 999;
-            margin-top: 15px;
+            padding: 10px 0;
         }
 
-        .modern-iframe:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.18);
+        .demo-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.07;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        /* Clearfix to ensure container encapsulates floated iframe smoothly */
-        .about-container::after {
-            content: "";
-            display: table;
-            clear: both;
+        .demo-content {
+            position: relative;
+            z-index: 2;
         }
 
-        /* ====== RESPONSIVE MATCHING SERVICES PAGE ====== */
+        /* Hero Intro Text */
+        .intro-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #444;
+            margin-bottom: 30px;
+            max-width: 900px;
+        }
+
+        /* Grid for "What We Don't Do" Cards */
+        .philosophy-section {
+            margin: 30px 0;
+        }
+
+        .philosophy-section h3 {
+            font-size: 1.3rem;
+            color: #0056B3;
+            margin-bottom: 15px;
+        }
+
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .philosophy-card {
+            background: #f8fafc;
+            border: 1px solid #eef4fe;
+            border-left: 4px solid #d32f2f; /* Red accent indicating what we avoid */
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 0.98rem;
+            color: #555;
+            transition: transform 0.2s ease;
+        }
+
+        .philosophy-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .philosophy-card span {
+            font-weight: 600;
+            text-decoration: line-through;
+            color: #666;
+        }
+
+        /* Call To Action Card replacing small iframe */
+        .cta-box {
+            background: linear-gradient(135deg, #0056B3, #1976D2);
+            color: #ffffff;
+            padding: 25px 30px;
+            border-radius: 20px;
+            margin-top: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 0 10px 20px rgba(0, 86, 179, 0.2);
+        }
+
+        .cta-box text-area h4 {
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+        }
+
+        .cta-box p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .btn-cta {
+            background: #FFEB3B;
+            color: #0056B3;
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.2s;
+            display: inline-block;
+        }
+
+        .btn-cta:hover {
+            background: #fdd835;
+            transform: scale(1.03);
+        }
+
+        /* ====== RESPONSIVE DESIGN ====== */
         @media (max-width: 768px) {
             body {
                 padding: 12px;
             }
 
             .about-container {
-                padding: 20px 15px;
+                padding: 22px 18px;
                 border-radius: 24px;
             }
 
-            .modern-iframe {
-                float: none;
-                display: block;
-                margin: 20px auto 0 auto;
-                width: 100%;
-                max-width: 350px;
+            h2 {
+                font-size: 1.6rem;
             }
-        }
 
-        @media (max-width: 480px) {
-            .about-container {
-                padding: 15px 10px;
-                border-radius: 18px;
+            .intro-text {
+                font-size: 1rem;
+            }
+
+            .cta-box {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .btn-cta {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
@@ -118,24 +206,49 @@
 
 <body>
 
-    <!-- EVERYTHING WRAPPED INSIDE THE SERVICES-STYLE CONTAINER -->
     <div class="about-container">
 
-        <img src="images3/original.logo.png" width="250" height="100" align="left;top">
+        <!-- Header Logo -->
+        <img class="top-logo" src="images3/original.logo.png" alt="BeSpellBee Logo">
+
+        <h2>🐝 About BeSpellBee</h2>
 
         <div class="demo-wrap">
-            <img class="demo-bg" src="images3/original.logo.png" width="600" height="600" />
+            <!-- Transparent Background Watermark -->
+            <img class="demo-bg" src="images3/original.logo.png" width="500" height="500" alt="Watermark">
             
             <div class="demo-content">
-                <p> 
-                BeSpellBee is an educational institution that offers a diverse range of training courses to students. We believe that success is within everyone's reach provided that sound teaching methods, relevant materials, professionalism and strong rapport are present.<br><br>
-                What we don't do at BeSpellBee is:<br><del> judge people on their past school experiences</del><br><del> force them to choose career paths they are not interested in</del><br><del>compare students to one another</del></p>
+                <!-- Introductory Pitch -->
+                <p class="intro-text">
+                    <strong>BeSpellBee</strong> is an educational institution that offers a diverse range of training courses to students. We believe that success is within everyone's reach provided that sound teaching methods, relevant materials, professionalism, and strong rapport are present.
+                </p>
+
+                <!-- Value Proposition Cards -->
+                <div class="philosophy-section">
+                    <h3>What We Never Do At BeSpellBee:</h3>
+                    <div class="philosophy-grid">
+                        <div class="philosophy-card">
+                            ✕ <span>Judge people on past school experiences</span>
+                        </div>
+                        <div class="philosophy-card">
+                            ✕ <span>Force students into unwanted career paths</span>
+                        </div>
+                        <div class="philosophy-card">
+                            ✕ <span>Compare students to one another</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <iframe class="modern-iframe" src="services.html"> 
-            <img src="https://lh3.googleusercontent.com/drive-viewer/AKGpihZmEBKUVGt8UtVXpWTa8-uI2sU3lim_KltSJ9-OqHvXfBSrmKklEtitlF_2co2kQ0qDBGRu1GZPJcifJYsdIFLRzpqviZWwi9E=s2560" width="40" height="40" align="left;top">
-        </iframe>
+        <!-- High-Converting Call-To-Action Block (Replaces Frame) -->
+        <div class="cta-box">
+            <div>
+                <h4>Ready to excel in your learning journey?</h4>
+                <p>Explore our tailored training courses for Beginners, B2 Exam Prep, and Baccalaureate students.</p>
+            </div>
+            <a href="services.html" class="btn-cta">Explore Services &rarr;</a>
+        </div>
 
     </div>
 
