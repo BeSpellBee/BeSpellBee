@@ -33,82 +33,25 @@
             color: #333;
         }
 
-        /* Top Header Logo Styling */
-        .header-logo {
-            display: block;
-            margin-bottom: 20px;
-            max-width: 250px;
-            height: auto;
-        }
-
-        /* Container for all content matching .services-container */
+        /* Container matching .services-container */
         .about-container {
-            position: relative;
             max-width: 1100px;
             margin: 0 auto;
             background: #fff;
             padding: 30px 25px;
             border-radius: 32px;
             box-shadow: 0 20px 35px -8px rgba(0,0,0,0.15);
-            overflow: hidden; /* Contains background image neatly inside container */
+            position: relative;
+            overflow: hidden;
         }
 
-        h2 {
-            font-size: 2rem;
-            color: #0056B3;
-            margin-bottom: 20px;
-            border-bottom: 3px solid #FFEB3B;
-            padding-bottom: 12px;
-        }
-
-        /* Demo Background Overlay Wrapper */
+        /* Your existing demo-wrap CSS */
         .demo-wrap {
-            position: relative;
-            min-height: 400px;
+            margin-top: -120px;
+            margin-bottom: -100px;
         }
 
-        .demo-bg {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0.08; /* Semi-transparent background logo */
-            width: 100%;
-            max-width: 500px;
-            height: auto;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .demo-content {
-            position: relative;
-            z-index: 2;
-            font-size: 1.05rem;
-            line-height: 1.8;
-            color: #444;
-        }
-
-        .demo-content ul {
-            list-style: none;
-            margin-top: 15px;
-            padding-left: 0;
-        }
-
-        .demo-content li {
-            margin-bottom: 8px;
-        }
-
-        /* Side iframe section */
-        .side-iframe {
-            margin-top: 25px;
-            float: right;
-            border: 2px dashed #0056B3;
-            border-radius: 12px;
-            position: relative;
-            z-index: 999;
-        }
-
-        /* ====== RESPONSIVE MATCHING SERVICES ====== */
+        /* ====== RESPONSIVE MATCHING SERVICES PAGE ====== */
         @media (max-width: 768px) {
             body {
                 padding: 12px;
@@ -118,14 +61,6 @@
                 padding: 20px 15px;
                 border-radius: 24px;
             }
-
-            h2 {
-                font-size: 1.6rem;
-            }
-
-            .demo-content {
-                font-size: 0.95rem;
-            }
         }
 
         @media (max-width: 480px) {
@@ -133,50 +68,29 @@
                 padding: 15px 10px;
                 border-radius: 18px;
             }
-
-            h2 {
-                font-size: 1.3rem;
-            }
-
-            .demo-content {
-                font-size: 0.88rem;
-            }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Header Logo -->
-    <img src="images3/original.logo.png" alt="BeSpellBee Logo" class="header-logo">
-
-    <!-- Outer Card Layout Matched to Services Page -->
+    <!-- EVERYTHING WRAPPED INSIDE THE SERVICES-STYLE CONTAINER -->
     <div class="about-container">
-        
-        <h2>🐝 About Us</h2>
+
+        <img src="images3/original.logo.png" width="250" height="100" align="left;top">
 
         <div class="demo-wrap">
-            <!-- Transparent Background Image -->
-            <img class="demo-bg" src="images3/original.logo.png" alt="Background Logo">
-
-            <!-- Content Area -->
+            <img class="demo-bg" src="images3/original.logo.png" width="600" height="600" />
+            
             <div class="demo-content">
-                <p>
-                    <strong>BeSpellBee</strong> is an educational institution that offers a diverse range of training courses to students. We believe that success is within everyone's reach provided that sound teaching methods, relevant materials, professionalism and strong rapport are present.
-                </p>
-                <br>
-                <p><strong>What we don't do at BeSpellBee is:</strong></p>
-                <ul>
-                    <li><del>judge people on their past school experiences</del></li>
-                    <li><del>force them to choose career paths they are not interested in</del></li>
-                    <li><del>compare students to one another</del></li>
-                </ul>
+                <p> 
+                BeSpellBee is an educational institution that offers a diverse range of training courses to students. We believe that success is within everyone's reach provided that sound teaching methods, relevant materials, professionalism and strong rapport are present.<br>
+                What we don't do at BeSpellBee is:<br></br><del> judge people on their past school experiences<br></br> force them to choose career paths they are not interested in<br></br>compare students to one another<br></br></del></small></p>
             </div>
         </div>
 
-        <!-- Attached Iframe & Transparent Image Block -->
-        <iframe src="services.html" class="side-iframe" width="200" height="150">
-            <img src="https://lh3.googleusercontent.com/drive-viewer/AKGpihZmEBKUVGt8UtVXpWTa8-uI2sU3lim_KltSJ9-OqHvXfBSrmKklEtitlF_2co2kQ0qDBGRu1GZPJcifJYsdIFLRzpqviZWwi9E=s2560" width="40" height="40" alt="Icon">
+        <iframe src="services.html" style="border:ridge;border:dashed;position: relative; z-index: 999;" align="right"> 
+            <img src="https://lh3.googleusercontent.com/drive-viewer/AKGpihZmEBKUVGt8UtVXpWTa8-uI2sU3lim_KltSJ9-OqHvXfBSrmKklEtitlF_2co2kQ0qDBGRu1GZPJcifJYsdIFLRzpqviZWwi9E=s2560" width="40" height="40" align="left;top">
         </iframe>
 
     </div>
