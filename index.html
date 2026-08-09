@@ -1610,99 +1610,115 @@
         // ------------------------------------------------------------
         // BOOKING FUNCTION
         // ------------------------------------------------------------
-        let selectedTeacher = null;
+       // ------------------------------------------------------------
+// BOOKING FUNCTION
+// ------------------------------------------------------------
+let selectedTeacher = null;
 
-        window.bookTeacher = function(teacherName) {
-            const teacher = teachers.find(t => t.name === teacherName);
-            if (teacher) {
-                selectedTeacher = teacher;
-                document.getElementById('modalTeacherName').textContent = teacher.name;
-                document.getElementById('modalTeacherSubject').textContent = teacher.subject;
-                document.getElementById('hiddenTeacherName').value = teacher.name;
-                document.getElementById('bookingForm').style.display = 'block';
-                document.getElementById('formSuccess').classList.remove('active');
-                document.getElementById('bookingModal').classList.add('active');
-                
-                document.getElementById('bookingFormElement').reset();
-                document.getElementById('submitBookingBtn').disabled = false;
-                document.getElementById('submitBookingBtn').innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking';
-            }
-        };
+// Replace with your actual backend endpoint route (e.g., /api/bookings or /bookings)
+const BACKEND_URL = 'https://bespellbee-backend-en6l.onrender.com/api/bookings';
 
-        window.closeModal = function() {
-            document.getElementById('bookingModal').classList.remove('active');
-            selectedTeacher = null;
-        };
+window.bookTeacher = function(teacherName) {
+    const teacher = teachers.find(t => t.name === teacherName);
+    if (teacher) {
+        selectedTeacher = teacher;
+        document.getElementById('modalTeacherName').textContent = teacher.name;
+        document.getElementById('modalTeacherSubject').textContent = teacher.subject;
+        document.getElementById('hiddenTeacherName').value = teacher.name;
+        document.getElementById('bookingForm').style.display = 'block';
+        document.getElementById('formSuccess').classList.remove('active');
+        document.getElementById('bookingModal').classList.add('active');
+        
+        document.getElementById('bookingFormElement').reset();
+        document.getElementById('submitBookingBtn').disabled = false;
+        document.getElementById('submitBookingBtn').innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking';
+    }
+};
 
-        document.getElementById('bookingModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
+window.closeModal = function() {
+    document.getElementById('bookingModal').classList.remove('active');
+    selectedTeacher = null;
+};
+
+document.getElementById('bookingModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeModal();
+    }
+});
+
+// ------------------------------------------------------------
+// SEND BOOKING - RENDER BACKEND
+// ------------------------------------------------------------
+window.sendBooking = async function(e) {
+    // Prevent standard form submission if triggered by form submit event
+    if (e && e.preventDefault) {
+        e.preventDefault();
+    }
+
+    const submitBtn = document.getElementById('submitBookingBtn');
+    
+    const studentName = document.getElementById('studentName').value.trim();
+    const studentEmail = document.getElementById('studentEmail').value.trim();
+    const studentPhone = document.getElementById('studentPhone').value.trim() || 'Not provided';
+    const timeSlot = document.getElementById('timeSlot').value;
+    const message = document.getElementById('message').value.trim() || 'No additional notes';
+    const teacherName = document.getElementById('hiddenTeacherName').value;
+
+    if (!studentName || !studentEmail || !timeSlot) {
+        alert('Please fill in all required fields.');
+        return;
+    }
+
+    if (!teacherName) {
+        alert('Please select a teacher first.');
+        return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="loading-spinner"></span> Sending...';
+
+    // Matches standard REST payload naming (snake_case or camelCase to match your backend)
+    const formData = {
+        studentName: studentName,
+        studentEmail: studentEmail,
+        studentPhone: studentPhone,
+        teacherName: teacherName,
+        timeSlot: timeSlot,
+        message: message
+    };
+
+    try {
+        const response = await fetch(BACKEND_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(formData)
         });
 
-        // ------------------------------------------------------------
-        // SEND BOOKING - FORMSPREE
-        // ------------------------------------------------------------
-        window.sendBooking = function() {
-            const submitBtn = document.getElementById('submitBookingBtn');
-            
-            const studentName = document.getElementById('studentName').value.trim();
-            const studentEmail = document.getElementById('studentEmail').value.trim();
-            const studentPhone = document.getElementById('studentPhone').value.trim() || 'Not provided';
-            const timeSlot = document.getElementById('timeSlot').value;
-            const message = document.getElementById('message').value.trim() || 'No additional notes';
-            const teacherName = document.getElementById('hiddenTeacherName').value;
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            throw new Error(errorData?.message || `Server returned status: ${response.status}`);
+        }
 
-            if (!studentName || !studentEmail || !timeSlot) {
-                alert('Please fill in all required fields.');
-                return;
-            }
+        const data = await response.json();
 
-            if (!teacherName) {
-                alert('Please select a teacher first.');
-                return;
-            }
+        // UI Updates on success
+        document.getElementById('bookingForm').style.display = 'none';
+        document.getElementById('successTeacherName').textContent = teacherName;
+        document.getElementById('formSuccess').classList.add('active');
 
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="loading-spinner"></span> Sending...';
+        console.log('✅ Booking sent successfully to backend!', data);
 
-            const formData = {
-                name: studentName,
-                email: studentEmail,
-                phone: studentPhone,
-                teacher: teacherName,
-                time_slot: timeSlot,
-                message: message
-            };
-
-            fetch('https://formspree.io/f/xbdnjqal', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => {
-                if (response.ok) {
-                    document.getElementById('bookingForm').style.display = 'none';
-                    document.getElementById('successTeacherName').textContent = teacherName;
-                    document.getElementById('formSuccess').classList.add('active');
-                    
-                    console.log('✅ Booking sent successfully!');
-                    console.log(`Teacher: ${teacherName}`);
-                    console.log(`Student: ${studentName} (${studentEmail})`);
-                    console.log(`Time: ${timeSlot}`);
-                } else {
-                    throw new Error('Failed to send booking');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Sorry, there was an error sending your booking. Please try again or contact us directly.');
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking';
-            });
-        };
+    } catch (error) {
+        console.error('Error sending booking:', error);
+        alert(`Sorry, there was an error sending your booking (${error.message}). Please try again.`);
+        
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking';
+    }
+};
 
         // ------------------------------------------------------------
         // BUILD CARDS
