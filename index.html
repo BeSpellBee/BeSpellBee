@@ -1641,9 +1641,9 @@
         });
 
         // ------------------------------------------------------------
-        // SEND BOOKING - RENDER BACKEND
+        // SEND BOOKING - FORMSPREE
         // ------------------------------------------------------------
-        window.sendBooking = async function() {
+        window.sendBooking = function() {
             const submitBtn = document.getElementById('submitBookingBtn');
             
             const studentName = document.getElementById('studentName').value.trim();
@@ -1667,44 +1667,182 @@
             submitBtn.innerHTML = '<span class="loading-spinner"></span> Sending...';
 
             const formData = {
-                studentName: studentName,
-                studentEmail: studentEmail,
-                studentPhone: studentPhone,
-                teacherName: teacherName,
-                timeSlot: timeSlot,
+                name: studentName,
+                email: studentEmail,
+                phone: studentPhone,
+                teacher: teacherName,
+                time_slot: timeSlot,
                 message: message
             };
 
-            try {
-                const response = await fetch('https://bespellbee-backend-en6l.onrender.com/api/bookings', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
-
+            fetch('https://formspree.io/f/xbdnjqal', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
                 if (response.ok) {
                     document.getElementById('bookingForm').style.display = 'none';
                     document.getElementById('successTeacherName').textContent = teacherName;
                     document.getElementById('formSuccess').classList.add('active');
+                    
                     console.log('✅ Booking sent successfully!');
                     console.log(`Teacher: ${teacherName}`);
                     console.log(`Student: ${studentName} (${studentEmail})`);
                     console.log(`Time: ${timeSlot}`);
                 } else {
-                    const errorData = await response.json().catch(() => ({}));
-                    alert(`Booking failed: ${errorData.message || 'Server error. Please try again later.'}`);
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking';
+                    throw new Error('Failed to send booking');
                 }
-            } catch (error) {
-                console.error('Error sending booking:', error);
-                alert('Could not connect to the booking server. Please check your network connection.');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Sorry, there was an error sending your booking. Please try again or contact us directly.');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking';
-            }
+            });
         };
+
+        // ------------------------------------------------------------
+        // BUILD CARDS
+        // ------------------------------------------------------------
+        const track = document.getElementById('carouselTrack');
+        const dotsContainer = document.getElementById('dotsContainer');
+
+        function buildCards() {
+            let cardsHTML = '';
+            filteredTeachers.forEach((teacher, index) => {
+                const fullBio = teacher.bio + `<br><br><em style="color:#88dddd; font-size:0.8rem;">"${teacher.coverLetterExcerpt}"</em>`;
+                
+                const videoBadge = teacher.hasVideo ? 
+                    `<span class="video-badge"><i class="fas fa-video"></i> Video Available</span>` : 
+                    `<span class="video-badge" style="color:#666; border-color:#333;"><i class="fas fa-clock"></i> Video Coming Soon</span>`;
+
+                const videoButton = teacher.hasVideo ? 
+                    `<button class="btn-video" onclick="openVideo('${teacher.name}')">
+                        <i class="fas fa-play"></i> Watch Intro
+                    </button>` : 
+                    `<button class="btn-video" onclick="openVideo('${teacher.name}')" style="color:#666; border-color:#333;">
+                        <i class="fas fa-clock"></i> Coming Soon
+                    </button>`;
+                
+                cardsHTML += `
+                    <div class="teacher-card" data-index="${index}">
+                        <div class="card-inner">
+                            <div class="profile-pic" onclick="openVideo('${teacher.name}')" title="Click to watch introduction">
+                                ${teacher.emoji}
+                                <div class="play-overlay"><i class="fas fa-play"></i></div>
+                            </div>
+                            <h3 class="teacher-name">${teacher.name}</h3>
+                            ${videoBadge}
+                            <div class="teacher-city">
+                                <i class="fas fa-map-pin"></i> ${teacher.city}
+                            </div>
+                            <div class="teacher-subject">${teacher.subject}</div>
+                            <div class="teacher-credentials">
+                                ${teacher.credentials.map(c => `<span>${c}</span>`).join('')}
+                            </div>
+                            <p class="teacher-bio">${fullBio}</p>
+                            <div class="btn-group">
+                                ${videoButton}
+                                <button class="btn-book" onclick="bookTeacher('${teacher.name}')">
+                                    <i class="fas fa-calendar-check"></i> Book a Lesson
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            track.innerHTML = cardsHTML;
+            track.style.display = filteredTeachers.length > 0 ? 'flex' : 'none';
+        }
+
+        function buildDots() {
+            let dotsHTML = '';
+            filteredTeachers.forEach((_, index) => {
+                dotsHTML += `<button class="dot" data-index="${index}" aria-label="Go to teacher ${index + 1}"></button>`;
+            });
+            dotsContainer.innerHTML = dotsHTML;
+        }
+
+        // ------------------------------------------------------------
+        // CAROUSEL LOGIC
+        // ------------------------------------------------------------
+        function updateCarousel(index) {
+            const total = filteredTeachers.length;
+            if (total === 0) return;
+            
+            if (index < 0) index = total - 1;
+            if (index >= total) index = 0;
+            currentIndex = index;
+
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+
+            document.getElementById('prevBtn').classList.toggle('hidden', total <= 1);
+            document.getElementById('nextBtn').classList.toggle('hidden', total <= 1);
+        }
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            updateCarousel(currentIndex - 1);
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            updateCarousel(currentIndex + 1);
+        });
+
+        dotsContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('dot')) {
+                const index = parseInt(e.target.dataset.index, 10);
+                updateCarousel(index);
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                document.getElementById('prevBtn').click();
+                e.preventDefault();
+            } else if (e.key === 'ArrowRight') {
+                document.getElementById('nextBtn').click();
+                e.preventDefault();
+            }
+        });
+
+        let startX = 0;
+        let isDragging = false;
+        const container = document.querySelector('.carousel-container');
+        container.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+        });
+        container.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            const endX = e.changedTouches[0].clientX;
+            const diff = startX - endX;
+            if (Math.abs(diff) > 40) {
+                if (diff > 0) {
+                    document.getElementById('nextBtn').click();
+                } else {
+                    document.getElementById('prevBtn').click();
+                }
+            }
+            isDragging = false;
+        });
+
+        // ------------------------------------------------------------
+        // INIT
+        // ------------------------------------------------------------
+        function init() {
+            buildFilters();
+            filterTeachers('All');
+        }
+
+        init();
     </script>
 
 </body>
