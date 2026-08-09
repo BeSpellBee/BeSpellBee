@@ -1230,11 +1230,6 @@
     <!-- ====== CAROUSEL JAVASCRIPT ====== -->
     <script>
         // ------------------------------------------------------------
-        // RENDER BACKEND CONFIGURATION - YOUR ACTUAL URL
-        // ------------------------------------------------------------
-        const RENDER_URL = 'https://bespellbee-backend-en6l.onrender.com/api/bookings';
-
-        // ------------------------------------------------------------
         // TEACHER DATA - 19 TEACHERS IN 10 CATEGORIES!
         // ------------------------------------------------------------
         const teachers = [
@@ -1509,8 +1504,8 @@
                 'Law & Civics': '⚖️',
                 'English Language': '🌍',
                 'Computer Science & IT': '💻',
-                'Economics & Accounting': '📊',
-                'Philosophy & Primary Education': '🧠'
+                'Economics & Accounting': '📊',     // NEW
+                'Philosophy & Primary Education': '🧠'  // NEW
             };
 
             let html = '';
@@ -1646,7 +1641,7 @@
         });
 
         // ------------------------------------------------------------
-        // SEND BOOKING - YOUR RENDER BACKEND
+        // SEND BOOKING - RENDER BACKEND
         // ------------------------------------------------------------
         window.sendBooking = async function() {
             const submitBtn = document.getElementById('submitBookingBtn');
@@ -1681,7 +1676,7 @@
             };
 
             try {
-                const response = await fetch(RENDER_URL, {
+                const response = await fetch('https://bespellbee-backend-en6l.onrender.com/api/bookings', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1693,6 +1688,10 @@
                     document.getElementById('bookingForm').style.display = 'none';
                     document.getElementById('successTeacherName').textContent = teacherName;
                     document.getElementById('formSuccess').classList.add('active');
+                    console.log('✅ Booking sent successfully!');
+                    console.log(`Teacher: ${teacherName}`);
+                    console.log(`Student: ${studentName} (${studentEmail})`);
+                    console.log(`Time: ${timeSlot}`);
                 } else {
                     const errorData = await response.json().catch(() => ({}));
                     alert(`Booking failed: ${errorData.message || 'Server error. Please try again later.'}`);
