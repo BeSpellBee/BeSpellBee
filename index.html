@@ -1230,10 +1230,9 @@
     <!-- ====== CAROUSEL JAVASCRIPT ====== -->
     <script>
         // ------------------------------------------------------------
-        // RENDER BACKEND CONFIGURATION
+        // RENDER BACKEND CONFIGURATION - YOUR ACTUAL URL
         // ------------------------------------------------------------
-        // ⚠️ Replace 'your-render-app-name' with your actual Render service URL
-        const RENDER_URL = 'https://bespellbee-backend-en6l.onrender.com/';
+        const RENDER_URL = 'https://bespellbee-backend-en6l.onrender.com/api/bookings';
 
         // ------------------------------------------------------------
         // TEACHER DATA - 19 TEACHERS IN 10 CATEGORIES!
@@ -1510,8 +1509,8 @@
                 'Law & Civics': '⚖️',
                 'English Language': '🌍',
                 'Computer Science & IT': '💻',
-                'Economics & Accounting': '📊',     // NEW
-                'Philosophy & Primary Education': '🧠'  // NEW
+                'Economics & Accounting': '📊',
+                'Philosophy & Primary Education': '🧠'
             };
 
             let html = '';
@@ -1647,7 +1646,7 @@
         });
 
         // ------------------------------------------------------------
-        // SEND BOOKING - RENDER API
+        // SEND BOOKING - YOUR RENDER BACKEND
         // ------------------------------------------------------------
         window.sendBooking = async function() {
             const submitBtn = document.getElementById('submitBookingBtn');
