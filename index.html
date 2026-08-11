@@ -1008,21 +1008,6 @@
         h1 svg text {
             font-size: 45px;
         }
-
-        /* ====== STUDENT DASHBOARD BADGE ====== */
-        .student-badge {
-            display: inline-block;
-            background: #00ffff;
-            color: #000;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            margin-left: 10px;
-        }
-        .student-badge i {
-            margin-right: 4px;
-        }
     </style>
 </head>
 
@@ -1039,16 +1024,6 @@
     <!-- ====== STUDENT LOGIN & SIGN UP LINKS ====== -->
     <a href="#" onclick="openSignupModal(); return false;" style="color:aqua; margin-left:15px;">📝 Student Sign Up</a>
     <a href="#" onclick="openLoginModal(); return false;" style="color:aqua; margin-left:10px;">🔐 Student Login</a>
-    
-    <!-- ====== STUDENT DASHBOARD LINK (shows when logged in) ====== -->
-    <a href="#" id="dashboardLink" onclick="openDashboard(); return false;" style="color:#00ff88; margin-left:10px; display:none;">
-        📊 Dashboard
-    </a>
-    
-    <!-- ====== LOGOUT BUTTON (shows when logged in) ====== -->
-    <a href="#" id="logoutLink" onclick="handleLogout(); return false;" style="color:#ff6666; margin-left:10px; display:none;">
-        🚪 Logout
-    </a>
     
     <div style="display: flex; justify-content: flex-end; align-items: center; gap: 15px; float:right;">
         <div style="display: flex; gap: 5px;">
@@ -1250,24 +1225,6 @@
                 <p>Your lesson request has been sent to <strong id="successTeacherName">Teacher</strong>.</p>
                 <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #666;">You will receive a confirmation email shortly.</p>
                 <button class="modal-btn-submit" onclick="closeModal()" style="margin-top: 1.5rem;">
-                    Close
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ====== DASHBOARD MODAL ====== -->
-    <div class="booking-modal" id="dashboardModal">
-        <div class="booking-modal-content" style="max-width: 600px;">
-            <h2>📊 Your Learning Dashboard</h2>
-            <div id="dashboardContent" style="color: #aaa; padding: 0.5rem 0;">
-                <div style="text-align: center; padding: 2rem;">
-                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #00ffff;"></i>
-                    <p>Loading your stats...</p>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 1rem;">
-                <button class="modal-btn-cancel" onclick="closeDashboard()" style="border-color: #00ffff; color: #00ffff;">
                     Close
                 </button>
             </div>
@@ -1651,7 +1608,6 @@
             if (e.key === 'Escape') {
                 closeVideoModal();
                 closeModal();
-                closeDashboard();
             }
         });
 
@@ -1689,7 +1645,7 @@
         });
 
         // ------------------------------------------------------------
-        // SEND BOOKING - WITH TRACKING
+        // SEND BOOKING - RENDER BACKEND
         // ------------------------------------------------------------
         window.sendBooking = async function() {
             const submitBtn = document.getElementById('submitBookingBtn');
@@ -1733,19 +1689,13 @@
                 });
 
                 if (response.ok) {
-                    // Track booking
-                    if (window.trackActivity) {
-                        window.trackActivity('booking', {
-                            teacher: teacherName,
-                            timeSlot: timeSlot,
-                            studentName: studentName
-                        });
-                    }
-
                     document.getElementById('bookingForm').style.display = 'none';
                     document.getElementById('successTeacherName').textContent = teacherName;
                     document.getElementById('formSuccess').classList.add('active');
                     console.log('✅ Booking sent successfully!');
+                    console.log(`Teacher: ${teacherName}`);
+                    console.log(`Student: ${studentName} (${studentEmail})`);
+                    console.log(`Time: ${timeSlot}`);
                 } else {
                     const errorData = await response.json().catch(() => ({}));
                     alert(`Booking failed: ${errorData.message || 'Server error. Please try again later.'}`);
@@ -1902,510 +1852,80 @@
     </script>
 
     <!-- ============================================================ -->
-    <!-- ====== STUDENT TRACKING SYSTEM ====== -->
+    <!-- ====== SIMPLE TEACHER CLICK TRACKING ====== -->
     <!-- ============================================================ -->
     <script>
-    // ============================================
-    // STUDENT TRACKING CONFIGURATION
-    // ============================================
-
+    // Simple tracking - just track teacher clicks
     const TRACKING_API = 'https://bespellbee-backend-en6l.onrender.com/api';
+
+    // Get auth token from localStorage
     const authToken = localStorage.getItem('authToken');
-    const sessionId = localStorage.getItem('sessionId') || generateSessionId();
-    let currentPage = 'home';
-    let pageStartTime = Date.now();
-    let isTrackingEnabled = !!authToken;
 
-    // ============================================
-    // HELPERS
-    // ============================================
-
-    function generateSessionId() {
-        const id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('sessionId', id);
-        return id;
-    }
-
-    function getHeaders() {
-        return {
-            'Authorization': `Bearer ${authToken}`,
-            'Content-Type': 'application/json',
-            'X-Session-Id': sessionId
-        };
-    }
-
-    // ============================================
-    // UPDATE UI BASED ON LOGIN STATUS
-    // ============================================
-
-    function updateAuthUI() {
-        const isLoggedIn = !!localStorage.getItem('authToken');
-        const dashboardLink = document.getElementById('dashboardLink');
-        const logoutLink = document.getElementById('logoutLink');
-        
-        if (isLoggedIn) {
-            dashboardLink.style.display = 'inline';
-            logoutLink.style.display = 'inline';
-            // Hide login/signup links
-            document.querySelectorAll('[onclick*="openSignupModal"], [onclick*="openLoginModal"]').forEach(el => {
-                el.style.display = 'none';
-            });
-        } else {
-            dashboardLink.style.display = 'none';
-            logoutLink.style.display = 'none';
-            document.querySelectorAll('[onclick*="openSignupModal"], [onclick*="openLoginModal"]').forEach(el => {
-                el.style.display = 'inline';
-            });
+    // Track teacher click function
+    async function trackTeacherClick(teacherName, subject) {
+        if (!authToken) {
+            console.log('🔒 Not logged in - tracking skipped');
+            return;
         }
-    }
-
-    // ============================================
-    // TRACKING FUNCTIONS
-    // ============================================
-
-    window.trackActivity = async function(type, data = {}) {
-        if (!isTrackingEnabled || !authToken) return;
         
         try {
             const response = await fetch(`${TRACKING_API}/track/page-view`, {
                 method: 'POST',
-                headers: getHeaders(),
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({
-                    page: currentPage,
-                    url: window.location.href,
-                    duration: Math.floor((Date.now() - pageStartTime) / 1000),
-                    action: type,
-                    ...data
+                    page: 'teacher_profile',
+                    action: 'teacher_click',
+                    teacher: teacherName,
+                    subject: subject,
+                    timestamp: new Date().toISOString()
                 })
             });
-            return await response.json();
+            
+            if (response.ok) {
+                console.log(`✅ Tracked: ${teacherName} clicked!`);
+            } else {
+                console.log('❌ Tracking failed:', await response.text());
+            }
         } catch (error) {
             console.error('Tracking error:', error);
         }
-    };
-
-    // Track video interactions
-    window.trackVideo = async function(videoId, action, currentTime, duration, progress) {
-        if (!isTrackingEnabled || !authToken) return;
-        
-        try {
-            await fetch(`${TRACKING_API}/track/video-progress`, {
-                method: 'POST',
-                headers: getHeaders(),
-                body: JSON.stringify({
-                    videoId: videoId || 'sample_video',
-                    videoTitle: document.querySelector('.teacher-name')?.textContent || 'Sample Video',
-                    action: action,
-                    currentTime: Math.floor(currentTime || 0),
-                    duration: Math.floor(duration || 0),
-                    progress: Math.round(progress || 0)
-                })
-            });
-        } catch (error) {
-            console.error('Video tracking error:', error);
-        }
-    };
-
-    // Track quiz attempt
-    window.trackQuiz = async function(quizId, answers, score, totalQuestions, timeTaken) {
-        if (!isTrackingEnabled || !authToken) return;
-        
-        try {
-            const response = await fetch(`${TRACKING_API}/track/quiz-attempt`, {
-                method: 'POST',
-                headers: getHeaders(),
-                body: JSON.stringify({
-                    quizId: quizId || 'sample_quiz',
-                    quizTitle: document.querySelector('.quiz-container h3')?.textContent || 'Sample Quiz',
-                    answers: answers || [],
-                    score: score || 0,
-                    totalQuestions: totalQuestions || 0,
-                    timeTaken: timeTaken || 0,
-                    isPassed: (score || 0) >= 60
-                })
-            });
-            return await response.json();
-        } catch (error) {
-            console.error('Quiz tracking error:', error);
-        }
-    };
-
-    // Send message with tracking
-    window.sendTrackedMessage = async function(teacherId, content) {
-        if (!isTrackingEnabled || !authToken) return;
-        
-        try {
-            const response = await fetch(`${TRACKING_API}/track/send-message`, {
-                method: 'POST',
-                headers: getHeaders(),
-                body: JSON.stringify({
-                    teacherId: teacherId,
-                    content: content
-                })
-            });
-            return await response.json();
-        } catch (error) {
-            console.error('Message tracking error:', error);
-        }
-    };
-
-    // Track session
-    async function trackSession(action) {
-        if (!isTrackingEnabled || !authToken) return;
-        
-        try {
-            await fetch(`${TRACKING_API}/track/session`, {
-                method: 'POST',
-                headers: getHeaders(),
-                body: JSON.stringify({ action: action })
-            });
-        } catch (error) {
-            console.error('Session tracking error:', error);
-        }
     }
 
-    // ============================================
-    // DASHBOARD
-    // ============================================
+    // ============================================================
+    // MODIFY THE EXISTING openVideo AND bookTeacher FUNCTIONS
+    // ============================================================
 
-    window.openDashboard = async function() {
-        const modal = document.getElementById('dashboardModal');
-        const content = document.getElementById('dashboardContent');
-        
-        modal.classList.add('active');
-        content.innerHTML = `
-            <div style="text-align: center; padding: 2rem;">
-                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #00ffff;"></i>
-                <p style="color: #aaa;">Loading your stats...</p>
-            </div>
-        `;
+    // Store original functions
+    const originalOpenVideo = window.openVideo;
+    const originalBookTeacher = window.bookTeacher;
 
-        try {
-            const response = await fetch(`${TRACKING_API}/track/dashboard`, {
-                headers: getHeaders()
-            });
-            const data = await response.json();
-
-            if (data.success) {
-                const d = data.data;
-                content.innerHTML = `
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1rem 0;">
-                        <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
-                            <div style="font-size: 1.8rem; color: #00ffff;">${d.stats?.completedVideos || 0}</div>
-                            <div style="font-size: 0.7rem; color: #666;">Videos Completed</div>
-                        </div>
-                        <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
-                            <div style="font-size: 1.8rem; color: #00ff88;">${d.stats?.totalQuizzes || 0}</div>
-                            <div style="font-size: 0.7rem; color: #666;">Quizzes Taken</div>
-                        </div>
-                        <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
-                            <div style="font-size: 1.8rem; color: #ffcc00;">${Math.round(d.stats?.avgScore || 0)}%</div>
-                            <div style="font-size: 0.7rem; color: #666;">Average Score</div>
-                        </div>
-                        <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
-                            <div style="font-size: 1.8rem; color: #ff66aa;">${d.stats?.totalMessages || 0}</div>
-                            <div style="font-size: 0.7rem; color: #666;">Messages Sent</div>
-                        </div>
-                    </div>
-                    <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center; margin-top: 0.5rem;">
-                        <div style="font-size: 1.2rem; color: #00ffff;">⭐ ${Math.round(d.student?.engagementScore || 0)}%</div>
-                        <div style="font-size: 0.7rem; color: #666;">Engagement Score</div>
-                    </div>
-                    <div style="margin-top: 0.8rem; font-size: 0.7rem; color: #555; text-align: center;">
-                        ⏱️ ${Math.floor((d.stats?.totalTimeSpent || 0) / 60)} minutes spent learning
-                    </div>
-                `;
-            } else {
-                content.innerHTML = `<p style="color: #ff6666; text-align: center;">Failed to load dashboard</p>`;
-            }
-        } catch (error) {
-            console.error('Dashboard error:', error);
-            content.innerHTML = `<p style="color: #ff6666; text-align: center;">Error loading dashboard</p>`;
+    // Enhanced openVideo with tracking
+    window.openVideo = function(teacherName) {
+        // Find teacher to get subject
+        const teacher = teachers.find(t => t.name === teacherName);
+        if (teacher) {
+            trackTeacherClick(teacherName, teacher.subject);
         }
+        // Call original function
+        originalOpenVideo(teacherName);
     };
 
-    window.closeDashboard = function() {
-        document.getElementById('dashboardModal').classList.remove('active');
+    // Enhanced bookTeacher with tracking
+    window.bookTeacher = function(teacherName) {
+        const teacher = teachers.find(t => t.name === teacherName);
+        if (teacher) {
+            trackTeacherClick(teacherName, teacher.subject);
+        }
+        // Call original function
+        originalBookTeacher(teacherName);
     };
 
-    document.getElementById('dashboardModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeDashboard();
-        }
-    });
-
-    // ============================================
-    // LOGOUT
-    // ============================================
-
-    window.handleLogout = async function() {
-        if (confirm('Are you sure you want to logout?')) {
-            await trackSession('logout');
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('studentId');
-            localStorage.removeItem('sessionId');
-            isTrackingEnabled = false;
-            updateAuthUI();
-            location.reload();
-        }
-    };
-
-    // ============================================
-    // AUTHENTICATION MODALS
-    // ============================================
-
-    // Signup Modal
-    window.openSignupModal = function() {
-        const modal = document.createElement('div');
-        modal.id = 'signupModal';
-        modal.style.cssText = `
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 9999;
-            display: flex; justify-content: center; align-items: center;
-            backdrop-filter: blur(10px);
-        `;
-        modal.innerHTML = `
-            <div style="background: #0d0d0d; border: 2px solid #00ffff; border-radius: 20px;
-                        padding: 2rem; max-width: 400px; width: 90%;">
-                <h2 style="color: #00ffff; text-align: center;">📝 Student Sign Up</h2>
-                <form id="signupForm" style="display: flex; flex-direction: column; gap: 1rem;">
-                    <input type="text" id="signupName" placeholder="Full Name" required
-                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
-                               background: #1a1a1a; color: white;">
-                    <input type="email" id="signupEmail" placeholder="Email" required
-                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
-                               background: #1a1a1a; color: white;">
-                    <input type="password" id="signupPassword" placeholder="Password (min 6 chars)" required
-                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
-                               background: #1a1a1a; color: white;">
-                    <input type="tel" id="signupPhone" placeholder="Phone (optional)"
-                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
-                               background: #1a1a1a; color: white;">
-                    <button type="submit" style="background: #00ffff; color: #000; border: none;
-                        padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                        Create Account
-                    </button>
-                </form>
-                <p style="color: #666; text-align: center; font-size: 0.8rem; margin-top: 0.5rem;">
-                    Already have an account? <a href="#" onclick="closeModalById('signupModal'); openLoginModal(); return false;" style="color: #00ffff;">Login</a>
-                </p>
-                <button onclick="closeModalById('signupModal')"
-                    style="background: transparent; color: #888; border: 1px solid #444;
-                           padding: 8px; border-radius: 8px; width: 100%; margin-top: 0.5rem; cursor: pointer;">
-                    Cancel
-                </button>
-                <div id="signupMessage" style="color: #ff4444; text-align: center; margin-top: 0.5rem;"></div>
-            </div>
-        `;
-        document.body.appendChild(modal);
-
-        document.getElementById('signupForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const name = document.getElementById('signupName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value;
-            const phone = document.getElementById('signupPhone').value.trim();
-            const messageEl = document.getElementById('signupMessage');
-
-            if (password.length < 6) {
-                messageEl.textContent = 'Password must be at least 6 characters';
-                return;
-            }
-
-            try {
-                const response = await fetch(`${TRACKING_API}/auth/register-student`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password, phone })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    localStorage.setItem('authToken', data.data.token);
-                    localStorage.setItem('studentId', data.data.id);
-                    isTrackingEnabled = true;
-                    messageEl.style.color = '#00ff88';
-                    messageEl.textContent = '✅ Account created!';
-                    updateAuthUI();
-                    setTimeout(() => {
-                        closeModalById('signupModal');
-                        location.reload();
-                    }, 1000);
-                } else {
-                    messageEl.textContent = '❌ ' + (data.message || 'Signup failed');
-                }
-            } catch (error) {
-                messageEl.textContent = '❌ Connection error. Please try again.';
-            }
-        });
-    };
-
-    // Login Modal
-    window.openLoginModal = function() {
-        const modal = document.createElement('div');
-        modal.id = 'loginModal';
-        modal.style.cssText = `
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 9999;
-            display: flex; justify-content: center; align-items: center;
-            backdrop-filter: blur(10px);
-        `;
-        modal.innerHTML = `
-            <div style="background: #0d0d0d; border: 2px solid #00ffff; border-radius: 20px;
-                        padding: 2rem; max-width: 400px; width: 90%;">
-                <h2 style="color: #00ffff; text-align: center;">🔐 Student Login</h2>
-                <form id="loginForm" style="display: flex; flex-direction: column; gap: 1rem;">
-                    <input type="email" id="loginEmail" placeholder="Email" required
-                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
-                               background: #1a1a1a; color: white;">
-                    <input type="password" id="loginPassword" placeholder="Password" required
-                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
-                               background: #1a1a1a; color: white;">
-                    <button type="submit" style="background: #00ffff; color: #000; border: none;
-                        padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                        Login
-                    </button>
-                </form>
-                <p style="color: #666; text-align: center; font-size: 0.8rem; margin-top: 0.5rem;">
-                    Don't have an account? <a href="#" onclick="closeModalById('loginModal'); openSignupModal(); return false;" style="color: #00ffff;">Sign Up</a>
-                </p>
-                <button onclick="closeModalById('loginModal')"
-                    style="background: transparent; color: #888; border: 1px solid #444;
-                           padding: 8px; border-radius: 8px; width: 100%; margin-top: 0.5rem; cursor: pointer;">
-                    Cancel
-                </button>
-                <div id="loginMessage" style="color: #ff4444; text-align: center; margin-top: 0.5rem;"></div>
-            </div>
-        `;
-        document.body.appendChild(modal);
-
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const messageEl = document.getElementById('loginMessage');
-
-            try {
-                const response = await fetch(`${TRACKING_API}/auth/student-login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    localStorage.setItem('authToken', data.data.token);
-                    localStorage.setItem('studentId', data.data.id);
-                    localStorage.setItem('sessionId', data.data.sessionId);
-                    isTrackingEnabled = true;
-                    messageEl.style.color = '#00ff88';
-                    messageEl.textContent = '✅ Login successful!';
-                    updateAuthUI();
-                    setTimeout(() => {
-                        closeModalById('loginModal');
-                        location.reload();
-                    }, 1000);
-                } else {
-                    messageEl.textContent = '❌ ' + (data.message || 'Login failed');
-                }
-            } catch (error) {
-                messageEl.textContent = '❌ Connection error. Please try again.';
-            }
-        });
-    };
-
-    function closeModalById(id) {
-        const el = document.getElementById(id);
-        if (el) el.remove();
-    }
-
-    // ============================================
-    // AUTO-TRACKING
-    // ============================================
-
-    // Update UI on load
-    updateAuthUI();
-
-    // Track page view on load
-    document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-            trackActivity('page_load', {
-                page: document.title || 'BeSpellBee',
-                url: window.location.href
-            });
-        }, 1000);
-        
-        if (isTrackingEnabled) {
-            trackSession('login');
-            // Load dashboard data silently
-            fetch(`${TRACKING_API}/track/dashboard`, {
-                headers: getHeaders()
-            }).then(r => r.json()).then(data => {
-                if (data.success) {
-                    console.log('📊 Engagement Score:', data.data.student?.engagementScore || 0);
-                }
-            }).catch(() => {});
-        }
-    });
-
-    // Track page visibility
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            trackActivity('page_hide', { page: currentPage });
-        } else {
-            trackActivity('page_show', { page: currentPage });
-            pageStartTime = Date.now();
-        }
-    });
-
-    // Track page leave
-    window.addEventListener('beforeunload', () => {
-        const duration = Math.floor((Date.now() - pageStartTime) / 1000);
-        trackActivity('page_leave', { 
-            page: currentPage, 
-            duration: duration 
-        });
-        // Try to send logout
-        if (isTrackingEnabled) {
-            navigator.sendBeacon(`${TRACKING_API}/track/session`, JSON.stringify({
-                action: 'logout'
-            }));
-        }
-    });
-
-    // Track clicks
-    document.addEventListener('click', (e) => {
-        const target = e.target;
-        const elementType = target.tagName.toLowerCase();
-        const elementText = target.textContent?.trim()?.substring(0, 50) || '';
-        const elementId = target.id || target.className || '';
-        
-        if (elementType !== 'a' && elementType !== 'button') return;
-        
-        trackActivity('click', {
-            element: elementType,
-            text: elementText,
-            id: elementId,
-            href: target.href || null,
-            class: target.className || null
-        });
-    });
-
-    // ============================================
-    // INIT
-    // ============================================
-
-    console.log('🚀 Tracking system initialized!');
-    console.log('📊 Session ID:', sessionId);
+    console.log('✅ Simple teacher click tracking loaded!');
     console.log('🔑 Logged in:', !!authToken);
-
-    // Make tracking functions available globally
-    window.trackActivity = trackActivity;
-    window.trackVideo = trackVideo;
-    window.trackQuiz = trackQuiz;
-    window.sendTrackedMessage = sendTrackedMessage;
+    console.log('📊 Click on any teacher card to track it!');
     </script>
 
 </body>
