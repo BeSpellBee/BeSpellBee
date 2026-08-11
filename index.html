@@ -1852,17 +1852,17 @@
     </script>
 
     <!-- ============================================================ -->
-    <!-- ====== SIMPLE TEACHER CLICK TRACKING ====== -->
+    <!-- ====== TEACHER CAROUSEL VIEW TRACKING ====== -->
     <!-- ============================================================ -->
     <script>
-    // Simple tracking - just track teacher clicks
+    // Simple tracking - just track when a teacher card is viewed in the carousel
     const TRACKING_API = 'https://bespellbee-backend-en6l.onrender.com/api';
 
     // Get auth token from localStorage
     const authToken = localStorage.getItem('authToken');
 
-    // Track teacher click function
-    async function trackTeacherClick(teacherName, subject) {
+    // Track teacher card view function
+    async function trackTeacherCardView(teacherName, subject) {
         if (!authToken) {
             console.log('🔒 Not logged in - tracking skipped');
             return;
@@ -1876,8 +1876,8 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    page: 'teacher_profile',
-                    action: 'teacher_click',
+                    page: 'teacher_carousel',
+                    action: 'teacher_card_view',
                     teacher: teacherName,
                     subject: subject,
                     timestamp: new Date().toISOString()
@@ -1885,47 +1885,77 @@
             });
             
             if (response.ok) {
-                console.log(`✅ Tracked: ${teacherName} clicked!`);
-            } else {
-                console.log('❌ Tracking failed:', await response.text());
+                console.log(`✅ Tracked: ${teacherName} card viewed`);
             }
         } catch (error) {
             console.error('Tracking error:', error);
         }
     }
 
-    // ============================================================
-    // MODIFY THE EXISTING openVideo AND bookTeacher FUNCTIONS
-    // ============================================================
+    // Track carousel navigation
+    function setupCarouselTracking() {
+        const track = document.getElementById('carouselTrack');
+        if (!track) return;
 
-    // Store original functions
-    const originalOpenVideo = window.openVideo;
-    const originalBookTeacher = window.bookTeacher;
-
-    // Enhanced openVideo with tracking
-    window.openVideo = function(teacherName) {
-        // Find teacher to get subject
-        const teacher = teachers.find(t => t.name === teacherName);
-        if (teacher) {
-            trackTeacherClick(teacherName, teacher.subject);
+        function trackCurrentCard() {
+            const cards = track.querySelectorAll('.teacher-card');
+            const visibleCard = cards[currentIndex];
+            
+            if (visibleCard) {
+                const teacherName = visibleCard.querySelector('.teacher-name')?.textContent;
+                const teacherSubject = visibleCard.querySelector('.teacher-subject')?.textContent;
+                
+                if (teacherName) {
+                    trackTeacherCardView(teacherName, teacherSubject || 'Unknown');
+                }
+            }
         }
-        // Call original function
-        originalOpenVideo(teacherName);
-    };
 
-    // Enhanced bookTeacher with tracking
-    window.bookTeacher = function(teacherName) {
-        const teacher = teachers.find(t => t.name === teacherName);
-        if (teacher) {
-            trackTeacherClick(teacherName, teacher.subject);
+        // Track on navigation
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        
+        if (prevBtn) {
+            prevBtn.addEventListener('click', function() {
+                setTimeout(trackCurrentCard, 150);
+            });
         }
-        // Call original function
-        originalBookTeacher(teacherName);
-    };
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', function() {
+                setTimeout(trackCurrentCard, 150);
+            });
+        }
 
-    console.log('✅ Simple teacher click tracking loaded!');
+        // Track on filter
+        document.getElementById('filterContainer')?.addEventListener('click', function(e) {
+            if (e.target.closest('.filter-btn')) {
+                setTimeout(trackCurrentCard, 200);
+            }
+        });
+
+        // Track on dot click
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('dot')) {
+                setTimeout(trackCurrentCard, 150);
+            }
+        });
+
+        // Track initial load
+        setTimeout(trackCurrentCard, 800);
+    }
+
+    // Run when page loads
+    if (document.readyState === 'complete') {
+        setTimeout(setupCarouselTracking, 500);
+    } else {
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(setupCarouselTracking, 500);
+        });
+    }
+
+    console.log('✅ Teacher carousel tracking loaded!');
     console.log('🔑 Logged in:', !!authToken);
-    console.log('📊 Click on any teacher card to track it!');
     </script>
 
 </body>
