@@ -1008,6 +1008,21 @@
         h1 svg text {
             font-size: 45px;
         }
+
+        /* ====== STUDENT BADGE ====== */
+        .student-badge {
+            display: inline-block;
+            background: #00ffff;
+            color: #000;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        .student-badge i {
+            margin-right: 4px;
+        }
     </style>
 </head>
 
@@ -1024,6 +1039,16 @@
     <!-- ====== STUDENT LOGIN & SIGN UP LINKS ====== -->
     <a href="#" onclick="openSignupModal(); return false;" style="color:aqua; margin-left:15px;">📝 Student Sign Up</a>
     <a href="#" onclick="openLoginModal(); return false;" style="color:aqua; margin-left:10px;">🔐 Student Login</a>
+    
+    <!-- ====== STUDENT DASHBOARD LINK (shows when logged in) ====== -->
+    <a href="#" id="dashboardLink" onclick="openDashboard(); return false;" style="color:#00ff88; margin-left:10px; display:none;">
+        📊 Dashboard
+    </a>
+    
+    <!-- ====== LOGOUT BUTTON (shows when logged in) ====== -->
+    <a href="#" id="logoutLink" onclick="handleLogout(); return false;" style="color:#ff6666; margin-left:10px; display:none;">
+        🚪 Logout
+    </a>
     
     <div style="display: flex; justify-content: flex-end; align-items: center; gap: 15px; float:right;">
         <div style="display: flex; gap: 5px;">
@@ -1225,6 +1250,24 @@
                 <p>Your lesson request has been sent to <strong id="successTeacherName">Teacher</strong>.</p>
                 <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #666;">You will receive a confirmation email shortly.</p>
                 <button class="modal-btn-submit" onclick="closeModal()" style="margin-top: 1.5rem;">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== DASHBOARD MODAL ====== -->
+    <div class="booking-modal" id="dashboardModal">
+        <div class="booking-modal-content" style="max-width: 600px;">
+            <h2>📊 Your Learning Dashboard</h2>
+            <div id="dashboardContent" style="color: #aaa; padding: 0.5rem 0;">
+                <div style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #00ffff;"></i>
+                    <p>Loading your stats...</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 1rem;">
+                <button class="modal-btn-cancel" onclick="closeDashboard()" style="border-color: #00ffff; color: #00ffff;">
                     Close
                 </button>
             </div>
@@ -1608,6 +1651,7 @@
             if (e.key === 'Escape') {
                 closeVideoModal();
                 closeModal();
+                closeDashboard();
             }
         });
 
@@ -1852,110 +1896,472 @@
     </script>
 
     <!-- ============================================================ -->
-    <!-- ====== TEACHER CAROUSEL VIEW TRACKING ====== -->
+    <!-- ====== STUDENT TRACKING SYSTEM ====== -->
     <!-- ============================================================ -->
     <script>
-    // Simple tracking - just track when a teacher card is viewed in the carousel
+    // ============================================
+    // STUDENT TRACKING CONFIGURATION
+    // ============================================
+
     const TRACKING_API = 'https://bespellbee-backend-en6l.onrender.com/api';
-
-    // Get auth token from localStorage
     const authToken = localStorage.getItem('authToken');
+    const sessionId = localStorage.getItem('sessionId') || generateSessionId();
+    let currentPage = 'home';
+    let pageStartTime = Date.now();
+    let isTrackingEnabled = !!authToken;
 
-    // Track teacher card view function
-    async function trackTeacherCardView(teacherName, subject) {
-        if (!authToken) {
-            console.log('🔒 Not logged in - tracking skipped');
+    // ============================================
+    // HELPERS
+    // ============================================
+
+    function generateSessionId() {
+        const id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('sessionId', id);
+        return id;
+    }
+
+    function getHeaders() {
+        return {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json',
+            'X-Session-Id': sessionId
+        };
+    }
+
+    // ============================================
+    // UPDATE UI BASED ON LOGIN STATUS
+    // ============================================
+
+    function updateAuthUI() {
+        const isLoggedIn = !!localStorage.getItem('authToken');
+        const dashboardLink = document.getElementById('dashboardLink');
+        const logoutLink = document.getElementById('logoutLink');
+        
+        if (isLoggedIn) {
+            if (dashboardLink) dashboardLink.style.display = 'inline';
+            if (logoutLink) logoutLink.style.display = 'inline';
+            document.querySelectorAll('[onclick*="openSignupModal"], [onclick*="openLoginModal"]').forEach(el => {
+                el.style.display = 'none';
+            });
+        } else {
+            if (dashboardLink) dashboardLink.style.display = 'none';
+            if (logoutLink) logoutLink.style.display = 'none';
+            document.querySelectorAll('[onclick*="openSignupModal"], [onclick*="openLoginModal"]').forEach(el => {
+                el.style.display = 'inline';
+            });
+        }
+    }
+
+    // ============================================
+    // DASHBOARD
+    // ============================================
+
+    window.openDashboard = async function() {
+        const modal = document.getElementById('dashboardModal');
+        const content = document.getElementById('dashboardContent');
+        
+        if (!modal) {
+            alert('Dashboard modal not found. Please refresh the page.');
             return;
         }
         
+        modal.classList.add('active');
+        content.innerHTML = `
+            <div style="text-align: center; padding: 2rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #00ffff;"></i>
+                <p style="color: #aaa;">Loading your stats...</p>
+            </div>
+        `;
+
         try {
-            const response = await fetch(`${TRACKING_API}/track/page-view`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${authToken}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    page: 'teacher_carousel',
-                    action: 'teacher_card_view',
-                    teacher: teacherName,
-                    subject: subject,
-                    timestamp: new Date().toISOString()
-                })
+            const response = await fetch(`${TRACKING_API}/track/dashboard`, {
+                headers: getHeaders()
             });
-            
-            if (response.ok) {
-                console.log(`✅ Tracked: ${teacherName} card viewed`);
+            const data = await response.json();
+
+            if (data.success) {
+                const d = data.data;
+                content.innerHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1rem 0;">
+                        <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
+                            <div style="font-size: 1.8rem; color: #00ffff;">${d.stats?.completedVideos || 0}</div>
+                            <div style="font-size: 0.7rem; color: #666;">Videos Completed</div>
+                        </div>
+                        <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
+                            <div style="font-size: 1.8rem; color: #00ff88;">${d.stats?.totalQuizzes || 0}</div>
+                            <div style="font-size: 0.7rem; color: #666;">Quizzes Taken</div>
+                        </div>
+                        <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
+                            <div style="font-size: 1.8rem; color: #ffcc00;">${Math.round(d.stats?.avgScore || 0)}%</div>
+                            <div style="font-size: 0.7rem; color: #666;">Average Score</div>
+                        </div>
+                        <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
+                            <div style="font-size: 1.8rem; color: #ff66aa;">${d.stats?.totalMessages || 0}</div>
+                            <div style="font-size: 0.7rem; color: #666;">Messages Sent</div>
+                        </div>
+                    </div>
+                    <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center; margin-top: 0.5rem;">
+                        <div style="font-size: 1.2rem; color: #00ffff;">⭐ ${Math.round(d.student?.engagementScore || 0)}%</div>
+                        <div style="font-size: 0.7rem; color: #666;">Engagement Score</div>
+                    </div>
+                    <div style="margin-top: 0.8rem; font-size: 0.7rem; color: #555; text-align: center;">
+                        ⏱️ ${Math.floor((d.stats?.totalTimeSpent || 0) / 60)} minutes spent learning
+                    </div>
+                `;
+            } else {
+                content.innerHTML = `<p style="color: #ff6666; text-align: center;">Failed to load dashboard: ${data.message || 'Unknown error'}</p>`;
             }
         } catch (error) {
-            console.error('Tracking error:', error);
+            console.error('Dashboard error:', error);
+            content.innerHTML = `<p style="color: #ff6666; text-align: center;">Error loading dashboard. Please try again.</p>`;
         }
+    };
+
+    window.closeDashboard = function() {
+        const modal = document.getElementById('dashboardModal');
+        if (modal) modal.classList.remove('active');
+    };
+
+    // ============================================
+    // LOGOUT
+    // ============================================
+
+    window.handleLogout = function() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('studentId');
+            localStorage.removeItem('sessionId');
+            isTrackingEnabled = false;
+            updateAuthUI();
+            location.reload();
+        }
+    };
+
+    // ============================================
+    // AUTHENTICATION MODALS
+    // ============================================
+
+    // Signup Modal
+    window.openSignupModal = function() {
+        document.querySelectorAll('#signupModal, #loginModal').forEach(el => el.remove());
+        
+        const modal = document.createElement('div');
+        modal.id = 'signupModal';
+        modal.style.cssText = `
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            backdrop-filter: blur(10px);
+        `;
+        modal.innerHTML = `
+            <div style="background: #0d0d0d; border: 2px solid #00ffff; border-radius: 20px;
+                        padding: 2rem; max-width: 400px; width: 90%;">
+                <h2 style="color: #00ffff; text-align: center;">📝 Student Sign Up</h2>
+                <form id="signupForm" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <input type="text" id="signupName" placeholder="Full Name" required
+                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
+                               background: #1a1a1a; color: white;">
+                    <input type="email" id="signupEmail" placeholder="Email" required
+                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
+                               background: #1a1a1a; color: white;">
+                    <input type="password" id="signupPassword" placeholder="Password (min 6 chars)" required
+                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
+                               background: #1a1a1a; color: white;">
+                    <input type="tel" id="signupPhone" placeholder="Phone (optional)"
+                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
+                               background: #1a1a1a; color: white;">
+                    <button type="submit" style="background: #00ffff; color: #000; border: none;
+                        padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                        Create Account
+                    </button>
+                </form>
+                <p style="color: #666; text-align: center; font-size: 0.8rem; margin-top: 0.5rem;">
+                    Already have an account? <a href="#" onclick="closeModalById('signupModal'); openLoginModal(); return false;" style="color: #00ffff;">Login</a>
+                </p>
+                <button onclick="closeModalById('signupModal')"
+                    style="background: transparent; color: #888; border: 1px solid #444;
+                           padding: 8px; border-radius: 8px; width: 100%; margin-top: 0.5rem; cursor: pointer;">
+                    Cancel
+                </button>
+                <div id="signupMessage" style="color: #ff4444; text-align: center; margin-top: 0.5rem;"></div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const phone = document.getElementById('signupPhone').value.trim();
+            const messageEl = document.getElementById('signupMessage');
+
+            if (password.length < 6) {
+                messageEl.textContent = 'Password must be at least 6 characters';
+                return;
+            }
+
+            messageEl.textContent = '⏳ Creating account...';
+            messageEl.style.color = '#00ffff';
+
+            try {
+                const response = await fetch(`${TRACKING_API}/auth/register-student`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password, phone })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('authToken', data.data.token);
+                    localStorage.setItem('studentId', data.data.id);
+                    isTrackingEnabled = true;
+                    messageEl.style.color = '#00ff88';
+                    messageEl.textContent = '✅ Account created!';
+                    updateAuthUI();
+                    setTimeout(() => {
+                        closeModalById('signupModal');
+                        location.reload();
+                    }, 1500);
+                } else {
+                    messageEl.textContent = '❌ ' + (data.message || 'Signup failed');
+                }
+            } catch (error) {
+                console.error('Signup error:', error);
+                messageEl.textContent = '❌ Connection error. Please try again.';
+            }
+        });
+    };
+
+    // Login Modal
+    window.openLoginModal = function() {
+        document.querySelectorAll('#signupModal, #loginModal').forEach(el => el.remove());
+        
+        const modal = document.createElement('div');
+        modal.id = 'loginModal';
+        modal.style.cssText = `
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            backdrop-filter: blur(10px);
+        `;
+        modal.innerHTML = `
+            <div style="background: #0d0d0d; border: 2px solid #00ffff; border-radius: 20px;
+                        padding: 2rem; max-width: 400px; width: 90%;">
+                <h2 style="color: #00ffff; text-align: center;">🔐 Student Login</h2>
+                <form id="loginForm" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <input type="email" id="loginEmail" placeholder="Email" required
+                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
+                               background: #1a1a1a; color: white;">
+                    <input type="password" id="loginPassword" placeholder="Password" required
+                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
+                               background: #1a1a1a; color: white;">
+                    <button type="submit" style="background: #00ffff; color: #000; border: none;
+                        padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                        Login
+                    </button>
+                </form>
+                <p style="color: #666; text-align: center; font-size: 0.8rem; margin-top: 0.5rem;">
+                    Don't have an account? <a href="#" onclick="closeModalById('loginModal'); openSignupModal(); return false;" style="color: #00ffff;">Sign Up</a>
+                </p>
+                <button onclick="closeModalById('loginModal')"
+                    style="background: transparent; color: #888; border: 1px solid #444;
+                           padding: 8px; border-radius: 8px; width: 100%; margin-top: 0.5rem; cursor: pointer;">
+                    Cancel
+                </button>
+                <div id="loginMessage" style="color: #ff4444; text-align: center; margin-top: 0.5rem;"></div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const messageEl = document.getElementById('loginMessage');
+
+            messageEl.textContent = '⏳ Logging in...';
+            messageEl.style.color = '#00ffff';
+
+            try {
+                const response = await fetch(`${TRACKING_API}/auth/student-login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('authToken', data.data.token);
+                    localStorage.setItem('studentId', data.data.id);
+                    isTrackingEnabled = true;
+                    messageEl.style.color = '#00ff88';
+                    messageEl.textContent = '✅ Login successful!';
+                    updateAuthUI();
+                    setTimeout(() => {
+                        closeModalById('loginModal');
+                        location.reload();
+                    }, 1500);
+                } else {
+                    messageEl.textContent = '❌ ' + (data.message || 'Login failed');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                messageEl.textContent = '❌ Connection error. Please try again.';
+            }
+        });
+    };
+
+    function closeModalById(id) {
+        const el = document.getElementById(id);
+        if (el) el.remove();
     }
 
-    // Track carousel navigation
-    function setupCarouselTracking() {
-        const track = document.getElementById('carouselTrack');
-        if (!track) return;
+    // ============================================
+    // AUTO-TRACKING
+    // ============================================
 
-        function trackCurrentCard() {
-            const cards = track.querySelectorAll('.teacher-card');
-            const visibleCard = cards[currentIndex];
-            
-            if (visibleCard) {
-                const teacherName = visibleCard.querySelector('.teacher-name')?.textContent;
-                const teacherSubject = visibleCard.querySelector('.teacher-subject')?.textContent;
+    updateAuthUI();
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            if (isTrackingEnabled) {
+                fetch(`${TRACKING_API}/track/page-view`, {
+                    method: 'POST',
+                    headers: getHeaders(),
+                    body: JSON.stringify({
+                        page: document.title || 'BeSpellBee',
+                        url: window.location.href,
+                        duration: 0
+                    })
+                }).catch(() => {});
+            }
+        }, 1000);
+        
+        if (isTrackingEnabled) {
+            fetch(`${TRACKING_API}/track/dashboard`, {
+                headers: getHeaders()
+            }).then(r => r.json()).then(data => {
+                if (data.success) {
+                    console.log('📊 Engagement Score:', data.data.student?.engagementScore || 0);
+                }
+            }).catch(() => {});
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!isTrackingEnabled) return;
+        const target = e.target;
+        const elementType = target.tagName.toLowerCase();
+        if (elementType !== 'a' && elementType !== 'button') return;
+        
+        const elementText = target.textContent?.trim()?.substring(0, 50) || '';
+        
+        fetch(`${TRACKING_API}/track/page-view`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify({
+                page: currentPage,
+                url: window.location.href,
+                action: 'click',
+                element: elementType,
+                text: elementText
+            })
+        }).catch(() => {});
+    });
+
+    console.log('🚀 Tracking system initialized!');
+    console.log('🔑 Logged in:', !!authToken);
+
+    window.trackActivity = function(type, data) {
+        if (!isTrackingEnabled) return;
+        fetch(`${TRACKING_API}/track/page-view`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify({
+                page: currentPage,
+                url: window.location.href,
+                action: type,
+                ...data
+            })
+        }).catch(() => {});
+    };
+    </script>
+
+    <!-- ============================================================ -->
+    <!-- ====== CAROUSEL VIEW TRACKING (ADDED WITHOUT BREAKING ANYTHING) ====== -->
+    <!-- ============================================================ -->
+    <script>
+    // This runs AFTER the main tracking system and just adds carousel tracking
+    (function() {
+        // Wait for carousel to be ready
+        function setupCarouselTracking() {
+            const track = document.getElementById('carouselTrack');
+            if (!track) {
+                setTimeout(setupCarouselTracking, 500);
+                return;
+            }
+
+            function trackCurrentCard() {
+                const authToken = localStorage.getItem('authToken');
+                if (!authToken) return;
                 
-                if (teacherName) {
-                    trackTeacherCardView(teacherName, teacherSubject || 'Unknown');
+                const cards = track.querySelectorAll('.teacher-card');
+                const visibleCard = cards[currentIndex];
+                
+                if (visibleCard) {
+                    const teacherName = visibleCard.querySelector('.teacher-name')?.textContent;
+                    const teacherSubject = visibleCard.querySelector('.teacher-subject')?.textContent;
+                    
+                    if (teacherName && window.trackActivity) {
+                        window.trackActivity('carousel_view', {
+                            teacher: teacherName,
+                            subject: teacherSubject || 'Unknown'
+                        });
+                        console.log(`✅ Carousel tracked: ${teacherName}`);
+                    }
                 }
             }
-        }
 
-        // Track on navigation
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        
-        if (prevBtn) {
-            prevBtn.addEventListener('click', function() {
+            // Track on navigation
+            document.getElementById('prevBtn')?.addEventListener('click', function() {
                 setTimeout(trackCurrentCard, 150);
             });
-        }
-        
-        if (nextBtn) {
-            nextBtn.addEventListener('click', function() {
+            document.getElementById('nextBtn')?.addEventListener('click', function() {
                 setTimeout(trackCurrentCard, 150);
             });
+
+            // Track on filter
+            document.getElementById('filterContainer')?.addEventListener('click', function(e) {
+                if (e.target.closest('.filter-btn')) {
+                    setTimeout(trackCurrentCard, 200);
+                }
+            });
+
+            // Track on dot click
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('dot')) {
+                    setTimeout(trackCurrentCard, 150);
+                }
+            });
+
+            // Track initial load
+            setTimeout(trackCurrentCard, 800);
+            
+            console.log('✅ Carousel tracking added!');
         }
 
-        // Track on filter
-        document.getElementById('filterContainer')?.addEventListener('click', function(e) {
-            if (e.target.closest('.filter-btn')) {
-                setTimeout(trackCurrentCard, 200);
-            }
-        });
-
-        // Track on dot click
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('dot')) {
-                setTimeout(trackCurrentCard, 150);
-            }
-        });
-
-        // Track initial load
-        setTimeout(trackCurrentCard, 800);
-    }
-
-    // Run when page loads
-    if (document.readyState === 'complete') {
-        setTimeout(setupCarouselTracking, 500);
-    } else {
-        document.addEventListener('DOMContentLoaded', function() {
+        // Run after page loads
+        if (document.readyState === 'complete') {
             setTimeout(setupCarouselTracking, 500);
-        });
-    }
-
-    console.log('✅ Teacher carousel tracking loaded!');
-    console.log('🔑 Logged in:', !!authToken);
+        } else {
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(setupCarouselTracking, 500);
+            });
+        }
+    })();
     </script>
 
 </body>
