@@ -9,6 +9,8 @@ let currentPage = 'home';
 let pageStartTime = Date.now();
 let isTrackingEnabled = !!authToken;
 
+console.log('✅ tracking.js loaded!');
+
 function generateSessionId() {
     const id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     localStorage.setItem('sessionId', id);
@@ -22,6 +24,10 @@ function getHeaders() {
         'X-Session-Id': sessionId
     };
 }
+
+// ============================================
+// PAGE VIEW TRACKING
+// ============================================
 
 function trackActivity(action, data = {}) {
     if (!isTrackingEnabled || !authToken) return;
@@ -43,7 +49,7 @@ function trackActivity(action, data = {}) {
 }
 
 // ============================================
-// TRACK LINK CLICKS
+// DEDICATED LINK CLICK TRACKING
 // ============================================
 
 function trackLink(linkName) {
@@ -57,10 +63,23 @@ function trackLink(linkName) {
 
     console.log(`🔗 Tracking link: ${linkName} (${duration}s)`);
 
-    trackActivity('link_click', {
-        link: linkName,
-        destination: linkName.toLowerCase().replace(' ', '-') + '.html',
-        duration: duration
+    // ✅ Direct fetch to /link-click endpoint (not page-view)
+    fetch(`${TRACKING_API}/track/link-click`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({
+            link: linkName,
+            destination: linkName.toLowerCase().replace(' ', '-') + '.html',
+            duration: duration
+        }),
+        keepalive: true
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(`✅ Link tracked: ${linkName}`, data);
+    })
+    .catch(err => {
+        console.error('❌ Link tracking error:', err);
     });
 }
 
