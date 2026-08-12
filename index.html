@@ -2307,7 +2307,7 @@ window.trackLink = function(linkName) {
 
     console.log(`🔗 Tracking link: ${linkName} (${duration}s)`);
 
-    fetch(`${TRACKING_API}/track/link_click`, {
+    fetch(`${TRACKING_API}/track/link-click`, {
         method: 'POST',
         headers: getHeaders(),
         body: JSON.stringify({
