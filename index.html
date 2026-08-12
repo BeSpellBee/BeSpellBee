@@ -2305,25 +2305,25 @@
             }
 
             function trackCurrentCard() {
-                const authToken = localStorage.getItem('authToken');
-                if (!authToken) return;
-                
-                const cards = track.querySelectorAll('.teacher-card');
-                const visibleCard = cards[currentIndex];
-                
-                if (visibleCard) {
-                    const teacherName = visibleCard.querySelector('.teacher-name')?.textContent;
-                    const teacherSubject = visibleCard.querySelector('.teacher-subject')?.textContent;
-                    
-                    if (teacherName && window.trackActivity) {
-                        window.trackActivity('carousel_view', {
-                            teacher: teacherName,
-                            subject: teacherSubject || 'Unknown'
-                        });
-                        console.log(`✅ Carousel tracked: ${teacherName}`);
-                    }
-                }
-            }
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) return;
+    
+    const cards = track.querySelectorAll('.teacher-card');
+    const visibleCard = cards[currentIndex];
+    
+    if (visibleCard) {
+        const teacherName = visibleCard.querySelector('.teacher-name')?.textContent;
+        const teacherSubject = visibleCard.querySelector('.teacher-subject')?.textContent;
+        
+        if (teacherName) {
+            // duration is now handled inside trackActivity
+            trackActivity('carousel_view', {
+                teacher: teacherName,
+                subject: teacherSubject || 'Unknown'
+            });
+        }
+    }
+}
 
             // Track on navigation
             document.getElementById('prevBtn')?.addEventListener('click', function() {
