@@ -1955,6 +1955,52 @@ function trackActivity(action, data = {}) {
         })
     }).catch(() => {});
 }
+		<!-- At the bottom of each page, before </body> -->
+<script>
+// ============================================
+// TRACKING CODE FOR THIS PAGE
+// ============================================
+
+const TRACKING_API = 'https://bespellbee-backend-en6l.onrender.com/api';
+const authToken = localStorage.getItem('authToken');
+const sessionId = localStorage.getItem('sessionId') || generateSessionId();
+let pageStartTime = Date.now();
+let isTrackingEnabled = !!authToken;
+
+// ... (all other tracking functions here) ...
+
+// ============================================
+// TRACK LINK CLICKS - Paste this here
+// ============================================
+
+function trackLink(linkName) {
+    if (isTrackingEnabled) {
+        const duration = Math.floor((Date.now() - pageStartTime) / 1000);
+        pageStartTime = Date.now();
+
+        trackActivity('link_click', {
+            link: linkName,
+            destination: linkName.toLowerCase().replace(' ', '-') + '.html',
+            duration: duration
+        });
+    }
+}
+
+// ============================================
+// PAGE VIEW ON LOAD
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        if (isTrackingEnabled) {
+            trackActivity('page_view', {
+                page: document.title || 'BeSpellBee',
+                url: window.location.href
+            });
+        }
+    }, 1000);
+});
+</script>
 
     // ============================================
     // UPDATE UI BASED ON LOGIN STATUS
