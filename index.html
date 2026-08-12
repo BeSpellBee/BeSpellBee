@@ -2279,26 +2279,7 @@ function trackActivity(action, data = {}) {
         }
     });
 
-    document.addEventListener('click', (e) => {
-        if (!isTrackingEnabled) return;
-        const target = e.target;
-        const elementType = target.tagName.toLowerCase();
-        if (elementType !== 'a' && elementType !== 'button') return;
-        
-        const elementText = target.textContent?.trim()?.substring(0, 50) || '';
-        
-        fetch(`${TRACKING_API}/track/page-view`, {
-            method: 'POST',
-            headers: getHeaders(),
-            body: JSON.stringify({
-                page: currentPage,
-                url: window.location.href,
-                action: 'click',
-                element: elementType,
-                text: elementText
-            })
-        }).catch(() => {});
-    });
+
 
     console.log('🚀 Tracking system initialized!');
     console.log('🔑 Logged in:', !!authToken);
