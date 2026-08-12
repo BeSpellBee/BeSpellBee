@@ -49,7 +49,7 @@ function trackActivity(action, data = {}) {
 }
 
 // ============================================
-// DEDICATED LINK CLICK TRACKING (FIXED)
+// DEDICATED LINK CLICK TRACKING (Beacon)
 // ============================================
 
 function trackLink(elementOrName, event) {
@@ -59,12 +59,11 @@ function trackLink(elementOrName, event) {
     }
 
     let linkName = '';
-    let destination = window.location.href; 
+    let destination = window.location.href;
 
     if (elementOrName instanceof HTMLElement) {
         linkName = elementOrName.innerText.trim() || 'Unknown Button';
         let href = elementOrName.getAttribute('href');
-        
         if (href && href !== '#' && href.trim() !== '') {
             destination = href;
         }
@@ -75,35 +74,36 @@ function trackLink(elementOrName, event) {
     const duration = Math.floor((Date.now() - pageStartTime) / 1000);
     pageStartTime = Date.now();
 
+    console.log(`🔗 Tracking link: ${linkName} -> ${destination} (${duration}s)`);
+
     const payload = JSON.stringify({
         link: linkName,
         destination: destination,
-        duration: duration
+        duration: duration,
+        token: authToken,        // ✅ Send token in body (required for sendBeacon)
+        sessionId: sessionId
     });
 
     const endpoint = `${TRACKING_API}/track/link-click`;
 
-    console.log(`🔗 Tracking link: ${linkName} -> ${destination} (${duration}s)`);
+    // ✅ Use sendBeacon for reliable delivery during page unload
+    const blob = new Blob([payload], { type: 'application/json' });
+    const sent = navigator.sendBeacon(endpoint, blob);
 
-    // ✅ USING FETCH WITH KEEPALIVE (sendBeacon removed because it drops Auth headers)
-    fetch(endpoint, {
-        method: 'POST',
-        headers: getHeaders(), // This safely sends your Auth Token
-        body: payload,
-        keepalive: true        // This does the exact same thing as sendBeacon
-    })
-    .then(res => {
-        if (!res.ok) {
-            console.error("Backend rejected the request with status:", res.status);
-        }
-        return res.json();
-    })
-    .then(data => {
-        console.log(`✅ Link tracked successfully: ${linkName}`, data);
-    })
-    .catch(err => {
-        console.error('❌ Link tracking error:', err);
-    });
+    if (!sent) {
+        // Fallback to fetch if sendBeacon fails
+        fetch(endpoint, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: payload,
+            keepalive: true
+        })
+        .then(res => res.json())
+        .then(data => console.log(`✅ Link tracked (fallback): ${linkName}`, data))
+        .catch(err => console.error('❌ Link tracking error:', err));
+    } else {
+        console.log(`✅ Link tracked (beacon): ${linkName}`);
+    }
 }
 
 // ============================================
