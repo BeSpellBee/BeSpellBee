@@ -1904,29 +1904,53 @@
     // ============================================
 
     const TRACKING_API = 'https://bespellbee-backend-en6l.onrender.com/api';
-    const authToken = localStorage.getItem('authToken');
-    const sessionId = localStorage.getItem('sessionId') || generateSessionId();
-    let currentPage = 'home';
-    let pageStartTime = Date.now();
-    let isTrackingEnabled = !!authToken;
+const authToken = localStorage.getItem('authToken');
+const sessionId = localStorage.getItem('sessionId') || generateSessionId();
+let currentPage = 'home';
+let pageStartTime = Date.now();  // ← Already defined
+let isTrackingEnabled = !!authToken;
 
-    // ============================================
-    // HELPERS
-    // ============================================
+// ============================================
+// TRACKING FUNCTIONS
+// ============================================
 
-    function generateSessionId() {
-        const id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('sessionId', id);
-        return id;
-    }
+function generateSessionId() {
+    const id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('sessionId', id);
+    return id;
+}
 
-    function getHeaders() {
-        return {
-            'Authorization': `Bearer ${authToken}`,
-            'Content-Type': 'application/json',
-            'X-Session-Id': sessionId
-        };
-    }
+function getHeaders() {
+    return {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+        'X-Session-Id': sessionId
+    };
+}
+
+// ============================================
+// MODIFIED: trackActivity with duration
+// ============================================
+
+function trackActivity(action, data = {}) {
+    if (!isTrackingEnabled || !authToken) return;
+
+    // Calculate duration since page load
+    const duration = Math.floor((Date.now() - pageStartTime) / 1000);
+    pageStartTime = Date.now(); // Reset timer after sending
+
+    fetch(`${TRACKING_API}/track/page-view`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({
+            page: document.title || 'BeSpellBee',
+            url: window.location.href,
+            duration: duration,  // ← Now sending duration
+            action: action,
+            ...data
+        })
+    }).catch(() => {});
+}
 
     // ============================================
     // UPDATE UI BASED ON LOGIN STATUS
