@@ -1898,7 +1898,10 @@
         init();
     </script>
 
-
+    <!-- ============================================================ -->
+    <!-- ====== STUDENT TRACKING SYSTEM ====== -->
+    <!-- ============================================================ -->
+    <script>
     // ============================================
     // STUDENT TRACKING CONFIGURATION
     // ============================================
@@ -2316,7 +2319,36 @@ function trackActivity(action, data = {}) {
 // ADD THIS: TRACK LINK CLICKS
 // ============================================
 
+window.trackLink = function(linkName) {
+    if (!isTrackingEnabled || !authToken) {
+        console.log('🔒 Not logged in - link tracking skipped');
+        return;
+    }
 
+    const duration = Math.floor((Date.now() - pageStartTime) / 1000);
+    pageStartTime = Date.now();
+
+    console.log(`🔗 Tracking link: ${linkName} (${duration}s)`);
+
+    fetch(`${TRACKING_API}/track/page-view`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({
+            page: document.title || 'BeSpellBee',
+            url: window.location.href,
+            duration: duration,
+            action: 'link_click',
+            link: linkName
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(`✅ Link tracked: ${linkName}`, data);
+    })
+    .catch(err => {
+        console.error('❌ Link tracking error:', err);
+    });
+};
     </script>
 
     <!-- ============================================================ -->
