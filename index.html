@@ -1031,12 +1031,12 @@
     <!-- ====== YOUR EXISTING NAVIGATION (PRESERVED) ====== -->
     <!-- ====== YOUR EXISTING NAVIGATION (UPDATED WITH TRACKING) ====== -->
 	<!-- ====== YOUR EXISTING NAVIGATION (UPDATED WITH TRACKING - SAME STYLE) ====== -->
-<a href="Abouts.html" target="_blank" style="color:aqua;float:left" onclick="trackLink(this, event)">About</a>(&nbsp;)(&nbsp;)
-<a href="services.html" target="_blank" style="color:aqua" onclick="trackLink(this, event)"> Services</a>(&nbsp;)(&nbsp;) 
-<a href="Contact.html" target="_blank" style="color:aqua" onclick="trackLink(this, event)"> Contact</a>(&nbsp;) (&nbsp;)
-<a href="B2-exam-preparation.html" target="_blank" style="color:aqua" onclick="trackLink(this, event)">B2 exam</a>(&nbsp;)(&nbsp;)
-<a href="Activities-for-adults.html" target="_blank" style="color:aqua" onclick="trackLink(this, event)">A1</a>(&nbsp;)(&nbsp;)
-<a href="French-bac.html" target="_blank" style="color:aqua" onclick="trackLink(this, event)">French bac</a>
+<a href="Abouts.html" target="_blank" style="color:aqua;float:left" onclick="trackLink('About')">About</a>(&nbsp;)(&nbsp;)
+<a href="services.html" target="_blank" style="color:aqua" onclick="trackLink('Services')"> Services</a>(&nbsp;)(&nbsp;) 
+<a href="Contact.html" target="_blank" style="color:aqua" onclick="trackLink('Contact')"> Contact</a>(&nbsp;) (&nbsp;)
+<a href="B2-exam-preparation.html" target="_blank" style="color:aqua" onclick="trackLink('B2 Exam')">B2 exam </a>(&nbsp;)(&nbsp;)
+<a href="Activities-for-adults.html" target="_blank" style="color:aqua" onclick="trackLink('A1 Activities')">A1</a>(&nbsp;)(&nbsp;)
+<a href="French-bac.html" target="_blank" style="color:aqua" onclick="trackLink('French Bac')">French bac</a>
 
     
     <!-- ====== STUDENT LOGIN & SIGN UP LINKS ====== -->
@@ -1931,6 +1931,29 @@ function getHeaders() {
     };
 }
 
+// ============================================
+// MODIFIED: trackActivity with duration
+// ============================================
+
+function trackActivity(action, data = {}) {
+    if (!isTrackingEnabled || !authToken) return;
+
+    // Calculate duration since page load
+    const duration = Math.floor((Date.now() - pageStartTime) / 1000);
+    pageStartTime = Date.now(); // Reset timer after sending
+
+    fetch(`${TRACKING_API}/track/page-view`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({
+            page: document.title || 'BeSpellBee',
+            url: window.location.href,
+            duration: duration,  // ← Now sending duration
+            action: action,
+            ...data
+        })
+    }).catch(() => {});
+}
 
     // ============================================
     // UPDATE UI BASED ON LOGIN STATUS
@@ -2292,61 +2315,40 @@ function getHeaders() {
             })
         }).catch(() => {});
     };
-		 DEDICATED LINK CLICK TRACKING (NEW)
-    // ============================================
+		// ============================================
+// ADD THIS: TRACK LINK CLICKS
+// ============================================
 
-    window.trackLink = function(elementOrName, event) {
-        if (!isTrackingEnabled || !authToken) {
-            console.log('🔒 Not logged in - link tracking skipped');
-            return;
-        }
+window.trackLink = function(linkName) {
+    if (!isTrackingEnabled || !authToken) {
+        console.log('🔒 Not logged in - link tracking skipped');
+        return;
+    }
 
-        let linkName = '';
-        let destination = '';
+    const duration = Math.floor((Date.now() - pageStartTime) / 1000);
+    pageStartTime = Date.now();
 
-        // Handle both element and string arguments
-        if (elementOrName instanceof HTMLElement) {
-            linkName = elementOrName.innerText.trim();
-            destination = elementOrName.getAttribute('href') || '';
-        } else {
-            linkName = String(elementOrName);
-            destination = linkName.toLowerCase().replace(/\s+/g, '-') + '.html';
-        }
+    console.log(`🔗 Tracking link: ${linkName} (${duration}s)`);
 
-        const duration = Math.floor((Date.now() - pageStartTime) / 1000);
-        pageStartTime = Date.now();
-
-        const payload = JSON.stringify({
-            link: linkName,
-            destination: destination,
-            duration: duration
-        });
-
-        const endpoint = `${TRACKING_API}/track/link-click`;
-
-        // Use sendBeacon for reliable delivery during navigation
-        if (navigator.sendBeacon) {
-            const blob = new Blob([payload], { type: 'application/json' });
-            const success = navigator.sendBeacon(endpoint, blob);
-            if (success) {
-                console.log(`✅ Link tracked via Beacon: ${linkName}`);
-                return;
-            }
-        }
-
-        // Fallback: fetch with keepalive
-        fetch(endpoint, {
-            method: 'POST',
-            headers: getHeaders(),
-            body: payload,
-            keepalive: true
+    fetch(`${TRACKING_API}/track/page-view`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({
+            page: document.title || 'BeSpellBee',
+            url: window.location.href,
+            duration: duration,
+            action: 'link_click',
+            link: linkName
         })
-        .then(res => res.json())
-        .then(data => console.log(`✅ Link tracked via Fetch: ${linkName}`, data))
-        .catch(err => console.error('❌ Link tracking error:', err));
-    };
-
-
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(`✅ Link tracked: ${linkName}`, data);
+    })
+    .catch(err => {
+        console.error('❌ Link tracking error:', err);
+    });
+};
     </script>
 
     <!-- ============================================================ -->
