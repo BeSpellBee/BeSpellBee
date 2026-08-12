@@ -73,3 +73,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 1000);
 });
+// ============================================
+// EXPOSE FUNCTIONS GLOBALLY
+// ============================================
+
+window.trackLink = trackLink;
+window.trackActivity = trackActivity;
+window.generateSessionId = generateSessionId;
+window.getHeaders = getHeaders;
