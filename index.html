@@ -2316,58 +2316,7 @@ function trackActivity(action, data = {}) {
         }).catch(() => {});
     };
 		// ============================================
-// ADD THIS: TRACK LINK CLICKS
-// ============================================
 
-window.trackLink = function(elementOrName, event) {
-    if (!isTrackingEnabled || !authToken) {
-        console.log('🔒 Not logged in - link tracking skipped');
-        return;
-    }
-
-    let linkName = '';
-    let destination = '';
-
-    if (elementOrName instanceof HTMLElement) {
-        linkName = elementOrName.innerText.trim();
-        destination = elementOrName.getAttribute('href') || '';
-    } else {
-        linkName = String(elementOrName);
-        destination = linkName.toLowerCase().replace(/\s+/g, '-') + '.html';
-    }
-
-    // ✅ Ensure destination is never null/empty
-    if (!destination) destination = window.location.href;
-
-    const duration = Math.floor((Date.now() - pageStartTime) / 1000);
-    pageStartTime = Date.now();
-
-    const payload = JSON.stringify({
-        link: linkName,
-        destination: destination,
-        duration: duration
-    });
-
-    const endpoint = `${TRACKING_API}/track/link-click`;
-
-    if (navigator.sendBeacon) {
-        const blob = new Blob([payload], { type: 'application/json' });
-        if (navigator.sendBeacon(endpoint, blob)) {
-            console.log(`✅ Link tracked via Beacon: ${linkName}`);
-            return;
-        }
-    }
-
-    fetch(endpoint, {
-        method: 'POST',
-        headers: getHeaders(),
-        body: payload,
-        keepalive: true
-    })
-    .then(res => res.json())
-    .then(data => console.log(`✅ Link tracked via Fetch: ${linkName}`, data))
-    .catch(err => console.error('❌ Link tracking error:', err));
-};
     </script>
 
     <!-- ============================================================ -->
