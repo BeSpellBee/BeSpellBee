@@ -63,16 +63,22 @@ function trackLink(elementOrName, event) {
     }
 
     let linkName = '';
-    let destination = '';
+    // SAFETY NET: Default to current page URL so it NEVER sends an empty string
+    let destination = window.location.href; 
 
-    // If an HTML element was passed (e.g. onclick="trackLink(this, event)")
+    // If an HTML element was passed (e.g. onclick="trackLink(this)")
     if (elementOrName instanceof HTMLElement) {
-        linkName = elementOrName.innerText.trim();
-        destination = elementOrName.getAttribute('href') || '';
+        linkName = elementOrName.innerText.trim() || 'Unknown Button';
+        let href = elementOrName.getAttribute('href');
+        
+        // Only use href if it exists and isn't just "#" or empty
+        if (href && href !== '#' && href.trim() !== '') {
+            destination = href;
+        }
     } else {
         // Fallback for direct string calls
         linkName = String(elementOrName);
-        destination = linkName.toLowerCase().replace(/\s+/g, '-') + '.html';
+        // Keep the safe default (current page URL) since we don't know the actual destination
     }
 
     const duration = Math.floor((Date.now() - pageStartTime) / 1000);
@@ -88,7 +94,7 @@ function trackLink(elementOrName, event) {
 
     console.log(`🔗 Tracking link: ${linkName} -> ${destination} (${duration}s)`);
 
-    // 1. Primary method: navigator.sendBeacon (Guarantees delivery before page changes)
+    // 1. Primary method: navigator.sendBeacon
     if (navigator.sendBeacon) {
         const blob = new Blob([payload], { type: 'application/json' });
         const success = navigator.sendBeacon(endpoint, blob);
@@ -103,7 +109,7 @@ function trackLink(elementOrName, event) {
         method: 'POST',
         headers: getHeaders(),
         body: payload,
-        keepalive: true // Keeps request alive even if window/tab changes
+        keepalive: true
     })
     .then(res => res.json())
     .then(data => {
