@@ -9,6 +9,8 @@ let currentPage = 'home';
 let pageStartTime = Date.now();
 let isTrackingEnabled = !!authToken;
 
+console.log('✅ tracking.js loaded!'); // ← ADD THIS TO CONFIRM EXECUTION
+
 function generateSessionId() {
     const id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     localStorage.setItem('sessionId', id);
@@ -42,26 +44,23 @@ function trackActivity(action, data = {}) {
     }).catch(() => {});
 }
 
-// ============================================
-// TRACK LINK CLICKS - Paste this on all pages
-// ============================================
-
 function trackLink(linkName) {
-    if (isTrackingEnabled) {
-        const duration = Math.floor((Date.now() - pageStartTime) / 1000);
-        pageStartTime = Date.now();
-
-        trackActivity('link_click', {
-            link: linkName,
-            destination: linkName.toLowerCase().replace(' ', '-') + '.html',
-            duration: duration
-        });
+    if (!isTrackingEnabled || !authToken) {
+        console.log('🔒 Not logged in - link tracking skipped');
+        return;
     }
-}
 
-// ============================================
-// PAGE VIEW ON LOAD - Paste this on all pages
-// ============================================
+    const duration = Math.floor((Date.now() - pageStartTime) / 1000);
+    pageStartTime = Date.now();
+
+    console.log(`🔗 Tracking link: ${linkName} (${duration}s)`);
+
+    trackActivity('link_click', {
+        link: linkName,
+        destination: linkName.toLowerCase().replace(' ', '-') + '.html',
+        duration: duration
+    });
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
@@ -73,8 +72,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 1000);
 });
+
 // ============================================
-// EXPOSE FUNCTIONS GLOBALLY
+// EXPOSE FUNCTIONS GLOBALLY (ADD THIS!)
 // ============================================
 
 window.trackLink = trackLink;
