@@ -9,8 +9,6 @@ let currentPage = 'home';
 let pageStartTime = Date.now();
 let isTrackingEnabled = !!authToken;
 
-console.log('✅ tracking.js loaded!');
-
 function generateSessionId() {
     const id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     localStorage.setItem('sessionId', id);
@@ -24,10 +22,6 @@ function getHeaders() {
         'X-Session-Id': sessionId
     };
 }
-
-// ============================================
-// PAGE VIEW TRACKING
-// ============================================
 
 function trackActivity(action, data = {}) {
     if (!isTrackingEnabled || !authToken) return;
@@ -49,61 +43,25 @@ function trackActivity(action, data = {}) {
 }
 
 // ============================================
-// DEDICATED LINK CLICK TRACKING (Beacon)
+// TRACK LINK CLICKS
 // ============================================
 
-function trackLink(elementOrName, event) {
+function trackLink(linkName) {
     if (!isTrackingEnabled || !authToken) {
         console.log('🔒 Not logged in - link tracking skipped');
         return;
     }
 
-    let linkName = '';
-    let destination = window.location.href;
-
-    if (elementOrName instanceof HTMLElement) {
-        linkName = elementOrName.innerText.trim() || 'Unknown Button';
-        let href = elementOrName.getAttribute('href');
-        if (href && href !== '#' && href.trim() !== '') {
-            destination = href;
-        }
-    } else {
-        linkName = String(elementOrName);
-    }
-
     const duration = Math.floor((Date.now() - pageStartTime) / 1000);
     pageStartTime = Date.now();
 
-    console.log(`🔗 Tracking link: ${linkName} -> ${destination} (${duration}s)`);
+    console.log(`🔗 Tracking link: ${linkName} (${duration}s)`);
 
-    const payload = JSON.stringify({
+    trackActivity('link_click', {
         link: linkName,
-        destination: destination,
-        duration: duration,
-        token: authToken,        // ✅ Send token in body (required for sendBeacon)
-        sessionId: sessionId
+        destination: linkName.toLowerCase().replace(' ', '-') + '.html',
+        duration: duration
     });
-
-    const endpoint = `${TRACKING_API}/track/link-click`;
-
-    // ✅ Use sendBeacon for reliable delivery during page unload
-    const blob = new Blob([payload], { type: 'application/json' });
-    const sent = navigator.sendBeacon(endpoint, blob);
-
-    if (!sent) {
-        // Fallback to fetch if sendBeacon fails
-        fetch(endpoint, {
-            method: 'POST',
-            headers: getHeaders(),
-            body: payload,
-            keepalive: true
-        })
-        .then(res => res.json())
-        .then(data => console.log(`✅ Link tracked (fallback): ${linkName}`, data))
-        .catch(err => console.error('❌ Link tracking error:', err));
-    } else {
-        console.log(`✅ Link tracked (beacon): ${linkName}`);
-    }
 }
 
 // ============================================
