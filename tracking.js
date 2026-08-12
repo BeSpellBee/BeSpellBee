@@ -52,30 +52,62 @@ function trackActivity(action, data = {}) {
 // DEDICATED LINK CLICK TRACKING
 // ============================================
 
-function trackLink(linkName) {
+// ============================================
+// DEDICATED LINK CLICK TRACKING (FIXED)
+// ============================================
+
+function trackLink(elementOrName, event) {
     if (!isTrackingEnabled || !authToken) {
         console.log('🔒 Not logged in - link tracking skipped');
         return;
     }
 
+    let linkName = '';
+    let destination = '';
+
+    // If an HTML element was passed (e.g. onclick="trackLink(this, event)")
+    if (elementOrName instanceof HTMLElement) {
+        linkName = elementOrName.innerText.trim();
+        destination = elementOrName.getAttribute('href') || '';
+    } else {
+        // Fallback for direct string calls
+        linkName = String(elementOrName);
+        destination = linkName.toLowerCase().replace(/\s+/g, '-') + '.html';
+    }
+
     const duration = Math.floor((Date.now() - pageStartTime) / 1000);
     pageStartTime = Date.now();
 
-    console.log(`🔗 Tracking link: ${linkName} (${duration}s)`);
+    const payload = JSON.stringify({
+        link: linkName,
+        destination: destination,
+        duration: duration
+    });
 
-    // Send to dedicated link-click endpoint
-    fetch(`${TRACKING_API}/track/link-click`, {
+    const endpoint = `${TRACKING_API}/track/link-click`;
+
+    console.log(`🔗 Tracking link: ${linkName} -> ${destination} (${duration}s)`);
+
+    // 1. Primary method: navigator.sendBeacon (Guarantees delivery before page changes)
+    if (navigator.sendBeacon) {
+        const blob = new Blob([payload], { type: 'application/json' });
+        const success = navigator.sendBeacon(endpoint, blob);
+        if (success) {
+            console.log(`✅ Link tracked via Beacon: ${linkName}`);
+            return;
+        }
+    }
+
+    // 2. Fallback method: fetch with keepalive: true
+    fetch(endpoint, {
         method: 'POST',
         headers: getHeaders(),
-        body: JSON.stringify({
-            link: linkName,
-            destination: linkName.toLowerCase().replace(' ', '-') + '.html',
-            duration: duration
-        })
+        body: payload,
+        keepalive: true // Keeps request alive even if window/tab changes
     })
     .then(res => res.json())
     .then(data => {
-        console.log(`✅ Link tracked: ${linkName}`, data);
+        console.log(`✅ Link tracked via Fetch: ${linkName}`, data);
     })
     .catch(err => {
         console.error('❌ Link tracking error:', err);
