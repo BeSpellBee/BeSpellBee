@@ -2266,19 +2266,7 @@ function trackActivity(action, data = {}) { if (!isTrackingEnabled || !authToken
     console.log('🚀 Tracking system initialized!');
     console.log('🔑 Logged in:', !!authToken);
 
-    window.trackActivity = function(type, data) {
-        if (!isTrackingEnabled) return;
-        fetch(`${TRACKING_API}/track/page-view`, {
-            method: 'POST',
-            headers: getHeaders(),
-            body: JSON.stringify({
-                page: currentPage,
-                url: window.location.href,
-                action: type,
-                ...data
-            })
-        }).catch(() => {});
-    };
+  
 		// ============================================
 
     </script>
