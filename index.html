@@ -1938,21 +1938,28 @@ function getHeaders() {
 function trackActivity(action, data = {}) {
     if (!isTrackingEnabled || !authToken) return;
 
-    // Calculate duration since page load
     const duration = Math.floor((Date.now() - pageStartTime) / 1000);
-    pageStartTime = Date.now(); // Reset timer after sending
+    pageStartTime = Date.now();
 
-    fetch(`${TRACKING_API}/track/page-view`, {
+    const endpoint =
+        action === 'link_click'
+            ? `${TRACKING_API}/track/link-click`
+            : `${TRACKING_API}/track/page-view`;
+
+    fetch(endpoint, {
         method: 'POST',
         headers: getHeaders(),
         body: JSON.stringify({
             page: document.title || 'BeSpellBee',
             url: window.location.href,
-            duration: duration,  // ← Now sending duration
+            duration: duration,
             action: action,
             ...data
-        })
-    }).catch(() => {});
+        }),
+        keepalive: true
+    }).catch(error => {
+        console.error('Tracking error:', error);
+    });
 }
 
     // ============================================
