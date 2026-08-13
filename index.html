@@ -2235,20 +2235,6 @@ function trackActivity(action, data = {}) { if (!isTrackingEnabled || !authToken
 
     updateAuthUI();
 
-    document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-            if (isTrackingEnabled) {
-                fetch(`${TRACKING_API}/track/page-view`, {
-                    method: 'POST',
-                    headers: getHeaders(),
-                    body: JSON.stringify({
-                        page: document.title || 'BeSpellBee',
-                        url: window.location.href,
-                        duration: 0
-                    })
-                }).catch(() => {});
-            }
-        }, 1000);
         
         if (isTrackingEnabled) {
             fetch(`${TRACKING_API}/track/dashboard`, {
