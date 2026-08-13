@@ -1898,269 +1898,99 @@
         init();
     </script>
 
-    <!-- ============================================================ -->
-    <!-- ====== STUDENT TRACKING SYSTEM ====== -->
-    <!-- ============================================================ -->
-    <script>
-   <!-- ============================================================ -->
-<!-- ====== STUDENT TRACKING SYSTEM (FIXED) ====== -->
-<!-- ============================================================ -->
-<script>
-// ============================================
-// CONFIGURATION
-// ============================================
+      // ============================================
+    // CONFIGURATION
+    // ============================================
 
-const TRACKING_API = 'https://bespellbee-backend-en6l.onrender.com/api';
-const authToken = localStorage.getItem('authToken');
-const sessionId = localStorage.getItem('sessionId') || generateSessionId();
-let currentPage = 'home';
-let pageStartTime = Date.now();
-let isTrackingEnabled = !!authToken;
-
-// ============================================
-// HELPERS
-// ============================================
-
-function generateSessionId() {
-    const id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    localStorage.setItem('sessionId', id);
-    return id;
-}
-
-function getHeaders() {
-    return {
-        'Authorization': `Bearer ${authToken}`,
-        'Content-Type': 'application/json',
-        'X-Session-Id': sessionId
-    };
-}
-
-// ============================================
-// SINGLE TRACKING FUNCTION (the only one)
-// ============================================
-
-function trackActivity(action, data = {}) {
-    if (!isTrackingEnabled || !authToken) {
-        console.log(`⏭️ Tracking skipped (not logged in): ${action}`);
-        return;
-    }
-
-    const duration = Math.floor((Date.now() - pageStartTime) / 1000);
-    pageStartTime = Date.now();
-
-    // Choose endpoint based on action
-    const endpoint = (action === 'link_click')
-        ? `${TRACKING_API}/track/link-click`
-        : `${TRACKING_API}/track/page-view`;
-
-    const payload = {
-        page: document.title || 'BeSpellBee',
-        url: window.location.href,
-        duration: duration,
-        action: action,
-        ...data
-    };
-
-    // If it's a link click, ensure we send the link text separately
-    if (action === 'link_click' && data.link) {
-        payload.link = data.link;
-        // The backend /track/link-click expects 'link' field
-    }
-
-    fetch(endpoint, {
-        method: 'POST',
-        headers: getHeaders(),
-        body: JSON.stringify(payload),
-        keepalive: true
-    })
-    .then(res => res.json())
-    .then(response => {
-        console.log(`✅ ${action} tracked:`, response);
-    })
-    .catch(error => {
-        console.error(`❌ Tracking error (${action}):`, error);
-    });
-}
-
-// Expose to global scope
-window.trackActivity = trackActivity;
-
-// ============================================
-// TRACK LINK CLICKS (uses trackActivity)
-// ============================================
-
-window.trackLink = function(linkName) {
-    trackActivity('link_click', { link: linkName });
-};
-
-// ============================================
-// AUTH UI UPDATE
-// ============================================
-
-function updateAuthUI() {
-    const isLoggedIn = !!localStorage.getItem('authToken');
-    const dashboardLink = document.getElementById('dashboardLink');
-    const logoutLink = document.getElementById('logoutLink');
-
-    if (isLoggedIn) {
-        if (dashboardLink) dashboardLink.style.display = 'inline';
-        if (logoutLink) logoutLink.style.display = 'inline';
-        document.querySelectorAll('[onclick*="openSignupModal"], [onclick*="openLoginModal"]').forEach(el => {
-            el.style.display = 'none';
-        });
-    } else {
-        if (dashboardLink) dashboardLink.style.display = 'none';
-        if (logoutLink) logoutLink.style.display = 'none';
-        document.querySelectorAll('[onclick*="openSignupModal"], [onclick*="openLoginModal"]').forEach(el => {
-            el.style.display = 'inline';
-        });
-    }
-}
-
-// ============================================
-// DASHBOARD
-// ============================================
-
-window.openDashboard = async function() {
-    const modal = document.getElementById('dashboardModal');
-    const content = document.getElementById('dashboardContent');
-
-    if (!modal) {
-        alert('Dashboard modal not found. Please refresh the page.');
-        return;
-    }
-
-    modal.classList.add('active');
-    content.innerHTML = `
-        <div style="text-align: center; padding: 2rem;">
-            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #00ffff;"></i>
-            <p style="color: #aaa;">Loading your stats...</p>
-        </div>
-    `;
-
-    try {
-        const response = await fetch(`${TRACKING_API}/track/dashboard`, {
-            headers: getHeaders()
-        });
-        const data = await response.json();
-
-        if (data.success) {
-            const d = data.data;
-            content.innerHTML = `
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1rem 0;">
-                    <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
-                        <div style="font-size: 1.8rem; color: #00ffff;">${d.stats?.completedVideos || 0}</div>
-                        <div style="font-size: 0.7rem; color: #666;">Videos Completed</div>
-                    </div>
-                    <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
-                        <div style="font-size: 1.8rem; color: #00ff88;">${d.stats?.totalQuizzes || 0}</div>
-                        <div style="font-size: 0.7rem; color: #666;">Quizzes Taken</div>
-                    </div>
-                    <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
-                        <div style="font-size: 1.8rem; color: #ffcc00;">${Math.round(d.stats?.avgScore || 0)}%</div>
-                        <div style="font-size: 0.7rem; color: #666;">Average Score</div>
-                    </div>
-                    <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
-                        <div style="font-size: 1.8rem; color: #ff66aa;">${d.stats?.totalMessages || 0}</div>
-                        <div style="font-size: 0.7rem; color: #666;">Messages Sent</div>
-                    </div>
-                </div>
-                <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center; margin-top: 0.5rem;">
-                    <div style="font-size: 1.2rem; color: #00ffff;">⭐ ${Math.round(d.student?.engagementScore || 0)}%</div>
-                    <div style="font-size: 0.7rem; color: #666;">Engagement Score</div>
-                </div>
-                <div style="margin-top: 0.8rem; font-size: 0.7rem; color: #555; text-align: center;">
-                    ⏱️ ${Math.floor((d.stats?.totalTimeSpent || 0) / 60)} minutes spent learning
-                </div>
-            `;
-        } else {
-            content.innerHTML = `<p style="color: #ff6666; text-align: center;">Failed to load dashboard: ${data.message || 'Unknown error'}</p>`;
-        }
-    } catch (error) {
-        console.error('Dashboard error:', error);
-        content.innerHTML = `<p style="color: #ff6666; text-align: center;">Error loading dashboard. Please try again.</p>`;
-    }
-};
-
-window.closeDashboard = function() {
-    const modal = document.getElementById('dashboardModal');
-    if (modal) modal.classList.remove('active');
-};
-
-// ============================================
-// LOGOUT
-// ============================================
-
-window.handleLogout = function() {
-    if (confirm('Are you sure you want to logout?')) {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('studentId');
-        localStorage.removeItem('sessionId');
-        isTrackingEnabled = false;
-        updateAuthUI();
-        location.reload();
-    }
-};
-
-// ============================================
-// AUTHENTICATION MODALS (unchanged, keep as is)
-// ============================================
-// ... (copy your existing openSignupModal, openLoginModal, closeModalById from your current code)
-// They are long, so I won't repeat them here – keep your current versions.
-
-// ============================================
-// AUTO-TRACKING & INIT
-// ============================================
-
-updateAuthUI();
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Track initial page view
-    setTimeout(() => {
-        if (isTrackingEnabled) {
-            trackActivity('page_view', { duration: 0 });
-        }
-    }, 1000);
-
-    // Fetch engagement score (optional)
-    if (isTrackingEnabled) {
-        fetch(`${TRACKING_API}/track/dashboard`, {
-            headers: getHeaders()
-        })
-        .then(r => r.json())
-        .then(data => {
-            if (data.success) {
-                console.log('📊 Engagement Score:', data.data.student?.engagementScore || 0);
-            }
-        })
-        .catch(() => {});
-    }
-});
-
-// Track link clicks on all <a> tags (optional – but your inline onclick already calls trackLink)
-// This is a fallback for links without explicit onclick.
-document.addEventListener('click', (e) => {
-    const target = e.target.closest('a');
-    if (target && target.href && target.href.startsWith('http') && !target.target) {
-        // Only track if not already handled by inline onclick
-        // We'll rely on inline trackLink for now.
-    }
-});
-
-console.log('🚀 Tracking system initialized (fixed)');
-console.log('🔑 Logged in:', !!authToken);
-console.log('📡 API base:', TRACKING_API);
-</script>
+    const TRACKING_API = 'https://bespellbee-backend-en6l.onrender.com/api';
+    const authToken = localStorage.getItem('authToken');
+    const sessionId = localStorage.getItem('sessionId') || generateSessionId();
+    let currentPage = 'home';
+    let pageStartTime = Date.now();
+    let isTrackingEnabled = !!authToken;
 
     // ============================================
-    // UPDATE UI BASED ON LOGIN STATUS
+    // HELPERS
+    // ============================================
+
+    function generateSessionId() {
+        const id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('sessionId', id);
+        return id;
+    }
+
+    function getHeaders() {
+        return {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json',
+            'X-Session-Id': sessionId
+        };
+    }
+
+    // ============================================
+    // SINGLE TRACKING FUNCTION
+    // ============================================
+
+    function trackActivity(action, data = {}) {
+        if (!isTrackingEnabled || !authToken) {
+            console.log(`⏭️ Tracking skipped (not logged in): ${action}`);
+            return;
+        }
+
+        const duration = Math.floor((Date.now() - pageStartTime) / 1000);
+        pageStartTime = Date.now();
+
+        // Choose endpoint based on action
+        const endpoint = (action === 'link_click')
+            ? `${TRACKING_API}/track/link-click`
+            : `${TRACKING_API}/track/page-view`;
+
+        const payload = {
+            page: document.title || 'BeSpellBee',
+            url: window.location.href,
+            duration: duration,
+            action: action,
+            ...data
+        };
+
+        if (action === 'link_click' && data.link) {
+            payload.link = data.link;
+        }
+
+        fetch(endpoint, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify(payload),
+            keepalive: true
+        })
+        .then(res => res.json())
+        .then(response => {
+            console.log(`✅ ${action} tracked:`, response);
+        })
+        .catch(error => {
+            console.error(`❌ Tracking error (${action}):`, error);
+        });
+    }
+
+    window.trackActivity = trackActivity;
+
+    // ============================================
+    // TRACK LINK CLICKS
+    // ============================================
+
+    window.trackLink = function(linkName) {
+        trackActivity('link_click', { link: linkName });
+    };
+
+    // ============================================
+    // AUTH UI UPDATE
     // ============================================
 
     function updateAuthUI() {
         const isLoggedIn = !!localStorage.getItem('authToken');
         const dashboardLink = document.getElementById('dashboardLink');
         const logoutLink = document.getElementById('logoutLink');
-        
+
         if (isLoggedIn) {
             if (dashboardLink) dashboardLink.style.display = 'inline';
             if (logoutLink) logoutLink.style.display = 'inline';
@@ -2183,12 +2013,12 @@ console.log('📡 API base:', TRACKING_API);
     window.openDashboard = async function() {
         const modal = document.getElementById('dashboardModal');
         const content = document.getElementById('dashboardContent');
-        
+
         if (!modal) {
             alert('Dashboard modal not found. Please refresh the page.');
             return;
         }
-        
+
         modal.classList.add('active');
         content.innerHTML = `
             <div style="text-align: center; padding: 2rem;">
@@ -2444,7 +2274,7 @@ console.log('📡 API base:', TRACKING_API);
     }
 
     // ============================================
-    // AUTO-TRACKING
+    // AUTO-TRACKING & INIT
     // ============================================
 
     updateAuthUI();
@@ -2452,109 +2282,35 @@ console.log('📡 API base:', TRACKING_API);
     document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             if (isTrackingEnabled) {
-                fetch(`${TRACKING_API}/track/page-view`, {
-                    method: 'POST',
-                    headers: getHeaders(),
-                    body: JSON.stringify({
-                        page: document.title || 'BeSpellBee',
-                        url: window.location.href,
-                        duration: 0
-                    })
-                }).catch(() => {});
+                trackActivity('page_view', { duration: 0 });
             }
         }, 1000);
-        
+
         if (isTrackingEnabled) {
             fetch(`${TRACKING_API}/track/dashboard`, {
                 headers: getHeaders()
-            }).then(r => r.json()).then(data => {
+            })
+            .then(r => r.json())
+            .then(data => {
                 if (data.success) {
                     console.log('📊 Engagement Score:', data.data.student?.engagementScore || 0);
                 }
-            }).catch(() => {});
+            })
+            .catch(() => {});
         }
     });
 
-    document.addEventListener('click', (e) => {
-        if (!isTrackingEnabled) return;
-        const target = e.target;
-        const elementType = target.tagName.toLowerCase();
-        if (elementType !== 'a' && elementType !== 'button') return;
-        
-        const elementText = target.textContent?.trim()?.substring(0, 50) || '';
-        
-        fetch(`${TRACKING_API}/track/page-view`, {
-            method: 'POST',
-            headers: getHeaders(),
-            body: JSON.stringify({
-                page: currentPage,
-                url: window.location.href,
-                action: 'click',
-                element: elementType,
-                text: elementText
-            })
-        }).catch(() => {});
-    });
-
-    console.log('🚀 Tracking system initialized!');
+    console.log('🚀 Tracking system initialized (complete)');
     console.log('🔑 Logged in:', !!authToken);
-
-    window.trackActivity = function(type, data) {
-        if (!isTrackingEnabled) return;
-        fetch(`${TRACKING_API}/track/page-view`, {
-            method: 'POST',
-            headers: getHeaders(),
-            body: JSON.stringify({
-                page: currentPage,
-                url: window.location.href,
-                action: type,
-                ...data
-            })
-        }).catch(() => {});
-    };
-		// ============================================
-// ADD THIS: TRACK LINK CLICKS
-// ============================================
-
-window.trackLink = function(linkName) {
-    if (!isTrackingEnabled || !authToken) {
-        console.log('🔒 Not logged in - link tracking skipped');
-        return;
-    }
-
-    const duration = Math.floor((Date.now() - pageStartTime) / 1000);
-    pageStartTime = Date.now();
-
-    console.log(`🔗 Tracking link: ${linkName} (${duration}s)`);
-
-    fetch(`${TRACKING_API}/track/page-view`, {
-        method: 'POST',
-        headers: getHeaders(),
-        body: JSON.stringify({
-            page: document.title || 'BeSpellBee',
-            url: window.location.href,
-            duration: duration,
-            action: 'link_click',
-            link: linkName
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log(`✅ Link tracked: ${linkName}`, data);
-    })
-    .catch(err => {
-        console.error('❌ Link tracking error:', err);
-    });
-};
+    console.log('📡 API base:', TRACKING_API);
     </script>
 
     <!-- ============================================================ -->
-    <!-- ====== CAROUSEL VIEW TRACKING (ADDED WITHOUT BREAKING ANYTHING) ====== -->
+    <!-- ====== CAROUSEL VIEW TRACKING ====== -->
     <!-- ============================================================ -->
     <script>
-    // This runs AFTER the main tracking system and just adds carousel tracking
+    // This runs AFTER the main tracking system and adds carousel tracking
     (function() {
-        // Wait for carousel to be ready
         function setupCarouselTracking() {
             const track = document.getElementById('carouselTrack');
             if (!track) {
@@ -2563,55 +2319,45 @@ window.trackLink = function(linkName) {
             }
 
             function trackCurrentCard() {
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) return;
-    
-    const cards = track.querySelectorAll('.teacher-card');
-    const visibleCard = cards[currentIndex];
-    
-    if (visibleCard) {
-        const teacherName = visibleCard.querySelector('.teacher-name')?.textContent;
-        const teacherSubject = visibleCard.querySelector('.teacher-subject')?.textContent;
-        
-        if (teacherName) {
-            // duration is now handled inside trackActivity
-            trackActivity('carousel_view', {
-                teacher: teacherName,
-                subject: teacherSubject || 'Unknown'
-            });
-        }
-    }
-}
+                const authToken = localStorage.getItem('authToken');
+                if (!authToken) return;
+                
+                const cards = track.querySelectorAll('.teacher-card');
+                const visibleCard = cards[currentIndex];
+                
+                if (visibleCard) {
+                    const teacherName = visibleCard.querySelector('.teacher-name')?.textContent;
+                    const teacherSubject = visibleCard.querySelector('.teacher-subject')?.textContent;
+                    
+                    if (teacherName) {
+                        trackActivity('carousel_view', {
+                            teacher: teacherName,
+                            subject: teacherSubject || 'Unknown'
+                        });
+                    }
+                }
+            }
 
-            // Track on navigation
             document.getElementById('prevBtn')?.addEventListener('click', function() {
                 setTimeout(trackCurrentCard, 150);
             });
             document.getElementById('nextBtn')?.addEventListener('click', function() {
                 setTimeout(trackCurrentCard, 150);
             });
-
-            // Track on filter
             document.getElementById('filterContainer')?.addEventListener('click', function(e) {
                 if (e.target.closest('.filter-btn')) {
                     setTimeout(trackCurrentCard, 200);
                 }
             });
-
-            // Track on dot click
             document.addEventListener('click', function(e) {
                 if (e.target.classList.contains('dot')) {
                     setTimeout(trackCurrentCard, 150);
                 }
             });
-
-            // Track initial load
             setTimeout(trackCurrentCard, 800);
-            
             console.log('✅ Carousel tracking added!');
         }
 
-        // Run after page loads
         if (document.readyState === 'complete') {
             setTimeout(setupCarouselTracking, 500);
         } else {
