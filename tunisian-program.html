@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tunisian Program – BeSpellBee</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #00ffff;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        h1 .flag {
+            font-size: 2.8rem;
+        }
+        .subhead {
+            color: #88dddd;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .card {
+            background: #0d0d0d;
+            border: 1px solid #1a4a4a;
+            border-radius: 16px;
+            padding: 24px;
+            transition: border-color 0.3s;
+            text-align: center;
+        }
+        .card:hover {
+            border-color: #00ffff;
+        }
+        .card .emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .card h2 {
+            color: #fff;
+            font-size: 1.4rem;
+            margin-bottom: 0.3rem;
+        }
+        .card p {
+            color: #888;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .card .btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 8px 24px;
+            border: 1px solid #00ffff;
+            border-radius: 30px;
+            color: #00ffff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .card .btn:hover {
+            background: #00ffff;
+            color: #000;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #666;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            color: #00ffff;
+        }
+        @media (max-width: 600px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="flag">🇹🇳</span> Tunisian Program</h1>
+        <p class="subhead">Tunisian curriculum resources, teacher materials, and localised learning content.</p>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="emoji">📘</div>
+                <h2>Tunisian Curriculum</h2>
+                <p>Resources aligned with the Tunisian education system for primary and secondary levels.</p>
+                <a href="#" class="btn">Coming Soon</a>
+            </div>
+            <div class="card">
+                <div class="emoji">🧑‍🏫</div>
+                <h2>Teacher Materials</h2>
+                <p>Lesson plans, worksheets, and teaching guides for Tunisian programme instructors.</p>
+                <a href="#" class="btn">Coming Soon</a>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+</body>
+</html>
