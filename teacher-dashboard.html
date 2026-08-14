@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeSpellBee - Teacher Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        /* ====== TOP NAV ====== */
+        .nav-bar {
+            background: #0d0d0d;
+            border-bottom: 1px solid #1a4a4a;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .nav-bar .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #00ffff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+        }
+        .nav-bar .logo span {
+            color: #fff;
+        }
+        .nav-bar .teacher-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .nav-bar .teacher-info .name {
+            font-weight: 600;
+            color: #fff;
+        }
+        .nav-bar .teacher-info .badge {
+            background: rgba(0, 255, 255, 0.15);
+            color: #00ffff;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+        .nav-bar .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff88;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        /* ====== DASHBOARD LAYOUT ====== */
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px 32px 60px;
+        }
+
+        /* ====== STATS ROW ====== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 32px;
+        }
+        .stat-card {
+            background: #0d0d0d;
+            border: 1px solid #1a4a4a;
+            border-radius: 14px;
+            padding: 20px 24px;
+            transition: border-color 0.3s;
+        }
+        .stat-card:hover {
+            border-color: #00ffff;
+        }
+        .stat-card .label {
+            color: #88dddd;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        .stat-card .number {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 4px 0 2px;
+        }
+        .stat-card .number .highlight {
+            color: #00ffff;
+        }
+        .stat-card .sub {
+            color: #666;
+            font-size: 0.8rem;
+        }
+        .stat-card .sub i {
+            margin-right: 4px;
+        }
+
+        /* ====== TWO-COLUMN GRID ====== */
+        .two-col {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        /* ====== ACTIVITY FEED ====== */
+        .panel {
+            background: #0d0d0d;
+            border: 1px solid #1a4a4a;
+            border-radius: 14px;
+            padding: 20px 24px;
+        }
+        .panel .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .panel .panel-header h3 {
+            color: #00ffff;
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .panel .panel-header .count-badge {
+            background: rgba(0, 255, 255, 0.12);
+            color: #00ffff;
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .panel .panel-header .live-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ff4444;
+            animation: pulse 1.5s infinite;
+        }
+        .panel .panel-header .live-dot.active {
+            background: #00ff88;
+        }
+
+        /* ====== ACTIVITY ITEMS ====== */
+        .activity-list {
+            max-height: 420px;
+            overflow-y: auto;
+        }
+        .activity-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .activity-list::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 4px;
+        }
+        .activity-list::-webkit-scrollbar-thumb {
+            background: #00ffff;
+            border-radius: 4px;
+        }
+
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #1a1a1a;
+            animation: slideIn 0.4s ease;
+        }
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-12px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .activity-item .left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .activity-item .left .icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+        .activity-item .left .icon.click { background: rgba(0, 255, 255, 0.12); color: #00ffff; }
+        .activity-item .left .icon.view { background: rgba(255, 204, 0, 0.12); color: #ffcc00; }
+        .activity-item .left .icon.book { background: rgba(0, 255, 136, 0.12); color: #00ff88; }
+        .activity-item .left .icon.search { background: rgba(255, 102, 170, 0.12); color: #ff66aa; }
+
+        .activity-item .left .text {
+            font-size: 0.9rem;
+        }
+        .activity-item .left .text .student {
+            color: #fff;
+            font-weight: 600;
+        }
+        .activity-item .left .text .action {
+            color: #88dddd;
+        }
+        .activity-item .left .text .target {
+            color: #00ffff;
+            font-weight: 500;
+        }
+
+        .activity-item .time {
+            color: #555;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            margin-left: 12px;
+        }
+
+        /* ====== ONLINE STUDENTS ====== */
+        .online-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .online-student {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: #121212;
+            border-radius: 10px;
+            border-left: 3px solid #00ff88;
+        }
+        .online-student .name {
+            font-weight: 500;
+            color: #fff;
+        }
+        .online-student .name i {
+            color: #00ff88;
+            font-size: 0.6rem;
+            margin-right: 6px;
+        }
+        .online-student .detail {
+            color: #666;
+            font-size: 0.75rem;
+        }
+        .online-student .detail .highlight {
+            color: #00ffff;
+        }
+
+        /* ====== UPCOMING SESSIONS ====== */
+        .session-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        .session-item:last-child {
+            border-bottom: none;
+        }
+        .session-item .left .student-name {
+            color: #fff;
+            font-weight: 500;
+        }
+        .session-item .left .subject {
+            color: #88dddd;
+            font-size: 0.8rem;
+        }
+        .session-item .time-slot {
+            color: #00ffff;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* ====== EMPTY STATE ====== */
+        .empty-state {
+            text-align: center;
+            padding: 32px 16px;
+            color: #555;
+        }
+        .empty-state i {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 768px) {
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .nav-bar {
+                padding: 12px 16px;
+            }
+            .dashboard {
+                padding: 16px;
+            }
+        }
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .activity-item {
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            .activity-item .time {
+                margin-left: 44px;
+                font-size: 0.65rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ====== TOP NAV ====== -->
+    <nav class="nav-bar">
+        <div class="logo">📚 BeSpell<span>Bee</span></div>
+        <div class="teacher-info">
+            <span class="badge"><span class="status-dot"></span> Live</span>
+            <span class="name"><i class="fas fa-user-graduate"></i> Arij Dhibi</span>
+            <span style="color: #555; font-size: 0.8rem;">| Visual Arts</span>
+            <a href="#" style="color: #00ffff; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </nav>
+
+    <!-- ====== DASHBOARD ====== -->
+    <div class="dashboard">
+
+        <!-- ====== STATS ====== -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="label"><i class="fas fa-users"></i> Active Students</div>
+                <div class="number" id="activeStudents">0</div>
+                <div class="sub"><i class="fas fa-arrow-up" style="color:#00ff88;"></i> +3 today</div>
+            </div>
+            <div class="stat-card">
+                <div class="label"><i class="fas fa-calendar-check"></i> Today's Sessions</div>
+                <div class="number" id="todaySessions">0</div>
+                <div class="sub"><i class="fas fa-clock"></i> <span id="nextSession">No sessions yet</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="label"><i class="fas fa-eye"></i> Profile Views</div>
+                <div class="number" id="profileViews">0</div>
+                <div class="sub"><i class="fas fa-arrow-up" style="color:#00ff88;"></i> +12 this week</div>
+            </div>
+            <div class="stat-card">
+                <div class="label"><i class="fas fa-link"></i> Student Clicks</div>
+                <div class="number" id="totalClicks">0</div>
+                <div class="sub"><i class="fas fa-arrow-up" style="color:#00ff88;"></i> <span id="clickRate">0</span> /hr</div>
+            </div>
+        </div>
+
+        <!-- ====== TWO COLUMNS ====== -->
+        <div class="two-col">
+
+            <!-- LEFT: ACTIVITY FEED -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>
+                        <span class="live-dot active"></span> Live Activity
+                        <span class="count-badge" id="activityCount">0</span>
+                    </h3>
+                    <span style="color:#555; font-size:0.75rem;">
+                        <i class="fas fa-sync-alt fa-spin"></i> live
+                    </span>
+                </div>
+                <div class="activity-list" id="activityFeed">
+                    <!-- Items injected by JavaScript -->
+                </div>
+            </div>
+
+            <!-- RIGHT: ONLINE STUDENTS + UPCOMING -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+
+                <!-- ONLINE STUDENTS -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-circle" style="color:#00ff88; font-size:0.6rem;"></i> Online Now</h3>
+                        <span class="count-badge" id="onlineCount">0</span>
+                    </div>
+                    <div class="online-grid" id="onlineStudents">
+                        <!-- Injected by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- UPCOMING SESSIONS -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-calendar-alt"></i> Upcoming Sessions</h3>
+                        <span class="count-badge" id="upcomingCount">0</span>
+                    </div>
+                    <div id="upcomingSessions">
+                        <!-- Injected by JavaScript -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ====== DASHBOARD JAVASCRIPT ====== -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        // CONFIGURATION
+        // ============================================================
+
+        // Student names for demo (matching your carousel data)
+        const STUDENT_NAMES = [
+            'Sarah Ahmed', 'Mohamed Ali', 'Leila Ben Ali', 'Youssef Karray',
+            'Ines Trabelsi', 'Ahmed Mansouri', 'Nour Chaabane', 'Omar Sassi',
+            'Sofia Hammami', 'Khaled Jaber'
+        ];
+
+        // Activity action pool
+        const ACTIONS = [
+            { icon: 'click', emoji: '🔗', action: 'clicked', target: 'About', category: 'link' },
+            { icon: 'click', emoji: '🔗', action: 'clicked', target: 'Services', category: 'link' },
+            { icon: 'click', emoji: '🔗', action: 'clicked', target: 'B2 Exam', category: 'link' },
+            { icon: 'click', emoji: '🔗', action: 'clicked', target: 'French Bac', category: 'link' },
+            { icon: 'click', emoji: '🔗', action: 'clicked', target: 'A1 Activities', category: 'link' },
+            { icon: 'view', emoji: '👁️', action: 'viewed', target: 'Visual Arts', category: 'teacher' },
+            { icon: 'view', emoji: '👁️', action: 'viewed', target: 'Computer Science', category: 'teacher' },
+            { icon: 'view', emoji: '👁️', action: 'viewed', target: 'English Language', category: 'teacher' },
+            { icon: 'search', emoji: '🔍', action: 'searched for', target: 'beginner', category: 'search' },
+            { icon: 'search', emoji: '🔍', action: 'searched for', target: 'advanced', category: 'search' },
+            { icon: 'book', emoji: '📚', action: 'booked', target: 'Arij Dhibi', category: 'booking' },
+        ];
+
+        // ============================================================
+        // STATE
+        // ============================================================
+
+        let activityFeed = [];
+        let onlineStudents = [];
+        let totalClicks = 0;
+
+        // ============================================================
+        // GENERATE MOCK DATA
+        // ============================================================
+
+        function randomItem(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function randomTime() {
+            const mins = Math.floor(Math.random() * 60);
+            const secs = Math.floor(Math.random() * 60);
+            if (mins < 1) return `${secs}s ago`;
+            if (mins < 60) return `${mins}m ago`;
+            return `${Math.floor(mins / 60)}h ${mins % 60}m ago`;
+        }
+
+        function generateActivity() {
+            const student = randomItem(STUDENT_NAMES);
+            const action = randomItem(ACTIONS);
+            const time = randomTime();
+            return {
+                student,
+                icon: action.icon,
+                emoji: action.emoji,
+                action: action.action,
+                target: action.target,
+                category: action.category,
+                time,
+                timestamp: Date.now() - Math.floor(Math.random() * 600000)
+            };
+        }
+
+        function generateOnlineStudent() {
+            const name = randomItem(STUDENT_NAMES);
+            const action = randomItem(ACTIONS);
+            return {
+                name,
+                action: `viewing ${action.target}`,
+                subject: randomItem(['Visual Arts', 'English', 'B2 Prep', 'Arabic Lit']),
+                since: Math.floor(Math.random() * 30) + 1
+            };
+        }
+
+        // ============================================================
+        // RENDER FUNCTIONS
+        // ============================================================
+
+        function renderStats() {
+            document.getElementById('activeStudents').textContent = onlineStudents.length;
+            document.getElementById('todaySessions').textContent = Math.floor(Math.random() * 5) + 1;
+            document.getElementById('profileViews').textContent = Math.floor(Math.random() * 50) + 20;
+            document.getElementById('totalClicks').textContent = totalClicks;
+            document.getElementById('clickRate').textContent = Math.floor(totalClicks / 2);
+        }
+
+        function renderActivityFeed() {
+            const container = document.getElementById('activityFeed');
+            const count = document.getElementById('activityCount');
+
+            if (activityFeed.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>Waiting for student activity...</p>
+                    </div>
+                `;
+                count.textContent = '0';
+                return;
+            }
+
+            // Sort by timestamp (newest first)
+            const sorted = [...activityFeed].sort((a, b) => b.timestamp - a.timestamp);
+            const visible = sorted.slice(0, 20);
+
+            container.innerHTML = visible.map(item => `
+                <div class="activity-item">
+                    <div class="left">
+                        <div class="icon ${item.icon}">${item.emoji}</div>
+                        <div class="text">
+                            <span class="student">${item.student}</span>
+                            <span class="action"> ${item.action} </span>
+                            <span class="target">${item.target}</span>
+                        </div>
+                    </div>
+                    <span class="time">${item.time}</span>
+                </div>
+            `).join('');
+
+            count.textContent = visible.length;
+        }
+
+        function renderOnlineStudents() {
+            const container = document.getElementById('onlineStudents');
+            const count = document.getElementById('onlineCount');
+
+            if (onlineStudents.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="padding:16px;">
+                        <p style="font-size:0.85rem;">No students online</p>
+                    </div>
+                `;
+                count.textContent = '0';
+                return;
+            }
+
+            container.innerHTML = onlineStudents.map(s => `
+                <div class="online-student">
+                    <span class="name"><i class="fas fa-circle"></i> ${s.name}</span>
+                    <span class="detail">${s.action} · <span class="highlight">${s.since}m</span></span>
+                </div>
+            `).join('');
+
+            count.textContent = onlineStudents.length;
+        }
+
+        function renderUpcomingSessions() {
+            const container = document.getElementById('upcomingSessions');
+            const count = document.getElementById('upcomingCount');
+
+            const sessions = [
+                { student: 'Sarah Ahmed', subject: 'Visual Arts', time: '10:00 AM' },
+                { student: 'Mohamed Ali', subject: 'English', time: '11:30 AM' },
+                { student: 'Leila Ben Ali', subject: 'B2 Prep', time: '2:00 PM' },
+            ];
+
+            container.innerHTML = sessions.map(s => `
+                <div class="session-item">
+                    <div class="left">
+                        <div class="student-name">${s.student}</div>
+                        <div class="subject">${s.subject}</div>
+                    </div>
+                    <div class="time-slot">${s.time}</div>
+                </div>
+            `).join('');
+
+            count.textContent = sessions.length;
+        }
+
+        // ============================================================
+        // UPDATE LOOPS
+        // ============================================================
+
+        // Add a new activity every 3–8 seconds
+        function addActivity() {
+            const newActivity = generateActivity();
+            activityFeed.push(newActivity);
+            totalClicks += 1;
+
+            // Update online students occasionally
+            if (Math.random() > 0.6) {
+                onlineStudents = [];
+                const count = Math.floor(Math.random() * 4) + 1;
+                for (let i = 0; i < count; i++) {
+                    onlineStudents.push(generateOnlineStudent());
+                }
+            }
+
+            renderStats();
+            renderActivityFeed();
+            renderOnlineStudents();
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+
+        function init() {
+            // Seed with some initial data
+            for (let i = 0; i < 5; i++) {
+                const item = generateActivity();
+                activityFeed.push(item);
+                totalClicks += 1;
+            }
+
+            onlineStudents = [
+                { name: 'Sarah Ahmed', action: 'viewing Visual Arts', subject: 'Visual Arts', since: 12 },
+                { name: 'Mohamed Ali', action: 'watching video', subject: 'B2 Prep', since: 8 },
+                { name: 'Ines Trabelsi', action: 'viewing English', subject: 'English', since: 4 },
+            ];
+
+            renderStats();
+            renderActivityFeed();
+            renderOnlineStudents();
+            renderUpcomingSessions();
+
+            // Start the real‑time simulation
+            setInterval(addActivity, 4000 + Math.random() * 4000);
+
+            console.log('🚀 Teacher Dashboard live (frontend simulation)');
+            console.log(`👥 ${onlineStudents.length} students online`);
+            console.log(`📊 ${totalClicks} total clicks simulated`);
+        }
+
+        init();
+    </script>
+
+</body>
+</html>
