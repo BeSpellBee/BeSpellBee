@@ -1028,8 +1028,8 @@
 
 <body style="background-color:black;">
 
-   <!-- ============================================================ -->
-<!-- ====== NAVIGATION BAR (UPDATED – ENGLISH EXAMS) ====== -->
+<!-- ============================================================ -->
+<!-- ====== NAVIGATION BAR (UPDATED – ENGLISH EXAMS + TEACHER LOGIN) ====== -->
 <!-- ============================================================ -->
 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; padding: 8px 12px; gap: 6px 12px; background: #0a0a0a; border-bottom: 1px solid #1a3a3a;">
 
@@ -1039,7 +1039,7 @@
         <a href="services.html" target="_blank" style="color:aqua; text-decoration:none; font-size:0.9rem;" onclick="trackLink('Services')">Services</a>
         <a href="Contact.html" target="_blank" style="color:aqua; text-decoration:none; font-size:0.9rem;" onclick="trackLink('Contact')">Contact</a>
 
-        <!-- English Exams – now aqua (matches all other links) -->
+        <!-- English Exams – aqua -->
         <a href="english-exams.html" target="_blank" 
            style="color:aqua; text-decoration:none; font-size:0.9rem;"
            onclick="trackLink('English Exams')">English Exams</a>
@@ -1049,7 +1049,7 @@
         <a href="French-bac.html" target="_blank" style="color:aqua; text-decoration:none; font-size:0.9rem;" onclick="trackLink('French Program')">🇫🇷 French Program</a>
     </div>
 
-    <!-- RIGHT: Search + Fiction + Student Auth (boxed) -->
+    <!-- RIGHT: Search + Fiction + Student Auth (boxed) + Teacher Login -->
     <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;">
 
         <!-- Search -->
@@ -1091,6 +1091,16 @@
                 🔐 Login
             </a>
         </div>
+
+        <!-- ====== TEACHER LOGIN BUTTON (gold, recruited teachers only) ====== -->
+        <a href="#" id="teacherLoginBtn" onclick="openTeacherLoginModal(); return false;" 
+           style="display:inline-block; padding:5px 14px; border:1px solid #ffcc00; border-radius:30px;
+                  color:#ffcc00; text-decoration:none; font-size:0.8rem; font-weight:600;
+                  transition: all 0.3s; background: rgba(255,204,0,0.05);"
+           onmouseover="this.style.background='#ffcc00'; this.style.color='#000';"
+           onmouseout="this.style.background='rgba(255,204,0,0.05)'; this.style.color='#ffcc00';">
+            👨‍🏫 Teacher
+        </a>
 
         <!-- ====== DASHBOARD & LOGOUT (hidden by default) ====== -->
         <div id="authenticatedButtons" style="display: none; gap: 6px;">
@@ -1334,6 +1344,27 @@
                     Close
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- ====== TEACHER LOGIN MODAL ====== -->
+    <div class="booking-modal" id="teacherLoginModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; justify-content:center; align-items:center; backdrop-filter:blur(10px);">
+        <div style="background:#0d0d0d; border:2px solid #ffcc00; border-radius:20px; padding:2rem; max-width:400px; width:90%;">
+            <h2 style="color:#ffcc00; text-align:center;">👨‍🏫 Teacher Login</h2>
+            <p style="color:#888; text-align:center; font-size:0.85rem; margin-bottom:1rem;">For recruited teachers only</p>
+            <form id="teacherLoginForm" style="display:flex; flex-direction:column; gap:1rem;">
+                <input type="email" id="teacherEmail" placeholder="Teacher Email" required
+                    style="padding:10px; border:1px solid #1a4a4a; border-radius:8px; background:#1a1a1a; color:white;">
+                <input type="password" id="teacherPassword" placeholder="Password" required
+                    style="padding:10px; border:1px solid #1a4a4a; border-radius:8px; background:#1a1a1a; color:white;">
+                <button type="submit" style="background:#ffcc00; color:#000; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+            <button onclick="closeTeacherLoginModal()" style="background:transparent; color:#888; border:1px solid #444; padding:8px; border-radius:8px; width:100%; margin-top:0.5rem; cursor:pointer;">
+                Cancel
+            </button>
+            <div id="teacherLoginMessage" style="color:#ff4444; text-align:center; margin-top:0.5rem;"></div>
         </div>
     </div>
 
@@ -1715,6 +1746,7 @@
                 closeVideoModal();
                 closeModal();
                 closeDashboard();
+                closeTeacherLoginModal();
             }
         });
 
@@ -2020,10 +2052,17 @@
 
     function updateAuthUI() {
         const isLoggedIn = !!localStorage.getItem('authToken');
+        const userRole = localStorage.getItem('userRole') || 'student';
         const studentAuthBtns = document.getElementById('studentAuthButtons');
         const authBtns = document.getElementById('authenticatedButtons');
         const dashboardLink = document.getElementById('dashboardLink');
         const logoutLink = document.getElementById('logoutLink');
+        const teacherLoginBtn = document.getElementById('teacherLoginBtn');
+
+        // Hide teacher login button if already logged in as teacher
+        if (teacherLoginBtn) {
+            teacherLoginBtn.style.display = (isLoggedIn && userRole === 'teacher') ? 'none' : 'inline-block';
+        }
 
         if (isLoggedIn) {
             // Hide student auth buttons
@@ -2122,6 +2161,9 @@
         if (confirm('Are you sure you want to logout?')) {
             localStorage.removeItem('authToken');
             localStorage.removeItem('studentId');
+            localStorage.removeItem('teacherId');
+            localStorage.removeItem('teacherName');
+            localStorage.removeItem('userRole');
             localStorage.removeItem('sessionId');
             isTrackingEnabled = false;
             updateAuthUI();
@@ -2130,7 +2172,7 @@
     };
 
     // ============================================
-    // AUTHENTICATION MODALS
+    // STUDENT AUTHENTICATION MODALS
     // ============================================
 
     // Signup Modal
@@ -2208,6 +2250,7 @@
                 if (data.success) {
                     localStorage.setItem('authToken', data.data.token);
                     localStorage.setItem('studentId', data.data.id);
+                    localStorage.setItem('userRole', 'student');
                     isTrackingEnabled = true;
                     messageEl.style.color = '#00ff88';
                     messageEl.textContent = '✅ Account created!';
@@ -2226,7 +2269,7 @@
         });
     };
 
-    // Login Modal
+    // Student Login Modal
     window.openLoginModal = function() {
         document.querySelectorAll('#signupModal, #loginModal').forEach(el => el.remove());
         
@@ -2288,6 +2331,7 @@
                 if (data.success) {
                     localStorage.setItem('authToken', data.data.token);
                     localStorage.setItem('studentId', data.data.id);
+                    localStorage.setItem('userRole', 'student');
                     isTrackingEnabled = true;
                     messageEl.style.color = '#00ff88';
                     messageEl.textContent = '✅ Login successful!';
@@ -2310,6 +2354,66 @@
         const el = document.getElementById(id);
         if (el) el.remove();
     }
+
+    // ============================================
+    // TEACHER LOGIN (no signup)
+    // ============================================
+
+    window.openTeacherLoginModal = function() {
+        const modal = document.getElementById('teacherLoginModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            document.getElementById('teacherLoginMessage').textContent = '';
+            document.getElementById('teacherLoginForm').reset();
+        }
+    };
+
+    window.closeTeacherLoginModal = function() {
+        const modal = document.getElementById('teacherLoginModal');
+        if (modal) modal.style.display = 'none';
+    };
+
+    // Handle teacher login form submission
+    document.getElementById('teacherLoginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('teacherEmail').value.trim();
+        const password = document.getElementById('teacherPassword').value;
+        const messageEl = document.getElementById('teacherLoginMessage');
+
+        messageEl.textContent = '⏳ Logging in...';
+        messageEl.style.color = '#ffcc00';
+
+        try {
+            const response = await fetch(`${TRACKING_API}/auth/teacher-login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                localStorage.setItem('authToken', data.data.token);
+                localStorage.setItem('teacherId', data.data.id);
+                localStorage.setItem('teacherName', data.data.name);
+                localStorage.setItem('userRole', 'teacher');
+                isTrackingEnabled = true;
+                messageEl.style.color = '#00ff88';
+                messageEl.textContent = '✅ Login successful! Redirecting...';
+                setTimeout(() => {
+                    closeTeacherLoginModal();
+                    window.location.href = 'teacher-dashboard.html';
+                }, 1500);
+            } else {
+                messageEl.textContent = '❌ ' + (data.message || 'Login failed');
+                messageEl.style.color = '#ff4444';
+            }
+        } catch (error) {
+            console.error('Teacher login error:', error);
+            messageEl.textContent = '❌ Connection error. Please try again.';
+            messageEl.style.color = '#ff4444';
+        }
+    });
 
     // ============================================
     // AUTO-TRACKING
