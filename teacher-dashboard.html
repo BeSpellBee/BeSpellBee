@@ -348,22 +348,24 @@
     <!-- ====== TOP NAV ====== -->
     <nav class="nav-bar">
         <div class="logo">
-    <svg width="180" height="40" viewBox="0 0 200 50">
-        <defs>
-            <linearGradient id="dashboardGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:aqua;"/>
-                <stop offset="50%" style="stop-color:white;" />
-                <stop offset="100%" style="stop-color:yellow;" />
-            </linearGradient>
-        </defs>
-        <text x="0" y="38" fill="url(#dashboardGradient)" font-size="36" font-weight="700" font-family="Segoe UI, sans-serif">BeSpellBee</text>
-    </svg>
-</div>
+            <svg width="180" height="40" viewBox="0 0 200 50">
+                <defs>
+                    <linearGradient id="dashboardGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:aqua;"/>
+                        <stop offset="50%" style="stop-color:white;" />
+                        <stop offset="100%" style="stop-color:yellow;" />
+                    </linearGradient>
+                </defs>
+                <text x="0" y="38" fill="url(#dashboardGradient)" font-size="36" font-weight="700" font-family="Segoe UI, sans-serif">BeSpellBee</text>
+            </svg>
+        </div>
         <div class="teacher-info">
             <span class="badge"><span class="status-dot"></span> Live</span>
-            <span class="name"><i class="fas fa-user-graduate"></i> Arij Dhibi</span>
-            <span style="color: #555; font-size: 0.8rem;">| Visual Arts</span>
-            <a href="#" style="color: #00ffff; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px;">
+            <!-- IDs added here so JS can inject the real name -->
+            <span class="name" id="navTeacherName"><i class="fas fa-user-graduate"></i> Loading...</span>
+            <span style="color: #555; font-size: 0.8rem;" id="navTeacherSubject">| ...</span>
+            <!-- Logout button made functional -->
+            <a href="#" id="logoutBtn" style="color: #00ffff; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px;">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </div>
@@ -375,24 +377,24 @@
         <!-- ====== STATS ====== -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="label"><i class="fas fa-users"></i> Active Students</div>
+                <div class="label"><i class="fas fa-users"></i> Total Students</div>
                 <div class="number" id="activeStudents">0</div>
-                <div class="sub"><i class="fas fa-arrow-up" style="color:#00ff88;"></i> +3 today</div>
+                <div class="sub">Tracked this period</div>
             </div>
             <div class="stat-card">
-                <div class="label"><i class="fas fa-calendar-check"></i> Today's Sessions</div>
+                <div class="label"><i class="fas fa-calendar-check"></i> Total Bookings</div>
                 <div class="number" id="todaySessions">0</div>
-                <div class="sub"><i class="fas fa-clock"></i> <span id="nextSession">No sessions yet</span></div>
+                <div class="sub"><i class="fas fa-clock"></i> <span id="nextSession">All time</span></div>
             </div>
             <div class="stat-card">
-                <div class="label"><i class="fas fa-eye"></i> Profile Views</div>
+                <div class="label"><i class="fas fa-eye"></i> Recorded Activity</div>
                 <div class="number" id="profileViews">0</div>
-                <div class="sub"><i class="fas fa-arrow-up" style="color:#00ff88;"></i> +12 this week</div>
+                <div class="sub">Page views & clicks</div>
             </div>
             <div class="stat-card">
-                <div class="label"><i class="fas fa-link"></i> Student Clicks</div>
+                <div class="label"><i class="fas fa-clock"></i> Pending Requests</div>
                 <div class="number" id="totalClicks">0</div>
-                <div class="sub"><i class="fas fa-arrow-up" style="color:#00ff88;"></i> <span id="clickRate">0</span> /hr</div>
+                <div class="sub">Awaiting confirmation</div>
             </div>
         </div>
 
@@ -411,32 +413,35 @@
                     </span>
                 </div>
                 <div class="activity-list" id="activityFeed">
-                    <!-- Items injected by JavaScript -->
+                    <div class="empty-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading real-time data...</p>
+                    </div>
                 </div>
             </div>
 
             <!-- RIGHT: ONLINE STUDENTS + UPCOMING -->
             <div style="display: flex; flex-direction: column; gap: 24px;">
 
-                <!-- ONLINE STUDENTS -->
+                <!-- ONLINE STUDENTS / ENGAGED STUDENTS -->
                 <div class="panel">
                     <div class="panel-header">
-                        <h3><i class="fas fa-circle" style="color:#00ff88; font-size:0.6rem;"></i> Online Now</h3>
+                        <h3><i class="fas fa-circle" style="color:#00ff88; font-size:0.6rem;"></i> Top Engaged</h3>
                         <span class="count-badge" id="onlineCount">0</span>
                     </div>
                     <div class="online-grid" id="onlineStudents">
-                        <!-- Injected by JavaScript -->
+                        <div class="empty-state" style="padding:16px;"><p style="font-size:0.85rem;">Loading...</p></div>
                     </div>
                 </div>
 
-                <!-- UPCOMING SESSIONS -->
+                <!-- UPCOMING SESSIONS / BOOKINGS -->
                 <div class="panel">
                     <div class="panel-header">
-                        <h3><i class="fas fa-calendar-alt"></i> Upcoming Sessions</h3>
+                        <h3><i class="fas fa-calendar-alt"></i> Recent Bookings</h3>
                         <span class="count-badge" id="upcomingCount">0</span>
                     </div>
                     <div id="upcomingSessions">
-                        <!-- Injected by JavaScript -->
+                        <div class="empty-state" style="padding:16px;"><p style="font-size:0.85rem;">Loading...</p></div>
                     </div>
                 </div>
 
@@ -445,237 +450,212 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- ====== DASHBOARD JAVASCRIPT ====== -->
+    <!-- ====== REAL DASHBOARD JAVASCRIPT ====== -->
     <!-- ============================================================ -->
     <script>
         // ============================================================
         // CONFIGURATION
         // ============================================================
-
-        // Student names for demo (matching your carousel data)
-        const STUDENT_NAMES = [
-            'Sarah Ahmed', 'Mohamed Ali', 'Leila Ben Ali', 'Youssef Karray',
-            'Ines Trabelsi', 'Ahmed Mansouri', 'Nour Chaabane', 'Omar Sassi',
-            'Sofia Hammami', 'Khaled Jaber'
-        ];
-
-        // Activity action pool
-        const ACTIONS = [
-            { icon: 'click', emoji: '🔗', action: 'clicked', target: 'About', category: 'link' },
-            { icon: 'click', emoji: '🔗', action: 'clicked', target: 'Services', category: 'link' },
-            { icon: 'click', emoji: '🔗', action: 'clicked', target: 'B2 Exam', category: 'link' },
-            { icon: 'click', emoji: '🔗', action: 'clicked', target: 'French Bac', category: 'link' },
-            { icon: 'click', emoji: '🔗', action: 'clicked', target: 'A1 Activities', category: 'link' },
-            { icon: 'view', emoji: '👁️', action: 'viewed', target: 'Visual Arts', category: 'teacher' },
-            { icon: 'view', emoji: '👁️', action: 'viewed', target: 'Computer Science', category: 'teacher' },
-            { icon: 'view', emoji: '👁️', action: 'viewed', target: 'English Language', category: 'teacher' },
-            { icon: 'search', emoji: '🔍', action: 'searched for', target: 'beginner', category: 'search' },
-            { icon: 'search', emoji: '🔍', action: 'searched for', target: 'advanced', category: 'search' },
-            { icon: 'book', emoji: '📚', action: 'booked', target: 'Arij Dhibi', category: 'booking' },
-        ];
+        
+        // ⚠️ REPLACE THIS with your actual Render URL (e.g., https://my-app.onrender.com)
+       const API_BASE_URL = 'https://bespellbee-backend-en6l.onrender.com';
+        // ============================================================
+        // LOGOUT LOGIC
+        // ============================================================
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html'; // Change if your login file has a different name
+        });
 
         // ============================================================
-        // STATE
+        // HELPER: FORMAT TIME AGO
         // ============================================================
-
-        let activityFeed = [];
-        let onlineStudents = [];
-        let totalClicks = 0;
-
-        // ============================================================
-        // GENERATE MOCK DATA
-        // ============================================================
-
-        function randomItem(arr) {
-            return arr[Math.floor(Math.random() * arr.length)];
+        function timeAgo(dateString) {
+            const now = new Date();
+            const past = new Date(dateString);
+            const diffMs = now - past;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHrs = Math.floor(diffMs / 3600000);
+            
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHrs < 24) return `${diffHrs}h ago`;
+            return past.toLocaleDateString();
         }
 
-        function randomTime() {
-            const mins = Math.floor(Math.random() * 60);
-            const secs = Math.floor(Math.random() * 60);
-            if (mins < 1) return `${secs}s ago`;
-            if (mins < 60) return `${mins}m ago`;
-            return `${Math.floor(mins / 60)}h ${mins % 60}m ago`;
-        }
+        // ============================================================
+        // FETCH REAL DATA
+        // ============================================================
+        async function loadDashboard() {
+            const token = localStorage.getItem('token'); // Make sure your login page saves the token here!
 
-        function generateActivity() {
-            const student = randomItem(STUDENT_NAMES);
-            const action = randomItem(ACTIONS);
-            const time = randomTime();
-            return {
-                student,
-                icon: action.icon,
-                emoji: action.emoji,
-                action: action.action,
-                target: action.target,
-                category: action.category,
-                time,
-                timestamp: Date.now() - Math.floor(Math.random() * 600000)
-            };
-        }
+            if (!token) {
+                alert('Please log in to view the dashboard.');
+                window.location.href = 'login.html';
+                return;
+            }
 
-        function generateOnlineStudent() {
-            const name = randomItem(STUDENT_NAMES);
-            const action = randomItem(ACTIONS);
-            return {
-                name,
-                action: `viewing ${action.target}`,
-                subject: randomItem(['Visual Arts', 'English', 'B2 Prep', 'Arabic Lit']),
-                since: Math.floor(Math.random() * 30) + 1
-            };
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/auth/teacher/dashboard`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || 'Failed to fetch dashboard data');
+                }
+
+                // Pass data to render functions
+                renderDashboard(result.data);
+
+            } catch (error) {
+                console.error('Dashboard Load Error:', error);
+                alert('Session expired or error loading data. Please log in again.');
+                window.location.href = 'login.html';
+            }
         }
 
         // ============================================================
         // RENDER FUNCTIONS
         // ============================================================
+        function renderDashboard(data) {
+            const { teacher, stats, recentActivity, engagementStats, bookings } = data;
 
-        function renderStats() {
-            document.getElementById('activeStudents').textContent = onlineStudents.length;
-            document.getElementById('todaySessions').textContent = Math.floor(Math.random() * 5) + 1;
-            document.getElementById('profileViews').textContent = Math.floor(Math.random() * 50) + 20;
-            document.getElementById('totalClicks').textContent = totalClicks;
-            document.getElementById('clickRate').textContent = Math.floor(totalClicks / 2);
+            // 1. Update Top Nav
+            document.getElementById('navTeacherName').innerHTML = `<i class="fas fa-user-graduate"></i> ${teacher.name}`;
+            document.getElementById('navTeacherSubject').textContent = `| ${teacher.subject || 'Teacher'}`;
+
+            // 2. Update Stats Cards
+            document.getElementById('activeStudents').textContent = stats.totalStudents || 0;
+            document.getElementById('todaySessions').textContent = stats.totalBookings || 0;
+            document.getElementById('profileViews').textContent = stats.recentActivityCount || 0;
+            document.getElementById('totalClicks').textContent = stats.pendingBookings || 0;
+
+            // 3. Render Live Activity Feed
+            renderActivityFeed(recentActivity || []);
+
+            // 4. Render Top Engaged Students (Using engagementStats)
+            renderEngagedStudents(engagementStats || []);
+
+            // 5. Render Bookings
+            renderBookings(bookings || []);
         }
 
-        function renderActivityFeed() {
+        function renderActivityFeed(activities) {
             const container = document.getElementById('activityFeed');
             const count = document.getElementById('activityCount');
 
-            if (activityFeed.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-inbox"></i>
-                        <p>Waiting for student activity...</p>
-                    </div>
-                `;
+            if (activities.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>No activity recorded yet</p></div>`;
                 count.textContent = '0';
                 return;
             }
 
-            // Sort by timestamp (newest first)
-            const sorted = [...activityFeed].sort((a, b) => b.timestamp - a.timestamp);
-            const visible = sorted.slice(0, 20);
+            count.textContent = activities.length;
+            
+            container.innerHTML = activities.map(item => {
+                // Parse activity data safely
+                let details = item.activityData;
+                if (typeof details === 'string') {
+                    try { details = JSON.parse(details); } catch(e) { details = {}; }
+                }
 
-            container.innerHTML = visible.map(item => `
-                <div class="activity-item">
-                    <div class="left">
-                        <div class="icon ${item.icon}">${item.emoji}</div>
-                        <div class="text">
-                            <span class="student">${item.student}</span>
-                            <span class="action"> ${item.action} </span>
-                            <span class="target">${item.target}</span>
+                // Determine icon and text based on type
+                let iconClass = 'view';
+                let emoji = '👁️';
+                let actionText = 'viewed';
+                let targetText = details.page || 'Page';
+
+                if (item.activityType === 'link_click') {
+                    iconClass = 'click'; emoji = '🔗'; actionText = 'clicked'; targetText = details.link || 'Link';
+                } else if (item.activityType === 'carousel_view') {
+                    iconClass = 'search'; emoji = '🔄'; actionText = 'viewed carousel on'; targetText = details.page || 'Home';
+                }
+
+                // If a student is attached, show their name. Otherwise show "Visitor"
+                const studentName = item.Student ? item.Student.name : 'Anonymous Visitor';
+
+                return `
+                    <div class="activity-item">
+                        <div class="left">
+                            <div class="icon ${iconClass}">${emoji}</div>
+                            <div class="text">
+                                <span class="student">${studentName}</span>
+                                <span class="action"> ${actionText} </span>
+                                <span class="target">${targetText}</span>
+                            </div>
                         </div>
+                        <span class="time">${timeAgo(item.createdAt)}</span>
                     </div>
-                    <span class="time">${item.time}</span>
-                </div>
-            `).join('');
-
-            count.textContent = visible.length;
+                `;
+            }).join('');
         }
 
-        function renderOnlineStudents() {
+        function renderEngagedStudents(students) {
             const container = document.getElementById('onlineStudents');
             const count = document.getElementById('onlineCount');
 
-            if (onlineStudents.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state" style="padding:16px;">
-                        <p style="font-size:0.85rem;">No students online</p>
-                    </div>
-                `;
+            if (students.length === 0) {
+                container.innerHTML = `<div class="empty-state" style="padding:16px;"><p style="font-size:0.85rem;">No student data yet</p></div>`;
                 count.textContent = '0';
                 return;
             }
 
-            container.innerHTML = onlineStudents.map(s => `
-                <div class="online-student">
-                    <span class="name"><i class="fas fa-circle"></i> ${s.name}</span>
-                    <span class="detail">${s.action} · <span class="highlight">${s.since}m</span></span>
-                </div>
-            `).join('');
+            count.textContent = students.length;
 
-            count.textContent = onlineStudents.length;
+            container.innerHTML = students.map(s => {
+                // The backend sends student data inside a Student object
+                const studentData = s.Student || s;
+                const name = studentData.name || 'Unknown Student';
+                const actions = s.activityCount || 0;
+                
+                return `
+                    <div class="online-student">
+                        <span class="name"><i class="fas fa-circle"></i> ${name}</span>
+                        <span class="detail"><span class="highlight">${actions}</span> actions</span>
+                    </div>
+                `;
+            }).join('');
         }
 
-        function renderUpcomingSessions() {
+        function renderBookings(bookings) {
             const container = document.getElementById('upcomingSessions');
             const count = document.getElementById('upcomingCount');
 
-            const sessions = [
-                { student: 'Sarah Ahmed', subject: 'Visual Arts', time: '10:00 AM' },
-                { student: 'Mohamed Ali', subject: 'English', time: '11:30 AM' },
-                { student: 'Leila Ben Ali', subject: 'B2 Prep', time: '2:00 PM' },
-            ];
+            if (bookings.length === 0) {
+                container.innerHTML = `<div class="empty-state" style="padding:16px;"><p style="font-size:0.85rem;">No bookings yet</p></div>`;
+                count.textContent = '0';
+                return;
+            }
 
-            container.innerHTML = sessions.map(s => `
-                <div class="session-item">
-                    <div class="left">
-                        <div class="student-name">${s.student}</div>
-                        <div class="subject">${s.subject}</div>
+            count.textContent = bookings.length;
+
+            container.innerHTML = bookings.map(b => {
+                const statusColor = b.status === 'pending' ? '#ffcc00' : '#00ff88';
+                return `
+                    <div class="session-item">
+                        <div class="left">
+                            <div class="student-name">${b.studentName || 'Student'}</div>
+                            <div class="subject" style="color: ${statusColor}; text-transform:capitalize;">${b.status || 'Pending'}</div>
+                        </div>
+                        <div class="time-slot">${timeAgo(b.createdAt)}</div>
                     </div>
-                    <div class="time-slot">${s.time}</div>
-                </div>
-            `).join('');
-
-            count.textContent = sessions.length;
+                `;
+            }).join('');
         }
 
         // ============================================================
-        // UPDATE LOOPS
+        // INIT ON LOAD
         // ============================================================
+        window.onload = loadDashboard;
 
-        // Add a new activity every 3–8 seconds
-        function addActivity() {
-            const newActivity = generateActivity();
-            activityFeed.push(newActivity);
-            totalClicks += 1;
-
-            // Update online students occasionally
-            if (Math.random() > 0.6) {
-                onlineStudents = [];
-                const count = Math.floor(Math.random() * 4) + 1;
-                for (let i = 0; i < count; i++) {
-                    onlineStudents.push(generateOnlineStudent());
-                }
-            }
-
-            renderStats();
-            renderActivityFeed();
-            renderOnlineStudents();
-        }
-
-        // ============================================================
-        // INIT
-        // ============================================================
-
-        function init() {
-            // Seed with some initial data
-            for (let i = 0; i < 5; i++) {
-                const item = generateActivity();
-                activityFeed.push(item);
-                totalClicks += 1;
-            }
-
-            onlineStudents = [
-                { name: 'Sarah Ahmed', action: 'viewing Visual Arts', subject: 'Visual Arts', since: 12 },
-                { name: 'Mohamed Ali', action: 'watching video', subject: 'B2 Prep', since: 8 },
-                { name: 'Ines Trabelsi', action: 'viewing English', subject: 'English', since: 4 },
-            ];
-
-            renderStats();
-            renderActivityFeed();
-            renderOnlineStudents();
-            renderUpcomingSessions();
-
-            // Start the real‑time simulation
-            setInterval(addActivity, 4000 + Math.random() * 4000);
-
-            console.log('🚀 Teacher Dashboard live (frontend simulation)');
-            console.log(`👥 ${onlineStudents.length} students online`);
-            console.log(`📊 ${totalClicks} total clicks simulated`);
-        }
-
-        init();
     </script>
 
 </body>
