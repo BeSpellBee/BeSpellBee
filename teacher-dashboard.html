@@ -464,8 +464,10 @@
         // ============================================================
         document.getElementById('logoutBtn').addEventListener('click', (e) => {
             e.preventDefault();
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('teacherId');
+            localStorage.removeItem('teacherName');
+            localStorage.removeItem('userRole');
             window.location.href = 'login.html'; // Change if your login file has a different name
         });
 
@@ -489,7 +491,7 @@
         // FETCH REAL DATA
         // ============================================================
         async function loadDashboard() {
-            const token = localStorage.getItem('token'); // Make sure your login page saves the token here!
+           const token = localStorage.getItem('authToken'); // Match what index.html saves! // Make sure your login page saves the token here!
 
             if (!token) {
                 alert('Please log in to view the dashboard.');
