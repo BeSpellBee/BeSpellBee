@@ -2505,7 +2505,25 @@ window.handleLogout = function(e) {
             messageEl.textContent = '❌ Connection error. Please try again.';
             messageEl.style.color = '#ff4444';
         }
+			window.handleLogout = function(e) {
+    // Prevent links or forms from triggering default navigation/404s
+    if (e && e.preventDefault) e.preventDefault();
+
+    if (confirm('Are you sure you want to logout?')) {
+        // Clear all session storage keys
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('studentId');
+        localStorage.removeItem('teacherId');
+        localStorage.removeItem('teacherName');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('sessionId');
+
+        // Cleanly force browser redirect directly to index.html in the same directory
+        window.location.replace('index.html');
+    }
+};
     });
+	
 
     // ============================================
     // AUTO-TRACKING
