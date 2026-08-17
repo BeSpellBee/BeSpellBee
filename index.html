@@ -2241,19 +2241,21 @@
 // LOGOUT (FIXED - Redirects to Root index.html)
 // ============================================
 
-window.handleLogout = function() {
+window.handleLogout = function(e) {
+    // Prevent links or forms from triggering default navigation/404s
+    if (e && e.preventDefault) e.preventDefault();
+
     if (confirm('Are you sure you want to logout?')) {
-        // Clear all stored credentials and flags
+        // Clear all session storage keys
         localStorage.removeItem('authToken');
         localStorage.removeItem('studentId');
         localStorage.removeItem('teacherId');
         localStorage.removeItem('teacherName');
         localStorage.removeItem('userRole');
         localStorage.removeItem('sessionId');
-        isTrackingEnabled = false;
 
-        // Leading slash '/' guarantees navigation to root index.html
-        window.location.replace('./index.html');
+        // Cleanly force browser redirect directly to index.html in the same directory
+        window.location.replace('index.html');
     }
 };
 
