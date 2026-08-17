@@ -1047,7 +1047,7 @@
 <body style="background-color:black;">
 
 <!-- ============================================================ -->
-<!-- ====== NAVIGATION BAR (UPDATED – ENGLISH EXAMS + TEACHER LOGIN) ====== -->
+<!-- ====== NAVIGATION BAR ====== -->
 <!-- ============================================================ -->
 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; padding: 8px 12px; gap: 6px 12px; background: #0a0a0a; border-bottom: 1px solid #1a3a3a;">
 
@@ -1110,7 +1110,7 @@
             </a>
         </div>
 
-        <!-- ====== TEACHER LOGIN BUTTON (gold, recruited teachers only) ====== -->
+        <!-- ====== TEACHER LOGIN BUTTON (gold, recruited teachers only) - HIDDEN WHEN STUDENT LOGGED IN ====== -->
         <a href="#" id="teacherLoginBtn" onclick="openTeacherLoginModal(); return false;" 
            style="display:inline-block; padding:5px 14px; border:1px solid #ffcc00; border-radius:30px;
                   color:#ffcc00; text-decoration:none; font-size:0.8rem; font-weight:600;
@@ -1347,10 +1347,10 @@
         </div>
     </div>
 
-    <!-- ====== STUDENT DASHBOARD MODAL ====== -->
+    <!-- ====== STUDENT/TEACHER DASHBOARD MODAL ====== -->
     <div class="booking-modal" id="dashboardModal">
         <div class="booking-modal-content" style="max-width: 600px;">
-            <h2>📊 Your Learning Dashboard</h2>
+            <h2>📊 Your Dashboard</h2>
             <div id="dashboardContent" style="color: #aaa; padding: 0.5rem 0;">
                 <div style="text-align: center; padding: 2rem;">
                     <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #00ffff;"></i>
@@ -2077,11 +2077,6 @@
         const logoutLink = document.getElementById('logoutLink');
         const teacherLoginBtn = document.getElementById('teacherLoginBtn');
 
-        // Hide teacher login button if already logged in as teacher
-        if (teacherLoginBtn) {
-            teacherLoginBtn.style.display = (isLoggedIn && userRole === 'teacher') ? 'none' : 'inline-block';
-        }
-
         if (isLoggedIn) {
             // Hide student auth buttons
             if (studentAuthBtns) studentAuthBtns.style.display = 'none';
@@ -2089,9 +2084,14 @@
             // Show dashboard & logout
             if (authBtns) authBtns.style.display = 'flex';
             if (dashboardLink) {
-                dashboardLink.style.display = 'inline-block'; // SHOW DASHBOARD
+                dashboardLink.style.display = 'inline-block';
             }
             if (logoutLink) logoutLink.style.display = 'inline-block';
+
+            // HIDE teacher login button when ANYONE is logged in (student OR teacher)
+            if (teacherLoginBtn) {
+                teacherLoginBtn.style.display = 'none';
+            }
         } else {
             // Show student auth buttons
             if (studentAuthBtns) studentAuthBtns.style.display = 'flex';
@@ -2100,6 +2100,11 @@
             if (authBtns) authBtns.style.display = 'none';
             if (dashboardLink) dashboardLink.style.display = 'none';
             if (logoutLink) logoutLink.style.display = 'none';
+
+            // Show teacher login button when logged out
+            if (teacherLoginBtn) {
+                teacherLoginBtn.style.display = 'inline-block';
+            }
         }
     }
 
@@ -2602,12 +2607,10 @@
     </script>
 
     <!-- ============================================================ -->
-    <!-- ====== CAROUSEL VIEW TRACKING (ADDED WITHOUT BREAKING ANYTHING) ====== -->
+    <!-- ====== CAROUSEL VIEW TRACKING ====== -->
     <!-- ============================================================ -->
     <script>
-    // This runs AFTER the main tracking system and just adds carousel tracking
     (function() {
-        // Wait for carousel to be ready
         function setupCarouselTracking() {
             const track = document.getElementById('carouselTrack');
             if (!track) {
@@ -2627,7 +2630,6 @@
                     const teacherSubject = visibleCard.querySelector('.teacher-subject')?.textContent;
                     
                     if (teacherName) {
-                        // duration is now handled inside trackActivity
                         trackActivity('carousel_view', {
                             teacher: teacherName,
                             subject: teacherSubject || 'Unknown'
@@ -2636,7 +2638,6 @@
                 }
             }
 
-            // Track on navigation
             document.getElementById('prevBtn')?.addEventListener('click', function() {
                 setTimeout(trackCurrentCard, 150);
             });
@@ -2644,27 +2645,23 @@
                 setTimeout(trackCurrentCard, 150);
             });
 
-            // Track on filter
             document.getElementById('filterContainer')?.addEventListener('click', function(e) {
                 if (e.target.closest('.filter-btn')) {
                     setTimeout(trackCurrentCard, 200);
                 }
             });
 
-            // Track on dot click
             document.addEventListener('click', function(e) {
                 if (e.target.classList.contains('dot')) {
                     setTimeout(trackCurrentCard, 150);
                 }
             });
 
-            // Track initial load
             setTimeout(trackCurrentCard, 800);
             
             console.log('✅ Carousel tracking added!');
         }
 
-        // Run after page loads
         if (document.readyState === 'complete') {
             setTimeout(setupCarouselTracking, 500);
         } else {
