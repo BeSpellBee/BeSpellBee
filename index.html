@@ -2247,8 +2247,7 @@
             localStorage.removeItem('sessionId');
             isTrackingEnabled = false;
             updateAuthUI();
-            // Just reload the page instead of redirecting
-           window.location.reload();
+            window.location.href = 'index.html';
         }
     };
 
