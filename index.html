@@ -2242,20 +2242,17 @@
 // ============================================
 
 window.handleLogout = function(e) {
-    // Prevent links or forms from triggering default navigation/404s
-    if (e && e.preventDefault) e.preventDefault();
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
 
     if (confirm('Are you sure you want to logout?')) {
-        // Clear all session storage keys
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('studentId');
-        localStorage.removeItem('teacherId');
-        localStorage.removeItem('teacherName');
-        localStorage.removeItem('userRole');
-        localStorage.removeItem('sessionId');
+        // Clear storage
+        localStorage.clear(); // Clears all local storage keys instantly
 
-        // Cleanly force browser redirect directly to index.html in the same directory
-        window.location.replace('index.html');
+        // Force browser directly to root directory URL (e.g. http://127.0.0.1:5500/)
+        window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
     }
 };
 
