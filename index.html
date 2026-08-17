@@ -2158,18 +2158,19 @@
     // ============================================
 
     window.handleLogout = function() {
-        if (confirm('Are you sure you want to logout?')) {
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('studentId');
-            localStorage.removeItem('teacherId');
-            localStorage.removeItem('teacherName');
-            localStorage.removeItem('userRole');
-            localStorage.removeItem('sessionId');
-            isTrackingEnabled = false;
-            updateAuthUI();
-            location.reload();
-        }
-    };
+    if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('studentId');
+        localStorage.removeItem('teacherId');
+        localStorage.removeItem('teacherName');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('sessionId');
+        isTrackingEnabled = false;
+        updateAuthUI();
+        // Just reload the page instead of redirecting
+        location.reload();
+    }
+};
 
     // ============================================
     // STUDENT AUTHENTICATION MODALS
