@@ -2237,19 +2237,25 @@
     // LOGOUT (FIXED - Just reloads the page)
     // ============================================
 
-    window.handleLogout = function() {
-        if (confirm('Are you sure you want to logout?')) {
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('studentId');
-            localStorage.removeItem('teacherId');
-            localStorage.removeItem('teacherName');
-            localStorage.removeItem('userRole');
-            localStorage.removeItem('sessionId');
-            isTrackingEnabled = false;
-            updateAuthUI();
-            window.location.href = 'index.html';
-        }
-    };
+    // ============================================
+// LOGOUT (FIXED - Redirects to Root index.html)
+// ============================================
+
+window.handleLogout = function() {
+    if (confirm('Are you sure you want to logout?')) {
+        // Clear all stored credentials and flags
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('studentId');
+        localStorage.removeItem('teacherId');
+        localStorage.removeItem('teacherName');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('sessionId');
+        isTrackingEnabled = false;
+
+        // Leading slash '/' guarantees navigation to root index.html
+        window.location.href = '/index.html';
+    }
+};
 
     // ============================================
     // STUDENT AUTHENTICATION MODALS
