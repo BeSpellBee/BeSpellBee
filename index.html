@@ -2241,20 +2241,7 @@
 // LOGOUT (FIXED - Redirects to Root index.html)
 // ============================================
 
-window.handleLogout = function(e) {
-    if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
 
-    if (confirm('Are you sure you want to logout?')) {
-        // Clear storage
-        localStorage.clear(); // Clears all local storage keys instantly
-
-        // Force browser directly to root directory URL (e.g. http://127.0.0.1:5500/)
-        window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
-    }
-};
 
     // ============================================
     // STUDENT AUTHENTICATION MODALS
@@ -2440,26 +2427,29 @@ window.handleLogout = function(e) {
         if (el) el.remove();
     }
 
-    // ============================================
-    // TEACHER LOGIN (no signup)
-    // ============================================
+    
+   // ============================================
+// TEACHER LOGIN (no signup)
+// ============================================
 
-    window.openTeacherLoginModal = function() {
-        const modal = document.getElementById('teacherLoginModal');
-        if (modal) {
-            modal.style.display = 'flex';
-            document.getElementById('teacherLoginMessage').textContent = '';
-            document.getElementById('teacherLoginForm').reset();
-        }
-    };
+window.openTeacherLoginModal = function() {
+    const modal = document.getElementById('teacherLoginModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.getElementById('teacherLoginMessage').textContent = '';
+        document.getElementById('teacherLoginForm').reset();
+    }
+};
 
-    window.closeTeacherLoginModal = function() {
-        const modal = document.getElementById('teacherLoginModal');
-        if (modal) modal.style.display = 'none';
-    };
+window.closeTeacherLoginModal = function() {
+    const modal = document.getElementById('teacherLoginModal');
+    if (modal) modal.style.display = 'none';
+};
 
-    // Handle teacher login form submission (FIXED)
-    document.getElementById('teacherLoginForm').addEventListener('submit', async function(e) {
+// Handle teacher login form submission
+const teacherForm = document.getElementById('teacherLoginForm');
+if (teacherForm) {
+    teacherForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         const email = document.getElementById('teacherEmail').value.trim();
         const password = document.getElementById('teacherPassword').value;
@@ -2486,7 +2476,6 @@ window.handleLogout = function(e) {
                 messageEl.style.color = '#00ff88';
                 messageEl.textContent = '✅ Login successful!';
                 
-                // Update UI and close modal
                 updateAuthUI();
                 
                 setTimeout(() => {
@@ -2502,12 +2491,17 @@ window.handleLogout = function(e) {
             messageEl.textContent = '❌ Connection error. Please try again.';
             messageEl.style.color = '#ff4444';
         }
-			window.handleLogout = function(e) {
-    // Prevent links or forms from triggering default navigation/404s
+    });
+}
+
+// ============================================
+// GLOBAL LOGOUT (OUTSIDE ALL EVENT LISTENERS)
+// ============================================
+
+window.handleLogout = function(e) {
     if (e && e.preventDefault) e.preventDefault();
 
     if (confirm('Are you sure you want to logout?')) {
-        // Clear all session storage keys
         localStorage.removeItem('authToken');
         localStorage.removeItem('studentId');
         localStorage.removeItem('teacherId');
@@ -2515,11 +2509,13 @@ window.handleLogout = function(e) {
         localStorage.removeItem('userRole');
         localStorage.removeItem('sessionId');
 
-        // Cleanly force browser redirect directly to index.html in the same directory
+        if (typeof isTrackingEnabled !== 'undefined') {
+            isTrackingEnabled = false;
+        }
+
         window.location.replace('index.html');
     }
 };
-    });
 	
 
     // ============================================
