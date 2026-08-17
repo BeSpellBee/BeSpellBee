@@ -1023,6 +1023,24 @@
         .student-badge i {
             margin-right: 4px;
         }
+
+        /* ====== TEACHER LOGIN MODAL ====== */
+        #teacherLoginModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+        #teacherLoginModal.active {
+            display: flex;
+        }
     </style>
 </head>
 
@@ -1348,7 +1366,7 @@
     </div>
 
     <!-- ====== TEACHER LOGIN MODAL ====== -->
-    <div class="booking-modal" id="teacherLoginModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; justify-content:center; align-items:center; backdrop-filter:blur(10px);">
+    <div id="teacherLoginModal">
         <div style="background:#0d0d0d; border:2px solid #ffcc00; border-radius:20px; padding:2rem; max-width:400px; width:90%;">
             <h2 style="color:#ffcc00; text-align:center;">👨‍🏫 Teacher Login</h2>
             <p style="color:#888; text-align:center; font-size:0.85rem; margin-bottom:1rem;">For recruited teachers only</p>
@@ -2047,7 +2065,7 @@
     }
 
     // ============================================
-    // UPDATE UI BASED ON LOGIN STATUS (UPDATED)
+    // UPDATE UI BASED ON LOGIN STATUS (FIXED)
     // ============================================
 
     function updateAuthUI() {
@@ -2070,7 +2088,9 @@
             
             // Show dashboard & logout
             if (authBtns) authBtns.style.display = 'flex';
-            if (dashboardLink) dashboardLink.style.display = 'none';
+            if (dashboardLink) {
+                dashboardLink.style.display = 'inline-block'; // SHOW DASHBOARD
+            }
             if (logoutLink) logoutLink.style.display = 'inline-block';
         } else {
             // Show student auth buttons
@@ -2084,7 +2104,7 @@
     }
 
     // ============================================
-    // DASHBOARD
+    // DASHBOARD (FIXED - Shows for both Student & Teacher)
     // ============================================
 
     window.openDashboard = async function() {
@@ -2104,41 +2124,96 @@
             </div>
         `;
 
+        const authToken = localStorage.getItem('authToken');
+        const userRole = localStorage.getItem('userRole');
+
         try {
-            const response = await fetch(`${TRACKING_API}/track/dashboard`, {
-                headers: getHeaders()
+            let endpoint;
+            if (userRole === 'teacher') {
+                endpoint = `${TRACKING_API}/teacher/dashboard`;
+            } else {
+                endpoint = `${TRACKING_API}/track/dashboard`;
+            }
+
+            const response = await fetch(endpoint, {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                    'Content-Type': 'application/json'
+                }
             });
             const data = await response.json();
 
             if (data.success) {
-                const d = data.data;
-                content.innerHTML = `
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1rem 0;">
-                        <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
-                            <div style="font-size: 1.8rem; color: #00ffff;">${d.stats?.completedVideos || 0}</div>
-                            <div style="font-size: 0.7rem; color: #666;">Videos Completed</div>
+                if (userRole === 'teacher') {
+                    // Teacher dashboard
+                    const d = data.data;
+                    content.innerHTML = `
+                        <div style="color: #fff; margin-bottom: 0.5rem;">
+                            <h3 style="color: #ffcc00;">👨‍🏫 ${d.teacher?.name || 'Teacher'}</h3>
+                            <p style="color: #888; font-size: 0.85rem;">${d.teacher?.email || ''}</p>
                         </div>
-                        <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
-                            <div style="font-size: 1.8rem; color: #00ff88;">${d.stats?.totalQuizzes || 0}</div>
-                            <div style="font-size: 0.7rem; color: #666;">Quizzes Taken</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1rem 0;">
+                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #ffcc00; text-align: center;">
+                                <div style="font-size: 1.8rem; color: #ffcc00;">${d.stats?.totalBookings || 0}</div>
+                                <div style="font-size: 0.7rem; color: #666;">Total Bookings</div>
+                            </div>
+                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #ffcc00; text-align: center;">
+                                <div style="font-size: 1.8rem; color: #ffcc00;">${d.stats?.pendingBookings || 0}</div>
+                                <div style="font-size: 0.7rem; color: #666;">Pending Bookings</div>
+                            </div>
+                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #ffcc00; text-align: center;">
+                                <div style="font-size: 1.8rem; color: #ffcc00;">${d.stats?.totalStudents || 0}</div>
+                                <div style="font-size: 0.7rem; color: #666;">Active Students</div>
+                            </div>
+                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #ffcc00; text-align: center;">
+                                <div style="font-size: 1.8rem; color: #ffcc00;">${d.stats?.recentActivityCount || 0}</div>
+                                <div style="font-size: 0.7rem; color: #666;">Recent Activities</div>
+                            </div>
                         </div>
-                        <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
-                            <div style="font-size: 1.8rem; color: #ffcc00;">${Math.round(d.stats?.avgScore || 0)}%</div>
-                            <div style="font-size: 0.7rem; color: #666;">Average Score</div>
+                        ${d.bookings?.length > 0 ? `
+                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; margin-top: 0.5rem;">
+                                <div style="color: #88dddd; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.3rem;">📅 Recent Bookings</div>
+                                ${d.bookings.map(b => `
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #aaa; padding: 0.2rem 0; border-bottom: 1px solid #1a1a1a;">
+                                        <span>${b.studentName}</span>
+                                        <span style="color: ${b.status === 'pending' ? '#ffcc00' : '#00ff88'};">${b.status}</span>
+                                        <span style="color: #555;">${new Date(b.createdAt).toLocaleDateString()}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    `;
+                } else {
+                    // Student dashboard
+                    const d = data.data;
+                    content.innerHTML = `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1rem 0;">
+                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
+                                <div style="font-size: 1.8rem; color: #00ffff;">${d.stats?.completedVideos || 0}</div>
+                                <div style="font-size: 0.7rem; color: #666;">Videos Completed</div>
+                            </div>
+                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
+                                <div style="font-size: 1.8rem; color: #00ff88;">${d.stats?.totalQuizzes || 0}</div>
+                                <div style="font-size: 0.7rem; color: #666;">Quizzes Taken</div>
+                            </div>
+                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
+                                <div style="font-size: 1.8rem; color: #ffcc00;">${Math.round(d.stats?.avgScore || 0)}%</div>
+                                <div style="font-size: 0.7rem; color: #666;">Average Score</div>
+                            </div>
+                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
+                                <div style="font-size: 1.8rem; color: #ff66aa;">${d.stats?.totalMessages || 0}</div>
+                                <div style="font-size: 0.7rem; color: #666;">Messages Sent</div>
+                            </div>
                         </div>
-                        <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
-                            <div style="font-size: 1.8rem; color: #ff66aa;">${d.stats?.totalMessages || 0}</div>
-                            <div style="font-size: 0.7rem; color: #666;">Messages Sent</div>
+                        <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center; margin-top: 0.5rem;">
+                            <div style="font-size: 1.2rem; color: #00ffff;">⭐ ${Math.round(d.student?.engagementScore || 0)}%</div>
+                            <div style="font-size: 0.7rem; color: #666;">Engagement Score</div>
                         </div>
-                    </div>
-                    <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center; margin-top: 0.5rem;">
-                        <div style="font-size: 1.2rem; color: #00ffff;">⭐ ${Math.round(d.student?.engagementScore || 0)}%</div>
-                        <div style="font-size: 0.7rem; color: #666;">Engagement Score</div>
-                    </div>
-                    <div style="margin-top: 0.8rem; font-size: 0.7rem; color: #555; text-align: center;">
-                        ⏱️ ${Math.floor((d.stats?.totalTimeSpent || 0) / 60)} minutes spent learning
-                    </div>
-                `;
+                        <div style="margin-top: 0.8rem; font-size: 0.7rem; color: #555; text-align: center;">
+                            ⏱️ ${Math.floor((d.stats?.totalTimeSpent || 0) / 60)} minutes spent learning
+                        </div>
+                    `;
+                }
             } else {
                 content.innerHTML = `<p style="color: #ff6666; text-align: center;">Failed to load dashboard: ${data.message || 'Unknown error'}</p>`;
             }
@@ -2154,23 +2229,23 @@
     };
 
     // ============================================
-    // LOGOUT
+    // LOGOUT (FIXED - Just reloads the page)
     // ============================================
 
     window.handleLogout = function() {
-    if (confirm('Are you sure you want to logout?')) {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('studentId');
-        localStorage.removeItem('teacherId');
-        localStorage.removeItem('teacherName');
-        localStorage.removeItem('userRole');
-        localStorage.removeItem('sessionId');
-        isTrackingEnabled = false;
-        updateAuthUI();
-        // Just reload the page instead of redirecting
-        location.reload();
-    }
-};
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('studentId');
+            localStorage.removeItem('teacherId');
+            localStorage.removeItem('teacherName');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('sessionId');
+            isTrackingEnabled = false;
+            updateAuthUI();
+            // Just reload the page instead of redirecting
+            location.reload();
+        }
+    };
 
     // ============================================
     // STUDENT AUTHENTICATION MODALS
@@ -2374,7 +2449,7 @@
         if (modal) modal.style.display = 'none';
     };
 
-    // Handle teacher login form submission
+    // Handle teacher login form submission (FIXED)
     document.getElementById('teacherLoginForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const email = document.getElementById('teacherEmail').value.trim();
@@ -2400,7 +2475,11 @@
                 localStorage.setItem('userRole', 'teacher');
                 isTrackingEnabled = true;
                 messageEl.style.color = '#00ff88';
-                messageEl.textContent = '✅ Login successful! Redirecting...';
+                messageEl.textContent = '✅ Login successful!';
+                
+                // Update UI and close modal
+                updateAuthUI();
+                
                 setTimeout(() => {
                     closeTeacherLoginModal();
                     window.location.href = 'teacher-dashboard.html';
@@ -2596,7 +2675,5 @@
     })();
     </script>
 
-    <!-- Remove the external tracking.js (we now have everything inline) -->
-    <!-- <script src="tracking.js"> -->
 </body>
 </html>
