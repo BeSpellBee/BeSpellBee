@@ -659,6 +659,44 @@
         window.onload = loadDashboard;
 
     </script>
+        <!-- ============================================================ -->
+    <!-- WEBSOCKET REAL-TIME CONNECTION -->
+    <!-- ============================================================ -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        const token = localStorage.getItem('authToken');
+
+        if (token) {
+            const socket = io('https://bespellbee-backend-en6l.onrender.com', {
+                auth: { token: token },
+                transports: ['websocket']
+            });
+
+            socket.on('connect', () => {
+                console.log('✅ WebSocket connected');
+            });
+
+            socket.on('new-activity', (activity) => {
+                console.log('📡 Live activity received:', activity);
+                // Call your existing function that adds activity to the feed
+                if (typeof addActivityToFeed === 'function') {
+                    addActivityToFeed(activity);
+                }
+            });
+
+            socket.on('disconnect', () => {
+                console.log('❌ WebSocket disconnected');
+            });
+
+            socket.on('connect_error', (err) => {
+                console.warn('⚠️ WebSocket connection error:', err.message);
+            });
+        } else {
+            console.warn('🔒 No token – WebSocket not connected');
+        }
+    </script>
+</body>
+</html>
 
 </body>
 </html>
