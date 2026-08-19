@@ -659,11 +659,70 @@
         window.onload = loadDashboard;
 
     </script>
+    // ============================================================
+// ADD SINGLE ACTIVITY TO FEED (for WebSocket real-time updates)
+// ============================================================
+
         <!-- ============================================================ -->
     <!-- WEBSOCKET REAL-TIME CONNECTION -->
     <!-- ============================================================ -->
     <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.2/dist/socket.io.min.js"></script>
+    
     <script>
+        function addActivityToFeed(activity) {
+    const container = document.getElementById('activityFeed');
+    const count = document.getElementById('activityCount');
+
+    // Remove empty-state if present
+    const emptyState = container.querySelector('.empty-state');
+    if (emptyState) emptyState.remove();
+
+    // Determine icon, emoji, text based on activity type
+    let iconClass = 'view';
+    let emoji = '👁️';
+    let actionText = 'viewed';
+    let targetText = activity.activityData?.page || 'Page';
+
+    if (activity.activityType === 'link_click') {
+        iconClass = 'click';
+        emoji = '🔗';
+        actionText = 'clicked';
+        targetText = activity.activityData?.link || 'Link';
+    } else if (activity.activityType === 'carousel_view') {
+        iconClass = 'search';
+        emoji = '🔄';
+        actionText = 'viewed carousel on';
+        targetText = activity.activityData?.page || 'Home';
+    }
+
+    // Create the new activity item
+    const item = document.createElement('div');
+    item.className = 'activity-item';
+    item.style.animation = 'slideIn 0.4s ease';
+    item.innerHTML = `
+        <div class="left">
+            <div class="icon ${iconClass}">${emoji}</div>
+            <div class="text">
+                <span class="student">${activity.studentName || 'Student'}</span>
+                <span class="action"> ${actionText} </span>
+                <span class="target">${targetText}</span>
+            </div>
+        </div>
+        <span class="time">Just now</span>
+    `;
+
+    // Prepend to the feed (newest on top)
+    container.prepend(item);
+
+    // Update the count badge
+    const currentCount = parseInt(count.textContent) || 0;
+    count.textContent = currentCount + 1;
+
+    // Keep only last 50 items to avoid performance issues
+    while (container.children.length > 50) {
+        container.removeChild(container.lastChild);
+    }
+}
         const token = localStorage.getItem('authToken');
 
         if (token) {
