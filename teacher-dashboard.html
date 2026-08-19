@@ -19,7 +19,6 @@
             min-height: 100vh;
         }
 
-        /* ====== TOP NAV ====== */
         .nav-bar {
             background: #0d0d0d;
             border-bottom: 1px solid #1a4a4a;
@@ -36,9 +35,7 @@
             color: #00ffff;
             text-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
         }
-        .nav-bar .logo span {
-            color: #fff;
-        }
+        .nav-bar .logo span { color: #fff; }
         .nav-bar .teacher-info {
             display: flex;
             align-items: center;
@@ -71,14 +68,12 @@
             100% { opacity: 1; }
         }
 
-        /* ====== DASHBOARD LAYOUT ====== */
         .dashboard {
             max-width: 1400px;
             margin: 0 auto;
             padding: 24px 32px 60px;
         }
 
-        /* ====== STATS ROW ====== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -92,9 +87,7 @@
             padding: 20px 24px;
             transition: border-color 0.3s;
         }
-        .stat-card:hover {
-            border-color: #00ffff;
-        }
+        .stat-card:hover { border-color: #00ffff; }
         .stat-card .label {
             color: #88dddd;
             font-size: 0.8rem;
@@ -108,18 +101,12 @@
             color: #fff;
             margin: 4px 0 2px;
         }
-        .stat-card .number .highlight {
-            color: #00ffff;
-        }
         .stat-card .sub {
             color: #666;
             font-size: 0.8rem;
         }
-        .stat-card .sub i {
-            margin-right: 4px;
-        }
+        .stat-card .sub i { margin-right: 4px; }
 
-        /* ====== TWO-COLUMN GRID ====== */
         .two-col {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -127,7 +114,6 @@
             margin-bottom: 32px;
         }
 
-        /* ====== ACTIVITY FEED ====== */
         .panel {
             background: #0d0d0d;
             border: 1px solid #1a4a4a;
@@ -164,26 +150,15 @@
             background: #ff4444;
             animation: pulse 1.5s infinite;
         }
-        .panel .panel-header .live-dot.active {
-            background: #00ff88;
-        }
+        .panel .panel-header .live-dot.active { background: #00ff88; }
 
-        /* ====== ACTIVITY ITEMS ====== */
         .activity-list {
             max-height: 420px;
             overflow-y: auto;
         }
-        .activity-list::-webkit-scrollbar {
-            width: 4px;
-        }
-        .activity-list::-webkit-scrollbar-track {
-            background: #1a1a1a;
-            border-radius: 4px;
-        }
-        .activity-list::-webkit-scrollbar-thumb {
-            background: #00ffff;
-            border-radius: 4px;
-        }
+        .activity-list::-webkit-scrollbar { width: 4px; }
+        .activity-list::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 4px; }
+        .activity-list::-webkit-scrollbar-thumb { background: #00ffff; border-radius: 4px; }
 
         .activity-item {
             display: flex;
@@ -193,14 +168,11 @@
             border-bottom: 1px solid #1a1a1a;
             animation: slideIn 0.4s ease;
         }
-        .activity-item:last-child {
-            border-bottom: none;
-        }
+        .activity-item:last-child { border-bottom: none; }
         @keyframes slideIn {
             from { opacity: 0; transform: translateX(-12px); }
             to { opacity: 1; transform: translateX(0); }
         }
-
         .activity-item .left {
             display: flex;
             align-items: center;
@@ -243,7 +215,6 @@
             margin-left: 12px;
         }
 
-        /* ====== ONLINE STUDENTS ====== */
         .online-grid {
             display: flex;
             flex-direction: column;
@@ -275,7 +246,6 @@
             color: #00ffff;
         }
 
-        /* ====== UPCOMING SESSIONS ====== */
         .session-item {
             display: flex;
             justify-content: space-between;
@@ -283,9 +253,7 @@
             padding: 10px 0;
             border-bottom: 1px solid #1a1a1a;
         }
-        .session-item:last-child {
-            border-bottom: none;
-        }
+        .session-item:last-child { border-bottom: none; }
         .session-item .left .student-name {
             color: #fff;
             font-weight: 500;
@@ -300,7 +268,6 @@
             font-weight: 600;
         }
 
-        /* ====== EMPTY STATE ====== */
         .empty-state {
             text-align: center;
             padding: 32px 16px;
@@ -313,33 +280,16 @@
             display: block;
         }
 
-        /* ====== RESPONSIVE ====== */
         @media (max-width: 768px) {
-            .two-col {
-                grid-template-columns: 1fr;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .nav-bar {
-                padding: 12px 16px;
-            }
-            .dashboard {
-                padding: 16px;
-            }
+            .two-col { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .nav-bar { padding: 12px 16px; }
+            .dashboard { padding: 16px; }
         }
         @media (max-width: 480px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            .activity-item {
-                flex-wrap: wrap;
-                gap: 4px;
-            }
-            .activity-item .time {
-                margin-left: 44px;
-                font-size: 0.65rem;
-            }
+            .stats-grid { grid-template-columns: 1fr; }
+            .activity-item { flex-wrap: wrap; gap: 4px; }
+            .activity-item .time { margin-left: 44px; font-size: 0.65rem; }
         }
     </style>
 </head>
@@ -361,10 +311,8 @@
         </div>
         <div class="teacher-info">
             <span class="badge"><span class="status-dot"></span> Live</span>
-            <!-- IDs added here so JS can inject the real name -->
             <span class="name" id="navTeacherName"><i class="fas fa-user-graduate"></i> Loading...</span>
             <span style="color: #555; font-size: 0.8rem;" id="navTeacherSubject">| ...</span>
-            <!-- Logout button made functional -->
             <a href="#" id="logoutBtn" style="color: #00ffff; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px;">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
@@ -450,17 +398,17 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- ====== REAL DASHBOARD JAVASCRIPT ====== -->
+    <!-- ====== ALL JAVASCRIPT (Dashboard + WebSocket) ====== -->
     <!-- ============================================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.2/dist/socket.io.min.js"></script>
     <script>
         // ============================================================
         // CONFIGURATION
         // ============================================================
-        
-        // ⚠️ REPLACE THIS with your actual Render URL (e.g., https://my-app.onrender.com)
-       const API_BASE_URL = 'https://bespellbee-backend-en6l.onrender.com';
+        const API_BASE_URL = 'https://bespellbee-backend-en6l.onrender.com';
+
         // ============================================================
-        // LOGOUT LOGIC
+        // LOGOUT
         // ============================================================
         document.getElementById('logoutBtn').addEventListener('click', (e) => {
             e.preventDefault();
@@ -468,11 +416,11 @@
             localStorage.removeItem('teacherId');
             localStorage.removeItem('teacherName');
             localStorage.removeItem('userRole');
-            window.location.href = 'index.html'; // Change if your login file has a different name
+            window.location.href = 'index.html';
         });
 
         // ============================================================
-        // HELPER: FORMAT TIME AGO
+        // HELPER: TIME AGO
         // ============================================================
         function timeAgo(dateString) {
             const now = new Date();
@@ -480,7 +428,6 @@
             const diffMs = now - past;
             const diffMins = Math.floor(diffMs / 60000);
             const diffHrs = Math.floor(diffMs / 3600000);
-            
             if (diffMins < 1) return 'Just now';
             if (diffMins < 60) return `${diffMins}m ago`;
             if (diffHrs < 24) return `${diffHrs}h ago`;
@@ -488,11 +435,10 @@
         }
 
         // ============================================================
-        // FETCH REAL DATA
+        // LOAD DASHBOARD DATA (REST)
         // ============================================================
         async function loadDashboard() {
-           const token = localStorage.getItem('authToken'); // Match what index.html saves! // Make sure your login page saves the token here!
-
+            const token = localStorage.getItem('authToken');
             if (!token) {
                 alert('Please log in to view the dashboard.');
                 window.location.href = 'index.html';
@@ -507,16 +453,11 @@
                         'Content-Type': 'application/json'
                     }
                 });
-
                 const result = await response.json();
-
                 if (!response.ok || !result.success) {
                     throw new Error(result.message || 'Failed to fetch dashboard data');
                 }
-
-                // Pass data to render functions
                 renderDashboard(result.data);
-
             } catch (error) {
                 console.error('Dashboard Load Error:', error);
                 alert('Session expired or error loading data. Please log in again.');
@@ -530,23 +471,16 @@
         function renderDashboard(data) {
             const { teacher, stats, recentActivity, engagementStats, bookings } = data;
 
-            // 1. Update Top Nav
             document.getElementById('navTeacherName').innerHTML = `<i class="fas fa-user-graduate"></i> ${teacher.name}`;
             document.getElementById('navTeacherSubject').textContent = `| ${teacher.subject || 'Teacher'}`;
 
-            // 2. Update Stats Cards
             document.getElementById('activeStudents').textContent = stats.totalStudents || 0;
             document.getElementById('todaySessions').textContent = stats.totalBookings || 0;
             document.getElementById('profileViews').textContent = stats.recentActivityCount || 0;
             document.getElementById('totalClicks').textContent = stats.pendingBookings || 0;
 
-            // 3. Render Live Activity Feed
             renderActivityFeed(recentActivity || []);
-
-            // 4. Render Top Engaged Students (Using engagementStats)
             renderEngagedStudents(engagementStats || []);
-
-            // 5. Render Bookings
             renderBookings(bookings || []);
         }
 
@@ -561,15 +495,11 @@
             }
 
             count.textContent = activities.length;
-            
             container.innerHTML = activities.map(item => {
-                // Parse activity data safely
                 let details = item.activityData;
                 if (typeof details === 'string') {
                     try { details = JSON.parse(details); } catch(e) { details = {}; }
                 }
-
-                // Determine icon and text based on type
                 let iconClass = 'view';
                 let emoji = '👁️';
                 let actionText = 'viewed';
@@ -581,9 +511,7 @@
                     iconClass = 'search'; emoji = '🔄'; actionText = 'viewed carousel on'; targetText = details.page || 'Home';
                 }
 
-                // If a student is attached, show their name. Otherwise show "Visitor"
                 const studentName = item.Student ? item.Student.name : 'Anonymous Visitor';
-
                 return `
                     <div class="activity-item">
                         <div class="left">
@@ -611,13 +539,10 @@
             }
 
             count.textContent = students.length;
-
             container.innerHTML = students.map(s => {
-                // The backend sends student data inside a Student object
                 const studentData = s.Student || s;
                 const name = studentData.name || 'Unknown Student';
                 const actions = s.activityCount || 0;
-                
                 return `
                     <div class="online-student">
                         <span class="name"><i class="fas fa-circle"></i> ${name}</span>
@@ -638,7 +563,6 @@
             }
 
             count.textContent = bookings.length;
-
             container.innerHTML = bookings.map(b => {
                 const statusColor = b.status === 'pending' ? '#ffcc00' : '#00ff88';
                 return `
@@ -653,28 +577,6 @@
             }).join('');
         }
 
-        // ============================================================
-        // INIT ON LOAD
-        // ============================================================
-        window.onload = loadDashboard;
-
-    </script>
-    // ============================================================
-// ADD SINGLE ACTIVITY TO FEED (for WebSocket real-time updates)
-// ============================================================
-
-        <!-- ============================================================ -->
-    <!-- WEBSOCKET REAL-TIME CONNECTION -->
-    <!-- ============================================================ -->
-    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.2/dist/socket.io.min.js"></script>
-    
-    <script>
-        
-            <!-- ============================================================ -->
-    <!-- WEBSOCKET REAL-TIME CONNECTION -->
-    <!-- ============================================================ -->
-    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.2/dist/socket.io.min.js"></script>
-    <script>
         // ============================================================
         // ADD SINGLE ACTIVITY TO FEED (for WebSocket real-time updates)
         // ============================================================
@@ -786,10 +688,22 @@
         } else {
             console.warn('🔒 No token – WebSocket not connected');
         }
+
+        // ============================================================
+        // INIT ON LOAD
+        // ============================================================
+        window.onload = function() {
+            loadDashboard();
+            // Optional polling fallback (no page reload)
+            setInterval(() => {
+                // Only refresh if WebSocket is not connected
+                if (typeof socket === 'undefined' || !socket.connected) {
+                    loadDashboard();
+                    console.log('🔄 Dashboard refreshed (polling fallback)');
+                }
+            }, 30000);
+        };
     </script>
-    </script>
-</body>
-</html>
 
 </body>
 </html>
