@@ -670,6 +670,91 @@
     
     <script>
         
+            <!-- ============================================================ -->
+    <!-- WEBSOCKET REAL-TIME CONNECTION -->
+    <!-- ============================================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.2/dist/socket.io.min.js"></script>
+    <script>
+        // ============================================================
+        // ADD SINGLE ACTIVITY TO FEED (for WebSocket real-time updates)
+        // ============================================================
+        function addActivityToFeed(activity) {
+            console.log('📝 addActivityToFeed called with:', activity);
+
+            const container = document.getElementById('activityFeed');
+            const count = document.getElementById('activityCount');
+
+            if (!container) {
+                console.error('❌ activityFeed element not found');
+                return;
+            }
+
+            // Remove empty-state if present
+            const emptyState = container.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+
+            // Parse activityData if it's a string
+            let activityData = activity.activityData;
+            if (typeof activityData === 'string') {
+                try {
+                    activityData = JSON.parse(activityData);
+                } catch (e) {
+                    activityData = {};
+                }
+            }
+
+            // Determine icon, emoji, text based on activity type
+            let iconClass = 'view';
+            let emoji = '👁️';
+            let actionText = 'viewed';
+            let targetText = activityData?.page || 'Page';
+
+            if (activity.activityType === 'link_click') {
+                iconClass = 'click';
+                emoji = '🔗';
+                actionText = 'clicked';
+                targetText = activityData?.link || 'Link';
+            } else if (activity.activityType === 'carousel_view') {
+                iconClass = 'search';
+                emoji = '🔄';
+                actionText = 'viewed carousel on';
+                targetText = activityData?.page || 'Home';
+            }
+
+            // Create the new activity item
+            const item = document.createElement('div');
+            item.className = 'activity-item';
+            item.style.animation = 'slideIn 0.4s ease';
+            item.innerHTML = `
+                <div class="left">
+                    <div class="icon ${iconClass}">${emoji}</div>
+                    <div class="text">
+                        <span class="student">${activity.studentName || 'Student'}</span>
+                        <span class="action"> ${actionText} </span>
+                        <span class="target">${targetText}</span>
+                    </div>
+                </div>
+                <span class="time">Just now</span>
+            `;
+
+            // Prepend to the feed (newest on top)
+            container.prepend(item);
+
+            // Update the count badge
+            const currentCount = parseInt(count.textContent) || 0;
+            count.textContent = currentCount + 1;
+
+            // Keep only last 50 items
+            while (container.children.length > 50) {
+                container.removeChild(container.lastChild);
+            }
+
+            console.log('✅ Activity added to feed');
+        }
+
+        // ============================================================
+        // WEBSOCKET CONNECTION
+        // ============================================================
         const token = localStorage.getItem('authToken');
 
         if (token) {
@@ -684,14 +769,15 @@
 
             socket.on('new-activity', (activity) => {
                 console.log('📡 Live activity received:', activity);
-                // Call your existing function that adds activity to the feed
                 if (typeof addActivityToFeed === 'function') {
                     addActivityToFeed(activity);
+                } else {
+                    console.warn('⚠️ addActivityToFeed is not defined');
                 }
             });
 
-            socket.on('disconnect', () => {
-                console.log('❌ WebSocket disconnected');
+            socket.on('disconnect', (reason) => {
+                console.log('❌ WebSocket disconnected. Reason:', reason);
             });
 
             socket.on('connect_error', (err) => {
@@ -700,6 +786,7 @@
         } else {
             console.warn('🔒 No token – WebSocket not connected');
         }
+    </script>
     </script>
 </body>
 </html>
