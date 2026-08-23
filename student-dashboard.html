@@ -19,6 +19,11 @@
             background: #0a0a0a;
             color: #e0e0e0;
             min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        body.loaded {
+            opacity: 1;
         }
 
         /* ====== TOP NAV ====== */
@@ -962,19 +967,15 @@
         function switchCourse(courseId) {
             currentCourse = courseId;
 
-            // Update button states
             document.querySelectorAll('.course-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.course === courseId);
             });
 
-            // Update header title
             const course = getCourseData(courseId);
             document.getElementById('courseTitle').textContent = course.title;
 
-            // Reset views
             showView('viewDashboard');
 
-            // Check if unlocked
             if (localStorage.getItem(`lmsUnlocked_${courseId}`) === 'true') {
                 document.getElementById('lmsGate').style.display = 'none';
                 document.getElementById('lmsViews').style.display = 'block';
@@ -1062,7 +1063,38 @@
         }
 
         // ============================================================
-        // 7. SEND PROGRESS TO BACKEND
+        // 7. FETCH STUDENT STATS (for engagement score)
+        // ============================================================
+        async function fetchStudentStats() {
+            const token = localStorage.getItem('authToken');
+            if (!token) return null;
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/track/dashboard`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                if (data.success) return data.data;
+                return null;
+            } catch (e) {
+                console.error('Failed to fetch student stats:', e);
+                return null;
+            }
+        }
+
+        // ============================================================
+        // 8. MOTIVATIONAL MESSAGE
+        // ============================================================
+        function getMotivationalMessage(score) {
+            const s = Math.round(score);
+            if (s >= 80) return '🌟 Outstanding! You\'re a learning superstar!';
+            if (s >= 60) return '🔥 Great progress! Keep up the momentum!';
+            if (s >= 40) return '📈 You\'re on the right track! Keep exploring!';
+            if (s >= 20) return '💪 Every click counts! Continue learning!';
+            return '🌱 Start your learning journey today!';
+        }
+
+        // ============================================================
+        // 9. SEND PROGRESS TO BACKEND
         // ============================================================
         async function sendProgress() {
             const token = localStorage.getItem('authToken');
@@ -1140,14 +1172,13 @@
         }
 
         // ============================================================
-        // 8. RENDER DASHBOARD
+        // 10. RENDER DASHBOARD
         // ============================================================
         function renderDashboard(courseId) {
             const course = getCourseData(courseId);
             const container = document.getElementById('dashboardContent');
             const prog = getProgress(courseId);
 
-            // Calculate progress
             let totalLessons = 0;
             let completedLessons = 0;
             course.modules.forEach(mod => {
@@ -1160,7 +1191,35 @@
             });
             const overallProgress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
 
-            let html = `
+            // Fetch engagement score from backend
+            fetchStudentStats().then(statsData => {
+                let engagementScore = 0;
+                let totalPageViews = 0;
+                let totalLinkClicks = 0;
+                let totalQuizzes = 0;
+                if (statsData) {
+                    engagementScore = statsData.student?.engagementScore || 0;
+                    totalPageViews = statsData.stats?.totalPageViews || 0;
+                    totalLinkClicks = statsData.stats?.totalLinkClicks || 0;
+                    totalQuizzes = statsData.stats?.totalQuizzes || 0;
+                }
+
+                let html = `
+                    <div style="background: #121212; border-radius: 16px; padding: 20px 24px; margin-bottom: 20px; border: 1px solid #1a4a4a;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                            <div>
+                                <span style="color: #88dddd; font-size: 0.85rem; display: block;">⭐ Your Engagement Score</span>
+                                <span style="color: #00ffff; font-size: 2.2rem; font-weight: 700;" id="engagementScoreDisplay">${Math.round(engagementScore)}%</span>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="color: #666; font-size: 0.75rem; display: block;" id="activityBreakdown">${totalPageViews} page views • ${totalLinkClicks} link clicks • ${totalQuizzes} quizzes</span>
+                                <span style="color: #555; font-size: 0.7rem;" id="engagementMessage">${getMotivationalMessage(engagementScore)}</span>
+                            </div>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: #1a1a1a; border-radius: 4px; margin-top: 12px; overflow: hidden;">
+                            <div style="height: 100%; background: linear-gradient(90deg, #00ffff, #ffcc00); border-radius: 4px; width: ${Math.min(engagementScore, 100)}%; transition: width 0.8s ease;"></div>
+                        </div>
+                    </div>
                     <div class="dashboard-header">
                         <h2><i class="fas fa-list-ul"></i> ${course.icon} ${course.title}</h2>
                         <div class="dashboard-actions">
@@ -1179,37 +1238,41 @@
                     </div>
                     <div id="moduleList"></div>
                 `;
-            container.innerHTML = html;
+                container.innerHTML = html;
 
-            const moduleList = document.getElementById('moduleList');
-            let listHtml = '';
-            course.modules.forEach(mod => {
-                listHtml += `<div class="module-card"><h3><i class="fas fa-folder-open"></i> ${mod.title}</h3>`;
-                mod.lessons.forEach(lesson => {
-                    const done = isCompleted(courseId, lesson.id) ? 'done' : '';
-                    let label = isCompleted(courseId, lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ?
-                        '🧠 Quiz' : '📖 Lesson');
-                    if (lesson.type === 'quiz') {
-                        const data = prog[lesson.id];
-                        if (data && data.completed) {
-                            label = `✅ Completed (${data.score}/${data.total})`;
+                const moduleList = document.getElementById('moduleList');
+                let listHtml = '';
+                course.modules.forEach(mod => {
+                    listHtml += `<div class="module-card"><h3><i class="fas fa-folder-open"></i> ${mod.title}</h3>`;
+                    mod.lessons.forEach(lesson => {
+                        const done = isCompleted(courseId, lesson.id) ? 'done' : '';
+                        let label = isCompleted(courseId, lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ?
+                            '🧠 Quiz' : '📖 Lesson');
+                        if (lesson.type === 'quiz') {
+                            const data = prog[lesson.id];
+                            if (data && data.completed) {
+                                label = `✅ Completed (${data.score}/${data.total})`;
+                            }
                         }
-                    }
-                    const icon = lesson.type === 'quiz' ? '🧠' : '📖';
-                    listHtml += `
-                            <div class="lesson-item" onclick="openLesson('${courseId}','${mod.id}','${lesson.id}')">
-                                <span>${icon} ${lesson.title}</span>
-                                <span class="status ${done}">${label}</span>
-                            </div>
-                        `;
+                        const icon = lesson.type === 'quiz' ? '🧠' : '📖';
+                        listHtml += `
+                                <div class="lesson-item" onclick="openLesson('${courseId}','${mod.id}','${lesson.id}')">
+                                    <span>${icon} ${lesson.title}</span>
+                                    <span class="status ${done}">${label}</span>
+                                </div>
+                            `;
+                    });
+                    listHtml += `</div>`;
                 });
-                listHtml += `</div>`;
+                moduleList.innerHTML = listHtml;
+            }).catch(err => {
+                console.error('Error rendering dashboard:', err);
+                container.innerHTML = `<div style="color:#ff6666; text-align:center; padding:20px;">Error loading dashboard. Please refresh.</div>`;
             });
-            moduleList.innerHTML = listHtml;
         }
 
         // ============================================================
-        // 9. OPEN LESSON / QUIZ
+        // 11. OPEN LESSON / QUIZ
         // ============================================================
         function openLesson(courseId, moduleId, lessonId) {
             const course = getCourseData(courseId);
@@ -1276,7 +1339,7 @@
         }
 
         // ============================================================
-        // 10. SUBMIT QUIZ
+        // 12. SUBMIT QUIZ
         // ============================================================
         function submitQuiz(courseId, quizId) {
             const course = getCourseData(courseId);
@@ -1322,7 +1385,7 @@
         }
 
         // ============================================================
-        // 11. DOWNLOAD PROGRESS
+        // 13. DOWNLOAD PROGRESS
         // ============================================================
         function downloadProgress() {
             const report = generateReport(currentCourse);
@@ -1334,7 +1397,7 @@
         }
 
         // ============================================================
-        // 12. PASSWORD GATE
+        // 14. PASSWORD GATE
         // ============================================================
         function unlockLMS() {
             const input = document.getElementById('lmsPassword');
@@ -1356,7 +1419,7 @@
         });
 
         // ============================================================
-        // 13. BACK TO TOP BUTTON
+        // 15. BACK TO TOP BUTTON
         // ============================================================
         const topBtn = document.getElementById("topBtn");
         window.onscroll = function() {
@@ -1371,12 +1434,18 @@
         };
 
         // ============================================================
-        // 14. INIT
+        // 16. FADE-IN ON LOAD
+        // ============================================================
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
+        });
+
+        // ============================================================
+        // 17. INIT
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             loadStudentName();
 
-            // Check if any course is unlocked
             let hasUnlocked = false;
             for (let key in courseData) {
                 if (localStorage.getItem(`lmsUnlocked_${key}`) === 'true') {
@@ -1386,7 +1455,6 @@
             }
 
             if (hasUnlocked) {
-                // Show the first unlocked course
                 for (let key in courseData) {
                     if (localStorage.getItem(`lmsUnlocked_${key}`) === 'true') {
                         switchCourse(key);
@@ -1394,10 +1462,10 @@
                     }
                 }
             } else {
-                // Show A1 with gate
                 switchCourse('a1');
             }
         });
     </script>
+
 </body>
 </html>
