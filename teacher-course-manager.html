@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeSpellBee - Manage Course</title>
+    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .nav-bar {
+            background: #0d0d0d;
+            border-bottom: 1px solid #1a4a4a;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-bar .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00ffff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+        }
+
+        .nav-bar .teacher-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-bar .teacher-info .name {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #1a4a4a;
+            padding-bottom: 16px;
+        }
+
+        .page-header h1 {
+            color: #00ffff;
+            font-size: 1.8rem;
+        }
+
+        .page-header h1 i {
+            color: #ffcc00;
+            margin-right: 10px;
+        }
+
+        .back-btn {
+            color: #88dddd;
+            text-decoration: none;
+            padding: 8px 20px;
+            border: 1px solid #1a4a4a;
+            border-radius: 40px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .course-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .course-btn {
+            padding: 10px 24px;
+            background: #0d0d0d;
+            border: 1px solid #1a4a4a;
+            border-radius: 40px;
+            color: #88dddd;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .course-btn:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .course-btn.active {
+            background: #00ffff;
+            color: #000;
+            border-color: #00ffff;
+        }
+
+        .module-card {
+            background: #121212;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #1a4a4a;
+            border-left: 6px solid #ffcc00;
+        }
+
+        .module-card .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .module-card .module-header h3 {
+            color: #00ffff;
+            font-size: 1.1rem;
+        }
+
+        .module-card .module-header .module-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .module-card .module-header .module-actions button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #1a4a4a;
+            color: #88dddd;
+            padding: 4px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .module-card .module-header .module-actions button:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .module-card .module-header .module-actions .delete-btn:hover {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+
+        .lesson-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1a1a1a;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 1px solid #1a4a4a;
+            margin: 6px 0;
+        }
+
+        .lesson-item .lesson-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lesson-item .lesson-info .lesson-type {
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+        }
+
+        .lesson-item .lesson-info .lesson-type.quiz {
+            background: rgba(255, 204, 0, 0.1);
+            color: #ffcc00;
+        }
+
+        .lesson-item .lesson-actions button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #1a4a4a;
+            color: #88dddd;
+            padding: 2px 10px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.3s;
+        }
+
+        .lesson-item .lesson-actions button:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .lesson-item .lesson-actions .delete-lesson:hover {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+
+        .add-btn {
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px dashed #1a4a4a;
+            color: #88dddd;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .add-btn:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+            background: rgba(0, 255, 255, 0.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #555;
+        }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #0d0d0d;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2 {
+            color: #00ffff;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-content .sub {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .modal-content .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .modal-content .form-group label {
+            display: block;
+            color: #88dddd;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .modal-content .form-group input,
+        .modal-content .form-group select,
+        .modal-content .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            background: #1a1a1a;
+            border: 1px solid #2a4a4a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.85rem;
+            box-sizing: border-box;
+        }
+
+        .modal-content .form-group input:focus,
+        .modal-content .form-group select:focus,
+        .modal-content .form-group textarea:focus {
+            outline: none;
+            border-color: #00ffff;
+        }
+
+        .modal-content .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .modal-content .form-group select option {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .modal-actions .btn-primary {
+            background: #00ffff;
+            color: #000;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .modal-actions .btn-primary:hover {
+            background: #66ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .modal-actions .btn-secondary {
+            background: transparent;
+            color: #888;
+            border: 1px solid #444;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .modal-actions .btn-secondary:hover {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff88;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            .page-header h1 { font-size: 1.4rem; }
+            .module-card .module-header { flex-direction: column; align-items: flex-start; }
+            .modal-content { padding: 1.5rem; }
+            .course-btn { padding: 8px 16px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ====== TOP NAV ====== -->
+    <nav class="nav-bar">
+        <div class="logo">
+            <svg width="180" height="40" viewBox="0 0 200 50">
+                <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:aqua;"/>
+                        <stop offset="50%" style="stop-color:white;" />
+                        <stop offset="100%" style="stop-color:yellow;" />
+                    </linearGradient>
+                </defs>
+                <text x="0" y="38" fill="url(#gradient)" font-size="36" font-weight="700" font-family="Segoe UI, sans-serif">BeSpellBee</text>
+            </svg>
+        </div>
+        <div class="teacher-info">
+            <span class="badge"><span class="status-dot"></span> Live</span>
+            <span class="name" id="navTeacherName"><i class="fas fa-user-graduate"></i> Loading...</span>
+        </div>
+    </nav>
+
+    <!-- ====== MAIN CONTENT ====== -->
+    <div class="container">
+
+        <div class="page-header">
+            <h1><i class="fas fa-pencil-alt"></i> Manage Your Course</h1>
+            <a href="teacher-dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+
+        <!-- Course Selector -->
+        <div class="course-selector" id="courseSelector">
+            <button class="course-btn active" data-course="a1" onclick="switchCourse('a1')">
+                <i class="fas fa-flag"></i> A1 Beginner
+            </button>
+            <button class="course-btn" data-course="b2" onclick="switchCourse('b2')">
+                <i class="fas fa-star"></i> B2 Exam Prep
+            </button>
+            <button class="course-btn" data-course="french" onclick="switchCourse('french')">
+                <i class="fas fa-flag"></i> French Bac/LLCE
+            </button>
+        </div>
+
+        <!-- Course Editor -->
+        <div id="courseEditor">
+            <div id="modulesContainer"></div>
+            <button class="add-btn" onclick="openAddModuleModal()">
+                <i class="fas fa-plus-circle"></i> Add New Module
+            </button>
+        </div>
+
+    </div>
+
+    <!-- ====== MODAL (Add/Edit) ====== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <h2 id="modalTitle">Add Module</h2>
+            <p class="sub" id="modalSub">Create a new module for your course.</p>
+            <form id="modalForm">
+                <input type="hidden" id="modalType" value="module">
+                <input type="hidden" id="editModuleId" value="">
+                <input type="hidden" id="editLessonId" value="">
+
+                <div class="form-group" id="moduleNameGroup">
+                    <label for="moduleName">Module Title</label>
+                    <input type="text" id="moduleName" placeholder="e.g. Module 1: Grammar Foundations" required>
+                </div>
+
+                <div class="form-group" id="lessonTitleGroup" style="display:none;">
+                    <label for="lessonTitle">Lesson Title</label>
+                    <input type="text" id="lessonTitle" placeholder="e.g. Present Tenses Review" required>
+                </div>
+
+                <div class="form-group" id="lessonTypeGroup" style="display:none;">
+                    <label for="lessonType">Lesson Type</label>
+                    <select id="lessonType" required>
+                        <option value="lesson">📖 Lesson</option>
+                        <option value="quiz">🧠 Quiz</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="lessonContentGroup" style="display:none;">
+                    <label for="lessonContent">Content (HTML / iframe embed)</label>
+                    <textarea id="lessonContent" placeholder="Paste your lesson content, iframe embed code, or HTML here..."></textarea>
+                </div>
+
+                <div class="form-group" id="quizQuestionsGroup" style="display:none;">
+                    <label>Quiz Questions</label>
+                    <div id="quizQuestionsContainer">
+                        <div class="question-item" style="background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;">
+                            <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                <input type="text" placeholder="Option A" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                <input type="text" placeholder="Option B" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                <input type="text" placeholder="Option C" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                    <option value="0">A</option>
+                                    <option value="1">B</option>
+                                    <option value="2">C</option>
+                                </select>
+                                <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" onclick="addQuestionField()" style="background:rgba(0,255,255,0.05); border:1px dashed #2a4a4a; color:#88dddd; padding:8px; border-radius:8px; cursor:pointer; width:100%; margin-top:6px;">
+                        <i class="fas fa-plus"></i> Add Question
+                    </button>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary" id="modalSubmitBtn">Save</button>
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ====== JAVASCRIPT ====== -->
+    <script>
+        // ============================================================
+        // CONFIGURATION
+        // ============================================================
+        const COURSES_KEY = 'lmsCourseData';
+        let currentCourse = 'a1';
+
+        // ============================================================
+        // DEFAULT COURSE DATA (fallback if nothing in localStorage)
+        // ============================================================
+        const defaultCourseData = {
+            a1: {
+                title: 'A1 Beginner',
+                icon: '🇬🇧',
+                modules: [
+                    {
+                        id: 'a1_m1',
+                        title: 'Module 1: Hospitality Basics',
+                        lessons: [
+                            { id: 'a1_l1', title: 'Common job questions and answers', type: 'lesson', content: '<h3>🔹 Common job questions and answers</h3><iframe src="https://app.lumi.education/api/v1/run/ui5YGZ/embed" frameborder="0" allowfullscreen></iframe>' },
+                            { id: 'a1_l2', title: 'First meetings', type: 'lesson', content: '<h3>🔹 First meetings</h3><iframe src="https://app.lumi.education/api/v1/run/WkKntW/embed" frameborder="0" allowfullscreen></iframe>' },
+                            { id: 'a1_q1', title: 'Hospitality Quiz', type: 'quiz', questions: [{ question: 'How do you greet a guest in a hotel?', options: ['"Hello, how can I help you?"', '"What do you want?"', '"Go away!"'], correct: 0 }, { question: 'What is the correct response to "Thank you"?', options: ['"You\'re welcome"', '"No problem"', 'Both A and B'], correct: 2 }] }
+                        ]
+                    },
+                    {
+                        id: 'a1_m2',
+                        title: 'Module 2: Daily Work',
+                        lessons: [
+                            { id: 'a1_l3', title: 'Daily routines at work', type: 'lesson', content: '<h3>🔹 Daily routines at work</h3><iframe src="https://app.lumi.education/api/v1/run/Zc_45y/embed" frameborder="0" allowfullscreen></iframe>' },
+                            { id: 'a1_l4', title: 'Daily routines dictation', type: 'lesson', content: '<h3>🔹 Daily routines dictation</h3><iframe src="https://app.lumi.education/api/v1/run/0WviSL/embed" frameborder="0" allowfullscreen></iframe>' },
+                            { id: 'a1_q2', title: 'Daily Work Quiz', type: 'quiz', questions: [{ question: 'What time do most hotel workers start their shift?', options: ['6:00 AM', '9:00 AM', '12:00 PM'], correct: 0 }, { question: 'What is a "shift"?', options: ['A work period', 'A break', 'A meeting'], correct: 0 }] }
+                        ]
+                    },
+                    {
+                        id: 'a1_m3',
+                        title: 'Module 3: Listening Comprehension',
+                        lessons: [
+                            { id: 'a1_l5', title: "Zoe's first day at work", type: 'lesson', content: '<h3>🔹 Zoe\'s first day at work</h3><audio controls style="width:100%; margin:10px 0;"><source src="mp3/2_6.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio><h3>📝 Activity 1</h3><iframe src="https://app.lumi.education/api/v1/run/IOyPZA/embed" frameborder="0" allowfullscreen></iframe><h3>📝 Activity 2</h3><iframe src="https://app.lumi.education/api/v1/run/RgqSXb/embed" frameborder="0" allowfullscreen></iframe>' },
+                            { id: 'a1_q3', title: 'Listening Quiz', type: 'quiz', questions: [{ question: 'What department does Zoe work in?', options: ['Reception', 'Housekeeping', 'Restaurant'], correct: 0 }, { question: 'Who helps Zoe on her first day?', options: ['The manager', 'A colleague', 'The guest'], correct: 1 }] }
+                        ]
+                    }
+                ]
+            },
+            b2: {
+                title: 'B2 Exam Prep',
+                icon: '📚',
+                modules: [
+                    {
+                        id: 'b2_m1',
+                        title: 'Module 1: Grammar Foundations',
+                        lessons: [
+                            { id: 'b2_l1', title: 'Present Tenses Review', type: 'lesson', content: '<h3>🔹 Present Simple vs. Present Continuous</h3><p><strong>Present Simple</strong> – habits, facts, routines.<br><em>Example:</em> "I <strong>work</strong> from 9 to 5."</p><p><strong>Present Continuous</strong> – actions happening now, temporary situations.<br><em>Example:</em> "I <strong>am working</strong> on a new project this week."</p><iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen></iframe>' },
+                            { id: 'b2_q1', title: 'Tenses Quiz', type: 'quiz', questions: [{ question: 'She ______ to work every day by bus.', options: ['go', 'goes', 'is going'], correct: 1 }, { question: 'Listen! Someone ______ the piano.', options: ['play', 'plays', 'is playing'], correct: 2 }, { question: 'I ______ him for years.', options: ['know', 'have known', 'knew'], correct: 1 }] }
+                        ]
+                    },
+                    {
+                        id: 'b2_m2',
+                        title: 'Module 2: Vocabulary & Expressions',
+                        lessons: [
+                            { id: 'b2_l2', title: 'Idiomatic Expressions', type: 'lesson', content: '<h3>🔹 Common Idioms for B2</h3><ul><li><strong>Break the ice</strong> – start a conversation.</li><li><strong>Hit the nail on the head</strong> – say exactly the right thing.</li><li><strong>Cost an arm and a leg</strong> – very expensive.</li></ul><iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" frameborder="0" allowfullscreen></iframe>' },
+                            { id: 'b2_q2', title: 'Vocabulary Quiz', type: 'quiz', questions: [{ question: 'To "break the ice" means to:', options: ['Start a conversation', 'Break something frozen', 'End a fight'], correct: 0 }, { question: 'If something "costs an arm and a leg", it is:', options: ['Cheap', 'Expensive', 'Free'], correct: 1 }] }
+                        ]
+                    }
+                ]
+            },
+            french: {
+                title: 'French Bac/LLCE',
+                icon: '🇫🇷',
+                modules: [
+                    {
+                        id: 'fr_m1',
+                        title: 'Module 1: French Grammar',
+                        lessons: [
+                            { id: 'fr_l1', title: 'French Grammar Basics', type: 'lesson', content: '<h3>🔹 French Grammar Basics</h3><p><strong>Le présent</strong> – actions happening now.</p><p><em>Example:</em> "Je <strong>parle</strong> français."</p><iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen></iframe>' },
+                            { id: 'fr_q1', title: 'French Quiz', type: 'quiz', questions: [{ question: 'How do you say "I speak French"?', options: ['Je parle français', 'Je parles français', 'Je parler français'], correct: 0 }, { question: 'What is "la maison" in English?', options: ['The house', 'The school', 'The car'], correct: 0 }] }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // ============================================================
+        // LOAD / SAVE COURSE DATA
+        // ============================================================
+        function loadCourseData() {
+            const saved = localStorage.getItem(COURSES_KEY);
+            if (saved) {
+                try {
+                    return JSON.parse(saved);
+                } catch (e) {
+                    console.error('Error parsing course data, using defaults');
+                    return JSON.parse(JSON.stringify(defaultCourseData));
+                }
+            }
+            return JSON.parse(JSON.stringify(defaultCourseData));
+        }
+
+        function saveCourseData(data) {
+            localStorage.setItem(COURSES_KEY, JSON.stringify(data));
+        }
+
+        function getCourseData() {
+            const all = loadCourseData();
+            return all[currentCourse] || all.a1;
+        }
+
+        // ============================================================
+        // RENDER COURSE
+        // ============================================================
+        function renderCourse() {
+            const course = getCourseData();
+            const container = document.getElementById('modulesContainer');
+            const courseTitle = course.title || 'Course';
+
+            if (!course.modules || course.modules.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <p>No modules yet. Click "Add New Module" to get started.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            course.modules.forEach((mod, modIndex) => {
+                html += `
+                    <div class="module-card">
+                        <div class="module-header">
+                            <h3><i class="fas fa-folder"></i> ${mod.title}</h3>
+                            <div class="module-actions">
+                                <button onclick="editModule('${mod.id}')"><i class="fas fa-edit"></i> Edit</button>
+                                <button class="delete-btn" onclick="deleteModule('${mod.id}')"><i class="fas fa-trash"></i> Delete</button>
+                            </div>
+                        </div>
+                        <div class="module-lessons">
+                `;
+
+                if (!mod.lessons || mod.lessons.length === 0) {
+                    html += `<p style="color:#555; font-size:0.85rem; padding:8px 0;">No lessons yet.</p>`;
+                } else {
+                    mod.lessons.forEach((lesson, lessonIndex) => {
+                        const typeLabel = lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson';
+                        const typeClass = lesson.type === 'quiz' ? 'quiz' : '';
+                        html += `
+                            <div class="lesson-item">
+                                <div class="lesson-info">
+                                    <span>${lesson.title}</span>
+                                    <span class="lesson-type ${typeClass}">${typeLabel}</span>
+                                </div>
+                                <div class="lesson-actions">
+                                    <button onclick="editLesson('${mod.id}','${lesson.id}')"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="delete-lesson" onclick="deleteLesson('${mod.id}','${lesson.id}')"><i class="fas fa-trash"></i> Delete</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                html += `
+                            <button class="add-btn" onclick="openAddLessonModal('${mod.id}')">
+                                <i class="fas fa-plus-circle"></i> Add Lesson to "${mod.title}"
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // ============================================================
+        // COURSE SWITCHING
+        // ============================================================
+        function switchCourse(courseId) {
+            currentCourse = courseId;
+            document.querySelectorAll('.course-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.course === courseId);
+            });
+            renderCourse();
+        }
+
+        // ============================================================
+        // MODULE CRUD
+        // ============================================================
+        function openAddModuleModal() {
+            document.getElementById('modalType').value = 'module';
+            document.getElementById('editModuleId').value = '';
+            document.getElementById('editLessonId').value = '';
+            document.getElementById('modalTitle').textContent = 'Add Module';
+            document.getElementById('modalSub').textContent = 'Create a new module for your course.';
+
+            document.getElementById('moduleNameGroup').style.display = 'block';
+            document.getElementById('lessonTitleGroup').style.display = 'none';
+            document.getElementById('lessonTypeGroup').style.display = 'none';
+            document.getElementById('lessonContentGroup').style.display = 'none';
+            document.getElementById('quizQuestionsGroup').style.display = 'none';
+
+            document.getElementById('moduleName').value = '';
+            document.getElementById('modalSubmitBtn').textContent = 'Add Module';
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function editModule(moduleId) {
+            const course = getCourseData();
+            const module = course.modules.find(m => m.id === moduleId);
+            if (!module) return;
+
+            document.getElementById('modalType').value = 'module';
+            document.getElementById('editModuleId').value = moduleId;
+            document.getElementById('editLessonId').value = '';
+            document.getElementById('modalTitle').textContent = 'Edit Module';
+            document.getElementById('modalSub').textContent = 'Update this module.';
+
+            document.getElementById('moduleNameGroup').style.display = 'block';
+            document.getElementById('lessonTitleGroup').style.display = 'none';
+            document.getElementById('lessonTypeGroup').style.display = 'none';
+            document.getElementById('lessonContentGroup').style.display = 'none';
+            document.getElementById('quizQuestionsGroup').style.display = 'none';
+
+            document.getElementById('moduleName').value = module.title;
+            document.getElementById('modalSubmitBtn').textContent = 'Save Changes';
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function deleteModule(moduleId) {
+            if (!confirm('Delete this module and all its lessons?')) return;
+            const allData = loadCourseData();
+            const course = allData[currentCourse];
+            course.modules = course.modules.filter(m => m.id !== moduleId);
+            saveCourseData(allData);
+            renderCourse();
+        }
+
+        // ============================================================
+        // LESSON CRUD
+        // ============================================================
+        function openAddLessonModal(moduleId) {
+            document.getElementById('modalType').value = 'lesson';
+            document.getElementById('editModuleId').value = moduleId;
+            document.getElementById('editLessonId').value = '';
+            document.getElementById('modalTitle').textContent = 'Add Lesson';
+            document.getElementById('modalSub').textContent = 'Create a new lesson or quiz.';
+
+            document.getElementById('moduleNameGroup').style.display = 'none';
+            document.getElementById('lessonTitleGroup').style.display = 'block';
+            document.getElementById('lessonTypeGroup').style.display = 'block';
+            document.getElementById('lessonContentGroup').style.display = 'block';
+            document.getElementById('quizQuestionsGroup').style.display = 'none';
+
+            document.getElementById('lessonTitle').value = '';
+            document.getElementById('lessonType').value = 'lesson';
+            document.getElementById('lessonContent').value = '';
+            document.getElementById('modalSubmitBtn').textContent = 'Add Lesson';
+
+            // Reset quiz questions
+            document.getElementById('quizQuestionsContainer').innerHTML = `
+                <div class="question-item" style="background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;">
+                    <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <input type="text" placeholder="Option A" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                        <input type="text" placeholder="Option B" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                        <input type="text" placeholder="Option C" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                        <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                            <option value="0">A</option>
+                            <option value="1">B</option>
+                            <option value="2">C</option>
+                        </select>
+                        <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
+                    </div>
+                </div>
+            `;
+
+            // Show/hide quiz fields based on type
+            toggleQuizFields('lesson');
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function editLesson(moduleId, lessonId) {
+            const course = getCourseData();
+            const module = course.modules.find(m => m.id === moduleId);
+            if (!module) return;
+            const lesson = module.lessons.find(l => l.id === lessonId);
+            if (!lesson) return;
+
+            document.getElementById('modalType').value = 'lesson';
+            document.getElementById('editModuleId').value = moduleId;
+            document.getElementById('editLessonId').value = lessonId;
+            document.getElementById('modalTitle').textContent = 'Edit Lesson';
+            document.getElementById('modalSub').textContent = 'Update this lesson or quiz.';
+
+            document.getElementById('moduleNameGroup').style.display = 'none';
+            document.getElementById('lessonTitleGroup').style.display = 'block';
+            document.getElementById('lessonTypeGroup').style.display = 'block';
+            document.getElementById('lessonContentGroup').style.display = 'block';
+
+            document.getElementById('lessonTitle').value = lesson.title;
+            document.getElementById('lessonType').value = lesson.type || 'lesson';
+
+            if (lesson.type === 'quiz' && lesson.questions) {
+                document.getElementById('quizQuestionsGroup').style.display = 'block';
+                // Load quiz questions
+                const container = document.getElementById('quizQuestionsContainer');
+                container.innerHTML = '';
+                lesson.questions.forEach((q, idx) => {
+                    const qDiv = document.createElement('div');
+                    qDiv.className = 'question-item';
+                    qDiv.style.cssText = 'background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;';
+                    qDiv.innerHTML = `
+                        <input type="text" placeholder="Question text" class="q-text" value="${q.question}" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                            ${q.options.map((opt, oi) => `
+                                <input type="text" placeholder="Option ${String.fromCharCode(65 + oi)}" class="q-option" value="${opt}" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                            `).join('')}
+                            <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                ${q.options.map((_, oi) => `<option value="${oi}" ${oi === q.correct ? 'selected' : ''}>${String.fromCharCode(65 + oi)}</option>`).join('')}
+                            </select>
+                            <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
+                        </div>
+                    `;
+                    container.appendChild(qDiv);
+                });
+                // Add an empty question if none
+                if (lesson.questions.length === 0) {
+                    addQuestionField();
+                }
+            } else {
+                document.getElementById('quizQuestionsGroup').style.display = 'none';
+                document.getElementById('lessonContent').value = lesson.content || '';
+            }
+
+            toggleQuizFields(lesson.type || 'lesson');
+            document.getElementById('modalSubmitBtn').textContent = 'Save Changes';
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function deleteLesson(moduleId, lessonId) {
+            if (!confirm('Delete this lesson?')) return;
+            const allData = loadCourseData();
+            const course = allData[currentCourse];
+            const module = course.modules.find(m => m.id === moduleId);
+            if (!module) return;
+            module.lessons = module.lessons.filter(l => l.id !== lessonId);
+            saveCourseData(allData);
+            renderCourse();
+        }
+
+        // ============================================================
+        // QUIZ HELPER FUNCTIONS
+        // ============================================================
+        function addQuestionField() {
+            const container = document.getElementById('quizQuestionsContainer');
+            const qDiv = document.createElement('div');
+            qDiv.className = 'question-item';
+            qDiv.style.cssText = 'background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;';
+            qDiv.innerHTML = `
+                <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <input type="text" placeholder="Option A" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                    <input type="text" placeholder="Option B" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                    <input type="text" placeholder="Option C" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                    <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                        <option value="0">A</option>
+                        <option value="1">B</option>
+                        <option value="2">C</option>
+                    </select>
+                    <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
+                </div>
+            `;
+            container.appendChild(qDiv);
+        }
+
+        function removeQuestion(btn) {
+            const container = document.getElementById('quizQuestionsContainer');
+            if (container.children.length <= 1) {
+                alert('You must have at least one question.');
+                return;
+            }
+            btn.closest('.question-item').remove();
+        }
+
+        function toggleQuizFields(type) {
+            const quizGroup = document.getElementById('quizQuestionsGroup');
+            const contentGroup = document.getElementById('lessonContentGroup');
+            if (type === 'quiz') {
+                quizGroup.style.display = 'block';
+                contentGroup.style.display = 'none';
+            } else {
+                quizGroup.style.display = 'none';
+                contentGroup.style.display = 'block';
+            }
+        }
+
+        // ============================================================
+        // MODAL SUBMIT
+        // ============================================================
+        document.getElementById('modalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const type = document.getElementById('modalType').value;
+            const allData = loadCourseData();
+            const course = allData[currentCourse];
+
+            if (type === 'module') {
+                const moduleId = document.getElementById('editModuleId').value;
+                const title = document.getElementById('moduleName').value.trim();
+
+                if (!title) { alert('Module title is required.'); return; }
+
+                if (moduleId) {
+                    // Edit existing module
+                    const mod = course.modules.find(m => m.id === moduleId);
+                    if (mod) mod.title = title;
+                } else {
+                    // Add new module
+                    const newModule = {
+                        id: currentCourse + '_m' + Date.now(),
+                        title: title,
+                        lessons: []
+                    };
+                    course.modules.push(newModule);
+                }
+
+                saveCourseData(allData);
+                closeModal();
+                renderCourse();
+            } else if (type === 'lesson') {
+                const moduleId = document.getElementById('editModuleId').value;
+                const lessonId = document.getElementById('editLessonId').value;
+                const title = document.getElementById('lessonTitle').value.trim();
+                const lessonType = document.getElementById('lessonType').value;
+                const content = document.getElementById('lessonContent').value.trim();
+
+                if (!title) { alert('Lesson title is required.'); return; }
+
+                const module = course.modules.find(m => m.id === moduleId);
+                if (!module) { alert('Module not found.'); return; }
+
+                if (lessonId) {
+                    // Edit existing lesson
+                    const lesson = module.lessons.find(l => l.id === lessonId);
+                    if (lesson) {
+                        lesson.title = title;
+                        lesson.type = lessonType;
+                        if (lessonType === 'quiz') {
+                            const questions = collectQuizQuestions();
+                            if (questions.length === 0) { alert('Please add at least one question.'); return; }
+                            lesson.questions = questions;
+                            delete lesson.content;
+                        } else {
+                            lesson.content = content || '<p>Lesson content goes here.</p>';
+                            delete lesson.questions;
+                        }
+                    }
+                } else {
+                    // Add new lesson
+                    const newLesson = {
+                        id: currentCourse + '_l' + Date.now(),
+                        title: title,
+                        type: lessonType
+                    };
+                    if (lessonType === 'quiz') {
+                        const questions = collectQuizQuestions();
+                        if (questions.length === 0) { alert('Please add at least one question.'); return; }
+                        newLesson.questions = questions;
+                    } else {
+                        newLesson.content = content || '<p>Lesson content goes here.</p>';
+                    }
+                    module.lessons.push(newLesson);
+                }
+
+                saveCourseData(allData);
+                closeModal();
+                renderCourse();
+            }
+        });
+
+        function collectQuizQuestions() {
+            const items = document.querySelectorAll('.question-item');
+            const questions = [];
+            items.forEach(item => {
+                const text = item.querySelector('.q-text').value.trim();
+                const options = item.querySelectorAll('.q-option');
+                const opts = Array.from(options).map(o => o.value.trim());
+                const correct = parseInt(item.querySelector('.q-correct').value);
+                if (text && opts.every(o => o)) {
+                    questions.push({ question: text, options: opts, correct: correct });
+                }
+            });
+            return questions;
+        }
+
+        // ============================================================
+        // MODAL TOGGLE
+        // ============================================================
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ============================================================
+        // LESSON TYPE TOGGLE (on form)
+        // ============================================================
+        document.getElementById('lessonType').addEventListener('change', function() {
+            toggleQuizFields(this.value);
+        });
+
+        // ============================================================
+        // LOAD TEACHER NAME
+        // ============================================================
+        function loadTeacherName() {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    const name = payload.name || 'Teacher';
+                    document.getElementById('navTeacherName').innerHTML = `<i class="fas fa-user-graduate"></i> ${name}`;
+                } catch (e) {
+                    document.getElementById('navTeacherName').innerHTML = `<i class="fas fa-user-graduate"></i> Teacher`;
+                }
+            } else {
+                document.getElementById('navTeacherName').innerHTML = `<i class="fas fa-user-graduate"></i> Teacher`;
+            }
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTeacherName();
+            // Ensure all courses exist in localStorage
+            const allData = loadCourseData();
+            // Make sure all default courses exist
+            for (let key in defaultCourseData) {
+                if (!allData[key]) {
+                    allData[key] = JSON.parse(JSON.stringify(defaultCourseData[key]));
+                }
+            }
+            saveCourseData(allData);
+            renderCourse();
+        });
+    </script>
+
+</body>
+</html>
