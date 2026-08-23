@@ -1122,7 +1122,7 @@
 
         <!-- ====== DASHBOARD & LOGOUT (hidden by default) ====== -->
         <div id="authenticatedButtons" style="display: none; gap: 6px;">
-            <a href="#" id="dashboardLink" onclick="openDashboard(); return false;" 
+            <a href="student-dashboard.html" id="dashboardLink" ...>
                style="display:inline-block; padding:5px 16px; border:1px solid #00ff88; border-radius:30px;
                       color:#00ff88; text-decoration:none; font-size:0.8rem; font-weight:600;
                       background: rgba(0,255,136,0.06); transition: all 0.3s;"
@@ -2329,9 +2329,9 @@
                     messageEl.textContent = '✅ Account created!';
                     updateAuthUI();
                     setTimeout(() => {
-                        closeModalById('signupModal');
-                        location.reload();
-                    }, 1500);
+    closeModalById('signupModal');
+    window.location.href = 'student-dashboard.html';
+}, 1500);
                 } else {
                     messageEl.textContent = '❌ ' + (data.message || 'Signup failed');
                 }
