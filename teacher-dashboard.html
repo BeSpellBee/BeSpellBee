@@ -310,13 +310,23 @@
             </svg>
         </div>
         <div class="teacher-info">
-            <span class="badge"><span class="status-dot"></span> Live</span>
-            <span class="name" id="navTeacherName"><i class="fas fa-user-graduate"></i> Loading...</span>
-            <span style="color: #555; font-size: 0.8rem;" id="navTeacherSubject">| ...</span>
-            <a href="#" id="logoutBtn" style="color: #00ffff; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px;">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-        </div>
+    <span class="badge"><span class="status-dot"></span> Live</span>
+    <span class="name" id="navTeacherName"><i class="fas fa-user-graduate"></i> Loading...</span>
+    <span style="color: #555; font-size: 0.8rem;" id="navTeacherSubject">| ...</span>
+    <!-- ====== MANAGE COURSE BUTTON (NEW) ====== -->
+    <a href="teacher-course-manager.html" 
+       style="display:inline-block; padding:5px 16px; border:1px solid #ffcc00; border-radius:30px;
+              color:#ffcc00; text-decoration:none; font-size:0.8rem; font-weight:600;
+              background: rgba(255,204,0,0.05); transition: all 0.3s;"
+       onmouseover="this.style.background='#ffcc00'; this.style.color='#000';"
+       onmouseout="this.style.background='rgba(255,204,0,0.05)'; this.style.color='#ffcc00';">
+        ⚙️ Manage Course
+    </a>
+    <!-- ====== LOGOUT BUTTON ====== -->
+    <a href="#" id="logoutBtn" style="color: #00ffff; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px;">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+</div>
     </nav>
 
     <!-- ====== DASHBOARD ====== -->
