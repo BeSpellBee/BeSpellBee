@@ -77,14 +77,46 @@
             color: #ffdd44;
         }
 
-        /* ====== DASHBOARD WRAPPER ====== */
+        /* ====== DASHBOARD CONTAINER ====== */
         .dashboard-container {
             max-width: 1100px;
             margin: 30px auto;
             padding: 0 20px;
         }
 
-        /* ====== LMS STYLES (extracted from your page) ====== */
+        /* ====== COURSE SELECTOR ====== */
+        .course-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .course-btn {
+            padding: 12px 28px;
+            background: #0d0d0d;
+            border: 1px solid #1a4a4a;
+            border-radius: 40px;
+            color: #88dddd;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .course-btn:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .course-btn.active {
+            background: #00ffff;
+            color: #000;
+            border-color: #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+        }
+
+        /* ====== LMS WRAPPER ====== */
         .lms-wrapper {
             max-width: 1100px;
             margin: 0 auto 20px auto;
@@ -92,8 +124,7 @@
             border-radius: 32px;
             box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.5);
             overflow: hidden;
-            border: 2px solid #1a4a4a;
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            border: 1px solid #1a4a4a;
         }
 
         .lms-header {
@@ -153,6 +184,10 @@
             color: #00ffff;
             font-size: 1.5rem;
             margin-bottom: 8px;
+        }
+
+        .lms-gate h3 i {
+            color: #ffcc00;
         }
 
         .lms-gate p {
@@ -228,6 +263,10 @@
             font-size: 1.4rem;
         }
 
+        .dashboard-header h2 i {
+            color: #ffcc00;
+        }
+
         .dashboard-actions {
             display: flex;
             gap: 10px;
@@ -243,6 +282,7 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
+            font-size: 0.85rem;
         }
 
         .dashboard-actions button:hover {
@@ -263,6 +303,11 @@
             color: #000;
         }
 
+        .dashboard-actions button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         /* ====== MODULE CARDS ====== */
         .module-card {
             background: #121212;
@@ -277,6 +322,11 @@
             color: #00ffff;
             margin-top: 0;
             font-size: 1.1rem;
+        }
+
+        .module-card h3 i {
+            color: #ffcc00;
+            margin-right: 8px;
         }
 
         /* ====== LESSON ITEMS ====== */
@@ -372,6 +422,7 @@
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
+            font-size: 0.9rem;
         }
 
         .nav-row button:hover,
@@ -407,6 +458,15 @@
             background: none !important;
         }
 
+        .completed-text {
+            color: #00ff88;
+            font-weight: 600;
+        }
+
+        .completed-text i {
+            margin-right: 6px;
+        }
+
         /* ====== QUIZ BLOCKS ====== */
         .question-block {
             background: #121212;
@@ -440,6 +500,7 @@
 
         .question-block input[type="radio"] {
             margin-right: 10px;
+            accent-color: #00ffff;
         }
 
         /* ====== QUIZ RESULT ====== */
@@ -499,6 +560,9 @@
                 flex: 1;
                 text-align: center;
             }
+            .course-selector {
+                justify-content: center;
+            }
         }
 
         @media (max-width: 480px) {
@@ -523,6 +587,10 @@
             .lms-body {
                 padding: 16px;
             }
+            .course-btn {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
         }
 
         /* ====== BACK TO TOP ====== */
@@ -532,7 +600,7 @@
             bottom: 20px;
             right: 30px;
             z-index: 99;
-            font-size: 24px;
+            font-size: 20px;
             border: none;
             outline: none;
             background-color: #00ffff;
@@ -564,15 +632,17 @@
         }
 
         @keyframes pulse {
-            0% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.4;
-            }
-            100% {
-                opacity: 1;
-            }
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        /* ====== COURSE SELECTOR ACTIVE STATE ====== */
+        .course-btn.active {
+            background: #00ffff;
+            color: #000;
+            border-color: #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
         }
     </style>
 </head>
@@ -604,10 +674,23 @@
     <!-- ====== DASHBOARD CONTAINER ====== -->
     <div class="dashboard-container">
 
+        <!-- ====== COURSE SELECTOR ====== -->
+        <div class="course-selector" id="courseSelector">
+            <button class="course-btn active" data-course="a1" onclick="switchCourse('a1')">
+                <i class="fas fa-flag"></i> A1 Beginner
+            </button>
+            <button class="course-btn" data-course="b2" onclick="switchCourse('b2')">
+                <i class="fas fa-star"></i> B2 Exam Prep
+            </button>
+            <button class="course-btn" data-course="french" onclick="switchCourse('french')">
+                <i class="fas fa-flag"></i> French Bac/LLCE
+            </button>
+        </div>
+
         <!-- ====== LMS WRAPPER ====== -->
         <div class="lms-wrapper" id="lmsWrapper">
             <div class="lms-header">
-                <h2><i class="fas fa-graduation-cap"></i> My Courses</h2>
+                <h2><i class="fas fa-graduation-cap"></i> <span id="courseTitle">A1 Beginner</span></h2>
                 <span class="lms-badge"><i class="fas fa-lock"></i> PREMIUM</span>
             </div>
             <div class="lms-body">
@@ -641,121 +724,222 @@
         </div>
     </div>
 
-    <!-- ====== PROGRESS REPORT FORM (Hidden) ====== -->
-    <form id="reportForm" action="https://api.web3forms.com/submit" method="POST" style="display:none;">
-        <input type="hidden" name="access_key" value="587c378a-3c75-498e-b3bc-b7fd96ad2278">
-        <input type="hidden" name="subject" id="reportSubject" value="Progress Report – Student Course">
-        <input type="hidden" name="from_name" value="Student">
-        <input type="hidden" name="replyto" value="student@example.com">
-        <input type="hidden" name="redirect" value="false">
-        <textarea name="message" id="reportBody"></textarea>
-    </form>
-
     <!-- ====== BACK TO TOP BUTTON ====== -->
     <button id="topBtn" title="Go to top"><i class="fas fa-arrow-up"></i></button>
 
     <!-- ============================================================ -->
-    <!-- ====== COMPLETE LMS JAVASCRIPT (Extracted from your page) ====== -->
+    <!-- ====== COMPLETE LMS JAVASCRIPT ====== -->
     <!-- ============================================================ -->
     <script>
         // ============================================================
-        // 0. CONFIGURATION
+        // CONFIGURATION
         // ============================================================
         const ACCESS_CODE = 'bestart332'; // Change to your own password
         const API_BASE_URL = 'https://bespellbee-backend-en6l.onrender.com';
+        let currentCourse = 'a1';
 
         // ============================================================
         // 1. COURSE DATA (Edit this to match your courses)
         // ============================================================
         const courseData = {
-            modules: [{
-                id: 'm1',
-                title: 'Module 1: Grammar Foundations',
-                lessons: [{
-                    id: 'l1',
-                    title: 'Present Tenses Review',
-                    type: 'lesson',
-                    content: `
-                            <h3>🔹 Present Simple vs. Present Continuous</h3>
-                            <p><strong>Present Simple</strong> – habits, facts, routines.<br>
-                            <em>Example:</em> "I <strong>work</strong> from 9 to 5."</p>
-                            <p><strong>Present Continuous</strong> – actions happening now, temporary situations.<br>
-                            <em>Example:</em> "I <strong>am working</strong> on a new project this week."</p>
-                            <h3>🔹 Stative Verbs</h3>
-                            <p>Verbs like <strong>know, believe, like, belong</strong> are usually not used in continuous forms.</p>
-                            <p><em>Correct:</em> "I <strong>believe</strong> you."<br>
-                            <em>Incorrect:</em> "I am believing you."</p>
-                            <h3>🔹 Practice Activity</h3>
-                            <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-                        `
+            a1: {
+                title: 'A1 Beginner',
+                icon: '🇬🇧',
+                modules: [{
+                    id: 'a1_m1',
+                    title: 'Module 1: Hospitality Basics',
+                    lessons: [{
+                        id: 'a1_l1',
+                        title: 'Common job questions and answers',
+                        type: 'lesson',
+                        content: `
+                                <h3>🔹 Common job questions and answers</h3>
+                                <p><strong>⚠️ Google Chrome only</strong></p>
+                                <iframe src="https://app.lumi.education/api/v1/run/ui5YGZ/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                            `
+                    }, {
+                        id: 'a1_l2',
+                        title: 'First meetings',
+                        type: 'lesson',
+                        content: `
+                                <h3>🔹 First meetings</h3>
+                                <iframe src="https://app.lumi.education/api/v1/run/WkKntW/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                            `
+                    }, {
+                        id: 'a1_q1',
+                        title: 'Hospitality Quiz',
+                        type: 'quiz',
+                        questions: [
+                            { question: 'How do you greet a guest in a hotel?', options: ['A) "Hello, how can I help you?"', 'B) "What do you want?"', 'C) "Go away!"'], correct: 0 },
+                            { question: 'What is the correct response to "Thank you"?', options: ['A) "You\'re welcome"', 'B) "No problem"', 'C) Both A and B'], correct: 2 }
+                        ]
+                    }]
                 }, {
-                    id: 'q1',
-                    title: 'Tenses Quiz',
-                    type: 'quiz',
-                    questions: [
-                        { question: 'She ______ to work every day by bus.', options: ['A) go', 'B) goes', 'C) is going'],
-                            correct: 1 },
-                        { question: 'Listen! Someone ______ the piano.', options: ['A) play', 'B) plays',
-                                'C) is playing'
-                            ], correct: 2 },
-                        { question: 'I ______ him for years.', options: ['A) know', 'B) have known', 'C) knew'],
-                            correct: 1 }
-                    ]
-                }]
-            }, {
-                id: 'm2',
-                title: 'Module 2: Vocabulary & Expressions',
-                lessons: [{
-                    id: 'l2',
-                    title: 'Idiomatic Expressions',
-                    type: 'lesson',
-                    content: `
-                            <h3>🔹 Common Idioms for B2</h3>
-                            <ul>
-                                <li><strong>Break the ice</strong> – start a conversation.</li>
-                                <li><strong>Hit the nail on the head</strong> – say exactly the right thing.</li>
-                                <li><strong>Cost an arm and a leg</strong> – very expensive.</li>
-                            </ul>
-                            <h3>🔹 Practice Activity</h3>
-                            <iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-                        `
+                    id: 'a1_m2',
+                    title: 'Module 2: Daily Work',
+                    lessons: [{
+                        id: 'a1_l3',
+                        title: 'Daily routines at work',
+                        type: 'lesson',
+                        content: `
+                                <h3>🔹 Daily routines at work</h3>
+                                <iframe src="https://app.lumi.education/api/v1/run/Zc_45y/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                            `
+                    }, {
+                        id: 'a1_l4',
+                        title: 'Daily routines dictation',
+                        type: 'lesson',
+                        content: `
+                                <h3>🔹 Daily routines dictation</h3>
+                                <iframe src="https://app.lumi.education/api/v1/run/0WviSL/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                            `
+                    }, {
+                        id: 'a1_q2',
+                        title: 'Daily Work Quiz',
+                        type: 'quiz',
+                        questions: [
+                            { question: 'What time do most hotel workers start their shift?', options: ['A) 6:00 AM', 'B) 9:00 AM', 'C) 12:00 PM'], correct: 0 },
+                            { question: 'What is a "shift"?', options: ['A) A work period', 'B) A break', 'C) A meeting'], correct: 0 }
+                        ]
+                    }]
                 }, {
-                    id: 'q2',
-                    title: 'Vocabulary Quiz',
-                    type: 'quiz',
-                    questions: [
-                        { question: 'To "break the ice" means to:', options: ['A) Start a conversation',
-                                'B) Break something frozen', 'C) End a fight'
-                            ], correct: 0 },
-                        { question: 'If something "costs an arm and a leg", it is:', options: ['A) Cheap',
-                                'B) Expensive', 'C) Free'
-                            ], correct: 1 }
-                    ]
+                    id: 'a1_m3',
+                    title: 'Module 3: Listening Comprehension',
+                    lessons: [{
+                        id: 'a1_l5',
+                        title: "Zoe's first day at work",
+                        type: 'lesson',
+                        content: `
+                                <h3>🔹 Zoe's first day at work</h3>
+                                <p><strong>🎧 Listen first:</strong></p>
+                                <audio controls style="width:100%; margin:10px 0;">
+                                    <source src="mp3/2_6.mp3" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
+                                <h3>📝 Activity 1</h3>
+                                <iframe src="https://app.lumi.education/api/v1/run/IOyPZA/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                                <h3>📝 Activity 2</h3>
+                                <iframe src="https://app.lumi.education/api/v1/run/RgqSXb/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                            `
+                    }, {
+                        id: 'a1_q3',
+                        title: 'Listening Quiz',
+                        type: 'quiz',
+                        questions: [
+                            { question: 'What department does Zoe work in?', options: ['A) Reception', 'B) Housekeeping', 'C) Restaurant'], correct: 0 },
+                            { question: 'Who helps Zoe on her first day?', options: ['A) The manager', 'B) A colleague', 'C) The guest'], correct: 1 }
+                        ]
+                    }]
                 }]
-            }]
+            },
+            b2: {
+                title: 'B2 Exam Prep',
+                icon: '📚',
+                modules: [{
+                    id: 'b2_m1',
+                    title: 'Module 1: Grammar Foundations',
+                    lessons: [{
+                        id: 'b2_l1',
+                        title: 'Present Tenses Review',
+                        type: 'lesson',
+                        content: `
+                                <h3>🔹 Present Simple vs. Present Continuous</h3>
+                                <p><strong>Present Simple</strong> – habits, facts, routines.<br>
+                                <em>Example:</em> "I <strong>work</strong> from 9 to 5."</p>
+                                <p><strong>Present Continuous</strong> – actions happening now, temporary situations.<br>
+                                <em>Example:</em> "I <strong>am working</strong> on a new project this week."</p>
+                                <h3>🔹 Practice Activity</h3>
+                                <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                            `
+                    }, {
+                        id: 'b2_q1',
+                        title: 'Tenses Quiz',
+                        type: 'quiz',
+                        questions: [
+                            { question: 'She ______ to work every day by bus.', options: ['A) go', 'B) goes', 'C) is going'], correct: 1 },
+                            { question: 'Listen! Someone ______ the piano.', options: ['A) play', 'B) plays', 'C) is playing'], correct: 2 },
+                            { question: 'I ______ him for years.', options: ['A) know', 'B) have known', 'C) knew'], correct: 1 }
+                        ]
+                    }]
+                }, {
+                    id: 'b2_m2',
+                    title: 'Module 2: Vocabulary & Expressions',
+                    lessons: [{
+                        id: 'b2_l2',
+                        title: 'Idiomatic Expressions',
+                        type: 'lesson',
+                        content: `
+                                <h3>🔹 Common Idioms for B2</h3>
+                                <ul>
+                                    <li><strong>Break the ice</strong> – start a conversation.</li>
+                                    <li><strong>Hit the nail on the head</strong> – say exactly the right thing.</li>
+                                    <li><strong>Cost an arm and a leg</strong> – very expensive.</li>
+                                </ul>
+                                <h3>🔹 Practice Activity</h3>
+                                <iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                            `
+                    }, {
+                        id: 'b2_q2',
+                        title: 'Vocabulary Quiz',
+                        type: 'quiz',
+                        questions: [
+                            { question: 'To "break the ice" means to:', options: ['A) Start a conversation', 'B) Break something frozen', 'C) End a fight'], correct: 0 },
+                            { question: 'If something "costs an arm and a leg", it is:', options: ['A) Cheap', 'B) Expensive', 'C) Free'], correct: 1 }
+                        ]
+                    }]
+                }]
+            },
+            french: {
+                title: 'French Bac/LLCE',
+                icon: '🇫🇷',
+                modules: [{
+                    id: 'fr_m1',
+                    title: 'Module 1: French Grammar',
+                    lessons: [{
+                        id: 'fr_l1',
+                        title: 'French Grammar Basics',
+                        type: 'lesson',
+                        content: `
+                                <h3>🔹 French Grammar Basics</h3>
+                                <p><strong>Le présent</strong> – actions happening now.</p>
+                                <p><em>Example:</em> "Je <strong>parle</strong> français."</p>
+                                <h3>🔹 Practice Activity</h3>
+                                <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                            `
+                    }, {
+                        id: 'fr_q1',
+                        title: 'French Quiz',
+                        type: 'quiz',
+                        questions: [
+                            { question: 'How do you say "I speak French"?', options: ['A) Je parle français', 'B) Je parles français', 'C) Je parler français'], correct: 0 },
+                            { question: 'What is "la maison" in English?', options: ['A) The house', 'B) The school', 'C) The car'], correct: 0 }
+                        ]
+                    }]
+                }]
+            }
         };
 
         // ============================================================
         // 2. STATE & HELPERS
         // ============================================================
-        function getProgress() {
-            const saved = localStorage.getItem('lmsProgress');
+        function getProgress(courseId) {
+            const saved = localStorage.getItem(`lmsProgress_${courseId}`);
             return saved ? JSON.parse(saved) : {};
         }
 
-        function saveProgress(prog) {
-            localStorage.setItem('lmsProgress', JSON.stringify(prog));
+        function saveProgress(courseId, prog) {
+            localStorage.setItem(`lmsProgress_${courseId}`, JSON.stringify(prog));
         }
 
-        function isCompleted(lessonId) {
-            const prog = getProgress();
+        function isCompleted(courseId, lessonId) {
+            const prog = getProgress(courseId);
             return prog[lessonId] && prog[lessonId].completed === true;
         }
 
-        function markCompleted(lessonId) {
-            const prog = getProgress();
+        function markCompleted(courseId, lessonId) {
+            const prog = getProgress(courseId);
             prog[lessonId] = { completed: true };
-            saveProgress(prog);
+            saveProgress(courseId, prog);
         }
 
         function showView(viewId) {
@@ -765,11 +949,46 @@
 
         function showDashboard() {
             showView('viewDashboard');
-            renderDashboard();
+            renderDashboard(currentCourse);
+        }
+
+        function getCourseData(courseId) {
+            return courseData[courseId] || courseData.a1;
         }
 
         // ============================================================
-        // 3. LOGOUT
+        // 3. COURSE SWITCHING
+        // ============================================================
+        function switchCourse(courseId) {
+            currentCourse = courseId;
+
+            // Update button states
+            document.querySelectorAll('.course-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.course === courseId);
+            });
+
+            // Update header title
+            const course = getCourseData(courseId);
+            document.getElementById('courseTitle').textContent = course.title;
+
+            // Reset views
+            showView('viewDashboard');
+
+            // Check if unlocked
+            if (localStorage.getItem(`lmsUnlocked_${courseId}`) === 'true') {
+                document.getElementById('lmsGate').style.display = 'none';
+                document.getElementById('lmsViews').style.display = 'block';
+                renderDashboard(courseId);
+            } else {
+                document.getElementById('lmsGate').style.display = 'block';
+                document.getElementById('lmsViews').style.display = 'none';
+                document.getElementById('lmsPassword').value = '';
+                document.getElementById('lmsGateError').textContent = '';
+            }
+        }
+
+        // ============================================================
+        // 4. LOGOUT
         // ============================================================
         document.getElementById('logoutBtn').addEventListener('click', function(e) {
             e.preventDefault();
@@ -781,7 +1000,7 @@
         });
 
         // ============================================================
-        // 4. LOAD STUDENT NAME
+        // 5. LOAD STUDENT NAME
         // ============================================================
         function loadStudentName() {
             const token = localStorage.getItem('authToken');
@@ -800,94 +1019,162 @@
         }
 
         // ============================================================
-        // 5. GENERATE REPORT
+        // 6. GENERATE REPORT
         // ============================================================
-        function generateReport() {
-            const prog = getProgress();
+        function generateReport(courseId) {
+            const course = getCourseData(courseId);
+            const prog = getProgress(courseId);
             let report = "=== Progress Report ===\n";
+            report += `Course: ${course.title}\n`;
             report += "Generated: " + new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString() + "\n\n";
 
-            courseData.modules.forEach(mod => {
+            let totalLessons = 0;
+            let completedLessons = 0;
+
+            course.modules.forEach(mod => {
                 report += `📌 ${mod.title}\n`;
                 mod.lessons.forEach(lesson => {
+                    totalLessons++;
                     const data = prog[lesson.id];
                     if (lesson.type === 'quiz') {
                         if (data && data.completed) {
+                            completedLessons++;
                             report += `  🧠 ${lesson.title}: ✅ Completed (Score: ${data.score}/${data.total})\n`;
                         } else {
                             report += `  🧠 ${lesson.title}: ⬜ Not started\n`;
                         }
                     } else {
-                        const status = data && data.completed ? "✅ Completed" : "⬜ Not started";
-                        report += `  📖 ${lesson.title}: ${status}\n`;
+                        if (data && data.completed) {
+                            completedLessons++;
+                            report += `  📖 ${lesson.title}: ✅ Completed\n`;
+                        } else {
+                            report += `  📖 ${lesson.title}: ⬜ Not started\n`;
+                        }
                     }
                 });
                 report += "\n";
             });
+
+            const progress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+            report += `📊 Overall Progress: ${progress}% (${completedLessons}/${totalLessons} lessons completed)\n`;
             report += "=== End of Report ===";
             return report;
         }
 
         // ============================================================
-        // 6. DOWNLOAD & SEND PROGRESS
+        // 7. SEND PROGRESS TO BACKEND
         // ============================================================
-        function downloadProgress() {
-            const report = generateReport();
-            const blob = new Blob([report], { type: 'text/plain' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `progress_${new Date().toISOString().slice(0,10)}.txt`;
-            a.click();
-        }
+        async function sendProgress() {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                alert('Please log in first.');
+                return;
+            }
 
-        function sendProgress() {
-            const report = generateReport();
-            document.getElementById('reportSubject').value = 'Progress Report – Student Course';
-            document.getElementById('reportBody').value = report;
+            const course = getCourseData(currentCourse);
+            const prog = getProgress(currentCourse);
+            const report = generateReport(currentCourse);
 
-            const form = document.getElementById('reportForm');
+            let totalLessons = 0;
+            let completedLessons = 0;
+            let quizScores = {};
+
+            course.modules.forEach(mod => {
+                mod.lessons.forEach(lesson => {
+                    totalLessons++;
+                    const data = prog[lesson.id];
+                    if (data && data.completed) {
+                        completedLessons++;
+                        if (lesson.type === 'quiz') {
+                            quizScores[lesson.id] = {
+                                title: lesson.title,
+                                score: data.score || 0,
+                                total: data.total || 0
+                            };
+                        }
+                    }
+                });
+            });
+
+            const overallProgress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+
             const btn = document.querySelector('.send-btn');
             if (btn) {
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                 btn.disabled = true;
             }
 
-            fetch(form.action, {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/student/progress-report`, {
                     method: 'POST',
-                    body: new FormData(form),
-                    headers: { 'Accept': 'application/json' }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        alert('✅ Progress report sent successfully! Your teacher will receive it shortly.');
-                    } else {
-                        alert('❌ Sending failed. Please use the Download button and email it manually.');
-                    }
-                    if (btn) {
-                        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Progress';
-                        btn.disabled = false;
-                    }
-                })
-                .catch(() => {
-                    alert('❌ Network error. Please use the Download button and email it manually.');
-                    if (btn) {
-                        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Progress';
-                        btn.disabled = false;
-                    }
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        courseName: course.title,
+                        progress: overallProgress,
+                        completedLessons: completedLessons,
+                        totalLessons: totalLessons,
+                        quizScores: quizScores,
+                        reportText: report
+                    })
                 });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('✅ Progress report sent successfully! Your teacher will see it.');
+                } else {
+                    alert('❌ Failed to send: ' + (data.message || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error sending progress:', error);
+                alert('❌ Network error. Please try again.');
+            } finally {
+                if (btn) {
+                    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Progress';
+                    btn.disabled = false;
+                }
+            }
         }
 
         // ============================================================
-        // 7. RENDER DASHBOARD
+        // 8. RENDER DASHBOARD
         // ============================================================
-        function renderDashboard() {
+        function renderDashboard(courseId) {
+            const course = getCourseData(courseId);
             const container = document.getElementById('dashboardContent');
+            const prog = getProgress(courseId);
+
+            // Calculate progress
+            let totalLessons = 0;
+            let completedLessons = 0;
+            course.modules.forEach(mod => {
+                mod.lessons.forEach(lesson => {
+                    totalLessons++;
+                    if (prog[lesson.id] && prog[lesson.id].completed) {
+                        completedLessons++;
+                    }
+                });
+            });
+            const overallProgress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+
             let html = `
                     <div class="dashboard-header">
-                        <h2><i class="fas fa-list-ul"></i> Course Dashboard</h2>
+                        <h2><i class="fas fa-list-ul"></i> ${course.icon} ${course.title}</h2>
                         <div class="dashboard-actions">
                             <button onclick="downloadProgress()"><i class="fas fa-download"></i> Download Progress</button>
                             <button class="send-btn" onclick="sendProgress()"><i class="fas fa-paper-plane"></i> Send Progress</button>
+                        </div>
+                    </div>
+                    <div style="background:#121212; border-radius:16px; padding:16px 20px; margin-bottom:20px; border:1px solid #1a4a4a;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                            <span style="color:#88dddd;"><i class="fas fa-chart-line"></i> Overall Progress</span>
+                            <span style="color:#00ffff; font-weight:700;">${overallProgress}% (${completedLessons}/${totalLessons})</span>
+                        </div>
+                        <div style="width:100%; height:6px; background:#1a1a1a; border-radius:4px; margin-top:8px; overflow:hidden;">
+                            <div style="height:100%; background:linear-gradient(90deg, #00ffff, #ffcc00); border-radius:4px; width:${overallProgress}%; transition:width 0.5s;"></div>
                         </div>
                     </div>
                     <div id="moduleList"></div>
@@ -896,14 +1183,13 @@
 
             const moduleList = document.getElementById('moduleList');
             let listHtml = '';
-            courseData.modules.forEach(mod => {
+            course.modules.forEach(mod => {
                 listHtml += `<div class="module-card"><h3><i class="fas fa-folder-open"></i> ${mod.title}</h3>`;
                 mod.lessons.forEach(lesson => {
-                    const done = isCompleted(lesson.id) ? 'done' : '';
-                    let label = isCompleted(lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ?
+                    const done = isCompleted(courseId, lesson.id) ? 'done' : '';
+                    let label = isCompleted(courseId, lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ?
                         '🧠 Quiz' : '📖 Lesson');
                     if (lesson.type === 'quiz') {
-                        const prog = getProgress();
                         const data = prog[lesson.id];
                         if (data && data.completed) {
                             label = `✅ Completed (${data.score}/${data.total})`;
@@ -911,7 +1197,7 @@
                     }
                     const icon = lesson.type === 'quiz' ? '🧠' : '📖';
                     listHtml += `
-                            <div class="lesson-item" onclick="openLesson('${mod.id}','${lesson.id}')">
+                            <div class="lesson-item" onclick="openLesson('${courseId}','${mod.id}','${lesson.id}')">
                                 <span>${icon} ${lesson.title}</span>
                                 <span class="status ${done}">${label}</span>
                             </div>
@@ -923,42 +1209,43 @@
         }
 
         // ============================================================
-        // 8. OPEN LESSON / QUIZ
+        // 9. OPEN LESSON / QUIZ
         // ============================================================
-        function openLesson(moduleId, lessonId) {
-            const module = courseData.modules.find(m => m.id === moduleId);
+        function openLesson(courseId, moduleId, lessonId) {
+            const course = getCourseData(courseId);
+            const module = course.modules.find(m => m.id === moduleId);
             const lesson = module.lessons.find(l => l.id === lessonId);
             if (lesson.type === 'quiz') {
                 showView('viewQuiz');
-                renderQuiz(lesson);
+                renderQuiz(courseId, lesson);
             } else {
                 showView('viewLesson');
-                renderLesson(lesson, moduleId);
+                renderLesson(courseId, lesson, moduleId);
             }
         }
 
-        function renderLesson(lesson, moduleId) {
+        function renderLesson(courseId, lesson, moduleId) {
             const container = document.getElementById('lessonContent');
-            const done = isCompleted(lesson.id);
+            const done = isCompleted(courseId, lesson.id);
             container.innerHTML = `
                     <h2 style="color: #00ffff;"><i class="fas fa-book"></i> ${lesson.title}</h2>
                     <div class="lesson-content">${lesson.content}</div>
                     <div class="nav-row">
                         <button onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Dashboard</button>
                         <div>
-                            ${!done ? `<button class="complete-btn" onclick="markLessonComplete('${lesson.id}')"><i class="fas fa-check"></i> Mark as Complete</button>` : '<span style="color:#00ff88; font-weight:600;"><i class="fas fa-check-circle"></i> Completed</span>'}
+                            ${!done ? `<button class="complete-btn" onclick="markLessonComplete('${courseId}','${lesson.id}')"><i class="fas fa-check"></i> Mark as Complete</button>` : '<span class="completed-text"><i class="fas fa-check-circle"></i> Completed</span>'}
                         </div>
                     </div>
                 `;
         }
 
-        function markLessonComplete(lessonId) {
-            markCompleted(lessonId);
+        function markLessonComplete(courseId, lessonId) {
+            markCompleted(courseId, lessonId);
             alert('✅ Lesson marked as complete!');
             showDashboard();
         }
 
-        function renderQuiz(quiz) {
+        function renderQuiz(courseId, quiz) {
             const container = document.getElementById('quizContent');
             let html = `<h2 style="color: #00ffff;"><i class="fas fa-brain"></i> ${quiz.title}</h2>`;
             html += `<form id="quizForm">`;
@@ -967,4 +1254,150 @@
                         <div class="question-block">
                             <p><strong>${idx+1}. ${q.question}</strong></p>
                             ${q.options.map((opt, oi) => `
-                                <label><input type="radio
+                                <label><input type="radio" name="q${idx}" value="${oi}"> ${opt}</label>
+                            `).join('')}
+                        </div>
+                    `;
+            });
+            html += `
+                    <button type="button" style="background:rgba(255,204,0,0.1); color:#ffcc00; border:1px solid rgba(255,204,0,0.3); padding:14px 32px; border-radius:60px; font-weight:700; cursor:pointer; transition:all 0.3s; font-size:1rem;" 
+                            onmouseover="this.style.background='#ffcc00'; this.style.color='#000';" 
+                            onmouseout="this.style.background='rgba(255,204,0,0.1)'; this.style.color='#ffcc00';" 
+                            onclick="submitQuiz('${courseId}','${quiz.id}')">
+                        <i class="fas fa-check"></i> Check Answers
+                    </button>
+                </form>
+                <div id="quizResult" class="quiz-result"></div>
+                <div class="nav-row" style="margin-top:20px;">
+                    <button onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Dashboard</button>
+                </div>
+            `;
+            container.innerHTML = html;
+        }
+
+        // ============================================================
+        // 10. SUBMIT QUIZ
+        // ============================================================
+        function submitQuiz(courseId, quizId) {
+            const course = getCourseData(courseId);
+            let quizData = null;
+            for (let m of course.modules) {
+                const found = m.lessons.find(l => l.id === quizId);
+                if (found) { quizData = found; break; }
+            }
+            if (!quizData) return;
+
+            const questions = quizData.questions;
+            let score = 0;
+            let allAnswered = true;
+
+            for (let i = 0; i < questions.length; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (!selected) { allAnswered = false; continue; }
+                if (parseInt(selected.value) === questions[i].correct) score++;
+            }
+
+            const resultDiv = document.getElementById('quizResult');
+            if (!allAnswered) {
+                resultDiv.className = 'quiz-result fail';
+                resultDiv.innerHTML = '<p style="color:#ff4444;">⚠️ Please answer all questions before submitting.</p>';
+                return;
+            }
+
+            const total = questions.length;
+            const passed = score >= total * 0.6;
+
+            const prog = getProgress(courseId);
+            prog[quizId] = { completed: true, score: score, total: total };
+            saveProgress(courseId, prog);
+
+            if (passed) {
+                resultDiv.className = 'quiz-result pass';
+                resultDiv.innerHTML = `<h3>✅ You scored ${score}/${total}. Well done!</h3>`;
+            } else {
+                resultDiv.className = 'quiz-result fail';
+                resultDiv.innerHTML = `<h3>❌ You scored ${score}/${total}. Review the lessons and try again.</h3>`;
+            }
+            document.querySelectorAll('#quizForm input[type="radio"]').forEach(el => el.disabled = true);
+        }
+
+        // ============================================================
+        // 11. DOWNLOAD PROGRESS
+        // ============================================================
+        function downloadProgress() {
+            const report = generateReport(currentCourse);
+            const blob = new Blob([report], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `progress_${currentCourse}_${new Date().toISOString().slice(0,10)}.txt`;
+            a.click();
+        }
+
+        // ============================================================
+        // 12. PASSWORD GATE
+        // ============================================================
+        function unlockLMS() {
+            const input = document.getElementById('lmsPassword');
+            const error = document.getElementById('lmsGateError');
+            if (input.value.trim() === ACCESS_CODE) {
+                localStorage.setItem(`lmsUnlocked_${currentCourse}`, 'true');
+                document.getElementById('lmsGate').style.display = 'none';
+                document.getElementById('lmsViews').style.display = 'block';
+                renderDashboard(currentCourse);
+            } else {
+                error.innerText = '❌ Incorrect access code. Please try again.';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        document.getElementById('lmsPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') unlockLMS();
+        });
+
+        // ============================================================
+        // 13. BACK TO TOP BUTTON
+        // ============================================================
+        const topBtn = document.getElementById("topBtn");
+        window.onscroll = function() {
+            if (window.scrollY > 400) {
+                topBtn.style.display = "block";
+            } else {
+                topBtn.style.display = "none";
+            }
+        };
+        topBtn.onclick = function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // ============================================================
+        // 14. INIT
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStudentName();
+
+            // Check if any course is unlocked
+            let hasUnlocked = false;
+            for (let key in courseData) {
+                if (localStorage.getItem(`lmsUnlocked_${key}`) === 'true') {
+                    hasUnlocked = true;
+                    break;
+                }
+            }
+
+            if (hasUnlocked) {
+                // Show the first unlocked course
+                for (let key in courseData) {
+                    if (localStorage.getItem(`lmsUnlocked_${key}`) === 'true') {
+                        switchCourse(key);
+                        break;
+                    }
+                }
+            } else {
+                // Show A1 with gate
+                switchCourse('a1');
+            }
+        });
+    </script>
+</body>
+</html>
