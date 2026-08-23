@@ -957,9 +957,24 @@
             renderDashboard(currentCourse);
         }
 
-        function getCourseData(courseId) {
-            return courseData[courseId] || courseData.a1;
+        // Replace the existing courseData object with this:
+function getCourseDataFromStorage(courseId) {
+    const COURSES_KEY = 'lmsCourseData';
+    const saved = localStorage.getItem(COURSES_KEY);
+    if (saved) {
+        try {
+            const all = JSON.parse(saved);
+            return all[courseId] || all.a1;
+        } catch (e) {
+            // Fallback to default if parsing fails
         }
+    }
+    // Default fallback (hardcoded as before)
+    return defaultCourseData[courseId] || defaultCourseData.a1;
+}
+
+// Then, wherever you use courseData[currentCourse], replace with:
+const course = getCourseDataFromStorage(currentCourse);
 
         // ============================================================
         // 3. COURSE SWITCHING
