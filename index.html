@@ -1130,26 +1130,9 @@
             👨‍🏫 Teacher
         </a>
 
-        <!-- ====== DASHBOARD & LOGOUT (hidden by default) ====== -->
-        <div id="authenticatedButtons" style="display: none; gap: 6px;">
-            <!-- ====== FIXED DASHBOARD LINK (removed the stray ...) ====== -->
-            <a href="student-dashboard.html" id="dashboardLink" 
-               style="display:inline-block; padding:5px 16px; border:1px solid #00ff88; border-radius:30px;
-                      color:#00ff88; text-decoration:none; font-size:0.8rem; font-weight:600;
-                      background: rgba(0,255,136,0.06); transition: all 0.3s;"
-               onmouseover="this.style.background='#00ff88'; this.style.color='#000';"
-               onmouseout="this.style.background='rgba(0,255,136,0.06)'; this.style.color='#00ff88';">
-                📊 Dashboard
-            </a>
-            <a href="#" id="logoutLink" onclick="handleLogout(); return false;" 
-               style="display:inline-block; padding:5px 16px; border:1px solid #ff6666; border-radius:30px;
-                      color:#ff6666; text-decoration:none; font-size:0.8rem; font-weight:600;
-                      background: rgba(255,102,102,0.06); transition: all 0.3s;"
-               onmouseover="this.style.background='#ff6666'; this.style.color='#000';"
-               onmouseout="this.style.background='rgba(255,102,102,0.06)'; this.style.color='#ff6666';">
-                🚪 Logout
-            </a>
-        </div>
+        <!-- ====== DASHBOARD & LOGOUT (REMOVED – no more green/red buttons) ====== -->
+        <!-- The old authenticatedButtons div has been removed entirely -->
+
     </div>
 </div>
 
@@ -2079,45 +2062,25 @@
     // UPDATE UI BASED ON LOGIN STATUS (FIXED)
     // ============================================
 
-    function updateAuthUI() {
-        const isLoggedIn = !!localStorage.getItem('authToken');
-        const userRole = localStorage.getItem('userRole') || 'student';
-        const studentAuthBtns = document.getElementById('studentAuthButtons');
-        const authBtns = document.getElementById('authenticatedButtons');
-        const dashboardLink = document.getElementById('dashboardLink');
-        const logoutLink = document.getElementById('logoutLink');
-        const teacherLoginBtn = document.getElementById('teacherLoginBtn');
+   function updateAuthUI() {
+    const isLoggedIn = !!localStorage.getItem('authToken');
+    const userRole = localStorage.getItem('userRole') || 'student';
+    const studentAuthBtns = document.getElementById('studentAuthButtons');
+    const teacherLoginBtn = document.getElementById('teacherLoginBtn');
 
-        if (isLoggedIn) {
-            // Hide student auth buttons
-            if (studentAuthBtns) studentAuthBtns.style.display = 'none';
-            
-            // Show dashboard & logout
-            if (authBtns) authBtns.style.display = 'flex';
-            if (dashboardLink) {
-                dashboardLink.style.display = 'inline-block';
-            }
-            if (logoutLink) logoutLink.style.display = 'inline-block';
-
-            // HIDE teacher login button when ANYONE is logged in (student OR teacher)
-            if (teacherLoginBtn) {
-                teacherLoginBtn.style.display = 'none';
-            }
-        } else {
-            // Show student auth buttons
-            if (studentAuthBtns) studentAuthBtns.style.display = 'flex';
-            
-            // Hide dashboard & logout
-            if (authBtns) authBtns.style.display = 'none';
-            if (dashboardLink) dashboardLink.style.display = 'none';
-            if (logoutLink) logoutLink.style.display = 'none';
-
-            // Show teacher login button when logged out
-            if (teacherLoginBtn) {
-                teacherLoginBtn.style.display = 'inline-block';
-            }
-        }
+    if (isLoggedIn) {
+        // Hide student auth buttons
+        if (studentAuthBtns) studentAuthBtns.style.display = 'none';
+        // Hide teacher login button
+        if (teacherLoginBtn) teacherLoginBtn.style.display = 'none';
+        // No more authenticated buttons – they've been removed
+    } else {
+        // Show student auth buttons
+        if (studentAuthBtns) studentAuthBtns.style.display = 'flex';
+        // Show teacher login button
+        if (teacherLoginBtn) teacherLoginBtn.style.display = 'inline-block';
     }
+}
 		updateAuthUI();
 
     // ============================================
@@ -2339,10 +2302,8 @@
                     messageEl.style.color = '#00ff88';
                     messageEl.textContent = '✅ Account created!';
                     updateAuthUI();
-                    setTimeout(() => {
-    closeModalById('signupModal');
-    window.location.href = 'student-dashboard.html';
-}, 1500);
+                    closeModalById('signupModal');
+                    window.location.href = 'student-dashboard.html';
                 } else {
                     messageEl.textContent = '❌ ' + (data.message || 'Signup failed');
                 }
@@ -2420,10 +2381,8 @@
                     messageEl.style.color = '#00ff88';
                     messageEl.textContent = '✅ Login successful!';
                     updateAuthUI();
-                    setTimeout(() => {
-    closeModalById('loginModal');
-    window.location.href = 'student-dashboard.html';
-}, 1500);
+                    closeModalById('loginModal');
+                    window.location.href = 'student-dashboard.html';
                 } else {
                     messageEl.textContent = '❌ ' + (data.message || 'Login failed');
                 }
