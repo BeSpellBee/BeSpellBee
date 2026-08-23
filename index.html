@@ -2410,9 +2410,9 @@
                     messageEl.textContent = '✅ Login successful!';
                     updateAuthUI();
                     setTimeout(() => {
-                        closeModalById('loginModal');
-                        location.reload();
-                    }, 1500);
+    closeModalById('loginModal');
+    window.location.href = 'student-dashboard.html';
+}, 1500);
                 } else {
                     messageEl.textContent = '❌ ' + (data.message || 'Login failed');
                 }
