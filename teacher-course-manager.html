@@ -7,8 +7,9 @@
     <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-        /* ... (same as before, no changes) ... */
-        /* Keep the existing styles exactly as they were */
+        /* ... (same styles as before – keep unchanged) ... */
+        /* For brevity, I'm not repeating the full CSS here – use the same as earlier */
+        /* But you can copy the full CSS from the previous version – it's identical */
         * {
             margin: 0;
             padding: 0;
@@ -254,7 +255,6 @@
             display: block;
         }
 
-        /* Modal styles */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -436,7 +436,6 @@
             <a href="teacher-dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
         </div>
 
-        <!-- Course Selector -->
         <div class="course-selector" id="courseSelector">
             <button class="course-btn active" data-course="a1" onclick="switchCourse('a1')">
                 <i class="fas fa-flag"></i> A1 Beginner
@@ -449,7 +448,6 @@
             </button>
         </div>
 
-        <!-- Course Editor -->
         <div id="courseEditor">
             <div id="modulesContainer"></div>
             <button class="add-btn" onclick="openAddModuleModal()">
@@ -459,29 +457,30 @@
 
     </div>
 
-    <!-- ====== MODAL (Add/Edit) ====== -->
+    <!-- ====== MODAL ====== -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <h2 id="modalTitle">Add Module</h2>
             <p class="sub" id="modalSub">Create a new module for your course.</p>
-            <form id="modalForm">
+            <!-- ✅ ADD novalidate to the form -->
+            <form id="modalForm" novalidate>
                 <input type="hidden" id="modalType" value="module">
                 <input type="hidden" id="editModuleId" value="">
                 <input type="hidden" id="editLessonId" value="">
 
                 <div class="form-group" id="moduleNameGroup">
                     <label for="moduleName">Module Title</label>
-                    <input type="text" id="moduleName" placeholder="e.g. Module 1: Grammar Foundations" required>
+                    <input type="text" id="moduleName" placeholder="e.g. Module 1: Grammar Foundations">
                 </div>
 
                 <div class="form-group" id="lessonTitleGroup" style="display:none;">
                     <label for="lessonTitle">Lesson Title</label>
-                    <input type="text" id="lessonTitle" placeholder="e.g. Present Tenses Review" required>
+                    <input type="text" id="lessonTitle" placeholder="e.g. Present Tenses Review">
                 </div>
 
                 <div class="form-group" id="lessonTypeGroup" style="display:none;">
                     <label for="lessonType">Lesson Type</label>
-                    <select id="lessonType" required>
+                    <select id="lessonType">
                         <option value="lesson">📖 Lesson</option>
                         <option value="quiz">🧠 Quiz</option>
                     </select>
@@ -531,9 +530,6 @@
         const COURSES_KEY = 'lmsCourseData';
         let currentCourse = 'a1';
 
-        // ============================================================
-        // DEFAULT COURSE DATA (fallback if nothing in localStorage)
-        // ============================================================
         const defaultCourseData = {
             a1: {
                 title: 'A1 Beginner',
@@ -605,18 +601,10 @@
             }
         };
 
-        // ============================================================
-        // LOAD / SAVE COURSE DATA
-        // ============================================================
         function loadCourseData() {
             const saved = localStorage.getItem(COURSES_KEY);
             if (saved) {
-                try {
-                    return JSON.parse(saved);
-                } catch (e) {
-                    console.error('Error parsing course data, using defaults');
-                    return JSON.parse(JSON.stringify(defaultCourseData));
-                }
+                try { return JSON.parse(saved); } catch(e) { return JSON.parse(JSON.stringify(defaultCourseData)); }
             }
             return JSON.parse(JSON.stringify(defaultCourseData));
         }
@@ -630,44 +618,28 @@
             return all[currentCourse] || all.a1;
         }
 
-        // ============================================================
-        // CONTENT CLEANER: Strip <html>, <head>, <body> if present
-        // ============================================================
+        // Content cleaner
         function cleanLessonContent(raw) {
             if (!raw || raw.trim() === '') return raw;
-            // If it looks like a full HTML document, extract the body
             const trimmed = raw.trim();
             if (trimmed.startsWith('<!DOCTYPE') || trimmed.startsWith('<html')) {
-                // Use DOMParser to extract body content
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(raw, 'text/html');
-                // Get body innerHTML, or fallback to the whole string if parsing fails
-                const bodyContent = doc.body ? doc.body.innerHTML : raw;
-                return bodyContent;
+                return doc.body ? doc.body.innerHTML : raw;
             }
             return raw;
         }
 
-        // ============================================================
-        // RENDER COURSE
-        // ============================================================
+        // RENDER
         function renderCourse() {
             const course = getCourseData();
             const container = document.getElementById('modulesContainer');
-            const courseTitle = course.title || 'Course';
-
             if (!course.modules || course.modules.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-folder-open"></i>
-                        <p>No modules yet. Click "Add New Module" to get started.</p>
-                    </div>
-                `;
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-folder-open"></i><p>No modules yet. Click "Add New Module" to get started.</p></div>`;
                 return;
             }
-
             let html = '';
-            course.modules.forEach((mod, modIndex) => {
+            course.modules.forEach(mod => {
                 html += `
                     <div class="module-card">
                         <div class="module-header">
@@ -679,11 +651,10 @@
                         </div>
                         <div class="module-lessons">
                 `;
-
                 if (!mod.lessons || mod.lessons.length === 0) {
                     html += `<p style="color:#555; font-size:0.85rem; padding:8px 0;">No lessons yet.</p>`;
                 } else {
-                    mod.lessons.forEach((lesson, lessonIndex) => {
+                    mod.lessons.forEach(lesson => {
                         const typeLabel = lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson';
                         const typeClass = lesson.type === 'quiz' ? 'quiz' : '';
                         html += `
@@ -700,7 +671,6 @@
                         `;
                     });
                 }
-
                 html += `
                             <button class="add-btn" onclick="openAddLessonModal('${mod.id}')">
                                 <i class="fas fa-plus-circle"></i> Add Lesson to "${mod.title}"
@@ -709,13 +679,9 @@
                     </div>
                 `;
             });
-
             container.innerHTML = html;
         }
 
-        // ============================================================
-        // COURSE SWITCHING
-        // ============================================================
         function switchCourse(courseId) {
             currentCourse = courseId;
             document.querySelectorAll('.course-btn').forEach(btn => {
@@ -724,22 +690,18 @@
             renderCourse();
         }
 
-        // ============================================================
         // MODULE CRUD
-        // ============================================================
         function openAddModuleModal() {
             document.getElementById('modalType').value = 'module';
             document.getElementById('editModuleId').value = '';
             document.getElementById('editLessonId').value = '';
             document.getElementById('modalTitle').textContent = 'Add Module';
             document.getElementById('modalSub').textContent = 'Create a new module for your course.';
-
             document.getElementById('moduleNameGroup').style.display = 'block';
             document.getElementById('lessonTitleGroup').style.display = 'none';
             document.getElementById('lessonTypeGroup').style.display = 'none';
             document.getElementById('lessonContentGroup').style.display = 'none';
             document.getElementById('quizQuestionsGroup').style.display = 'none';
-
             document.getElementById('moduleName').value = '';
             document.getElementById('modalSubmitBtn').textContent = 'Add Module';
             document.getElementById('modalOverlay').classList.add('active');
@@ -749,19 +711,16 @@
             const course = getCourseData();
             const module = course.modules.find(m => m.id === moduleId);
             if (!module) return;
-
             document.getElementById('modalType').value = 'module';
             document.getElementById('editModuleId').value = moduleId;
             document.getElementById('editLessonId').value = '';
             document.getElementById('modalTitle').textContent = 'Edit Module';
             document.getElementById('modalSub').textContent = 'Update this module.';
-
             document.getElementById('moduleNameGroup').style.display = 'block';
             document.getElementById('lessonTitleGroup').style.display = 'none';
             document.getElementById('lessonTypeGroup').style.display = 'none';
             document.getElementById('lessonContentGroup').style.display = 'none';
             document.getElementById('quizQuestionsGroup').style.display = 'none';
-
             document.getElementById('moduleName').value = module.title;
             document.getElementById('modalSubmitBtn').textContent = 'Save Changes';
             document.getElementById('modalOverlay').classList.add('active');
@@ -776,28 +735,22 @@
             renderCourse();
         }
 
-        // ============================================================
         // LESSON CRUD
-        // ============================================================
         function openAddLessonModal(moduleId) {
             document.getElementById('modalType').value = 'lesson';
             document.getElementById('editModuleId').value = moduleId;
             document.getElementById('editLessonId').value = '';
             document.getElementById('modalTitle').textContent = 'Add Lesson';
             document.getElementById('modalSub').textContent = 'Create a new lesson or quiz.';
-
             document.getElementById('moduleNameGroup').style.display = 'none';
             document.getElementById('lessonTitleGroup').style.display = 'block';
             document.getElementById('lessonTypeGroup').style.display = 'block';
             document.getElementById('lessonContentGroup').style.display = 'block';
             document.getElementById('quizQuestionsGroup').style.display = 'none';
-
             document.getElementById('lessonTitle').value = '';
             document.getElementById('lessonType').value = 'lesson';
             document.getElementById('lessonContent').value = '';
             document.getElementById('modalSubmitBtn').textContent = 'Add Lesson';
-
-            // Reset quiz questions
             document.getElementById('quizQuestionsContainer').innerHTML = `
                 <div class="question-item" style="background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;">
                     <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
@@ -814,8 +767,6 @@
                     </div>
                 </div>
             `;
-
-            // Show/hide quiz fields based on type
             toggleQuizFields('lesson');
             document.getElementById('modalOverlay').classList.add('active');
         }
@@ -826,24 +777,19 @@
             if (!module) return;
             const lesson = module.lessons.find(l => l.id === lessonId);
             if (!lesson) return;
-
             document.getElementById('modalType').value = 'lesson';
             document.getElementById('editModuleId').value = moduleId;
             document.getElementById('editLessonId').value = lessonId;
             document.getElementById('modalTitle').textContent = 'Edit Lesson';
             document.getElementById('modalSub').textContent = 'Update this lesson or quiz.';
-
             document.getElementById('moduleNameGroup').style.display = 'none';
             document.getElementById('lessonTitleGroup').style.display = 'block';
             document.getElementById('lessonTypeGroup').style.display = 'block';
             document.getElementById('lessonContentGroup').style.display = 'block';
-
             document.getElementById('lessonTitle').value = lesson.title;
             document.getElementById('lessonType').value = lesson.type || 'lesson';
-
             if (lesson.type === 'quiz' && lesson.questions) {
                 document.getElementById('quizQuestionsGroup').style.display = 'block';
-                // Load quiz questions
                 const container = document.getElementById('quizQuestionsContainer');
                 container.innerHTML = '';
                 lesson.questions.forEach((q, idx) => {
@@ -864,15 +810,11 @@
                     `;
                     container.appendChild(qDiv);
                 });
-                // Add an empty question if none
-                if (lesson.questions.length === 0) {
-                    addQuestionField();
-                }
+                if (lesson.questions.length === 0) addQuestionField();
             } else {
                 document.getElementById('quizQuestionsGroup').style.display = 'none';
                 document.getElementById('lessonContent').value = lesson.content || '';
             }
-
             toggleQuizFields(lesson.type || 'lesson');
             document.getElementById('modalSubmitBtn').textContent = 'Save Changes';
             document.getElementById('modalOverlay').classList.add('active');
@@ -889,9 +831,7 @@
             renderCourse();
         }
 
-        // ============================================================
-        // QUIZ HELPER FUNCTIONS
-        // ============================================================
+        // QUIZ HELPERS
         function addQuestionField() {
             const container = document.getElementById('quizQuestionsContainer');
             const qDiv = document.createElement('div');
@@ -916,10 +856,7 @@
 
         function removeQuestion(btn) {
             const container = document.getElementById('quizQuestionsContainer');
-            if (container.children.length <= 1) {
-                alert('You must have at least one question.');
-                return;
-            }
+            if (container.children.length <= 1) { alert('You must have at least one question.'); return; }
             btn.closest('.question-item').remove();
         }
 
@@ -935,8 +872,23 @@
             }
         }
 
+        function collectQuizQuestions() {
+            const items = document.querySelectorAll('.question-item');
+            const questions = [];
+            items.forEach(item => {
+                const text = item.querySelector('.q-text').value.trim();
+                const options = item.querySelectorAll('.q-option');
+                const opts = Array.from(options).map(o => o.value.trim());
+                const correct = parseInt(item.querySelector('.q-correct').value);
+                if (text && opts.every(o => o)) {
+                    questions.push({ question: text, options: opts, correct: correct });
+                }
+            });
+            return questions;
+        }
+
         // ============================================================
-        // MODAL SUBMIT (with content cleaning)
+        // MODAL SUBMIT – with manual validation
         // ============================================================
         document.getElementById('modalForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -948,21 +900,15 @@
             if (type === 'module') {
                 const moduleId = document.getElementById('editModuleId').value;
                 const title = document.getElementById('moduleName').value.trim();
-
                 if (!title) { alert('Module title is required.'); return; }
 
                 if (moduleId) {
                     const mod = course.modules.find(m => m.id === moduleId);
                     if (mod) mod.title = title;
                 } else {
-                    const newModule = {
-                        id: currentCourse + '_m' + Date.now(),
-                        title: title,
-                        lessons: []
-                    };
+                    const newModule = { id: currentCourse + '_m' + Date.now(), title: title, lessons: [] };
                     course.modules.push(newModule);
                 }
-
                 saveCourseData(allData);
                 closeModal();
                 renderCourse();
@@ -978,7 +924,6 @@
                 const module = course.modules.find(m => m.id === moduleId);
                 if (!module) { alert('Module not found.'); return; }
 
-                // Clean the content (strip full HTML if present)
                 const cleanedContent = cleanLessonContent(rawContent);
 
                 if (lessonId) {
@@ -997,11 +942,7 @@
                         }
                     }
                 } else {
-                    const newLesson = {
-                        id: currentCourse + '_l' + Date.now(),
-                        title: title,
-                        type: lessonType
-                    };
+                    const newLesson = { id: currentCourse + '_l' + Date.now(), title: title, type: lessonType };
                     if (lessonType === 'quiz') {
                         const questions = collectQuizQuestions();
                         if (questions.length === 0) { alert('Please add at least one question.'); return; }
@@ -1011,31 +952,12 @@
                     }
                     module.lessons.push(newLesson);
                 }
-
                 saveCourseData(allData);
                 closeModal();
                 renderCourse();
             }
         });
 
-        function collectQuizQuestions() {
-            const items = document.querySelectorAll('.question-item');
-            const questions = [];
-            items.forEach(item => {
-                const text = item.querySelector('.q-text').value.trim();
-                const options = item.querySelectorAll('.q-option');
-                const opts = Array.from(options).map(o => o.value.trim());
-                const correct = parseInt(item.querySelector('.q-correct').value);
-                if (text && opts.every(o => o)) {
-                    questions.push({ question: text, options: opts, correct: correct });
-                }
-            });
-            return questions;
-        }
-
-        // ============================================================
-        // MODAL TOGGLE
-        // ============================================================
         function closeModal() {
             document.getElementById('modalOverlay').classList.remove('active');
         }
@@ -1044,16 +966,11 @@
             if (e.target === this) closeModal();
         });
 
-        // ============================================================
-        // LESSON TYPE TOGGLE (on form)
-        // ============================================================
         document.getElementById('lessonType').addEventListener('change', function() {
             toggleQuizFields(this.value);
         });
 
-        // ============================================================
         // LOAD TEACHER NAME
-        // ============================================================
         function loadTeacherName() {
             const token = localStorage.getItem('authToken');
             if (token) {
@@ -1069,9 +986,7 @@
             }
         }
 
-        // ============================================================
         // INIT
-        // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             loadTeacherName();
             const allData = loadCourseData();
