@@ -7,6 +7,8 @@
     <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
+        /* ... (same as before, no changes) ... */
+        /* Keep the existing styles exactly as they were */
         * {
             margin: 0;
             padding: 0;
@@ -629,6 +631,24 @@
         }
 
         // ============================================================
+        // CONTENT CLEANER: Strip <html>, <head>, <body> if present
+        // ============================================================
+        function cleanLessonContent(raw) {
+            if (!raw || raw.trim() === '') return raw;
+            // If it looks like a full HTML document, extract the body
+            const trimmed = raw.trim();
+            if (trimmed.startsWith('<!DOCTYPE') || trimmed.startsWith('<html')) {
+                // Use DOMParser to extract body content
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(raw, 'text/html');
+                // Get body innerHTML, or fallback to the whole string if parsing fails
+                const bodyContent = doc.body ? doc.body.innerHTML : raw;
+                return bodyContent;
+            }
+            return raw;
+        }
+
+        // ============================================================
         // RENDER COURSE
         // ============================================================
         function renderCourse() {
@@ -916,7 +936,7 @@
         }
 
         // ============================================================
-        // MODAL SUBMIT
+        // MODAL SUBMIT (with content cleaning)
         // ============================================================
         document.getElementById('modalForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -932,11 +952,9 @@
                 if (!title) { alert('Module title is required.'); return; }
 
                 if (moduleId) {
-                    // Edit existing module
                     const mod = course.modules.find(m => m.id === moduleId);
                     if (mod) mod.title = title;
                 } else {
-                    // Add new module
                     const newModule = {
                         id: currentCourse + '_m' + Date.now(),
                         title: title,
@@ -953,15 +971,17 @@
                 const lessonId = document.getElementById('editLessonId').value;
                 const title = document.getElementById('lessonTitle').value.trim();
                 const lessonType = document.getElementById('lessonType').value;
-                const content = document.getElementById('lessonContent').value.trim();
+                const rawContent = document.getElementById('lessonContent').value;
 
                 if (!title) { alert('Lesson title is required.'); return; }
 
                 const module = course.modules.find(m => m.id === moduleId);
                 if (!module) { alert('Module not found.'); return; }
 
+                // Clean the content (strip full HTML if present)
+                const cleanedContent = cleanLessonContent(rawContent);
+
                 if (lessonId) {
-                    // Edit existing lesson
                     const lesson = module.lessons.find(l => l.id === lessonId);
                     if (lesson) {
                         lesson.title = title;
@@ -972,12 +992,11 @@
                             lesson.questions = questions;
                             delete lesson.content;
                         } else {
-                            lesson.content = content || '<p>Lesson content goes here.</p>';
+                            lesson.content = cleanedContent || '<p>Lesson content goes here.</p>';
                             delete lesson.questions;
                         }
                     }
                 } else {
-                    // Add new lesson
                     const newLesson = {
                         id: currentCourse + '_l' + Date.now(),
                         title: title,
@@ -988,7 +1007,7 @@
                         if (questions.length === 0) { alert('Please add at least one question.'); return; }
                         newLesson.questions = questions;
                     } else {
-                        newLesson.content = content || '<p>Lesson content goes here.</p>';
+                        newLesson.content = cleanedContent || '<p>Lesson content goes here.</p>';
                     }
                     module.lessons.push(newLesson);
                 }
@@ -1055,9 +1074,7 @@
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             loadTeacherName();
-            // Ensure all courses exist in localStorage
             const allData = loadCourseData();
-            // Make sure all default courses exist
             for (let key in defaultCourseData) {
                 if (!allData[key]) {
                     allData[key] = JSON.parse(JSON.stringify(defaultCourseData[key]));
