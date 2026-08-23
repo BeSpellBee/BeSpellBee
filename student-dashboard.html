@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeSpellBee - Student Dashboard</title>
+    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* ====== GLOBAL ====== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        /* ====== TOP NAV ====== */
+        .nav-bar {
+            background: #0d0d0d;
+            border-bottom: 1px solid #1a4a4a;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-bar .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00ffff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+        }
+
+        .nav-bar .logo span {
+            color: #fff;
+        }
+
+        .nav-bar .student-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-bar .student-info .name {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .nav-bar .student-info .badge {
+            background: rgba(0, 255, 255, 0.15);
+            color: #00ffff;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .nav-bar .logout-btn {
+            color: #ffcc00;
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-left: 1px solid #333;
+            padding-left: 16px;
+            transition: color 0.3s;
+        }
+
+        .nav-bar .logout-btn:hover {
+            color: #ffdd44;
+        }
+
+        /* ====== DASHBOARD WRAPPER ====== */
+        .dashboard-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* ====== LMS STYLES (extracted from your page) ====== */
+        .lms-wrapper {
+            max-width: 1100px;
+            margin: 0 auto 20px auto;
+            background: #0d0d0d;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 2px solid #1a4a4a;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        .lms-header {
+            background: #0d0d0d;
+            padding: 18px 24px;
+            color: #00ffff;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            border-bottom: 1px solid #1a4a4a;
+        }
+
+        .lms-header h2 {
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #00ffff;
+        }
+
+        .lms-header h2 i {
+            color: #ffcc00;
+        }
+
+        .lms-badge {
+            background: rgba(255, 204, 0, 0.15);
+            color: #ffcc00;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 204, 0, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .lms-body {
+            padding: 24px;
+            background: #0d0d0d;
+        }
+
+        /* ====== ACCESS GATE ====== */
+        .lms-gate {
+            background: #121212;
+            border-radius: 24px;
+            padding: 40px 20px;
+            text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
+            border: 1px solid #1a4a4a;
+        }
+
+        .lms-gate h3 {
+            color: #00ffff;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .lms-gate p {
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .lms-gate input {
+            padding: 14px 20px;
+            border: 2px solid #1a4a4a;
+            border-radius: 60px;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 300px;
+            outline: none;
+            margin: 10px 0;
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .lms-gate input:focus {
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+
+        .lms-gate button {
+            padding: 14px 32px;
+            background: #00ffff;
+            border: none;
+            color: #000;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lms-gate button:hover {
+            background: #66ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        .lms-gate .error {
+            color: #ff4444;
+            margin-top: 10px;
+        }
+
+        /* ====== LMS VIEWS ====== */
+        .lms-view {
+            display: none;
+        }
+
+        .lms-view.active {
+            display: block;
+        }
+
+        /* ====== DASHBOARD VIEW ====== */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-header h2 {
+            color: #00ffff;
+            border-left: 6px solid #ffcc00;
+            padding-left: 16px;
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .dashboard-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-actions button {
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+            border: 1px solid #1a4a4a;
+            padding: 10px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .dashboard-actions button:hover {
+            background: #00ffff;
+            color: #000;
+            border-color: #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+        }
+
+        .dashboard-actions .send-btn {
+            background: rgba(255, 204, 0, 0.1);
+            color: #ffcc00;
+            border: 1px solid rgba(255, 204, 0, 0.3);
+        }
+
+        .dashboard-actions .send-btn:hover {
+            background: #ffcc00;
+            color: #000;
+        }
+
+        /* ====== MODULE CARDS ====== */
+        .module-card {
+            background: #121212;
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 6px solid #ffcc00;
+            border: 1px solid #1a4a4a;
+        }
+
+        .module-card h3 {
+            color: #00ffff;
+            margin-top: 0;
+            font-size: 1.1rem;
+        }
+
+        /* ====== LESSON ITEMS ====== */
+        .lesson-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1a1a1a;
+            padding: 12px 18px;
+            border-radius: 16px;
+            border: 1px solid #1a4a4a;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lesson-item:hover {
+            background: #252525;
+            border-color: #00ffff;
+        }
+
+        .lesson-item .status {
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 40px;
+            background: #1a1a1a;
+            color: #666;
+            border: 1px solid #1a4a4a;
+        }
+
+        .lesson-item .status.done {
+            background: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        /* ====== LESSON CONTENT ====== */
+        .lesson-content {
+            background: #121212;
+            padding: 24px;
+            border-radius: 24px;
+            line-height: 1.7;
+            border: 1px solid #1a4a4a;
+        }
+
+        .lesson-content h3 {
+            color: #00ffff;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .lesson-content p {
+            color: #ccc;
+        }
+
+        .lesson-content ul {
+            color: #ccc;
+            padding-left: 20px;
+        }
+
+        .lesson-content li {
+            margin: 8px 0;
+        }
+
+        .lesson-content iframe {
+            width: 100%;
+            height: 500px;
+            border: 1px solid #1a4a4a;
+            border-radius: 16px;
+            background: #0d0d0d;
+            margin-top: 15px;
+        }
+
+        /* ====== NAV ROW ====== */
+        .nav-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #1a4a4a;
+        }
+
+        .nav-row button,
+        .nav-row a {
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+            padding: 12px 28px;
+            border-radius: 60px;
+            border: 1px solid #1a4a4a;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .nav-row button:hover,
+        .nav-row a:hover {
+            background: #00ffff;
+            color: #000;
+            border-color: #00ffff;
+        }
+
+        .nav-row .complete-btn {
+            background: rgba(255, 204, 0, 0.1);
+            color: #ffcc00;
+            border-color: rgba(255, 204, 0, 0.3);
+        }
+
+        .nav-row .complete-btn:hover {
+            background: #ffcc00;
+            color: #000;
+            border-color: #ffcc00;
+        }
+
+        .back-btn {
+            background: none !important;
+            border: none !important;
+            color: #888 !important;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px 0 !important;
+        }
+
+        .back-btn:hover {
+            color: #00ffff !important;
+            background: none !important;
+        }
+
+        /* ====== QUIZ BLOCKS ====== */
+        .question-block {
+            background: #121212;
+            padding: 20px;
+            border-radius: 24px;
+            margin-bottom: 20px;
+            border-left: 6px solid #00ffff;
+            border: 1px solid #1a4a4a;
+        }
+
+        .question-block p {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .question-block label {
+            display: block;
+            margin: 8px 0;
+            padding: 10px 16px;
+            background: #1a1a1a;
+            border-radius: 40px;
+            cursor: pointer;
+            color: #ccc;
+            transition: all 0.3s;
+        }
+
+        .question-block label:hover {
+            background: #252525;
+            border-color: #00ffff;
+        }
+
+        .question-block input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        /* ====== QUIZ RESULT ====== */
+        .quiz-result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 24px;
+            display: none;
+        }
+
+        .quiz-result.pass {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 6px solid #00ff88;
+            display: block;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .quiz-result.pass h3 {
+            color: #00ff88;
+        }
+
+        .quiz-result.fail {
+            background: rgba(255, 68, 68, 0.1);
+            border-left: 6px solid #ff4444;
+            display: block;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+        }
+
+        .quiz-result.fail h3 {
+            color: #ff4444;
+        }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 700px) {
+            .lms-header h2 {
+                font-size: 1.2rem;
+            }
+            .lesson-content iframe {
+                height: 350px;
+            }
+            .nav-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .nav-row button,
+            .nav-row a {
+                text-align: center;
+            }
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .dashboard-actions {
+                width: 100%;
+            }
+            .dashboard-actions button {
+                flex: 1;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .lms-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .lms-gate input {
+                max-width: 100%;
+            }
+            .lesson-content iframe {
+                height: 250px;
+            }
+            .module-card {
+                padding: 16px;
+            }
+            .lesson-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .lms-body {
+                padding: 16px;
+            }
+        }
+
+        /* ====== BACK TO TOP ====== */
+        #topBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            z-index: 99;
+            font-size: 24px;
+            border: none;
+            outline: none;
+            background-color: #00ffff;
+            color: #000;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            line-height: 50px;
+            padding: 0;
+            transition: 0.1s;
+        }
+
+        #topBtn:hover {
+            background-color: #66ffff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff88;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ====== TOP NAV ====== -->
+    <nav class="nav-bar">
+        <div class="logo">
+            <svg width="180" height="40" viewBox="0 0 200 50">
+                <defs>
+                    <linearGradient id="lmsGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:aqua;"/>
+                        <stop offset="50%" style="stop-color:white;" />
+                        <stop offset="100%" style="stop-color:yellow;" />
+                    </linearGradient>
+                </defs>
+                <text x="0" y="38" fill="url(#lmsGradient)" font-size="36" font-weight="700" font-family="Segoe UI, sans-serif">BeSpellBee</text>
+            </svg>
+        </div>
+        <div class="student-info">
+            <span class="badge"><span class="status-dot"></span> Learning</span>
+            <span class="name" id="navStudentName"><i class="fas fa-user-graduate"></i> Loading...</span>
+            <a href="#" id="logoutBtn" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </nav>
+
+    <!-- ====== DASHBOARD CONTAINER ====== -->
+    <div class="dashboard-container">
+
+        <!-- ====== LMS WRAPPER ====== -->
+        <div class="lms-wrapper" id="lmsWrapper">
+            <div class="lms-header">
+                <h2><i class="fas fa-graduation-cap"></i> My Courses</h2>
+                <span class="lms-badge"><i class="fas fa-lock"></i> PREMIUM</span>
+            </div>
+            <div class="lms-body">
+
+                <!-- ====== ACCESS GATE ====== -->
+                <div id="lmsGate" class="lms-gate">
+                    <h3><i class="fas fa-key"></i> Enter your access code</h3>
+                    <p>Purchase access to unlock your course materials.</p>
+                    <input type="password" id="lmsPassword" placeholder="Your access code...">
+                    <br>
+                    <button onclick="unlockLMS()"><i class="fas fa-unlock-alt"></i> Unlock Course</button>
+                    <div id="lmsGateError" class="error"></div>
+                </div>
+
+                <!-- ====== LMS VIEWS ====== -->
+                <div id="lmsViews" style="display: none;">
+                    <div id="viewDashboard" class="lms-view active">
+                        <div id="dashboardContent"></div>
+                    </div>
+                    <div id="viewLesson" class="lms-view">
+                        <button class="back-btn" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+                        <div id="lessonContent"></div>
+                    </div>
+                    <div id="viewQuiz" class="lms-view">
+                        <button class="back-btn" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+                        <div id="quizContent"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== PROGRESS REPORT FORM (Hidden) ====== -->
+    <form id="reportForm" action="https://api.web3forms.com/submit" method="POST" style="display:none;">
+        <input type="hidden" name="access_key" value="587c378a-3c75-498e-b3bc-b7fd96ad2278">
+        <input type="hidden" name="subject" id="reportSubject" value="Progress Report – Student Course">
+        <input type="hidden" name="from_name" value="Student">
+        <input type="hidden" name="replyto" value="student@example.com">
+        <input type="hidden" name="redirect" value="false">
+        <textarea name="message" id="reportBody"></textarea>
+    </form>
+
+    <!-- ====== BACK TO TOP BUTTON ====== -->
+    <button id="topBtn" title="Go to top"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- ============================================================ -->
+    <!-- ====== COMPLETE LMS JAVASCRIPT (Extracted from your page) ====== -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        // 0. CONFIGURATION
+        // ============================================================
+        const ACCESS_CODE = 'bestart332'; // Change to your own password
+        const API_BASE_URL = 'https://bespellbee-backend-en6l.onrender.com';
+
+        // ============================================================
+        // 1. COURSE DATA (Edit this to match your courses)
+        // ============================================================
+        const courseData = {
+            modules: [{
+                id: 'm1',
+                title: 'Module 1: Grammar Foundations',
+                lessons: [{
+                    id: 'l1',
+                    title: 'Present Tenses Review',
+                    type: 'lesson',
+                    content: `
+                            <h3>🔹 Present Simple vs. Present Continuous</h3>
+                            <p><strong>Present Simple</strong> – habits, facts, routines.<br>
+                            <em>Example:</em> "I <strong>work</strong> from 9 to 5."</p>
+                            <p><strong>Present Continuous</strong> – actions happening now, temporary situations.<br>
+                            <em>Example:</em> "I <strong>am working</strong> on a new project this week."</p>
+                            <h3>🔹 Stative Verbs</h3>
+                            <p>Verbs like <strong>know, believe, like, belong</strong> are usually not used in continuous forms.</p>
+                            <p><em>Correct:</em> "I <strong>believe</strong> you."<br>
+                            <em>Incorrect:</em> "I am believing you."</p>
+                            <h3>🔹 Practice Activity</h3>
+                            <iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                        `
+                }, {
+                    id: 'q1',
+                    title: 'Tenses Quiz',
+                    type: 'quiz',
+                    questions: [
+                        { question: 'She ______ to work every day by bus.', options: ['A) go', 'B) goes', 'C) is going'],
+                            correct: 1 },
+                        { question: 'Listen! Someone ______ the piano.', options: ['A) play', 'B) plays',
+                                'C) is playing'
+                            ], correct: 2 },
+                        { question: 'I ______ him for years.', options: ['A) know', 'B) have known', 'C) knew'],
+                            correct: 1 }
+                    ]
+                }]
+            }, {
+                id: 'm2',
+                title: 'Module 2: Vocabulary & Expressions',
+                lessons: [{
+                    id: 'l2',
+                    title: 'Idiomatic Expressions',
+                    type: 'lesson',
+                    content: `
+                            <h3>🔹 Common Idioms for B2</h3>
+                            <ul>
+                                <li><strong>Break the ice</strong> – start a conversation.</li>
+                                <li><strong>Hit the nail on the head</strong> – say exactly the right thing.</li>
+                                <li><strong>Cost an arm and a leg</strong> – very expensive.</li>
+                            </ul>
+                            <h3>🔹 Practice Activity</h3>
+                            <iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                        `
+                }, {
+                    id: 'q2',
+                    title: 'Vocabulary Quiz',
+                    type: 'quiz',
+                    questions: [
+                        { question: 'To "break the ice" means to:', options: ['A) Start a conversation',
+                                'B) Break something frozen', 'C) End a fight'
+                            ], correct: 0 },
+                        { question: 'If something "costs an arm and a leg", it is:', options: ['A) Cheap',
+                                'B) Expensive', 'C) Free'
+                            ], correct: 1 }
+                    ]
+                }]
+            }]
+        };
+
+        // ============================================================
+        // 2. STATE & HELPERS
+        // ============================================================
+        function getProgress() {
+            const saved = localStorage.getItem('lmsProgress');
+            return saved ? JSON.parse(saved) : {};
+        }
+
+        function saveProgress(prog) {
+            localStorage.setItem('lmsProgress', JSON.stringify(prog));
+        }
+
+        function isCompleted(lessonId) {
+            const prog = getProgress();
+            return prog[lessonId] && prog[lessonId].completed === true;
+        }
+
+        function markCompleted(lessonId) {
+            const prog = getProgress();
+            prog[lessonId] = { completed: true };
+            saveProgress(prog);
+        }
+
+        function showView(viewId) {
+            document.querySelectorAll('.lms-view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+        }
+
+        function showDashboard() {
+            showView('viewDashboard');
+            renderDashboard();
+        }
+
+        // ============================================================
+        // 3. LOGOUT
+        // ============================================================
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('studentId');
+            localStorage.removeItem('studentName');
+            localStorage.removeItem('userRole');
+            window.location.href = 'index.html';
+        });
+
+        // ============================================================
+        // 4. LOAD STUDENT NAME
+        // ============================================================
+        function loadStudentName() {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    const name = payload.name || 'Student';
+                    document.getElementById('navStudentName').innerHTML =
+                        `<i class="fas fa-user-graduate"></i> ${name}`;
+                } catch (e) {
+                    document.getElementById('navStudentName').innerHTML = `<i class="fas fa-user-graduate"></i> Student`;
+                }
+            } else {
+                document.getElementById('navStudentName').innerHTML = `<i class="fas fa-user-graduate"></i> Guest`;
+            }
+        }
+
+        // ============================================================
+        // 5. GENERATE REPORT
+        // ============================================================
+        function generateReport() {
+            const prog = getProgress();
+            let report = "=== Progress Report ===\n";
+            report += "Generated: " + new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString() + "\n\n";
+
+            courseData.modules.forEach(mod => {
+                report += `📌 ${mod.title}\n`;
+                mod.lessons.forEach(lesson => {
+                    const data = prog[lesson.id];
+                    if (lesson.type === 'quiz') {
+                        if (data && data.completed) {
+                            report += `  🧠 ${lesson.title}: ✅ Completed (Score: ${data.score}/${data.total})\n`;
+                        } else {
+                            report += `  🧠 ${lesson.title}: ⬜ Not started\n`;
+                        }
+                    } else {
+                        const status = data && data.completed ? "✅ Completed" : "⬜ Not started";
+                        report += `  📖 ${lesson.title}: ${status}\n`;
+                    }
+                });
+                report += "\n";
+            });
+            report += "=== End of Report ===";
+            return report;
+        }
+
+        // ============================================================
+        // 6. DOWNLOAD & SEND PROGRESS
+        // ============================================================
+        function downloadProgress() {
+            const report = generateReport();
+            const blob = new Blob([report], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `progress_${new Date().toISOString().slice(0,10)}.txt`;
+            a.click();
+        }
+
+        function sendProgress() {
+            const report = generateReport();
+            document.getElementById('reportSubject').value = 'Progress Report – Student Course';
+            document.getElementById('reportBody').value = report;
+
+            const form = document.getElementById('reportForm');
+            const btn = document.querySelector('.send-btn');
+            if (btn) {
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                btn.disabled = true;
+            }
+
+            fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: { 'Accept': 'application/json' }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('✅ Progress report sent successfully! Your teacher will receive it shortly.');
+                    } else {
+                        alert('❌ Sending failed. Please use the Download button and email it manually.');
+                    }
+                    if (btn) {
+                        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Progress';
+                        btn.disabled = false;
+                    }
+                })
+                .catch(() => {
+                    alert('❌ Network error. Please use the Download button and email it manually.');
+                    if (btn) {
+                        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Progress';
+                        btn.disabled = false;
+                    }
+                });
+        }
+
+        // ============================================================
+        // 7. RENDER DASHBOARD
+        // ============================================================
+        function renderDashboard() {
+            const container = document.getElementById('dashboardContent');
+            let html = `
+                    <div class="dashboard-header">
+                        <h2><i class="fas fa-list-ul"></i> Course Dashboard</h2>
+                        <div class="dashboard-actions">
+                            <button onclick="downloadProgress()"><i class="fas fa-download"></i> Download Progress</button>
+                            <button class="send-btn" onclick="sendProgress()"><i class="fas fa-paper-plane"></i> Send Progress</button>
+                        </div>
+                    </div>
+                    <div id="moduleList"></div>
+                `;
+            container.innerHTML = html;
+
+            const moduleList = document.getElementById('moduleList');
+            let listHtml = '';
+            courseData.modules.forEach(mod => {
+                listHtml += `<div class="module-card"><h3><i class="fas fa-folder-open"></i> ${mod.title}</h3>`;
+                mod.lessons.forEach(lesson => {
+                    const done = isCompleted(lesson.id) ? 'done' : '';
+                    let label = isCompleted(lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ?
+                        '🧠 Quiz' : '📖 Lesson');
+                    if (lesson.type === 'quiz') {
+                        const prog = getProgress();
+                        const data = prog[lesson.id];
+                        if (data && data.completed) {
+                            label = `✅ Completed (${data.score}/${data.total})`;
+                        }
+                    }
+                    const icon = lesson.type === 'quiz' ? '🧠' : '📖';
+                    listHtml += `
+                            <div class="lesson-item" onclick="openLesson('${mod.id}','${lesson.id}')">
+                                <span>${icon} ${lesson.title}</span>
+                                <span class="status ${done}">${label}</span>
+                            </div>
+                        `;
+                });
+                listHtml += `</div>`;
+            });
+            moduleList.innerHTML = listHtml;
+        }
+
+        // ============================================================
+        // 8. OPEN LESSON / QUIZ
+        // ============================================================
+        function openLesson(moduleId, lessonId) {
+            const module = courseData.modules.find(m => m.id === moduleId);
+            const lesson = module.lessons.find(l => l.id === lessonId);
+            if (lesson.type === 'quiz') {
+                showView('viewQuiz');
+                renderQuiz(lesson);
+            } else {
+                showView('viewLesson');
+                renderLesson(lesson, moduleId);
+            }
+        }
+
+        function renderLesson(lesson, moduleId) {
+            const container = document.getElementById('lessonContent');
+            const done = isCompleted(lesson.id);
+            container.innerHTML = `
+                    <h2 style="color: #00ffff;"><i class="fas fa-book"></i> ${lesson.title}</h2>
+                    <div class="lesson-content">${lesson.content}</div>
+                    <div class="nav-row">
+                        <button onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Dashboard</button>
+                        <div>
+                            ${!done ? `<button class="complete-btn" onclick="markLessonComplete('${lesson.id}')"><i class="fas fa-check"></i> Mark as Complete</button>` : '<span style="color:#00ff88; font-weight:600;"><i class="fas fa-check-circle"></i> Completed</span>'}
+                        </div>
+                    </div>
+                `;
+        }
+
+        function markLessonComplete(lessonId) {
+            markCompleted(lessonId);
+            alert('✅ Lesson marked as complete!');
+            showDashboard();
+        }
+
+        function renderQuiz(quiz) {
+            const container = document.getElementById('quizContent');
+            let html = `<h2 style="color: #00ffff;"><i class="fas fa-brain"></i> ${quiz.title}</h2>`;
+            html += `<form id="quizForm">`;
+            quiz.questions.forEach((q, idx) => {
+                html += `
+                        <div class="question-block">
+                            <p><strong>${idx+1}. ${q.question}</strong></p>
+                            ${q.options.map((opt, oi) => `
+                                <label><input type="radio
