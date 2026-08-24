@@ -736,38 +736,49 @@
         // PREVIEW LESSON (NEW)
         // ============================================================
         function previewLesson(moduleId, lessonId) {
-            const course = getCourseData();
-            const module = course.modules.find(m => m.id === moduleId);
-            const lesson = module.lessons.find(l => l.id === lessonId);
-            if (!lesson) return;
+    const course = getCourseData();
+    const module = course.modules.find(m => m.id === moduleId);
+    const lesson = module.lessons.find(l => l.id === lessonId);
+    if (!lesson) return;
 
-            const previewWindow = window.open('', '_blank');
-            previewWindow.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Preview: ${lesson.title}</title>
-                    <style>
-                        body { font-family: 'Segoe UI', sans-serif; padding: 30px; max-width: 800px; margin: auto; background: #f5f7fc; }
-                        .container { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-                        .preview-badge { background: #FFEB3B; color: #000; padding: 4px 12px; border-radius: 40px; font-size: 0.8rem; display: inline-block; margin-bottom: 20px; }
-                        h2 { color: #0056B3; border-bottom: 2px solid #eef4fe; padding-bottom: 10px; }
-                        .content { line-height: 1.6; }
-                        .footer { margin-top: 30px; padding-top: 20px; border-top: 2px solid #eef4fe; color: #888; font-size: 0.85rem; text-align: center; }
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
-                        <span class="preview-badge">👁️ Teacher Preview</span>
-                        <h2>${lesson.title}</h2>
-                        <div class="content">${lesson.content || '<p style="color:#999;">No content yet. Add content to this lesson.</p>'}</div>
-                        <div class="footer">This is how students will see this lesson.</div>
-                    </div>
-                </body>
-                </html>
-            `);
-            previewWindow.document.close();
-        }
+    const previewWindow = window.open('', '_blank');
+    previewWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Preview: ${lesson.title}</title>
+            <style>
+                body { font-family: 'Segoe UI', sans-serif; padding: 30px; max-width: 1000px; margin: auto; background: #f5f7fc; }
+                .container { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+                .preview-badge { background: #FFEB3B; color: #000; padding: 4px 12px; border-radius: 40px; font-size: 0.8rem; display: inline-block; margin-bottom: 20px; }
+                h2 { color: #0056B3; border-bottom: 2px solid #eef4fe; padding-bottom: 10px; }
+                .content { line-height: 1.6; }
+                .content iframe {
+                    width: 100% !important;
+                    max-width: 100% !important;
+                    min-height: 500px !important;
+                    height: auto !important;
+                    aspect-ratio: 16 / 9;
+                    border: 2px solid #eef4fe;
+                    border-radius: 16px;
+                    background: #fff;
+                    margin: 15px 0;
+                }
+                .footer { margin-top: 30px; padding-top: 20px; border-top: 2px solid #eef4fe; color: #888; font-size: 0.85rem; text-align: center; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <span class="preview-badge">👁️ Teacher Preview</span>
+                <h2>${lesson.title}</h2>
+                <div class="content">${lesson.content || '<p style="color:#999;">No content yet. Add content to this lesson.</p>'}</div>
+                <div class="footer">This is how students will see this lesson.</div>
+            </div>
+        </body>
+        </html>
+    `);
+    previewWindow.document.close();
+}
 
         // ============================================================
         // COURSE SWITCHING
