@@ -119,6 +119,16 @@
             transform: scale(1.02);
         }
 
+        .create-course-btn.template-btn {
+            background: #ffcc00;
+            color: #000;
+        }
+
+        .create-course-btn.template-btn:hover {
+            background: #ffdd44;
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.3);
+        }
+
         /* ====== COURSE SELECTOR ====== */
         .course-selector {
             display: flex;
@@ -501,6 +511,9 @@
             <button class="create-course-btn" onclick="openCreateCourseModal()">
                 <i class="fas fa-plus-circle"></i> Create New Course
             </button>
+            <button class="create-course-btn template-btn" onclick="addPPPModule()">
+                <i class="fas fa-magic"></i> Add PPP Module (Template)
+            </button>
         </div>
 
         <!-- Course Selector (dynamic) -->
@@ -610,7 +623,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- JAVASCRIPT – API-INTEGRATED + CREATE COURSE -->
+    <!-- JAVASCRIPT – API-INTEGRATED + CREATE COURSE + PPP TEMPLATE -->
     <!-- ============================================================ -->
     <script>
         // ============================================================
@@ -866,6 +879,64 @@
         });
 
         // ============================================================
+        // ADD PPP MODULE (Presentation - Practice - Production)
+        // ============================================================
+        async function addPPPModule() {
+            if (!currentCourseId) {
+                alert('Please select a course first.');
+                return;
+            }
+
+            const moduleTitle = prompt('Enter module title (e.g., "Unit 1: Greetings"):', 'New PPP Module');
+            if (!moduleTitle) return;
+
+            // Create the module
+            const module = await createModule(currentCourseId, moduleTitle);
+            if (!module) return;
+
+            // Create 3 lessons: Presentation, Practice, Production (quiz)
+            const lessons = [
+                {
+                    title: '🎯 Presentation',
+                    type: 'lesson',
+                    content: `<h2>Presentation</h2><p>Introduce the key concepts here. Add text, images, or embed a video.</p><p><strong>Example:</strong> Watch this video and note the key phrases.</p>`,
+                    orderIndex: 0
+                },
+                {
+                    title: '✍️ Practice Activity',
+                    type: 'lesson',
+                    content: `<h2>Practice Activity</h2><p>Students apply what they learned. Add a Lumi iframe, a writing task, or a matching exercise.</p><p><em>Example: Drag and drop the correct words into the sentences.</em></p>`,
+                    orderIndex: 1
+                },
+                {
+                    title: '📝 Production Quiz',
+                    type: 'quiz',
+                    questions: [
+                        { question: 'What is the correct greeting for a formal setting?', options: ['"Hey"', '"Good morning, sir."', '"Hi there"'], correct: 1 },
+                        { question: 'Which phrase would you use to offer help?', options: ['"You should go."', '"Can I assist you?"', '"Leave me alone."'], correct: 1 }
+                    ],
+                    orderIndex: 2
+                }
+            ];
+
+            // Create each lesson
+            let success = true;
+            for (const lessonData of lessons) {
+                const result = await createLesson(module.id, lessonData);
+                if (!result) {
+                    success = false;
+                    alert('Failed to create one of the lessons. Please check the console.');
+                    break;
+                }
+            }
+
+            if (success) {
+                alert('✅ PPP Module created successfully!');
+                await selectCourse(currentCourseId);
+            }
+        }
+
+        // ============================================================
         // RENDER FUNCTIONS
         // ============================================================
 
@@ -893,7 +964,7 @@
                 container.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-folder-open"></i>
-                        <p>No modules yet. Click "Add New Module" to get started.</p>
+                        <p>No modules yet. Click "Add New Module" or "Add PPP Module" to get started.</p>
                     </div>
                 `;
                 return;
@@ -1236,60 +1307,101 @@
         }
 
         // ============================================================
-        // MODAL SUBMIT (create/update)
+        // MODAL SUBMIT (with safety check and loading state)
         // ============================================================
 
         document.getElementById('modalForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
+            console.log('✅ Form submitted');
+            console.log('currentCourseId:', currentCourseId);
+
+            // 🔥 CRITICAL: Ensure a course is selected
+            if (!currentCourseId) {
+                alert('⚠️ Please select a course first from the course list above.');
+                return;
+            }
+
             const type = document.getElementById('modalType').value;
+            const submitBtn = document.getElementById('modalSubmitBtn');
+            const originalText = submitBtn.textContent;
 
-            if (type === 'module') {
-                const moduleId = document.getElementById('editModuleId').value;
-                const title = document.getElementById('moduleName').value.trim();
-                if (!title) { alert('Module title is required.'); return; }
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Saving...';
 
-                let result;
-                if (moduleId) {
-                    result = await updateModule(parseInt(moduleId), title);
-                } else {
-                    result = await createModule(currentCourseId, title);
-                }
-                if (result) {
-                    closeModal();
-                    await selectCourse(currentCourseId);
-                }
-            } else if (type === 'lesson') {
-                const moduleId = document.getElementById('editModuleId').value;
-                const lessonId = document.getElementById('editLessonId').value;
-                const title = document.getElementById('lessonTitle').value.trim();
-                const lessonType = document.getElementById('lessonType').value;
-                const rawContent = document.getElementById('lessonContent').value;
-                if (!title) { alert('Lesson title is required.'); return; }
+            try {
+                if (type === 'module') {
+                    const moduleId = document.getElementById('editModuleId').value;
+                    const title = document.getElementById('moduleName').value.trim();
 
-                const lessonData = {
-                    title,
-                    type: lessonType,
-                    content: rawContent,
-                    orderIndex: 0
-                };
+                    if (!title) {
+                        alert('Module title is required.');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalText;
+                        return;
+                    }
 
-                if (lessonType === 'quiz') {
-                    const questions = collectQuizQuestions();
-                    if (questions.length === 0) { alert('Please add at least one question.'); return; }
-                    lessonData.questions = questions;
-                }
+                    let result;
+                    if (moduleId) {
+                        result = await updateModule(parseInt(moduleId), title);
+                    } else {
+                        result = await createModule(currentCourseId, title);
+                    }
 
-                let result;
-                if (lessonId) {
-                    result = await updateLesson(parseInt(lessonId), lessonData);
-                } else {
-                    result = await createLesson(parseInt(moduleId), lessonData);
+                    if (result) {
+                        closeModal();
+                        await selectCourse(currentCourseId);
+                    }
+                } else if (type === 'lesson') {
+                    const moduleId = document.getElementById('editModuleId').value;
+                    const lessonId = document.getElementById('editLessonId').value;
+                    const title = document.getElementById('lessonTitle').value.trim();
+                    const lessonType = document.getElementById('lessonType').value;
+                    const rawContent = document.getElementById('lessonContent').value;
+
+                    if (!title) {
+                        alert('Lesson title is required.');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalText;
+                        return;
+                    }
+
+                    const lessonData = {
+                        title,
+                        type: lessonType,
+                        content: rawContent,
+                        orderIndex: 0
+                    };
+
+                    if (lessonType === 'quiz') {
+                        const questions = collectQuizQuestions();
+                        if (questions.length === 0) {
+                            alert('Please add at least one question.');
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = originalText;
+                            return;
+                        }
+                        lessonData.questions = questions;
+                    }
+
+                    let result;
+                    if (lessonId) {
+                        result = await updateLesson(parseInt(lessonId), lessonData);
+                    } else {
+                        result = await createLesson(parseInt(moduleId), lessonData);
+                    }
+
+                    if (result) {
+                        closeModal();
+                        await selectCourse(currentCourseId);
+                    }
                 }
-                if (result) {
-                    closeModal();
-                    await selectCourse(currentCourseId);
-                }
+            } catch (error) {
+                console.error('Error in form submission:', error);
+                alert('An unexpected error occurred. Please check the console.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
             }
         });
 
