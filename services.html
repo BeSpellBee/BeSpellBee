@@ -16,8 +16,7 @@
     <title>Services</title>
     
     <style>
-        /* ... (your existing CSS – unchanged) ... */
-        /* Keep your styles exactly as they were */
+        /* Global Reset & Base */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -106,10 +105,20 @@
             height: auto !important;
         }
 
-        .img-small {
-            width: 100% !important;
-            max-width: 450px !important;
-            height: auto !important;
+        .btn-learn {
+            display: inline-block;
+            padding: 10px 30px;
+            background: #0056B3;
+            color: #fff;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-learn:hover {
+            background: #1976D2;
         }
 
         #topBtn {
@@ -146,6 +155,7 @@
             p { font-size: 0.95rem; }
             .nav-links { gap: 10px 18px; }
             .nav-links a { font-size: 0.95rem; }
+            .btn-learn { padding: 8px 20px; font-size: 0.9rem; }
             #topBtn { width: 44px; height: 44px; font-size: 20px; line-height: 44px; bottom: 15px; right: 15px; }
         }
 
@@ -156,6 +166,7 @@
             p { font-size: 0.88rem; }
             .nav-links { gap: 8px 12px; padding: 10px 0; }
             .nav-links a { font-size: 0.85rem; }
+            .btn-learn { padding: 6px 16px; font-size: 0.8rem; }
             #topBtn { width: 38px; height: 38px; font-size: 16px; line-height: 38px; bottom: 12px; right: 12px; }
         }
     </style>
@@ -172,7 +183,7 @@
             <a href="#A1/A2/B1" onclick="trackLink('Beginners A1/A2/B1')">🔹 Beginners (A1/A2/B1)</a>
             <a href="#B2" onclick="trackLink('Advanced B2')">🔹 Advanced (B2)</a>
             <a href="#Bac" onclick="trackLink('Baccalaureate Prep')">🔹 Baccalaureate Prep</a>
-            <a href="#Tunisian" onclick="trackLink('Tunisian Program')">🔹 Tunisian Program</a>
+            <a href="#Tunisian" onclick="trackLink('Collège & Lycée Program')">🇹🇳 Collège & Lycée Program</a>
         </div>
 
         <!-- Top Image -->
@@ -183,32 +194,40 @@
         <h3>🔹 A1 / A2 / B1 – Beginners</h3>
         <p>We offer online courses for beginning students seeking to get better at English and improve foundational communication skills.</p>
         <img src="images2/level.guide.png" alt="CEFR Levels" class="img-medium">
+        <p>
+            <a href="#A1/A2/B1" class="btn-learn">Learn More →</a>
+        </p>
 
         <!-- B2 Section -->
         <a id="B2"></a>
         <h3>🔹 B2 – Advanced Students</h3>
         <p>Our main focus is on students seeking to pass B2/C1 international exams and earn scholarships enabling them to access selective universities.</p>
         <img src="images2/Advanced.png" alt="Advanced" class="img-fluid">
+        <p>
+            <a href="#B2" class="btn-learn">Learn More →</a>
+        </p>
 
         <!-- Baccalaureate Section -->
         <a id="Bac"></a>
         <h3>🔹 Baccalaureate Preparation</h3>
         <p>We offer preparation for passing the French baccalaureate exam.</p>
+        <p>
+            <a href="#Bac" class="btn-learn">Learn More →</a>
+        </p>
 
         <!-- ============================================================ -->
-        <!-- TUNISIAN PROGRAM SECTION (bottom) -->
+        <!-- TUNISIAN / COLLÈGE & LYCÉE PROGRAM SECTION -->
         <!-- ============================================================ -->
         <a id="Tunisian"></a>
-        <h3>🔹 Tunisian Program</h3>
+        <h3>🇹🇳 Collège & Lycée Program</h3>
         <p>
-            <h3>🇹🇳 Collège & Lycée Program</h3>
-<p>For students in middle school and secondary (Collège & Lycée) – tailored lessons, exam prep, and support aligned with the Tunisian curriculum.</p>.
+            Tunisia’s first private e‑middle school and secondary school.
+            We offer a fully online, curriculum‑aligned education for students in Collège (middle school) and Lycée (secondary).
+            Our program covers all core subjects, exam preparation, and personalised support – designed to help students succeed in the Tunisian system and beyond.
         </p>
-        <img src="images4/teacher.jpg" alt="Tunisian Program" class="img-fluid">
-        <p style="margin-top: 10px;">
-            <a href="tunisian-program.html" style="display: inline-block; padding: 10px 30px; background: #0056B3; color: #fff; border-radius: 40px; text-decoration: none; font-weight: 600; transition: background 0.3s;">
-                Learn More →
-            </a>
+        <img src="images4/teacher.jpg" alt="Collège & Lycée Program" class="img-fluid">
+        <p>
+            <a href="tunisian-program.html" class="btn-learn">Learn More →</a>
         </p>
 
     </div>
