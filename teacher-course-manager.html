@@ -7,9 +7,7 @@
     <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-        /* ... (same styles as before – keep unchanged) ... */
-        /* For brevity, I'm not repeating the full CSS here – use the same as earlier */
-        /* But you can copy the full CSS from the previous version – it's identical */
+        /* ====== GLOBAL ====== */
         * {
             margin: 0;
             padding: 0;
@@ -167,11 +165,6 @@
             color: #00ffff;
         }
 
-        .module-card .module-header .module-actions .delete-btn:hover {
-            border-color: #ff4444;
-            color: #ff4444;
-        }
-
         .lesson-item {
             display: flex;
             justify-content: space-between;
@@ -181,12 +174,15 @@
             border-radius: 12px;
             border: 1px solid #1a4a4a;
             margin: 6px 0;
+            flex-wrap: wrap;
+            gap: 6px;
         }
 
         .lesson-item .lesson-info {
             display: flex;
             align-items: center;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .lesson-item .lesson-info .lesson-type {
@@ -202,11 +198,17 @@
             color: #ffcc00;
         }
 
+        .lesson-item .lesson-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
         .lesson-item .lesson-actions button {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid #1a4a4a;
             color: #88dddd;
-            padding: 2px 10px;
+            padding: 4px 10px;
             border-radius: 16px;
             cursor: pointer;
             font-size: 0.7rem;
@@ -218,9 +220,9 @@
             color: #00ffff;
         }
 
-        .lesson-item .lesson-actions .delete-lesson:hover {
-            border-color: #ff4444;
-            color: #ff4444;
+        .lesson-item .lesson-actions .preview-btn:hover {
+            border-color: #ffcc00;
+            color: #ffcc00;
         }
 
         .add-btn {
@@ -255,6 +257,7 @@
             display: block;
         }
 
+        /* ====== MODAL ====== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -382,6 +385,24 @@
             color: #ff4444;
         }
 
+        .modal-actions .btn-danger {
+            background: #ff4444;
+            color: #fff;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .modal-actions .btn-danger:hover {
+            background: #cc0000;
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
+        }
+
         .status-dot {
             display: inline-block;
             width: 10px;
@@ -403,6 +424,12 @@
             .module-card .module-header { flex-direction: column; align-items: flex-start; }
             .modal-content { padding: 1.5rem; }
             .course-btn { padding: 8px 16px; font-size: 0.8rem; }
+            .lesson-item { flex-direction: column; align-items: flex-start; }
+            .lesson-item .lesson-actions { width: 100%; justify-content: flex-start; }
+            .modal-actions { flex-direction: column; }
+            .modal-actions .btn-primary,
+            .modal-actions .btn-secondary,
+            .modal-actions .btn-danger { width: 100%; text-align: center; }
         }
     </style>
 </head>
@@ -436,6 +463,7 @@
             <a href="teacher-dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
         </div>
 
+        <!-- Course Selector -->
         <div class="course-selector" id="courseSelector">
             <button class="course-btn active" data-course="a1" onclick="switchCourse('a1')">
                 <i class="fas fa-flag"></i> A1 Beginner
@@ -448,6 +476,7 @@
             </button>
         </div>
 
+        <!-- Course Editor -->
         <div id="courseEditor">
             <div id="modulesContainer"></div>
             <button class="add-btn" onclick="openAddModuleModal()">
@@ -457,12 +486,11 @@
 
     </div>
 
-    <!-- ====== MODAL ====== -->
+    <!-- ====== MODAL (Add/Edit) ====== -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <h2 id="modalTitle">Add Module</h2>
             <p class="sub" id="modalSub">Create a new module for your course.</p>
-            <!-- ✅ ADD novalidate to the form -->
             <form id="modalForm" novalidate>
                 <input type="hidden" id="modalType" value="module">
                 <input type="hidden" id="editModuleId" value="">
@@ -517,6 +545,7 @@
                 <div class="modal-actions">
                     <button type="submit" class="btn-primary" id="modalSubmitBtn">Save</button>
                     <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="btn-danger" id="modalDeleteBtn" style="display:none;" onclick="confirmDelete()">🗑️ Delete</button>
                 </div>
             </form>
         </div>
@@ -530,6 +559,9 @@
         const COURSES_KEY = 'lmsCourseData';
         let currentCourse = 'a1';
 
+        // ============================================================
+        // DEFAULT COURSE DATA
+        // ============================================================
         const defaultCourseData = {
             a1: {
                 title: 'A1 Beginner',
@@ -601,6 +633,9 @@
             }
         };
 
+        // ============================================================
+        // LOAD / SAVE COURSE DATA
+        // ============================================================
         function loadCourseData() {
             const saved = localStorage.getItem(COURSES_KEY);
             if (saved) {
@@ -618,7 +653,9 @@
             return all[currentCourse] || all.a1;
         }
 
-        // Content cleaner
+        // ============================================================
+        // CONTENT CLEANER
+        // ============================================================
         function cleanLessonContent(raw) {
             if (!raw || raw.trim() === '') return raw;
             const trimmed = raw.trim();
@@ -630,14 +667,23 @@
             return raw;
         }
 
-        // RENDER
+        // ============================================================
+        // RENDER COURSE (with Preview & Delete inside Edit)
+        // ============================================================
         function renderCourse() {
             const course = getCourseData();
             const container = document.getElementById('modulesContainer');
+
             if (!course.modules || course.modules.length === 0) {
-                container.innerHTML = `<div class="empty-state"><i class="fas fa-folder-open"></i><p>No modules yet. Click "Add New Module" to get started.</p></div>`;
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <p>No modules yet. Click "Add New Module" to get started.</p>
+                    </div>
+                `;
                 return;
             }
+
             let html = '';
             course.modules.forEach(mod => {
                 html += `
@@ -646,11 +692,11 @@
                             <h3><i class="fas fa-folder"></i> ${mod.title}</h3>
                             <div class="module-actions">
                                 <button onclick="editModule('${mod.id}')"><i class="fas fa-edit"></i> Edit</button>
-                                <button class="delete-btn" onclick="deleteModule('${mod.id}')"><i class="fas fa-trash"></i> Delete</button>
                             </div>
                         </div>
                         <div class="module-lessons">
                 `;
+
                 if (!mod.lessons || mod.lessons.length === 0) {
                     html += `<p style="color:#555; font-size:0.85rem; padding:8px 0;">No lessons yet.</p>`;
                 } else {
@@ -664,13 +710,16 @@
                                     <span class="lesson-type ${typeClass}">${typeLabel}</span>
                                 </div>
                                 <div class="lesson-actions">
+                                    <button class="preview-btn" onclick="previewLesson('${mod.id}','${lesson.id}')" title="Preview Lesson">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
                                     <button onclick="editLesson('${mod.id}','${lesson.id}')"><i class="fas fa-edit"></i> Edit</button>
-                                    <button class="delete-lesson" onclick="deleteLesson('${mod.id}','${lesson.id}')"><i class="fas fa-trash"></i> Delete</button>
                                 </div>
                             </div>
                         `;
                     });
                 }
+
                 html += `
                             <button class="add-btn" onclick="openAddLessonModal('${mod.id}')">
                                 <i class="fas fa-plus-circle"></i> Add Lesson to "${mod.title}"
@@ -679,9 +728,50 @@
                     </div>
                 `;
             });
+
             container.innerHTML = html;
         }
 
+        // ============================================================
+        // PREVIEW LESSON (NEW)
+        // ============================================================
+        function previewLesson(moduleId, lessonId) {
+            const course = getCourseData();
+            const module = course.modules.find(m => m.id === moduleId);
+            const lesson = module.lessons.find(l => l.id === lessonId);
+            if (!lesson) return;
+
+            const previewWindow = window.open('', '_blank', 'width=800,height=600');
+            previewWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Preview: ${lesson.title}</title>
+                    <style>
+                        body { font-family: 'Segoe UI', sans-serif; padding: 30px; max-width: 800px; margin: auto; background: #f5f7fc; }
+                        .container { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+                        .preview-badge { background: #FFEB3B; color: #000; padding: 4px 12px; border-radius: 40px; font-size: 0.8rem; display: inline-block; margin-bottom: 20px; }
+                        h2 { color: #0056B3; border-bottom: 2px solid #eef4fe; padding-bottom: 10px; }
+                        .content { line-height: 1.6; }
+                        .footer { margin-top: 30px; padding-top: 20px; border-top: 2px solid #eef4fe; color: #888; font-size: 0.85rem; text-align: center; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <span class="preview-badge">👁️ Teacher Preview</span>
+                        <h2>${lesson.title}</h2>
+                        <div class="content">${lesson.content || '<p style="color:#999;">No content yet. Add content to this lesson.</p>'}</div>
+                        <div class="footer">This is how students will see this lesson.</div>
+                    </div>
+                </body>
+                </html>
+            `);
+            previewWindow.document.close();
+        }
+
+        // ============================================================
+        // COURSE SWITCHING
+        // ============================================================
         function switchCourse(courseId) {
             currentCourse = courseId;
             document.querySelectorAll('.course-btn').forEach(btn => {
@@ -690,20 +780,15 @@
             renderCourse();
         }
 
+        // ============================================================
         // MODULE CRUD
+        // ============================================================
         function openAddModuleModal() {
-            document.getElementById('modalType').value = 'module';
-            document.getElementById('editModuleId').value = '';
-            document.getElementById('editLessonId').value = '';
+            resetModal('module');
             document.getElementById('modalTitle').textContent = 'Add Module';
             document.getElementById('modalSub').textContent = 'Create a new module for your course.';
-            document.getElementById('moduleNameGroup').style.display = 'block';
-            document.getElementById('lessonTitleGroup').style.display = 'none';
-            document.getElementById('lessonTypeGroup').style.display = 'none';
-            document.getElementById('lessonContentGroup').style.display = 'none';
-            document.getElementById('quizQuestionsGroup').style.display = 'none';
-            document.getElementById('moduleName').value = '';
             document.getElementById('modalSubmitBtn').textContent = 'Add Module';
+            document.getElementById('modalDeleteBtn').style.display = 'none';
             document.getElementById('modalOverlay').classList.add('active');
         }
 
@@ -711,63 +796,42 @@
             const course = getCourseData();
             const module = course.modules.find(m => m.id === moduleId);
             if (!module) return;
-            document.getElementById('modalType').value = 'module';
+
+            resetModal('module');
             document.getElementById('editModuleId').value = moduleId;
-            document.getElementById('editLessonId').value = '';
             document.getElementById('modalTitle').textContent = 'Edit Module';
             document.getElementById('modalSub').textContent = 'Update this module.';
-            document.getElementById('moduleNameGroup').style.display = 'block';
-            document.getElementById('lessonTitleGroup').style.display = 'none';
-            document.getElementById('lessonTypeGroup').style.display = 'none';
-            document.getElementById('lessonContentGroup').style.display = 'none';
-            document.getElementById('quizQuestionsGroup').style.display = 'none';
             document.getElementById('moduleName').value = module.title;
             document.getElementById('modalSubmitBtn').textContent = 'Save Changes';
+            document.getElementById('modalDeleteBtn').style.display = 'block';
+            document.getElementById('modalDeleteBtn').textContent = '🗑️ Delete Module';
+            document.getElementById('modalDeleteBtn').onclick = function() {
+                if (confirm('Delete this module and all its lessons?')) {
+                    deleteModule(moduleId);
+                }
+            };
             document.getElementById('modalOverlay').classList.add('active');
         }
 
         function deleteModule(moduleId) {
-            if (!confirm('Delete this module and all its lessons?')) return;
             const allData = loadCourseData();
             const course = allData[currentCourse];
             course.modules = course.modules.filter(m => m.id !== moduleId);
             saveCourseData(allData);
+            closeModal();
             renderCourse();
         }
 
+        // ============================================================
         // LESSON CRUD
+        // ============================================================
         function openAddLessonModal(moduleId) {
-            document.getElementById('modalType').value = 'lesson';
+            resetModal('lesson');
             document.getElementById('editModuleId').value = moduleId;
-            document.getElementById('editLessonId').value = '';
             document.getElementById('modalTitle').textContent = 'Add Lesson';
             document.getElementById('modalSub').textContent = 'Create a new lesson or quiz.';
-            document.getElementById('moduleNameGroup').style.display = 'none';
-            document.getElementById('lessonTitleGroup').style.display = 'block';
-            document.getElementById('lessonTypeGroup').style.display = 'block';
-            document.getElementById('lessonContentGroup').style.display = 'block';
-            document.getElementById('quizQuestionsGroup').style.display = 'none';
-            document.getElementById('lessonTitle').value = '';
-            document.getElementById('lessonType').value = 'lesson';
-            document.getElementById('lessonContent').value = '';
             document.getElementById('modalSubmitBtn').textContent = 'Add Lesson';
-            document.getElementById('quizQuestionsContainer').innerHTML = `
-                <div class="question-item" style="background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;">
-                    <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
-                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                        <input type="text" placeholder="Option A" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
-                        <input type="text" placeholder="Option B" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
-                        <input type="text" placeholder="Option C" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
-                        <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
-                            <option value="0">A</option>
-                            <option value="1">B</option>
-                            <option value="2">C</option>
-                        </select>
-                        <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
-                    </div>
-                </div>
-            `;
-            toggleQuizFields('lesson');
+            document.getElementById('modalDeleteBtn').style.display = 'none';
             document.getElementById('modalOverlay').classList.add('active');
         }
 
@@ -777,19 +841,18 @@
             if (!module) return;
             const lesson = module.lessons.find(l => l.id === lessonId);
             if (!lesson) return;
-            document.getElementById('modalType').value = 'lesson';
+
+            resetModal('lesson');
             document.getElementById('editModuleId').value = moduleId;
             document.getElementById('editLessonId').value = lessonId;
             document.getElementById('modalTitle').textContent = 'Edit Lesson';
             document.getElementById('modalSub').textContent = 'Update this lesson or quiz.';
-            document.getElementById('moduleNameGroup').style.display = 'none';
-            document.getElementById('lessonTitleGroup').style.display = 'block';
-            document.getElementById('lessonTypeGroup').style.display = 'block';
-            document.getElementById('lessonContentGroup').style.display = 'block';
             document.getElementById('lessonTitle').value = lesson.title;
             document.getElementById('lessonType').value = lesson.type || 'lesson';
+
             if (lesson.type === 'quiz' && lesson.questions) {
                 document.getElementById('quizQuestionsGroup').style.display = 'block';
+                document.getElementById('lessonContentGroup').style.display = 'none';
                 const container = document.getElementById('quizQuestionsContainer');
                 container.innerHTML = '';
                 lesson.questions.forEach((q, idx) => {
@@ -813,25 +876,82 @@
                 if (lesson.questions.length === 0) addQuestionField();
             } else {
                 document.getElementById('quizQuestionsGroup').style.display = 'none';
+                document.getElementById('lessonContentGroup').style.display = 'block';
                 document.getElementById('lessonContent').value = lesson.content || '';
             }
-            toggleQuizFields(lesson.type || 'lesson');
+
             document.getElementById('modalSubmitBtn').textContent = 'Save Changes';
+            document.getElementById('modalDeleteBtn').style.display = 'block';
+            document.getElementById('modalDeleteBtn').textContent = '🗑️ Delete Lesson';
+            document.getElementById('modalDeleteBtn').onclick = function() {
+                if (confirm('Delete this lesson permanently?')) {
+                    deleteLesson(moduleId, lessonId);
+                }
+            };
             document.getElementById('modalOverlay').classList.add('active');
         }
 
         function deleteLesson(moduleId, lessonId) {
-            if (!confirm('Delete this lesson?')) return;
             const allData = loadCourseData();
             const course = allData[currentCourse];
             const module = course.modules.find(m => m.id === moduleId);
             if (!module) return;
             module.lessons = module.lessons.filter(l => l.id !== lessonId);
             saveCourseData(allData);
+            closeModal();
             renderCourse();
         }
 
+        // ============================================================
+        // MODAL HELPERS
+        // ============================================================
+        function resetModal(type) {
+            document.getElementById('modalType').value = type;
+            document.getElementById('editModuleId').value = '';
+            document.getElementById('editLessonId').value = '';
+
+            document.getElementById('moduleNameGroup').style.display = type === 'module' ? 'block' : 'none';
+            document.getElementById('lessonTitleGroup').style.display = type === 'lesson' ? 'block' : 'none';
+            document.getElementById('lessonTypeGroup').style.display = type === 'lesson' ? 'block' : 'none';
+            document.getElementById('lessonContentGroup').style.display = 'none';
+            document.getElementById('quizQuestionsGroup').style.display = 'none';
+
+            document.getElementById('moduleName').value = '';
+            document.getElementById('lessonTitle').value = '';
+            document.getElementById('lessonType').value = 'lesson';
+            document.getElementById('lessonContent').value = '';
+
+            // Reset quiz questions
+            document.getElementById('quizQuestionsContainer').innerHTML = `
+                <div class="question-item" style="background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;">
+                    <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <input type="text" placeholder="Option A" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                        <input type="text" placeholder="Option B" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                        <input type="text" placeholder="Option C" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                        <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                            <option value="0">A</option>
+                            <option value="1">B</option>
+                            <option value="2">C</option>
+                        </select>
+                        <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
+                    </div>
+                </div>
+            `;
+            toggleQuizFields('lesson');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ============================================================
         // QUIZ HELPERS
+        // ============================================================
         function addQuestionField() {
             const container = document.getElementById('quizQuestionsContainer');
             const qDiv = document.createElement('div');
@@ -872,6 +992,10 @@
             }
         }
 
+        document.getElementById('lessonType').addEventListener('change', function() {
+            toggleQuizFields(this.value);
+        });
+
         function collectQuizQuestions() {
             const items = document.querySelectorAll('.question-item');
             const questions = [];
@@ -888,7 +1012,7 @@
         }
 
         // ============================================================
-        // MODAL SUBMIT – with manual validation
+        // MODAL SUBMIT
         // ============================================================
         document.getElementById('modalForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -958,19 +1082,9 @@
             }
         });
 
-        function closeModal() {
-            document.getElementById('modalOverlay').classList.remove('active');
-        }
-
-        document.getElementById('modalOverlay').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
-
-        document.getElementById('lessonType').addEventListener('change', function() {
-            toggleQuizFields(this.value);
-        });
-
+        // ============================================================
         // LOAD TEACHER NAME
+        // ============================================================
         function loadTeacherName() {
             const token = localStorage.getItem('authToken');
             if (token) {
@@ -986,7 +1100,9 @@
             }
         }
 
+        // ============================================================
         // INIT
+        // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             loadTeacherName();
             const allData = loadCourseData();
@@ -999,6 +1115,5 @@
             renderCourse();
         });
     </script>
-
 </body>
 </html>
