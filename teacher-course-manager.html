@@ -91,6 +91,35 @@
             color: #00ffff;
         }
 
+        /* ====== CREATE COURSE BUTTON ====== */
+        .create-course-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .create-course-btn {
+            background: #00ffff;
+            color: #000;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .create-course-btn:hover {
+            background: #66ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        /* ====== COURSE SELECTOR ====== */
         .course-selector {
             display: flex;
             gap: 12px;
@@ -119,6 +148,10 @@
             background: #00ffff;
             color: #000;
             border-color: #00ffff;
+        }
+
+        .course-btn .course-icon {
+            margin-right: 6px;
         }
 
         .module-card {
@@ -463,6 +496,13 @@
             <a href="teacher-dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
         </div>
 
+        <!-- ====== CREATE COURSE AREA ====== -->
+        <div class="create-course-area">
+            <button class="create-course-btn" onclick="openCreateCourseModal()">
+                <i class="fas fa-plus-circle"></i> Create New Course
+            </button>
+        </div>
+
         <!-- Course Selector (dynamic) -->
         <div class="course-selector" id="courseSelector">
             <!-- Buttons will be injected here -->
@@ -478,7 +518,33 @@
 
     </div>
 
-    <!-- ====== MODAL (Add/Edit) ====== -->
+    <!-- ====== CREATE COURSE MODAL ====== -->
+    <div class="modal-overlay" id="createCourseModal">
+        <div class="modal-content">
+            <h2>📚 Create New Course</h2>
+            <p class="sub">Set up a new course for your students.</p>
+            <form id="createCourseForm">
+                <div class="form-group">
+                    <label for="courseTitle">Course Title</label>
+                    <input type="text" id="courseTitle" placeholder="e.g. Advanced English B2" required>
+                </div>
+                <div class="form-group">
+                    <label for="courseIcon">Icon (emoji)</label>
+                    <input type="text" id="courseIcon" placeholder="📚" value="📚" maxlength="2">
+                </div>
+                <div class="form-group">
+                    <label for="courseAccessCode">Access Code</label>
+                    <input type="text" id="courseAccessCode" placeholder="e.g. B2-2024" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Create Course</button>
+                    <button type="button" class="btn-secondary" onclick="closeCreateCourseModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ====== EDIT MODAL (Module / Lesson) ====== -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <h2 id="modalTitle">Add Module</h2>
@@ -544,17 +610,17 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- JAVASCRIPT – API-INTEGRATED -->
+    <!-- JAVASCRIPT – API-INTEGRATED + CREATE COURSE -->
     <!-- ============================================================ -->
     <script>
         // ============================================================
         // CONFIGURATION
         // ============================================================
-        const API_BASE_URL = 'https://bespellbee-backend-en6l.onrender.com'; // change to your actual backend URL
+        const API_BASE_URL = 'https://bespellbee-backend-en6l.onrender.com';
 
-        let currentCourseId = null; // holds the selected course ID
-        let courses = []; // list of courses for the teacher
-        let currentCourseData = null; // full course data with modules/lessons
+        let currentCourseId = null;
+        let courses = [];
+        let currentCourseData = null;
 
         // ============================================================
         // HELPER: GET AUTH HEADERS
@@ -571,7 +637,7 @@
         // API CALLS
         // ============================================================
 
-        // Fetch all courses for the logged-in teacher
+        // Fetch all courses
         async function fetchCourses() {
             try {
                 const response = await fetch(`${API_BASE_URL}/api/teacher/courses`, {
@@ -606,6 +672,28 @@
                 }
             } catch (error) {
                 console.error('Error fetching course:', error);
+                return null;
+            }
+        }
+
+        // Create a new course
+        async function createCourse(title, icon, accessCode) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/courses`, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({ title, icon, accessCode })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    return data.data;
+                } else {
+                    alert('❌ Failed to create course: ' + (data.message || 'Unknown error'));
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error creating course:', error);
+                alert('Network error creating course.');
                 return null;
             }
         }
@@ -741,13 +829,50 @@
         }
 
         // ============================================================
+        // CREATE COURSE MODAL
+        // ============================================================
+
+        function openCreateCourseModal() {
+            document.getElementById('createCourseModal').classList.add('active');
+            document.getElementById('createCourseForm').reset();
+        }
+
+        function closeCreateCourseModal() {
+            document.getElementById('createCourseModal').classList.remove('active');
+        }
+
+        document.getElementById('createCourseForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('courseTitle').value.trim();
+            const icon = document.getElementById('courseIcon').value.trim() || '📚';
+            const accessCode = document.getElementById('courseAccessCode').value.trim();
+
+            if (!title || !accessCode) {
+                alert('Title and access code are required.');
+                return;
+            }
+
+            const newCourse = await createCourse(title, icon, accessCode);
+            if (newCourse) {
+                alert('✅ Course created successfully!');
+                closeCreateCourseModal();
+                await init();
+            }
+        });
+
+        document.getElementById('createCourseModal').addEventListener('click', function(e) {
+            if (e.target === this) closeCreateCourseModal();
+        });
+
+        // ============================================================
         // RENDER FUNCTIONS
         // ============================================================
 
         function renderCourseSelector() {
             const container = document.getElementById('courseSelector');
             if (!courses || courses.length === 0) {
-                container.innerHTML = `<p style="color:#888;">No courses found. Please create a course first.</p>`;
+                container.innerHTML = `<p style="color:#888;">No courses yet. Create your first course above.</p>`;
                 return;
             }
             let html = '';
@@ -755,7 +880,7 @@
                 const active = course.id === currentCourseId ? 'active' : '';
                 html += `
                     <button class="course-btn ${active}" data-course-id="${course.id}" onclick="selectCourse(${course.id})">
-                        ${course.icon || '📚'} ${course.title}
+                        <span class="course-icon">${course.icon || '📚'}</span> ${course.title}
                     </button>
                 `;
             });
@@ -828,12 +953,10 @@
 
         async function selectCourse(courseId) {
             currentCourseId = courseId;
-            // Update button styles
             document.querySelectorAll('.course-btn').forEach(btn => {
                 btn.classList.toggle('active', parseInt(btn.dataset.courseId) === courseId);
             });
 
-            // Fetch full course data
             const courseData = await fetchCourse(courseId);
             if (courseData) {
                 currentCourseData = courseData;
@@ -885,7 +1008,7 @@
         }
 
         // ============================================================
-        // MODULE CRUD (with modals)
+        // MODULE CRUD
         // ============================================================
 
         function openAddModuleModal() {
@@ -921,13 +1044,12 @@
             const success = await deleteModule(moduleId);
             if (success) {
                 closeModal();
-                // Refresh the course data
                 await selectCourse(currentCourseId);
             }
         }
 
         // ============================================================
-        // LESSON CRUD (with modals)
+        // LESSON CRUD
         // ============================================================
 
         function openAddLessonModal(moduleId) {
@@ -1023,7 +1145,6 @@
             document.getElementById('lessonType').value = 'lesson';
             document.getElementById('lessonContent').value = '';
 
-            // Reset quiz questions
             document.getElementById('quizQuestionsContainer').innerHTML = `
                 <div class="question-item" style="background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;">
                     <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
@@ -1198,20 +1319,17 @@
         async function init() {
             loadTeacherName();
 
-            // Fetch courses for the teacher
             const fetchedCourses = await fetchCourses();
             if (fetchedCourses && fetchedCourses.length > 0) {
                 courses = fetchedCourses;
                 renderCourseSelector();
-                // Select the first course
                 await selectCourse(courses[0].id);
             } else {
-                // No courses – show empty state
-                document.getElementById('courseSelector').innerHTML = `<p style="color:#888;">No courses found. Please create a course first (via admin).</p>`;
+                document.getElementById('courseSelector').innerHTML = `<p style="color:#888;">No courses yet. Create your first course above.</p>`;
                 document.getElementById('modulesContainer').innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-plus-circle"></i>
-                        <p>You don't have any courses yet. Contact admin to set up your course.</p>
+                        <p>You don't have any courses yet. Click "Create New Course" to get started.</p>
                     </div>
                 `;
             }
