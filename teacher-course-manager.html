@@ -7,13 +7,556 @@
     <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-        /* (same CSS as before – unchanged) */
-        /* Keep your existing styles – they are fine */
+        /* ====== GLOBAL ====== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .nav-bar {
+            background: #0d0d0d;
+            border-bottom: 1px solid #1a4a4a;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .nav-bar .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00ffff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+        }
+        .nav-bar .teacher-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .nav-bar .teacher-info .name {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #1a4a4a;
+            padding-bottom: 16px;
+        }
+        .page-header h1 {
+            color: #00ffff;
+            font-size: 1.8rem;
+        }
+        .page-header h1 i { color: #ffcc00; margin-right: 10px; }
+        .back-btn {
+            color: #88dddd;
+            text-decoration: none;
+            padding: 8px 20px;
+            border: 1px solid #1a4a4a;
+            border-radius: 40px;
+            transition: all 0.3s;
+        }
+        .back-btn:hover { border-color: #00ffff; color: #00ffff; }
+
+        .create-course-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .create-course-btn {
+            background: #00ffff;
+            color: #000;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+        .create-course-btn:hover {
+            background: #66ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        .course-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .course-btn {
+            padding: 10px 24px;
+            background: #0d0d0d;
+            border: 1px solid #1a4a4a;
+            border-radius: 40px;
+            color: #88dddd;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        .course-btn:hover { border-color: #00ffff; color: #00ffff; }
+        .course-btn.active {
+            background: #00ffff;
+            color: #000;
+            border-color: #00ffff;
+        }
+        .course-btn .course-icon { margin-right: 6px; }
+
+        .module-card {
+            background: #121212;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #1a4a4a;
+            border-left: 6px solid #ffcc00;
+        }
+        .module-card .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .module-card .module-header h3 {
+            color: #00ffff;
+            font-size: 1.1rem;
+        }
+        .module-card .module-header .module-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .module-card .module-header .module-actions button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #1a4a4a;
+            color: #88dddd;
+            padding: 4px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.3s;
+        }
+        .module-card .module-header .module-actions button:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .lesson-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1a1a1a;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 1px solid #1a4a4a;
+            margin: 6px 0;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .lesson-item .lesson-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .lesson-item .lesson-info .lesson-type {
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+        }
+        .lesson-item .lesson-info .lesson-type.quiz {
+            background: rgba(255, 204, 0, 0.1);
+            color: #ffcc00;
+        }
+        .lesson-item .lesson-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .lesson-item .lesson-actions button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #1a4a4a;
+            color: #88dddd;
+            padding: 4px 10px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.3s;
+        }
+        .lesson-item .lesson-actions button:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+        .lesson-item .lesson-actions .preview-btn:hover {
+            border-color: #ffcc00;
+            color: #ffcc00;
+        }
+        .lesson-item .lesson-actions .move-btn {
+            padding: 2px 6px;
+            font-size: 0.65rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #1a4a4a;
+            color: #88dddd;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .lesson-item .lesson-actions .move-btn:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+        .lesson-item .lesson-actions .move-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .add-btn {
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px dashed #1a4a4a;
+            color: #88dddd;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .add-btn:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+            background: rgba(0, 255, 255, 0.05);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #555;
+        }
+        .empty-state i {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* ====== MODAL ====== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: #0d0d0d;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-content h2 {
+            color: #00ffff;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+        .modal-content .sub {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 1.2rem;
+        }
+        .modal-content .form-group {
+            margin-bottom: 1rem;
+        }
+        .modal-content .form-group label {
+            display: block;
+            color: #88dddd;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+        .modal-content .form-group input,
+        .modal-content .form-group select,
+        .modal-content .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            background: #1a1a1a;
+            border: 1px solid #2a4a4a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.85rem;
+            box-sizing: border-box;
+        }
+        .modal-content .form-group input:focus,
+        .modal-content .form-group select:focus,
+        .modal-content .form-group textarea:focus {
+            outline: none;
+            border-color: #00ffff;
+        }
+        .modal-content .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .modal-content .form-group select option { background: #1a1a1a; color: #fff; }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+        }
+        .modal-actions .btn-primary {
+            background: #00ffff;
+            color: #000;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 100px;
+        }
+        .modal-actions .btn-primary:hover {
+            background: #66ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+        }
+        .modal-actions .btn-secondary {
+            background: transparent;
+            color: #888;
+            border: 1px solid #444;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 80px;
+        }
+        .modal-actions .btn-secondary:hover {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+        .modal-actions .btn-danger {
+            background: #ff4444;
+            color: #fff;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 80px;
+        }
+        .modal-actions .btn-danger:hover {
+            background: #cc0000;
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff88;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+        @media (max-width: 600px) {
+            .page-header h1 { font-size: 1.4rem; }
+            .module-card .module-header { flex-direction: column; align-items: flex-start; }
+            .modal-content { padding: 1.5rem; }
+            .course-btn { padding: 8px 16px; font-size: 0.8rem; }
+            .lesson-item { flex-direction: column; align-items: flex-start; }
+            .lesson-item .lesson-actions { width: 100%; justify-content: flex-start; }
+            .modal-actions { flex-direction: column; }
+            .modal-actions .btn-primary,
+            .modal-actions .btn-secondary,
+            .modal-actions .btn-danger { width: 100%; text-align: center; }
+        }
     </style>
 </head>
 <body>
-    <!-- (same HTML structure – unchanged) -->
-    <!-- ... -->
+
+    <!-- ====== TOP NAV ====== -->
+    <nav class="nav-bar">
+        <div class="logo">
+            <svg width="180" height="40" viewBox="0 0 200 50">
+                <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:aqua;"/>
+                        <stop offset="50%" style="stop-color:white;" />
+                        <stop offset="100%" style="stop-color:yellow;" />
+                    </linearGradient>
+                </defs>
+                <text x="0" y="38" fill="url(#gradient)" font-size="36" font-weight="700" font-family="Segoe UI, sans-serif">BeSpellBee</text>
+            </svg>
+        </div>
+        <div class="teacher-info">
+            <span class="badge"><span class="status-dot"></span> Live</span>
+            <span class="name" id="navTeacherName"><i class="fas fa-user-graduate"></i> Loading...</span>
+        </div>
+    </nav>
+
+    <!-- ====== MAIN CONTENT ====== -->
+    <div class="container">
+
+        <div class="page-header">
+            <h1><i class="fas fa-pencil-alt"></i> Manage Your Course</h1>
+            <a href="teacher-dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+
+        <div class="create-course-area">
+            <button class="create-course-btn" onclick="openCreateCourseModal()">
+                <i class="fas fa-plus-circle"></i> Create New Course
+            </button>
+        </div>
+
+        <!-- Course Selector -->
+        <div class="course-selector" id="courseSelector">
+            <!-- Injected by JS -->
+        </div>
+
+        <!-- Course Editor -->
+        <div id="courseEditor">
+            <div id="modulesContainer"></div>
+            <button class="add-btn" onclick="openAddModuleModal()">
+                <i class="fas fa-plus-circle"></i> Add New Module
+            </button>
+        </div>
+
+    </div>
+
+    <!-- ====== CREATE COURSE MODAL ====== -->
+    <div class="modal-overlay" id="createCourseModal">
+        <div class="modal-content">
+            <h2>📚 Create New Course</h2>
+            <p class="sub">Set up a new course for your students.</p>
+            <form id="createCourseForm">
+                <div class="form-group">
+                    <label for="courseTitle">Course Title</label>
+                    <input type="text" id="courseTitle" placeholder="e.g. Advanced English B2" required>
+                </div>
+                <div class="form-group">
+                    <label for="courseIcon">Icon (emoji)</label>
+                    <input type="text" id="courseIcon" placeholder="📚" value="📚" maxlength="2">
+                </div>
+                <div class="form-group">
+                    <label for="courseAccessCode">Access Code</label>
+                    <input type="text" id="courseAccessCode" placeholder="e.g. B2-2024" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Create Course</button>
+                    <button type="button" class="btn-secondary" onclick="closeCreateCourseModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ====== EDIT MODAL (Module / Lesson) ====== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <h2 id="modalTitle">Add Module</h2>
+            <p class="sub" id="modalSub">Create a new module for your course.</p>
+            <form id="modalForm" novalidate>
+                <input type="hidden" id="modalType" value="module">
+                <input type="hidden" id="editModuleId" value="">
+                <input type="hidden" id="editLessonId" value="">
+
+                <div class="form-group" id="moduleNameGroup">
+                    <label for="moduleName">Module Title</label>
+                    <input type="text" id="moduleName" placeholder="e.g. Module 1: Grammar Foundations">
+                </div>
+
+                <div class="form-group" id="lessonTitleGroup" style="display:none;">
+                    <label for="lessonTitle">Lesson Title</label>
+                    <input type="text" id="lessonTitle" placeholder="e.g. Present Tenses Review">
+                </div>
+
+                <div class="form-group" id="lessonTypeGroup" style="display:none;">
+                    <label for="lessonType">Lesson Type</label>
+                    <select id="lessonType">
+                        <option value="lesson">📖 Lesson</option>
+                        <option value="quiz">🧠 Quiz</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="lessonContentGroup" style="display:none;">
+                    <label for="lessonContent">Content (HTML / iframe embed)</label>
+                    <textarea id="lessonContent" placeholder="Paste your lesson content, iframe embed code, or HTML here..."></textarea>
+                </div>
+
+                <div class="form-group" id="quizQuestionsGroup" style="display:none;">
+                    <label>Quiz Questions</label>
+                    <div id="quizQuestionsContainer">
+                        <div class="question-item" style="background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;">
+                            <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                <input type="text" placeholder="Option A" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                <input type="text" placeholder="Option B" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                <input type="text" placeholder="Option C" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                    <option value="0">A</option>
+                                    <option value="1">B</option>
+                                    <option value="2">C</option>
+                                </select>
+                                <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" onclick="addQuestionField()" style="background:rgba(0,255,255,0.05); border:1px dashed #2a4a4a; color:#88dddd; padding:8px; border-radius:8px; cursor:pointer; width:100%; margin-top:6px;">
+                        <i class="fas fa-plus"></i> Add Question
+                    </button>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary" id="modalSubmitBtn">Save</button>
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="btn-danger" id="modalDeleteBtn" style="display:none;" onclick="confirmDelete()">🗑️ Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================================================ -->
     <script>
         // ============================================================
         // CONFIGURATION
@@ -35,7 +578,7 @@
         }
 
         // ============================================================
-        // API CALLS (unchanged)
+        // API CALLS
         // ============================================================
         async function fetchCourses() {
             try {
@@ -227,7 +770,7 @@
         }
 
         // ============================================================
-        // RENDER FUNCTIONS (unchanged)
+        // RENDER FUNCTIONS
         // ============================================================
         function renderCourseSelector() {
             const container = document.getElementById('courseSelector');
@@ -336,7 +879,7 @@
         }
 
         // ============================================================
-        // MOVE LESSON (unchanged)
+        // MOVE LESSON
         // ============================================================
         async function moveLesson(moduleId, lessonId, direction) {
             if (!currentCourseData) return;
@@ -362,7 +905,7 @@
         }
 
         // ============================================================
-        // PREVIEW LESSON (unchanged)
+        // PREVIEW LESSON
         // ============================================================
         function previewLesson(moduleId, lessonId) {
             if (!currentCourseData) return;
@@ -401,7 +944,7 @@
         }
 
         // ============================================================
-        // MODULE CRUD (unchanged)
+        // MODULE CRUD
         // ============================================================
         function openAddModuleModal() {
             resetModal('module');
@@ -441,7 +984,7 @@
         }
 
         // ============================================================
-        // LESSON CRUD (unchanged)
+        // LESSON CRUD
         // ============================================================
         function openAddLessonModal(moduleId) {
             resetModal('lesson');
@@ -517,7 +1060,7 @@
         }
 
         // ============================================================
-        // MODAL HELPERS (unchanged)
+        // MODAL HELPERS
         // ============================================================
         function resetModal(type) {
             document.getElementById('modalType').value = type;
@@ -563,7 +1106,7 @@
         });
 
         // ============================================================
-        // QUIZ HELPERS (unchanged)
+        // QUIZ HELPERS
         // ============================================================
         function addQuestionField() {
             const container = document.getElementById('quizQuestionsContainer');
@@ -709,7 +1252,7 @@
         });
 
         // ============================================================
-        // LOAD TEACHER NAME (unchanged)
+        // LOAD TEACHER NAME
         // ============================================================
         function loadTeacherName() {
             const token = localStorage.getItem('authToken');
@@ -750,5 +1293,6 @@
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
+
 </body>
 </html>
