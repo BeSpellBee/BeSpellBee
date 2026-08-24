@@ -7,14 +7,564 @@
     <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-        /* ... (same CSS as before – copy from the previous full version) ... */
-        /* I'll keep the same styles to avoid repetition. Please reuse the CSS from the earlier response. */
+        /* ====== GLOBAL ====== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .nav-bar {
+            background: #0d0d0d;
+            border-bottom: 1px solid #1a4a4a;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-bar .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00ffff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+        }
+
+        .nav-bar .teacher-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-bar .teacher-info .name {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #1a4a4a;
+            padding-bottom: 16px;
+        }
+
+        .page-header h1 {
+            color: #00ffff;
+            font-size: 1.8rem;
+        }
+
+        .page-header h1 i {
+            color: #ffcc00;
+            margin-right: 10px;
+        }
+
+        .back-btn {
+            color: #88dddd;
+            text-decoration: none;
+            padding: 8px 20px;
+            border: 1px solid #1a4a4a;
+            border-radius: 40px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .create-course-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .create-course-btn {
+            background: #00ffff;
+            color: #000;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .create-course-btn:hover {
+            background: #66ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        .course-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .course-btn {
+            padding: 10px 24px;
+            background: #0d0d0d;
+            border: 1px solid #1a4a4a;
+            border-radius: 40px;
+            color: #88dddd;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .course-btn:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .course-btn.active {
+            background: #00ffff;
+            color: #000;
+            border-color: #00ffff;
+        }
+
+        .course-btn .course-icon {
+            margin-right: 6px;
+        }
+
+        .module-card {
+            background: #121212;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #1a4a4a;
+            border-left: 6px solid #ffcc00;
+        }
+
+        .module-card .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .module-card .module-header h3 {
+            color: #00ffff;
+            font-size: 1.1rem;
+        }
+
+        .module-card .module-header .module-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .module-card .module-header .module-actions button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #1a4a4a;
+            color: #88dddd;
+            padding: 4px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .module-card .module-header .module-actions button:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .lesson-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1a1a1a;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 1px solid #1a4a4a;
+            margin: 6px 0;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .lesson-item .lesson-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .lesson-item .lesson-info .lesson-type {
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+        }
+
+        .lesson-item .lesson-info .lesson-type.quiz {
+            background: rgba(255, 204, 0, 0.1);
+            color: #ffcc00;
+        }
+
+        .lesson-item .lesson-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .lesson-item .lesson-actions button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #1a4a4a;
+            color: #88dddd;
+            padding: 4px 10px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.3s;
+        }
+
+        .lesson-item .lesson-actions button:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .lesson-item .lesson-actions .preview-btn:hover {
+            border-color: #ffcc00;
+            color: #ffcc00;
+        }
+
+        .lesson-item .lesson-actions .move-btn {
+            padding: 2px 6px;
+            font-size: 0.65rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #1a4a4a;
+            color: #88dddd;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lesson-item .lesson-actions .move-btn:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .lesson-item .lesson-actions .move-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .add-btn {
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px dashed #1a4a4a;
+            color: #88dddd;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .add-btn:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+            background: rgba(0, 255, 255, 0.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #555;
+        }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* ====== MODAL ====== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #0d0d0d;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2 {
+            color: #00ffff;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-content .sub {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .modal-content .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .modal-content .form-group label {
+            display: block;
+            color: #88dddd;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .modal-content .form-group input,
+        .modal-content .form-group select,
+        .modal-content .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            background: #1a1a1a;
+            border: 1px solid #2a4a4a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.85rem;
+            box-sizing: border-box;
+        }
+
+        .modal-content .form-group input:focus,
+        .modal-content .form-group select:focus,
+        .modal-content .form-group textarea:focus {
+            outline: none;
+            border-color: #00ffff;
+        }
+
+        .modal-content .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .modal-content .form-group select option {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .modal-actions .btn-primary {
+            background: #00ffff;
+            color: #000;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .modal-actions .btn-primary:hover {
+            background: #66ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .modal-actions .btn-secondary {
+            background: transparent;
+            color: #888;
+            border: 1px solid #444;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .modal-actions .btn-secondary:hover {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+
+        .modal-actions .btn-danger {
+            background: #ff4444;
+            color: #fff;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .modal-actions .btn-danger:hover {
+            background: #cc0000;
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff88;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            .page-header h1 { font-size: 1.4rem; }
+            .module-card .module-header { flex-direction: column; align-items: flex-start; }
+            .modal-content { padding: 1.5rem; }
+            .course-btn { padding: 8px 16px; font-size: 0.8rem; }
+            .lesson-item { flex-direction: column; align-items: flex-start; }
+            .lesson-item .lesson-actions { width: 100%; justify-content: flex-start; }
+            .modal-actions { flex-direction: column; }
+            .modal-actions .btn-primary,
+            .modal-actions .btn-secondary,
+            .modal-actions .btn-danger { width: 100%; text-align: center; }
+        }
     </style>
 </head>
 <body>
-    <!-- ... (same nav, containers, modals) ... -->
-    <!-- No changes to HTML structure, just remove the checkbox group -->
 
+    <!-- ====== TOP NAV ====== -->
+    <nav class="nav-bar">
+        <div class="logo">
+            <svg width="180" height="40" viewBox="0 0 200 50">
+                <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:aqua;"/>
+                        <stop offset="50%" style="stop-color:white;" />
+                        <stop offset="100%" style="stop-color:yellow;" />
+                    </linearGradient>
+                </defs>
+                <text x="0" y="38" fill="url(#gradient)" font-size="36" font-weight="700" font-family="Segoe UI, sans-serif">BeSpellBee</text>
+            </svg>
+        </div>
+        <div class="teacher-info">
+            <span class="badge"><span class="status-dot"></span> Live</span>
+            <span class="name" id="navTeacherName"><i class="fas fa-user-graduate"></i> Loading...</span>
+        </div>
+    </nav>
+
+    <!-- ====== MAIN CONTENT ====== -->
+    <div class="container">
+
+        <div class="page-header">
+            <h1><i class="fas fa-pencil-alt"></i> Manage Your Course</h1>
+            <a href="teacher-dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+
+        <!-- ====== CREATE COURSE AREA ====== -->
+        <div class="create-course-area">
+            <button class="create-course-btn" onclick="openCreateCourseModal()">
+                <i class="fas fa-plus-circle"></i> Create New Course
+            </button>
+        </div>
+
+        <!-- Course Selector -->
+        <div class="course-selector" id="courseSelector">
+            <!-- Injected by JS -->
+        </div>
+
+        <!-- Course Editor -->
+        <div id="courseEditor">
+            <div id="modulesContainer"></div>
+            <button class="add-btn" onclick="openAddModuleModal()">
+                <i class="fas fa-plus-circle"></i> Add New Module
+            </button>
+        </div>
+
+    </div>
+
+    <!-- ====== CREATE COURSE MODAL ====== -->
+    <div class="modal-overlay" id="createCourseModal">
+        <div class="modal-content">
+            <h2>📚 Create New Course</h2>
+            <p class="sub">Set up a new course for your students.</p>
+            <form id="createCourseForm">
+                <div class="form-group">
+                    <label for="courseTitle">Course Title</label>
+                    <input type="text" id="courseTitle" placeholder="e.g. Advanced English B2" required>
+                </div>
+                <div class="form-group">
+                    <label for="courseIcon">Icon (emoji)</label>
+                    <input type="text" id="courseIcon" placeholder="📚" value="📚" maxlength="2">
+                </div>
+                <div class="form-group">
+                    <label for="courseAccessCode">Access Code</label>
+                    <input type="text" id="courseAccessCode" placeholder="e.g. B2-2024" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Create Course</button>
+                    <button type="button" class="btn-secondary" onclick="closeCreateCourseModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ====== EDIT MODAL (Module / Lesson) ====== -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <h2 id="modalTitle">Add Module</h2>
@@ -29,7 +579,7 @@
                     <input type="text" id="moduleName" placeholder="e.g. Module 1: Grammar Foundations">
                 </div>
 
-                <!-- Removed the PPP checkbox -->
+                <!-- No checkbox – automatic PPP template -->
 
                 <div class="form-group" id="lessonTitleGroup" style="display:none;">
                     <label for="lessonTitle">Lesson Title</label>
@@ -52,9 +602,24 @@
                 <div class="form-group" id="quizQuestionsGroup" style="display:none;">
                     <label>Quiz Questions</label>
                     <div id="quizQuestionsContainer">
-                        <!-- ... same as before ... -->
+                        <div class="question-item" style="background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;">
+                            <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                <input type="text" placeholder="Option A" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                <input type="text" placeholder="Option B" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                <input type="text" placeholder="Option C" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                    <option value="0">A</option>
+                                    <option value="1">B</option>
+                                    <option value="2">C</option>
+                                </select>
+                                <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
+                            </div>
+                        </div>
                     </div>
-                    <button type="button" onclick="addQuestionField()">+ Add Question</button>
+                    <button type="button" onclick="addQuestionField()" style="background:rgba(0,255,255,0.05); border:1px dashed #2a4a4a; color:#88dddd; padding:8px; border-radius:8px; cursor:pointer; width:100%; margin-top:6px;">
+                        <i class="fas fa-plus"></i> Add Question
+                    </button>
                 </div>
 
                 <div class="modal-actions">
@@ -66,18 +631,176 @@
         </div>
     </div>
 
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================================================ -->
     <script>
         // ============================================================
-        // The rest of your JavaScript – but modify the module creation:
+        // CONFIGURATION
         // ============================================================
+        const API_BASE_URL = 'https://bespellbee-backend-en6l.onrender.com';
+        let currentCourseId = null;
+        let courses = [];
+        let currentCourseData = null;
 
-        // When adding a module, automatically create 3 placeholder lessons
+        // ============================================================
+        // HELPER: GET AUTH HEADERS
+        // ============================================================
+        function getAuthHeaders() {
+            const token = localStorage.getItem('authToken');
+            return {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            };
+        }
+
+        // ============================================================
+        // API CALLS
+        // ============================================================
+        async function fetchCourses() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/courses`, { headers: getAuthHeaders() });
+                const data = await response.json();
+                if (data.success) { courses = data.data; return courses; }
+                console.error('Failed to fetch courses:', data.message);
+                return [];
+            } catch (error) { console.error('Error fetching courses:', error); return []; }
+        }
+
+        async function fetchCourse(courseId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/courses/${courseId}`, { headers: getAuthHeaders() });
+                const data = await response.json();
+                if (data.success) return data.data;
+                console.error('Failed to fetch course:', data.message);
+                return null;
+            } catch (error) { console.error('Error fetching course:', error); return null; }
+        }
+
+        async function createCourse(title, icon, accessCode) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/courses`, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({ title, icon, accessCode })
+                });
+                const data = await response.json();
+                if (data.success) return data.data;
+                alert('❌ Failed to create course: ' + (data.message || 'Unknown error'));
+                return null;
+            } catch (error) { console.error('Error creating course:', error); alert('Network error creating course.'); return null; }
+        }
+
+        async function createModule(courseId, title) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/courses/${courseId}/modules`, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({ title })
+                });
+                const data = await response.json();
+                if (data.success) return data.data;
+                alert('Failed to create module: ' + (data.message || 'Unknown error'));
+                return null;
+            } catch (error) { console.error('Error creating module:', error); alert('Network error creating module.'); return null; }
+        }
+
+        async function updateModule(moduleId, title) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/modules/${moduleId}`, {
+                    method: 'PUT',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({ title })
+                });
+                const data = await response.json();
+                if (data.success) return data.data;
+                alert('Failed to update module: ' + (data.message || 'Unknown error'));
+                return null;
+            } catch (error) { console.error('Error updating module:', error); alert('Network error updating module.'); return null; }
+        }
+
+        async function deleteModule(moduleId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/modules/${moduleId}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+                const data = await response.json();
+                if (data.success) return true;
+                alert('Failed to delete module: ' + (data.message || 'Unknown error'));
+                return false;
+            } catch (error) { console.error('Error deleting module:', error); alert('Network error deleting module.'); return false; }
+        }
+
+        async function createLesson(moduleId, lessonData) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/modules/${moduleId}/lessons`, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(lessonData)
+                });
+                const data = await response.json();
+                if (data.success) return data.data;
+                alert('Failed to create lesson: ' + (data.message || 'Unknown error'));
+                return null;
+            } catch (error) { console.error('Error creating lesson:', error); alert('Network error creating lesson.'); return null; }
+        }
+
+        async function updateLesson(lessonId, lessonData) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/lessons/${lessonId}`, {
+                    method: 'PUT',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(lessonData)
+                });
+                const data = await response.json();
+                if (data.success) return data.data;
+                alert('Failed to update lesson: ' + (data.message || 'Unknown error'));
+                return null;
+            } catch (error) { console.error('Error updating lesson:', error); alert('Network error updating lesson.'); return null; }
+        }
+
+        async function deleteLesson(lessonId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/lessons/${lessonId}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+                const data = await response.json();
+                if (data.success) return true;
+                alert('Failed to delete lesson: ' + (data.message || 'Unknown error'));
+                return false;
+            } catch (error) { console.error('Error deleting lesson:', error); alert('Network error deleting lesson.'); return false; }
+        }
+
+        // ============================================================
+        // CREATE COURSE MODAL
+        // ============================================================
+        function openCreateCourseModal() {
+            document.getElementById('createCourseModal').classList.add('active');
+            document.getElementById('createCourseForm').reset();
+        }
+        function closeCreateCourseModal() {
+            document.getElementById('createCourseModal').classList.remove('active');
+        }
+        document.getElementById('createCourseForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const title = document.getElementById('courseTitle').value.trim();
+            const icon = document.getElementById('courseIcon').value.trim() || '📚';
+            const accessCode = document.getElementById('courseAccessCode').value.trim();
+            if (!title || !accessCode) { alert('Title and access code are required.'); return; }
+            const newCourse = await createCourse(title, icon, accessCode);
+            if (newCourse) { alert('✅ Course created successfully!'); closeCreateCourseModal(); await init(); }
+        });
+        document.getElementById('createCourseModal').addEventListener('click', function(e) { if (e.target === this) closeCreateCourseModal(); });
+
+        // ============================================================
+        // PPP TEMPLATE – creates a module with 3 placeholder lessons
+        // ============================================================
         async function createModuleWithPlaceholders(courseId, title) {
-            // First create the module
             const module = await createModule(courseId, title);
             if (!module) return null;
 
-            // Define three placeholder lessons
             const placeholders = [
                 {
                     title: '📖 Lesson',
@@ -102,7 +825,6 @@
                 }
             ];
 
-            // Create each placeholder lesson
             let allSuccess = true;
             for (const data of placeholders) {
                 const result = await createLesson(module.id, data);
@@ -116,7 +838,406 @@
         }
 
         // ============================================================
-        // Update the modal submit handler to use the new function
+        // RENDER FUNCTIONS
+        // ============================================================
+        function renderCourseSelector() {
+            const container = document.getElementById('courseSelector');
+            if (!courses || courses.length === 0) {
+                container.innerHTML = `<p style="color:#888;">No courses yet. Create your first course above.</p>`;
+                return;
+            }
+            let html = '';
+            courses.forEach(course => {
+                const active = course.id === currentCourseId ? 'active' : '';
+                html += `
+                    <button class="course-btn ${active}" data-course-id="${course.id}" onclick="selectCourse(${course.id})">
+                        <span class="course-icon">${course.icon || '📚'}</span> ${course.title}
+                    </button>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderModules() {
+            const container = document.getElementById('modulesContainer');
+            if (!currentCourseData || !currentCourseData.modules || currentCourseData.modules.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <p>No modules yet. Click "Add New Module" to get started.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            currentCourseData.modules.forEach(mod => {
+                html += `
+                    <div class="module-card">
+                        <div class="module-header">
+                            <h3><i class="fas fa-folder"></i> ${mod.title}</h3>
+                            <div class="module-actions">
+                                <button onclick="editModule(${mod.id})"><i class="fas fa-edit"></i> Edit</button>
+                            </div>
+                        </div>
+                        <div class="module-lessons">
+                `;
+
+                if (!mod.Lessons || mod.Lessons.length === 0) {
+                    html += `<p style="color:#555; font-size:0.85rem; padding:8px 0;">No lessons yet.</p>`;
+                } else {
+                    // Sort by orderIndex
+                    const sorted = [...mod.Lessons].sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0));
+                    sorted.forEach((lesson, index) => {
+                        const typeLabel = lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson';
+                        const typeClass = lesson.type === 'quiz' ? 'quiz' : '';
+                        const isFirst = index === 0;
+                        const isLast = index === sorted.length - 1;
+                        html += `
+                            <div class="lesson-item">
+                                <div class="lesson-info">
+                                    <span>${lesson.title}</span>
+                                    <span class="lesson-type ${typeClass}">${typeLabel}</span>
+                                </div>
+                                <div class="lesson-actions">
+                                    <button class="preview-btn" onclick="previewLesson(${mod.id}, ${lesson.id})" title="Preview Lesson">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button onclick="editLesson(${mod.id}, ${lesson.id})"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="move-btn" onclick="moveLesson(${mod.id}, ${lesson.id}, -1)" title="Move Up" ${isFirst ? 'disabled' : ''}>
+                                        <i class="fas fa-chevron-up"></i>
+                                    </button>
+                                    <button class="move-btn" onclick="moveLesson(${mod.id}, ${lesson.id}, 1)" title="Move Down" ${isLast ? 'disabled' : ''}>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                html += `
+                            <button class="add-btn" onclick="openAddLessonModal(${mod.id})">
+                                <i class="fas fa-plus-circle"></i> Add Lesson to "${mod.title}"
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // ============================================================
+        // COURSE SELECTION
+        // ============================================================
+        async function selectCourse(courseId) {
+            currentCourseId = courseId;
+            document.querySelectorAll('.course-btn').forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.courseId) === courseId);
+            });
+
+            const courseData = await fetchCourse(courseId);
+            if (courseData) {
+                currentCourseData = courseData;
+                renderModules();
+            } else {
+                currentCourseData = null;
+                document.getElementById('modulesContainer').innerHTML = `<p style="color:#ff4444;">Error loading course data.</p>`;
+            }
+        }
+
+        // ============================================================
+        // MOVE LESSON
+        // ============================================================
+        async function moveLesson(moduleId, lessonId, direction) {
+            if (!currentCourseData) return;
+            const module = currentCourseData.modules.find(m => m.id === moduleId);
+            if (!module) return;
+            const lessonIndex = module.Lessons.findIndex(l => l.id === lessonId);
+            if (lessonIndex === -1) return;
+            const newIndex = lessonIndex + direction;
+            if (newIndex < 0 || newIndex >= module.Lessons.length) return;
+
+            const otherLesson = module.Lessons[newIndex];
+            const tempOrder = lesson.orderIndex;
+            lesson.orderIndex = otherLesson.orderIndex;
+            otherLesson.orderIndex = tempOrder;
+
+            const update1 = await updateLesson(lesson.id, { orderIndex: lesson.orderIndex });
+            const update2 = await updateLesson(otherLesson.id, { orderIndex: otherLesson.orderIndex });
+            if (update1 && update2) {
+                await selectCourse(currentCourseId);
+            } else {
+                alert('Failed to reorder lessons. Please try again.');
+            }
+        }
+
+        // ============================================================
+        // PREVIEW LESSON
+        // ============================================================
+        function previewLesson(moduleId, lessonId) {
+            if (!currentCourseData) return;
+            const module = currentCourseData.modules.find(m => m.id === moduleId);
+            if (!module) return;
+            const lesson = module.Lessons.find(l => l.id === lessonId);
+            if (!lesson) return;
+
+            const previewWindow = window.open('', '_blank');
+            previewWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Preview: ${lesson.title}</title>
+                    <style>
+                        body { font-family: 'Segoe UI', sans-serif; padding: 30px; max-width: 1000px; margin: auto; background: #f5f7fc; }
+                        .container { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+                        .preview-badge { background: #FFEB3B; color: #000; padding: 4px 12px; border-radius: 40px; font-size: 0.8rem; display: inline-block; margin-bottom: 20px; }
+                        h2 { color: #0056B3; border-bottom: 2px solid #eef4fe; padding-bottom: 10px; }
+                        .content { line-height: 1.6; }
+                        .content iframe { width: 100% !important; max-width: 100% !important; min-height: 500px !important; height: auto !important; aspect-ratio: 16/9; border: 2px solid #eef4fe; border-radius: 16px; background: #fff; margin: 15px 0; }
+                        .footer { margin-top: 30px; padding-top: 20px; border-top: 2px solid #eef4fe; color: #888; font-size: 0.85rem; text-align: center; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <span class="preview-badge">👁️ Teacher Preview</span>
+                        <h2>${lesson.title}</h2>
+                        <div class="content">${lesson.content || '<p style="color:#999;">No content yet. Add content to this lesson.</p>'}</div>
+                        <div class="footer">This is how students will see this lesson.</div>
+                    </div>
+                </body>
+                </html>
+            `);
+            previewWindow.document.close();
+        }
+
+        // ============================================================
+        // MODULE CRUD
+        // ============================================================
+        function openAddModuleModal() {
+            resetModal('module');
+            document.getElementById('modalTitle').textContent = 'Add Module';
+            document.getElementById('modalSub').textContent = 'Create a new module for your course.';
+            document.getElementById('modalSubmitBtn').textContent = 'Add Module';
+            document.getElementById('modalDeleteBtn').style.display = 'none';
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function editModule(moduleId) {
+            const module = currentCourseData.modules.find(m => m.id === moduleId);
+            if (!module) return;
+
+            resetModal('module');
+            document.getElementById('editModuleId').value = moduleId;
+            document.getElementById('modalTitle').textContent = 'Edit Module';
+            document.getElementById('modalSub').textContent = 'Update this module.';
+            document.getElementById('moduleName').value = module.title;
+            document.getElementById('modalSubmitBtn').textContent = 'Save Changes';
+            document.getElementById('modalDeleteBtn').style.display = 'block';
+            document.getElementById('modalDeleteBtn').textContent = '🗑️ Delete Module';
+            document.getElementById('modalDeleteBtn').onclick = function() {
+                if (confirm('Delete this module and all its lessons?')) {
+                    confirmDeleteModule(moduleId);
+                }
+            };
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        async function confirmDeleteModule(moduleId) {
+            const success = await deleteModule(moduleId);
+            if (success) {
+                closeModal();
+                await selectCourse(currentCourseId);
+            }
+        }
+
+        // ============================================================
+        // LESSON CRUD
+        // ============================================================
+        function openAddLessonModal(moduleId) {
+            resetModal('lesson');
+            document.getElementById('editModuleId').value = moduleId;
+            document.getElementById('modalTitle').textContent = 'Add Lesson';
+            document.getElementById('modalSub').textContent = 'Create a new lesson or quiz.';
+            document.getElementById('modalSubmitBtn').textContent = 'Add Lesson';
+            document.getElementById('modalDeleteBtn').style.display = 'none';
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function editLesson(moduleId, lessonId) {
+            const module = currentCourseData.modules.find(m => m.id === moduleId);
+            if (!module) return;
+            const lesson = module.Lessons.find(l => l.id === lessonId);
+            if (!lesson) return;
+
+            resetModal('lesson');
+            document.getElementById('editModuleId').value = moduleId;
+            document.getElementById('editLessonId').value = lessonId;
+            document.getElementById('modalTitle').textContent = 'Edit Lesson';
+            document.getElementById('modalSub').textContent = 'Update this lesson or quiz.';
+            document.getElementById('lessonTitle').value = lesson.title;
+            document.getElementById('lessonType').value = lesson.type || 'lesson';
+
+            if (lesson.type === 'quiz' && lesson.questions) {
+                document.getElementById('quizQuestionsGroup').style.display = 'block';
+                document.getElementById('lessonContentGroup').style.display = 'none';
+                const container = document.getElementById('quizQuestionsContainer');
+                container.innerHTML = '';
+                lesson.questions.forEach((q, idx) => {
+                    const qDiv = document.createElement('div');
+                    qDiv.className = 'question-item';
+                    qDiv.style.cssText = 'background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;';
+                    qDiv.innerHTML = `
+                        <input type="text" placeholder="Question text" class="q-text" value="${q.question}" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                            ${q.options.map((opt, oi) => `
+                                <input type="text" placeholder="Option ${String.fromCharCode(65 + oi)}" class="q-option" value="${opt}" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                            `).join('')}
+                            <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                ${q.options.map((_, oi) => `<option value="${oi}" ${oi === q.correct ? 'selected' : ''}>${String.fromCharCode(65 + oi)}</option>`).join('')}
+                            </select>
+                            <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
+                        </div>
+                    `;
+                    container.appendChild(qDiv);
+                });
+                if (lesson.questions.length === 0) addQuestionField();
+            } else {
+                document.getElementById('quizQuestionsGroup').style.display = 'none';
+                document.getElementById('lessonContentGroup').style.display = 'block';
+                document.getElementById('lessonContent').value = lesson.content || '';
+            }
+
+            document.getElementById('modalSubmitBtn').textContent = 'Save Changes';
+            document.getElementById('modalDeleteBtn').style.display = 'block';
+            document.getElementById('modalDeleteBtn').textContent = '🗑️ Delete Lesson';
+            document.getElementById('modalDeleteBtn').onclick = function() {
+                if (confirm('Delete this lesson permanently?')) {
+                    confirmDeleteLesson(lessonId);
+                }
+            };
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        async function confirmDeleteLesson(lessonId) {
+            const success = await deleteLesson(lessonId);
+            if (success) {
+                closeModal();
+                await selectCourse(currentCourseId);
+            }
+        }
+
+        // ============================================================
+        // MODAL HELPERS
+        // ============================================================
+        function resetModal(type) {
+            document.getElementById('modalType').value = type;
+            document.getElementById('editModuleId').value = '';
+            document.getElementById('editLessonId').value = '';
+
+            document.getElementById('moduleNameGroup').style.display = type === 'module' ? 'block' : 'none';
+            document.getElementById('lessonTitleGroup').style.display = type === 'lesson' ? 'block' : 'none';
+            document.getElementById('lessonTypeGroup').style.display = type === 'lesson' ? 'block' : 'none';
+            document.getElementById('lessonContentGroup').style.display = 'none';
+            document.getElementById('quizQuestionsGroup').style.display = 'none';
+
+            document.getElementById('moduleName').value = '';
+            document.getElementById('lessonTitle').value = '';
+            document.getElementById('lessonType').value = 'lesson';
+            document.getElementById('lessonContent').value = '';
+
+            document.getElementById('quizQuestionsContainer').innerHTML = `
+                <div class="question-item" style="background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;">
+                    <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <input type="text" placeholder="Option A" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                        <input type="text" placeholder="Option B" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                        <input type="text" placeholder="Option C" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                        <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                            <option value="0">A</option>
+                            <option value="1">B</option>
+                            <option value="2">C</option>
+                        </select>
+                        <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
+                    </div>
+                </div>
+            `;
+            toggleQuizFields('lesson');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ============================================================
+        // QUIZ HELPERS
+        // ============================================================
+        function addQuestionField() {
+            const container = document.getElementById('quizQuestionsContainer');
+            const qDiv = document.createElement('div');
+            qDiv.className = 'question-item';
+            qDiv.style.cssText = 'background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;';
+            qDiv.innerHTML = `
+                <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <input type="text" placeholder="Option A" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                    <input type="text" placeholder="Option B" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                    <input type="text" placeholder="Option C" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                    <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                        <option value="0">A</option>
+                        <option value="1">B</option>
+                        <option value="2">C</option>
+                    </select>
+                    <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
+                </div>
+            `;
+            container.appendChild(qDiv);
+        }
+
+        function removeQuestion(btn) {
+            const container = document.getElementById('quizQuestionsContainer');
+            if (container.children.length <= 1) { alert('You must have at least one question.'); return; }
+            btn.closest('.question-item').remove();
+        }
+
+        function toggleQuizFields(type) {
+            const quizGroup = document.getElementById('quizQuestionsGroup');
+            const contentGroup = document.getElementById('lessonContentGroup');
+            if (type === 'quiz') {
+                quizGroup.style.display = 'block';
+                contentGroup.style.display = 'none';
+            } else {
+                quizGroup.style.display = 'none';
+                contentGroup.style.display = 'block';
+            }
+        }
+
+        document.getElementById('lessonType').addEventListener('change', function() {
+            toggleQuizFields(this.value);
+        });
+
+        function collectQuizQuestions() {
+            const items = document.querySelectorAll('.question-item');
+            const questions = [];
+            items.forEach(item => {
+                const text = item.querySelector('.q-text').value.trim();
+                const options = item.querySelectorAll('.q-option');
+                const opts = Array.from(options).map(o => o.value.trim());
+                const correct = parseInt(item.querySelector('.q-correct').value);
+                if (text && opts.every(o => o)) {
+                    questions.push({ question: text, options: opts, correct: correct });
+                }
+            });
+            return questions;
+        }
+
+        // ============================================================
+        // MODAL SUBMIT (with automatic PPP for new modules)
         // ============================================================
         document.getElementById('modalForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -142,7 +1263,7 @@
                         // Editing existing module – just update title
                         result = await updateModule(parseInt(moduleId), title);
                     } else {
-                        // New module – create with placeholders
+                        // New module – create with PPP placeholders
                         result = await createModuleWithPlaceholders(currentCourseId, title);
                     }
                     if (result) {
@@ -150,11 +1271,40 @@
                         await selectCourse(currentCourseId);
                     }
                 } else if (type === 'lesson') {
-                    // ... (lesson creation stays the same)
+                    const moduleId = document.getElementById('editModuleId').value;
+                    const lessonId = document.getElementById('editLessonId').value;
+                    const title = document.getElementById('lessonTitle').value.trim();
+                    const lessonType = document.getElementById('lessonType').value;
+                    const rawContent = document.getElementById('lessonContent').value;
+                    if (!title) { alert('Lesson title is required.'); return; }
+
+                    const lessonData = {
+                        title,
+                        type: lessonType,
+                        content: rawContent,
+                        orderIndex: 0
+                    };
+
+                    if (lessonType === 'quiz') {
+                        const questions = collectQuizQuestions();
+                        if (questions.length === 0) { alert('Please add at least one question.'); return; }
+                        lessonData.questions = questions;
+                    }
+
+                    let result;
+                    if (lessonId) {
+                        result = await updateLesson(parseInt(lessonId), lessonData);
+                    } else {
+                        result = await createLesson(parseInt(moduleId), lessonData);
+                    }
+                    if (result) {
+                        closeModal();
+                        await selectCourse(currentCourseId);
+                    }
                 }
             } catch (error) {
-                console.error(error);
-                alert('An error occurred.');
+                console.error('Error in form submission:', error);
+                alert('An unexpected error occurred. Please check the console.');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
@@ -162,15 +1312,47 @@
         });
 
         // ============================================================
-        // Move lesson (up/down) – same as before
+        // LOAD TEACHER NAME
         // ============================================================
-        async function moveLesson(moduleId, lessonId, direction) {
-            // ... (same as earlier)
+        function loadTeacherName() {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    const name = payload.name || 'Teacher';
+                    document.getElementById('navTeacherName').innerHTML = `<i class="fas fa-user-graduate"></i> ${name}`;
+                } catch (e) {
+                    document.getElementById('navTeacherName').innerHTML = `<i class="fas fa-user-graduate"></i> Teacher`;
+                }
+            } else {
+                document.getElementById('navTeacherName').innerHTML = `<i class="fas fa-user-graduate"></i> Teacher`;
+            }
         }
 
         // ============================================================
-        // The rest of your functions (fetch, render, etc.) remain unchanged.
+        // INIT
         // ============================================================
+        async function init() {
+            loadTeacherName();
+
+            const fetchedCourses = await fetchCourses();
+            if (fetchedCourses && fetchedCourses.length > 0) {
+                courses = fetchedCourses;
+                renderCourseSelector();
+                await selectCourse(courses[0].id);
+            } else {
+                document.getElementById('courseSelector').innerHTML = `<p style="color:#888;">No courses yet. Create your first course above.</p>`;
+                document.getElementById('modulesContainer').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-plus-circle"></i>
+                        <p>You don't have any courses yet. Click "Create New Course" to get started.</p>
+                    </div>
+                `;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
     </script>
+
 </body>
 </html>
