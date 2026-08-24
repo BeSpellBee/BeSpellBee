@@ -741,7 +741,7 @@
             const lesson = module.lessons.find(l => l.id === lessonId);
             if (!lesson) return;
 
-            const previewWindow = window.open('', '_blank', 'width=800,height=600');
+            const previewWindow = window.open('', '_blank');
             previewWindow.document.write(`
                 <!DOCTYPE html>
                 <html>
