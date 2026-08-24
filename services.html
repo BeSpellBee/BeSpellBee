@@ -16,7 +16,8 @@
     <title>Services</title>
     
     <style>
-        /* Global Reset & Base */
+        /* ... (your existing CSS – unchanged) ... */
+        /* Keep your styles exactly as they were */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -30,7 +31,6 @@
             color: #333;
         }
 
-        /* Container for all content */
         .services-container {
             max-width: 1100px;
             margin: 0 auto;
@@ -62,7 +62,6 @@
             color: #444;
         }
 
-        /* Navigation links */
         .nav-links {
             display: flex;
             flex-wrap: wrap;
@@ -85,7 +84,6 @@
             text-decoration: underline;
         }
 
-        /* ====== IMAGES - FIXED FOR RESPONSIVENESS ====== */
         .services-container img {
             max-width: 100%;
             height: auto;
@@ -96,7 +94,6 @@
             border: 1px solid #eef4fe;
         }
 
-        /* Remove fixed widths from inline styles via class override */
         .img-fluid {
             width: 100% !important;
             max-width: 700px !important;
@@ -115,7 +112,6 @@
             height: auto !important;
         }
 
-        /* Back to Top Button */
         #topBtn {
             display: none;
             position: fixed;
@@ -142,84 +138,25 @@
             background-color: #0056B3;
         }
 
-        /* ====== RESPONSIVE ====== */
         @media (max-width: 768px) {
-            body {
-                padding: 12px;
-            }
-
-            .services-container {
-                padding: 20px 15px;
-                border-radius: 24px;
-            }
-
-            h2 {
-                font-size: 1.6rem;
-            }
-
-            h3 {
-                font-size: 1.3rem;
-                margin-top: 30px;
-            }
-
-            p {
-                font-size: 0.95rem;
-            }
-
-            .nav-links {
-                gap: 10px 18px;
-            }
-
-            .nav-links a {
-                font-size: 0.95rem;
-            }
-
-            #topBtn {
-                width: 44px;
-                height: 44px;
-                font-size: 20px;
-                line-height: 44px;
-                bottom: 15px;
-                right: 15px;
-            }
+            body { padding: 12px; }
+            .services-container { padding: 20px 15px; border-radius: 24px; }
+            h2 { font-size: 1.6rem; }
+            h3 { font-size: 1.3rem; margin-top: 30px; }
+            p { font-size: 0.95rem; }
+            .nav-links { gap: 10px 18px; }
+            .nav-links a { font-size: 0.95rem; }
+            #topBtn { width: 44px; height: 44px; font-size: 20px; line-height: 44px; bottom: 15px; right: 15px; }
         }
 
         @media (max-width: 480px) {
-            .services-container {
-                padding: 15px 10px;
-                border-radius: 18px;
-            }
-
-            h2 {
-                font-size: 1.3rem;
-            }
-
-            h3 {
-                font-size: 1.1rem;
-                margin-top: 25px;
-            }
-
-            p {
-                font-size: 0.88rem;
-            }
-
-            .nav-links {
-                gap: 8px 12px;
-                padding: 10px 0;
-            }
-
-            .nav-links a {
-                font-size: 0.85rem;
-            }
-
-            #topBtn {
-                width: 38px;
-                height: 38px;
-                font-size: 16px;
-                line-height: 38px;
-                bottom: 12px;
-                right: 12px;
-            }
+            .services-container { padding: 15px 10px; border-radius: 18px; }
+            h2 { font-size: 1.3rem; }
+            h3 { font-size: 1.1rem; margin-top: 25px; }
+            p { font-size: 0.88rem; }
+            .nav-links { gap: 8px 12px; padding: 10px 0; }
+            .nav-links a { font-size: 0.85rem; }
+            #topBtn { width: 38px; height: 38px; font-size: 16px; line-height: 38px; bottom: 12px; right: 12px; }
         }
     </style>
 </head>
@@ -231,11 +168,12 @@
         <h2>📚 Services</h2>
 
         <!-- Navigation Links -->
-       <div class="nav-links">
-    <a href="#A1/A2/B1" onclick="trackLink('Beginners A1/A2/B1')">🔹 Beginners (A1/A2/B1)</a>
-    <a href="#B2" onclick="trackLink('Advanced B2')">🔹 Advanced (B2)</a>
-    <a href="#Bac" onclick="trackLink('Baccalaureate Prep')">🔹 Baccalaureate Prep</a>
-</div>
+        <div class="nav-links">
+            <a href="#A1/A2/B1" onclick="trackLink('Beginners A1/A2/B1')">🔹 Beginners (A1/A2/B1)</a>
+            <a href="#B2" onclick="trackLink('Advanced B2')">🔹 Advanced (B2)</a>
+            <a href="#Bac" onclick="trackLink('Baccalaureate Prep')">🔹 Baccalaureate Prep</a>
+            <a href="#Tunisian" onclick="trackLink('Tunisian Program')">🔹 Tunisian Program</a>
+        </div>
 
         <!-- Top Image -->
         <img src="images2/graduate.png.jpg" alt="Graduate" class="img-fluid">
@@ -256,7 +194,22 @@
         <a id="Bac"></a>
         <h3>🔹 Baccalaureate Preparation</h3>
         <p>We offer preparation for passing the French baccalaureate exam.</p>
-        <!-- Add an image here if you have one for Bac -->
+
+        <!-- ============================================================ -->
+        <!-- TUNISIAN PROGRAM SECTION (bottom) -->
+        <!-- ============================================================ -->
+        <a id="Tunisian"></a>
+        <h3>🔹 Tunisian Program</h3>
+        <p>
+            For students following the Tunisian curriculum – tailored lessons, exam prep, and support.
+            Covers all levels from primary to Baccalaureate, aligned with the Tunisian Ministry of Education standards.
+        </p>
+        <img src="images4/teacher.jpg" alt="Tunisian Program" class="img-fluid">
+        <p style="margin-top: 10px;">
+            <a href="tunisian-program.html" style="display: inline-block; padding: 10px 30px; background: #0056B3; color: #fff; border-radius: 40px; text-decoration: none; font-weight: 600; transition: background 0.3s;">
+                Learn More →
+            </a>
+        </p>
 
     </div>
 
@@ -276,6 +229,6 @@
             window.scrollTo({top: 0, behavior: 'smooth'});
         };
     </script>
-<script src="tracking.js"></script>
+    <script src="tracking.js"></script>
 </body>
 </html>
