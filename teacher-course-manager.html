@@ -463,17 +463,9 @@
             <a href="teacher-dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
         </div>
 
-        <!-- Course Selector -->
+        <!-- Course Selector (dynamic) -->
         <div class="course-selector" id="courseSelector">
-            <button class="course-btn active" data-course="a1" onclick="switchCourse('a1')">
-                <i class="fas fa-flag"></i> A1 Beginner
-            </button>
-            <button class="course-btn" data-course="b2" onclick="switchCourse('b2')">
-                <i class="fas fa-star"></i> B2 Exam Prep
-            </button>
-            <button class="course-btn" data-course="french" onclick="switchCourse('french')">
-                <i class="fas fa-flag"></i> French Bac/LLCE
-            </button>
+            <!-- Buttons will be injected here -->
         </div>
 
         <!-- Course Editor -->
@@ -551,130 +543,228 @@
         </div>
     </div>
 
-    <!-- ====== JAVASCRIPT ====== -->
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT – API-INTEGRATED -->
+    <!-- ============================================================ -->
     <script>
         // ============================================================
         // CONFIGURATION
         // ============================================================
-        const COURSES_KEY = 'lmsCourseData';
-        let currentCourse = 'a1';
+        const API_BASE_URL = 'https://bespellbee-backend-en6l.onrender.com'; // change to your actual backend URL
+
+        let currentCourseId = null; // holds the selected course ID
+        let courses = []; // list of courses for the teacher
+        let currentCourseData = null; // full course data with modules/lessons
 
         // ============================================================
-        // DEFAULT COURSE DATA
+        // HELPER: GET AUTH HEADERS
         // ============================================================
-        const defaultCourseData = {
-            a1: {
-                title: 'A1 Beginner',
-                icon: '🇬🇧',
-                modules: [
-                    {
-                        id: 'a1_m1',
-                        title: 'Module 1: Hospitality Basics',
-                        lessons: [
-                            { id: 'a1_l1', title: 'Common job questions and answers', type: 'lesson', content: '<h3>🔹 Common job questions and answers</h3><iframe src="https://app.lumi.education/api/v1/run/ui5YGZ/embed" frameborder="0" allowfullscreen></iframe>' },
-                            { id: 'a1_l2', title: 'First meetings', type: 'lesson', content: '<h3>🔹 First meetings</h3><iframe src="https://app.lumi.education/api/v1/run/WkKntW/embed" frameborder="0" allowfullscreen></iframe>' },
-                            { id: 'a1_q1', title: 'Hospitality Quiz', type: 'quiz', questions: [{ question: 'How do you greet a guest in a hotel?', options: ['"Hello, how can I help you?"', '"What do you want?"', '"Go away!"'], correct: 0 }, { question: 'What is the correct response to "Thank you"?', options: ['"You\'re welcome"', '"No problem"', 'Both A and B'], correct: 2 }] }
-                        ]
-                    },
-                    {
-                        id: 'a1_m2',
-                        title: 'Module 2: Daily Work',
-                        lessons: [
-                            { id: 'a1_l3', title: 'Daily routines at work', type: 'lesson', content: '<h3>🔹 Daily routines at work</h3><iframe src="https://app.lumi.education/api/v1/run/Zc_45y/embed" frameborder="0" allowfullscreen></iframe>' },
-                            { id: 'a1_l4', title: 'Daily routines dictation', type: 'lesson', content: '<h3>🔹 Daily routines dictation</h3><iframe src="https://app.lumi.education/api/v1/run/0WviSL/embed" frameborder="0" allowfullscreen></iframe>' },
-                            { id: 'a1_q2', title: 'Daily Work Quiz', type: 'quiz', questions: [{ question: 'What time do most hotel workers start their shift?', options: ['6:00 AM', '9:00 AM', '12:00 PM'], correct: 0 }, { question: 'What is a "shift"?', options: ['A work period', 'A break', 'A meeting'], correct: 0 }] }
-                        ]
-                    },
-                    {
-                        id: 'a1_m3',
-                        title: 'Module 3: Listening Comprehension',
-                        lessons: [
-                            { id: 'a1_l5', title: "Zoe's first day at work", type: 'lesson', content: '<h3>🔹 Zoe\'s first day at work</h3><audio controls style="width:100%; margin:10px 0;"><source src="mp3/2_6.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio><h3>📝 Activity 1</h3><iframe src="https://app.lumi.education/api/v1/run/IOyPZA/embed" frameborder="0" allowfullscreen></iframe><h3>📝 Activity 2</h3><iframe src="https://app.lumi.education/api/v1/run/RgqSXb/embed" frameborder="0" allowfullscreen></iframe>' },
-                            { id: 'a1_q3', title: 'Listening Quiz', type: 'quiz', questions: [{ question: 'What department does Zoe work in?', options: ['Reception', 'Housekeeping', 'Restaurant'], correct: 0 }, { question: 'Who helps Zoe on her first day?', options: ['The manager', 'A colleague', 'The guest'], correct: 1 }] }
-                        ]
-                    }
-                ]
-            },
-            b2: {
-                title: 'B2 Exam Prep',
-                icon: '📚',
-                modules: [
-                    {
-                        id: 'b2_m1',
-                        title: 'Module 1: Grammar Foundations',
-                        lessons: [
-                            { id: 'b2_l1', title: 'Present Tenses Review', type: 'lesson', content: '<h3>🔹 Present Simple vs. Present Continuous</h3><p><strong>Present Simple</strong> – habits, facts, routines.<br><em>Example:</em> "I <strong>work</strong> from 9 to 5."</p><p><strong>Present Continuous</strong> – actions happening now, temporary situations.<br><em>Example:</em> "I <strong>am working</strong> on a new project this week."</p><iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen></iframe>' },
-                            { id: 'b2_q1', title: 'Tenses Quiz', type: 'quiz', questions: [{ question: 'She ______ to work every day by bus.', options: ['go', 'goes', 'is going'], correct: 1 }, { question: 'Listen! Someone ______ the piano.', options: ['play', 'plays', 'is playing'], correct: 2 }, { question: 'I ______ him for years.', options: ['know', 'have known', 'knew'], correct: 1 }] }
-                        ]
-                    },
-                    {
-                        id: 'b2_m2',
-                        title: 'Module 2: Vocabulary & Expressions',
-                        lessons: [
-                            { id: 'b2_l2', title: 'Idiomatic Expressions', type: 'lesson', content: '<h3>🔹 Common Idioms for B2</h3><ul><li><strong>Break the ice</strong> – start a conversation.</li><li><strong>Hit the nail on the head</strong> – say exactly the right thing.</li><li><strong>Cost an arm and a leg</strong> – very expensive.</li></ul><iframe src="https://app.lumi.education/api/v1/run/SlF7eK/embed" frameborder="0" allowfullscreen></iframe>' },
-                            { id: 'b2_q2', title: 'Vocabulary Quiz', type: 'quiz', questions: [{ question: 'To "break the ice" means to:', options: ['Start a conversation', 'Break something frozen', 'End a fight'], correct: 0 }, { question: 'If something "costs an arm and a leg", it is:', options: ['Cheap', 'Expensive', 'Free'], correct: 1 }] }
-                        ]
-                    }
-                ]
-            },
-            french: {
-                title: 'French Bac/LLCE',
-                icon: '🇫🇷',
-                modules: [
-                    {
-                        id: 'fr_m1',
-                        title: 'Module 1: French Grammar',
-                        lessons: [
-                            { id: 'fr_l1', title: 'French Grammar Basics', type: 'lesson', content: '<h3>🔹 French Grammar Basics</h3><p><strong>Le présent</strong> – actions happening now.</p><p><em>Example:</em> "Je <strong>parle</strong> français."</p><iframe src="https://app.lumi.education/api/v1/run/3HvzvJ/embed" frameborder="0" allowfullscreen></iframe>' },
-                            { id: 'fr_q1', title: 'French Quiz', type: 'quiz', questions: [{ question: 'How do you say "I speak French"?', options: ['Je parle français', 'Je parles français', 'Je parler français'], correct: 0 }, { question: 'What is "la maison" in English?', options: ['The house', 'The school', 'The car'], correct: 0 }] }
-                        ]
-                    }
-                ]
+        function getAuthHeaders() {
+            const token = localStorage.getItem('authToken');
+            return {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            };
+        }
+
+        // ============================================================
+        // API CALLS
+        // ============================================================
+
+        // Fetch all courses for the logged-in teacher
+        async function fetchCourses() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/courses`, {
+                    headers: getAuthHeaders()
+                });
+                const data = await response.json();
+                if (data.success) {
+                    courses = data.data;
+                    return courses;
+                } else {
+                    console.error('Failed to fetch courses:', data.message);
+                    return [];
+                }
+            } catch (error) {
+                console.error('Error fetching courses:', error);
+                return [];
             }
-        };
+        }
 
-        // ============================================================
-        // LOAD / SAVE COURSE DATA
-        // ============================================================
-        function loadCourseData() {
-            const saved = localStorage.getItem(COURSES_KEY);
-            if (saved) {
-                try { return JSON.parse(saved); } catch(e) { return JSON.parse(JSON.stringify(defaultCourseData)); }
+        // Fetch a single course with modules and lessons
+        async function fetchCourse(courseId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/courses/${courseId}`, {
+                    headers: getAuthHeaders()
+                });
+                const data = await response.json();
+                if (data.success) {
+                    return data.data;
+                } else {
+                    console.error('Failed to fetch course:', data.message);
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error fetching course:', error);
+                return null;
             }
-            return JSON.parse(JSON.stringify(defaultCourseData));
         }
 
-        function saveCourseData(data) {
-            localStorage.setItem(COURSES_KEY, JSON.stringify(data));
-        }
-
-        function getCourseData() {
-            const all = loadCourseData();
-            return all[currentCourse] || all.a1;
-        }
-
-        // ============================================================
-        // CONTENT CLEANER
-        // ============================================================
-        function cleanLessonContent(raw) {
-            if (!raw || raw.trim() === '') return raw;
-            const trimmed = raw.trim();
-            if (trimmed.startsWith('<!DOCTYPE') || trimmed.startsWith('<html')) {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(raw, 'text/html');
-                return doc.body ? doc.body.innerHTML : raw;
+        // Create a new module
+        async function createModule(courseId, title) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/courses/${courseId}/modules`, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({ title })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    return data.data;
+                } else {
+                    alert('Failed to create module: ' + (data.message || 'Unknown error'));
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error creating module:', error);
+                alert('Network error creating module.');
+                return null;
             }
-            return raw;
+        }
+
+        // Update a module
+        async function updateModule(moduleId, title) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/modules/${moduleId}`, {
+                    method: 'PUT',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({ title })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    return data.data;
+                } else {
+                    alert('Failed to update module: ' + (data.message || 'Unknown error'));
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error updating module:', error);
+                alert('Network error updating module.');
+                return null;
+            }
+        }
+
+        // Delete a module
+        async function deleteModule(moduleId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/modules/${moduleId}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+                const data = await response.json();
+                if (data.success) {
+                    return true;
+                } else {
+                    alert('Failed to delete module: ' + (data.message || 'Unknown error'));
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error deleting module:', error);
+                alert('Network error deleting module.');
+                return false;
+            }
+        }
+
+        // Create a new lesson
+        async function createLesson(moduleId, lessonData) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/modules/${moduleId}/lessons`, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(lessonData)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    return data.data;
+                } else {
+                    alert('Failed to create lesson: ' + (data.message || 'Unknown error'));
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error creating lesson:', error);
+                alert('Network error creating lesson.');
+                return null;
+            }
+        }
+
+        // Update a lesson
+        async function updateLesson(lessonId, lessonData) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/lessons/${lessonId}`, {
+                    method: 'PUT',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(lessonData)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    return data.data;
+                } else {
+                    alert('Failed to update lesson: ' + (data.message || 'Unknown error'));
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error updating lesson:', error);
+                alert('Network error updating lesson.');
+                return null;
+            }
+        }
+
+        // Delete a lesson
+        async function deleteLesson(lessonId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/lessons/${lessonId}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+                const data = await response.json();
+                if (data.success) {
+                    return true;
+                } else {
+                    alert('Failed to delete lesson: ' + (data.message || 'Unknown error'));
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error deleting lesson:', error);
+                alert('Network error deleting lesson.');
+                return false;
+            }
         }
 
         // ============================================================
-        // RENDER COURSE (with Preview & Delete inside Edit)
+        // RENDER FUNCTIONS
         // ============================================================
-        function renderCourse() {
-            const course = getCourseData();
+
+        function renderCourseSelector() {
+            const container = document.getElementById('courseSelector');
+            if (!courses || courses.length === 0) {
+                container.innerHTML = `<p style="color:#888;">No courses found. Please create a course first.</p>`;
+                return;
+            }
+            let html = '';
+            courses.forEach(course => {
+                const active = course.id === currentCourseId ? 'active' : '';
+                html += `
+                    <button class="course-btn ${active}" data-course-id="${course.id}" onclick="selectCourse(${course.id})">
+                        ${course.icon || '📚'} ${course.title}
+                    </button>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderModules() {
             const container = document.getElementById('modulesContainer');
-
-            if (!course.modules || course.modules.length === 0) {
+            if (!currentCourseData || !currentCourseData.modules || currentCourseData.modules.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-folder-open"></i>
@@ -685,22 +775,22 @@
             }
 
             let html = '';
-            course.modules.forEach(mod => {
+            currentCourseData.modules.forEach(mod => {
                 html += `
                     <div class="module-card">
                         <div class="module-header">
                             <h3><i class="fas fa-folder"></i> ${mod.title}</h3>
                             <div class="module-actions">
-                                <button onclick="editModule('${mod.id}')"><i class="fas fa-edit"></i> Edit</button>
+                                <button onclick="editModule(${mod.id})"><i class="fas fa-edit"></i> Edit</button>
                             </div>
                         </div>
                         <div class="module-lessons">
                 `;
 
-                if (!mod.lessons || mod.lessons.length === 0) {
+                if (!mod.Lessons || mod.Lessons.length === 0) {
                     html += `<p style="color:#555; font-size:0.85rem; padding:8px 0;">No lessons yet.</p>`;
                 } else {
-                    mod.lessons.forEach(lesson => {
+                    mod.Lessons.forEach(lesson => {
                         const typeLabel = lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson';
                         const typeClass = lesson.type === 'quiz' ? 'quiz' : '';
                         html += `
@@ -710,10 +800,10 @@
                                     <span class="lesson-type ${typeClass}">${typeLabel}</span>
                                 </div>
                                 <div class="lesson-actions">
-                                    <button class="preview-btn" onclick="previewLesson('${mod.id}','${lesson.id}')" title="Preview Lesson">
+                                    <button class="preview-btn" onclick="previewLesson(${mod.id}, ${lesson.id})" title="Preview Lesson">
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    <button onclick="editLesson('${mod.id}','${lesson.id}')"><i class="fas fa-edit"></i> Edit</button>
+                                    <button onclick="editLesson(${mod.id}, ${lesson.id})"><i class="fas fa-edit"></i> Edit</button>
                                 </div>
                             </div>
                         `;
@@ -721,7 +811,7 @@
                 }
 
                 html += `
-                            <button class="add-btn" onclick="openAddLessonModal('${mod.id}')">
+                            <button class="add-btn" onclick="openAddLessonModal(${mod.id})">
                                 <i class="fas fa-plus-circle"></i> Add Lesson to "${mod.title}"
                             </button>
                         </div>
@@ -733,67 +823,71 @@
         }
 
         // ============================================================
-        // PREVIEW LESSON (NEW)
+        // COURSE SELECTION
         // ============================================================
-        function previewLesson(moduleId, lessonId) {
-    const course = getCourseData();
-    const module = course.modules.find(m => m.id === moduleId);
-    const lesson = module.lessons.find(l => l.id === lessonId);
-    if (!lesson) return;
 
-    const previewWindow = window.open('', '_blank');
-    previewWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Preview: ${lesson.title}</title>
-            <style>
-                body { font-family: 'Segoe UI', sans-serif; padding: 30px; max-width: 1000px; margin: auto; background: #f5f7fc; }
-                .container { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-                .preview-badge { background: #FFEB3B; color: #000; padding: 4px 12px; border-radius: 40px; font-size: 0.8rem; display: inline-block; margin-bottom: 20px; }
-                h2 { color: #0056B3; border-bottom: 2px solid #eef4fe; padding-bottom: 10px; }
-                .content { line-height: 1.6; }
-                .content iframe {
-                    width: 100% !important;
-                    max-width: 100% !important;
-                    min-height: 500px !important;
-                    height: auto !important;
-                    aspect-ratio: 16 / 9;
-                    border: 2px solid #eef4fe;
-                    border-radius: 16px;
-                    background: #fff;
-                    margin: 15px 0;
-                }
-                .footer { margin-top: 30px; padding-top: 20px; border-top: 2px solid #eef4fe; color: #888; font-size: 0.85rem; text-align: center; }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <span class="preview-badge">👁️ Teacher Preview</span>
-                <h2>${lesson.title}</h2>
-                <div class="content">${lesson.content || '<p style="color:#999;">No content yet. Add content to this lesson.</p>'}</div>
-                <div class="footer">This is how students will see this lesson.</div>
-            </div>
-        </body>
-        </html>
-    `);
-    previewWindow.document.close();
-}
-
-        // ============================================================
-        // COURSE SWITCHING
-        // ============================================================
-        function switchCourse(courseId) {
-            currentCourse = courseId;
+        async function selectCourse(courseId) {
+            currentCourseId = courseId;
+            // Update button styles
             document.querySelectorAll('.course-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.course === courseId);
+                btn.classList.toggle('active', parseInt(btn.dataset.courseId) === courseId);
             });
-            renderCourse();
+
+            // Fetch full course data
+            const courseData = await fetchCourse(courseId);
+            if (courseData) {
+                currentCourseData = courseData;
+                renderModules();
+            } else {
+                currentCourseData = null;
+                document.getElementById('modulesContainer').innerHTML = `<p style="color:#ff4444;">Error loading course data.</p>`;
+            }
         }
 
         // ============================================================
-        // MODULE CRUD
+        // PREVIEW LESSON
         // ============================================================
+
+        function previewLesson(moduleId, lessonId) {
+            if (!currentCourseData) return;
+            const module = currentCourseData.modules.find(m => m.id === moduleId);
+            if (!module) return;
+            const lesson = module.Lessons.find(l => l.id === lessonId);
+            if (!lesson) return;
+
+            const previewWindow = window.open('', '_blank');
+            previewWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Preview: ${lesson.title}</title>
+                    <style>
+                        body { font-family: 'Segoe UI', sans-serif; padding: 30px; max-width: 1000px; margin: auto; background: #f5f7fc; }
+                        .container { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+                        .preview-badge { background: #FFEB3B; color: #000; padding: 4px 12px; border-radius: 40px; font-size: 0.8rem; display: inline-block; margin-bottom: 20px; }
+                        h2 { color: #0056B3; border-bottom: 2px solid #eef4fe; padding-bottom: 10px; }
+                        .content { line-height: 1.6; }
+                        .content iframe { width: 100% !important; max-width: 100% !important; min-height: 500px !important; height: auto !important; aspect-ratio: 16/9; border: 2px solid #eef4fe; border-radius: 16px; background: #fff; margin: 15px 0; }
+                        .footer { margin-top: 30px; padding-top: 20px; border-top: 2px solid #eef4fe; color: #888; font-size: 0.85rem; text-align: center; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <span class="preview-badge">👁️ Teacher Preview</span>
+                        <h2>${lesson.title}</h2>
+                        <div class="content">${lesson.content || '<p style="color:#999;">No content yet. Add content to this lesson.</p>'}</div>
+                        <div class="footer">This is how students will see this lesson.</div>
+                    </div>
+                </body>
+                </html>
+            `);
+            previewWindow.document.close();
+        }
+
+        // ============================================================
+        // MODULE CRUD (with modals)
+        // ============================================================
+
         function openAddModuleModal() {
             resetModal('module');
             document.getElementById('modalTitle').textContent = 'Add Module';
@@ -804,8 +898,7 @@
         }
 
         function editModule(moduleId) {
-            const course = getCourseData();
-            const module = course.modules.find(m => m.id === moduleId);
+            const module = currentCourseData.modules.find(m => m.id === moduleId);
             if (!module) return;
 
             resetModal('module');
@@ -818,24 +911,25 @@
             document.getElementById('modalDeleteBtn').textContent = '🗑️ Delete Module';
             document.getElementById('modalDeleteBtn').onclick = function() {
                 if (confirm('Delete this module and all its lessons?')) {
-                    deleteModule(moduleId);
+                    confirmDeleteModule(moduleId);
                 }
             };
             document.getElementById('modalOverlay').classList.add('active');
         }
 
-        function deleteModule(moduleId) {
-            const allData = loadCourseData();
-            const course = allData[currentCourse];
-            course.modules = course.modules.filter(m => m.id !== moduleId);
-            saveCourseData(allData);
-            closeModal();
-            renderCourse();
+        async function confirmDeleteModule(moduleId) {
+            const success = await deleteModule(moduleId);
+            if (success) {
+                closeModal();
+                // Refresh the course data
+                await selectCourse(currentCourseId);
+            }
         }
 
         // ============================================================
-        // LESSON CRUD
+        // LESSON CRUD (with modals)
         // ============================================================
+
         function openAddLessonModal(moduleId) {
             resetModal('lesson');
             document.getElementById('editModuleId').value = moduleId;
@@ -847,10 +941,9 @@
         }
 
         function editLesson(moduleId, lessonId) {
-            const course = getCourseData();
-            const module = course.modules.find(m => m.id === moduleId);
+            const module = currentCourseData.modules.find(m => m.id === moduleId);
             if (!module) return;
-            const lesson = module.lessons.find(l => l.id === lessonId);
+            const lesson = module.Lessons.find(l => l.id === lessonId);
             if (!lesson) return;
 
             resetModal('lesson');
@@ -896,26 +989,24 @@
             document.getElementById('modalDeleteBtn').textContent = '🗑️ Delete Lesson';
             document.getElementById('modalDeleteBtn').onclick = function() {
                 if (confirm('Delete this lesson permanently?')) {
-                    deleteLesson(moduleId, lessonId);
+                    confirmDeleteLesson(lessonId);
                 }
             };
             document.getElementById('modalOverlay').classList.add('active');
         }
 
-        function deleteLesson(moduleId, lessonId) {
-            const allData = loadCourseData();
-            const course = allData[currentCourse];
-            const module = course.modules.find(m => m.id === moduleId);
-            if (!module) return;
-            module.lessons = module.lessons.filter(l => l.id !== lessonId);
-            saveCourseData(allData);
-            closeModal();
-            renderCourse();
+        async function confirmDeleteLesson(lessonId) {
+            const success = await deleteLesson(lessonId);
+            if (success) {
+                closeModal();
+                await selectCourse(currentCourseId);
+            }
         }
 
         // ============================================================
         // MODAL HELPERS
         // ============================================================
+
         function resetModal(type) {
             document.getElementById('modalType').value = type;
             document.getElementById('editModuleId').value = '';
@@ -963,6 +1054,7 @@
         // ============================================================
         // QUIZ HELPERS
         // ============================================================
+
         function addQuestionField() {
             const container = document.getElementById('quizQuestionsContainer');
             const qDiv = document.createElement('div');
@@ -1023,79 +1115,67 @@
         }
 
         // ============================================================
-        // MODAL SUBMIT
+        // MODAL SUBMIT (create/update)
         // ============================================================
-        document.getElementById('modalForm').addEventListener('submit', function(e) {
+
+        document.getElementById('modalForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const type = document.getElementById('modalType').value;
-            const allData = loadCourseData();
-            const course = allData[currentCourse];
 
             if (type === 'module') {
                 const moduleId = document.getElementById('editModuleId').value;
                 const title = document.getElementById('moduleName').value.trim();
                 if (!title) { alert('Module title is required.'); return; }
 
+                let result;
                 if (moduleId) {
-                    const mod = course.modules.find(m => m.id === moduleId);
-                    if (mod) mod.title = title;
+                    result = await updateModule(parseInt(moduleId), title);
                 } else {
-                    const newModule = { id: currentCourse + '_m' + Date.now(), title: title, lessons: [] };
-                    course.modules.push(newModule);
+                    result = await createModule(currentCourseId, title);
                 }
-                saveCourseData(allData);
-                closeModal();
-                renderCourse();
+                if (result) {
+                    closeModal();
+                    await selectCourse(currentCourseId);
+                }
             } else if (type === 'lesson') {
                 const moduleId = document.getElementById('editModuleId').value;
                 const lessonId = document.getElementById('editLessonId').value;
                 const title = document.getElementById('lessonTitle').value.trim();
                 const lessonType = document.getElementById('lessonType').value;
                 const rawContent = document.getElementById('lessonContent').value;
-
                 if (!title) { alert('Lesson title is required.'); return; }
 
-                const module = course.modules.find(m => m.id === moduleId);
-                if (!module) { alert('Module not found.'); return; }
+                const lessonData = {
+                    title,
+                    type: lessonType,
+                    content: rawContent,
+                    orderIndex: 0
+                };
 
-                const cleanedContent = cleanLessonContent(rawContent);
-
-                if (lessonId) {
-                    const lesson = module.lessons.find(l => l.id === lessonId);
-                    if (lesson) {
-                        lesson.title = title;
-                        lesson.type = lessonType;
-                        if (lessonType === 'quiz') {
-                            const questions = collectQuizQuestions();
-                            if (questions.length === 0) { alert('Please add at least one question.'); return; }
-                            lesson.questions = questions;
-                            delete lesson.content;
-                        } else {
-                            lesson.content = cleanedContent || '<p>Lesson content goes here.</p>';
-                            delete lesson.questions;
-                        }
-                    }
-                } else {
-                    const newLesson = { id: currentCourse + '_l' + Date.now(), title: title, type: lessonType };
-                    if (lessonType === 'quiz') {
-                        const questions = collectQuizQuestions();
-                        if (questions.length === 0) { alert('Please add at least one question.'); return; }
-                        newLesson.questions = questions;
-                    } else {
-                        newLesson.content = cleanedContent || '<p>Lesson content goes here.</p>';
-                    }
-                    module.lessons.push(newLesson);
+                if (lessonType === 'quiz') {
+                    const questions = collectQuizQuestions();
+                    if (questions.length === 0) { alert('Please add at least one question.'); return; }
+                    lessonData.questions = questions;
                 }
-                saveCourseData(allData);
-                closeModal();
-                renderCourse();
+
+                let result;
+                if (lessonId) {
+                    result = await updateLesson(parseInt(lessonId), lessonData);
+                } else {
+                    result = await createLesson(parseInt(moduleId), lessonData);
+                }
+                if (result) {
+                    closeModal();
+                    await selectCourse(currentCourseId);
+                }
             }
         });
 
         // ============================================================
         // LOAD TEACHER NAME
         // ============================================================
+
         function loadTeacherName() {
             const token = localStorage.getItem('authToken');
             if (token) {
@@ -1114,17 +1194,31 @@
         // ============================================================
         // INIT
         // ============================================================
-        document.addEventListener('DOMContentLoaded', function() {
+
+        async function init() {
             loadTeacherName();
-            const allData = loadCourseData();
-            for (let key in defaultCourseData) {
-                if (!allData[key]) {
-                    allData[key] = JSON.parse(JSON.stringify(defaultCourseData[key]));
-                }
+
+            // Fetch courses for the teacher
+            const fetchedCourses = await fetchCourses();
+            if (fetchedCourses && fetchedCourses.length > 0) {
+                courses = fetchedCourses;
+                renderCourseSelector();
+                // Select the first course
+                await selectCourse(courses[0].id);
+            } else {
+                // No courses – show empty state
+                document.getElementById('courseSelector').innerHTML = `<p style="color:#888;">No courses found. Please create a course first (via admin).</p>`;
+                document.getElementById('modulesContainer').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-plus-circle"></i>
+                        <p>You don't have any courses yet. Contact admin to set up your course.</p>
+                    </div>
+                `;
             }
-            saveCourseData(allData);
-            renderCourse();
-        });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
     </script>
+
 </body>
 </html>
