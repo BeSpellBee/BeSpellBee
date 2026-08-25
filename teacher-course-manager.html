@@ -791,73 +791,82 @@
         }
 
         function renderModules() {
-            const container = document.getElementById('modulesContainer');
-            if (!currentCourseData || !currentCourseData.modules || currentCourseData.modules.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-folder-open"></i>
-                        <p>No modules yet. Click "Add New Module" to get started.</p>
+    console.log('🔍 renderModules() called');
+    console.log('📦 currentCourseData:', currentCourseData);
+
+    const container = document.getElementById('modulesContainer');
+    console.log('📄 container element:', container);
+
+    if (!currentCourseData || !currentCourseData.modules || currentCourseData.modules.length === 0) {
+        console.warn('⚠️ No modules found – showing empty state');
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-folder-open"></i>
+                <p>No modules yet. Click "Add New Module" to get started.</p>
+            </div>
+        `;
+        return;
+    }
+
+    console.log(`✅ Found ${currentCourseData.modules.length} modules, rendering...`);
+    let html = '';
+    currentCourseData.modules.forEach(mod => {
+        console.log(`  📌 Module: ${mod.title} (${mod.id}) – ${mod.Lessons ? mod.Lessons.length : 0} lessons`);
+        html += `
+            <div class="module-card">
+                <div class="module-header">
+                    <h3><i class="fas fa-folder"></i> ${mod.title}</h3>
+                    <div class="module-actions">
+                        <button onclick="editModule(${mod.id})"><i class="fas fa-edit"></i> Edit</button>
                     </div>
-                `;
-                return;
-            }
+                </div>
+                <div class="module-lessons">
+        `;
 
-            let html = '';
-            currentCourseData.modules.forEach(mod => {
+        if (!mod.Lessons || mod.Lessons.length === 0) {
+            html += `<p style="color:#555; font-size:0.85rem; padding:8px 0;">No lessons yet.</p>`;
+        } else {
+            const sorted = [...mod.Lessons].sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0));
+            sorted.forEach((lesson, index) => {
+                const typeLabel = lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson';
+                const typeClass = lesson.type === 'quiz' ? 'quiz' : '';
+                const isFirst = index === 0;
+                const isLast = index === sorted.length - 1;
                 html += `
-                    <div class="module-card">
-                        <div class="module-header">
-                            <h3><i class="fas fa-folder"></i> ${mod.title}</h3>
-                            <div class="module-actions">
-                                <button onclick="editModule(${mod.id})"><i class="fas fa-edit"></i> Edit</button>
-                            </div>
+                    <div class="lesson-item">
+                        <div class="lesson-info">
+                            <span>${lesson.title}</span>
+                            <span class="lesson-type ${typeClass}">${typeLabel}</span>
                         </div>
-                        <div class="module-lessons">
-                `;
-
-                if (!mod.Lessons || mod.Lessons.length === 0) {
-                    html += `<p style="color:#555; font-size:0.85rem; padding:8px 0;">No lessons yet.</p>`;
-                } else {
-                    const sorted = [...mod.Lessons].sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0));
-                    sorted.forEach((lesson, index) => {
-                        const typeLabel = lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson';
-                        const typeClass = lesson.type === 'quiz' ? 'quiz' : '';
-                        const isFirst = index === 0;
-                        const isLast = index === sorted.length - 1;
-                        html += `
-                            <div class="lesson-item">
-                                <div class="lesson-info">
-                                    <span>${lesson.title}</span>
-                                    <span class="lesson-type ${typeClass}">${typeLabel}</span>
-                                </div>
-                                <div class="lesson-actions">
-                                    <button class="preview-btn" onclick="previewLesson(${mod.id}, ${lesson.id})" title="Preview Lesson">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button onclick="editLesson(${mod.id}, ${lesson.id})"><i class="fas fa-edit"></i> Edit</button>
-                                    <button class="move-btn" onclick="moveLesson(${mod.id}, ${lesson.id}, -1)" title="Move Up" ${isFirst ? 'disabled' : ''}>
-                                        <i class="fas fa-chevron-up"></i>
-                                    </button>
-                                    <button class="move-btn" onclick="moveLesson(${mod.id}, ${lesson.id}, 1)" title="Move Down" ${isLast ? 'disabled' : ''}>
-                                        <i class="fas fa-chevron-down"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
-
-                html += `
-                            <button class="add-btn" onclick="openAddLessonModal(${mod.id})">
-                                <i class="fas fa-plus-circle"></i> Add Lesson to "${mod.title}"
+                        <div class="lesson-actions">
+                            <button class="preview-btn" onclick="previewLesson(${mod.id}, ${lesson.id})" title="Preview Lesson">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button onclick="editLesson(${mod.id}, ${lesson.id})"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="move-btn" onclick="moveLesson(${mod.id}, ${lesson.id}, -1)" title="Move Up" ${isFirst ? 'disabled' : ''}>
+                                <i class="fas fa-chevron-up"></i>
+                            </button>
+                            <button class="move-btn" onclick="moveLesson(${mod.id}, ${lesson.id}, 1)" title="Move Down" ${isLast ? 'disabled' : ''}>
+                                <i class="fas fa-chevron-down"></i>
                             </button>
                         </div>
                     </div>
                 `;
             });
-
-            container.innerHTML = html;
         }
+
+        html += `
+                    <button class="add-btn" onclick="openAddLessonModal(${mod.id})">
+                        <i class="fas fa-plus-circle"></i> Add Lesson to "${mod.title}"
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+    console.log('✅ renderModules() completed');
+}
 
         // ============================================================
         // COURSE SELECTION
