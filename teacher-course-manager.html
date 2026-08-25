@@ -863,20 +863,27 @@
         // COURSE SELECTION
         // ============================================================
         async function selectCourse(courseId) {
-            currentCourseId = courseId;
-            document.querySelectorAll('.course-btn').forEach(btn => {
-                btn.classList.toggle('active', parseInt(btn.dataset.courseId) === courseId);
-            });
+    console.log('🔄 selectCourse called with ID:', courseId);
+    currentCourseId = courseId;
 
-            const courseData = await fetchCourse(courseId);
-            if (courseData) {
-                currentCourseData = courseData;
-                renderModules();
-            } else {
-                currentCourseData = null;
-                document.getElementById('modulesContainer').innerHTML = `<p style="color:#ff4444;">Error loading course data.</p>`;
-            }
-        }
+    document.querySelectorAll('.course-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.courseId) === courseId);
+    });
+
+    console.log('📡 Fetching course data for ID:', courseId);
+    const courseData = await fetchCourse(courseId);
+    console.log('📦 Course data received:', courseData);
+
+    if (courseData) {
+        currentCourseData = courseData;
+        console.log('✅ currentCourseData set, calling renderModules()');
+        renderModules();
+    } else {
+        currentCourseData = null;
+        console.error('❌ No course data received');
+        document.getElementById('modulesContainer').innerHTML = `<p style="color:#ff4444;">Error loading course data.</p>`;
+    }
+}
 
         // ============================================================
         // MOVE LESSON
