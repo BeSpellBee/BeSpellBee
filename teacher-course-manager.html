@@ -791,14 +791,10 @@
         }
 
         function renderModules() {
-    console.log('🔍 renderModules() called');
-    console.log('📦 currentCourseData:', currentCourseData);
-
     const container = document.getElementById('modulesContainer');
-    console.log('📄 container element:', container);
+    if (!container) return;
 
     if (!currentCourseData || !currentCourseData.modules || currentCourseData.modules.length === 0) {
-        console.warn('⚠️ No modules found – showing empty state');
         container.innerHTML = `
             <div class="empty-state">
                 <i class="fas fa-folder-open"></i>
@@ -808,10 +804,8 @@
         return;
     }
 
-    console.log(`✅ Found ${currentCourseData.modules.length} modules, rendering...`);
     let html = '';
     currentCourseData.modules.forEach(mod => {
-        console.log(`  📌 Module: ${mod.title} (${mod.id}) – ${mod.Lessons ? mod.Lessons.length : 0} lessons`);
         html += `
             <div class="module-card">
                 <div class="module-header">
@@ -823,17 +817,19 @@
                 <div class="module-lessons">
         `;
 
-        if (!mod.Lessons || mod.Lessons.length === 0) {
+        // Sort lessons by orderIndex
+        const sortedLessons = mod.Lessons ? [...mod.Lessons].sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0)) : [];
+
+        if (sortedLessons.length === 0) {
             html += `<p style="color:#555; font-size:0.85rem; padding:8px 0;">No lessons yet.</p>`;
         } else {
-            const sorted = [...mod.Lessons].sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0));
-            sorted.forEach((lesson, index) => {
+            sortedLessons.forEach((lesson, index) => {
                 const typeLabel = lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson';
                 const typeClass = lesson.type === 'quiz' ? 'quiz' : '';
                 const isFirst = index === 0;
-                const isLast = index === sorted.length - 1;
+                const isLast = index === sortedLessons.length - 1;
                 html += `
-                    <div class="lesson-item">
+                    <div class="lesson-item" data-lesson-id="${lesson.id}">
                         <div class="lesson-info">
                             <span>${lesson.title}</span>
                             <span class="lesson-type ${typeClass}">${typeLabel}</span>
@@ -855,17 +851,39 @@
             });
         }
 
+        // ============================================================
+        // THREE SEPARATE "+" BUTTONS
+        // ============================================================
         html += `
-                    <button class="add-btn" onclick="openAddLessonModal(${mod.id})">
-                        <i class="fas fa-plus-circle"></i> Add Lesson to "${mod.title}"
-                    </button>
+            <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+                <button class="add-btn" onclick="openAddLessonModalWithType(${mod.id}, 'lesson')" 
+                        style="flex:1; min-width:80px; background:rgba(0,255,255,0.05); border:1px dashed #1a4a4a; color:#88dddd; padding:8px 12px; border-radius:12px; cursor:pointer; transition:all 0.3s;"
+                        onmouseover="this.style.borderColor='#00ffff'; this.style.color='#00ffff';"
+                        onmouseout="this.style.borderColor='#1a4a4a'; this.style.color='#88dddd';">
+                    <i class="fas fa-plus-circle"></i> Lesson
+                </button>
+                <button class="add-btn" onclick="openAddLessonModalWithType(${mod.id}, 'practice')" 
+                        style="flex:1; min-width:80px; background:rgba(0,255,255,0.05); border:1px dashed #1a4a4a; color:#88dddd; padding:8px 12px; border-radius:12px; cursor:pointer; transition:all 0.3s;"
+                        onmouseover="this.style.borderColor='#00ffff'; this.style.color='#00ffff';"
+                        onmouseout="this.style.borderColor='#1a4a4a'; this.style.color='#88dddd';">
+                    <i class="fas fa-plus-circle"></i> Practice Activity
+                </button>
+                <button class="add-btn" onclick="openAddLessonModalWithType(${mod.id}, 'quiz')" 
+                        style="flex:1; min-width:80px; background:rgba(0,255,255,0.05); border:1px dashed #1a4a4a; color:#88dddd; padding:8px 12px; border-radius:12px; cursor:pointer; transition:all 0.3s;"
+                        onmouseover="this.style.borderColor='#00ffff'; this.style.color='#00ffff';"
+                        onmouseout="this.style.borderColor='#1a4a4a'; this.style.color='#88dddd';">
+                    <i class="fas fa-plus-circle"></i> Quiz
+                </button>
+            </div>
+        `;
+
+        html += `
                 </div>
             </div>
         `;
     });
 
     container.innerHTML = html;
-    console.log('✅ renderModules() completed');
 }
 
         // ============================================================
@@ -901,28 +919,51 @@
         // ============================================================
         // MOVE LESSON
         // ============================================================
-        async function moveLesson(moduleId, lessonId, direction) {
-            if (!currentCourseData) return;
-            const module = currentCourseData.modules.find(m => m.id === moduleId);
-            if (!module) return;
-            const lessonIndex = module.Lessons.findIndex(l => l.id === lessonId);
-            if (lessonIndex === -1) return;
-            const newIndex = lessonIndex + direction;
-            if (newIndex < 0 || newIndex >= module.Lessons.length) return;
+       async function moveLesson(moduleId, lessonId, direction) {
+    console.log(`🔄 Moving lesson ${lessonId} direction: ${direction}`);
+    if (!currentCourseData) return;
 
-            const otherLesson = module.Lessons[newIndex];
-            const tempOrder = lesson.orderIndex;
-            lesson.orderIndex = otherLesson.orderIndex;
-            otherLesson.orderIndex = tempOrder;
+    const module = currentCourseData.modules.find(m => m.id === moduleId);
+    if (!module) {
+        console.error('❌ Module not found:', moduleId);
+        return;
+    }
 
-            const update1 = await updateLesson(lesson.id, { orderIndex: lesson.orderIndex });
-            const update2 = await updateLesson(otherLesson.id, { orderIndex: otherLesson.orderIndex });
-            if (update1 && update2) {
-                await selectCourse(currentCourseId);
-            } else {
-                alert('Failed to reorder lessons. Please try again.');
-            }
-        }
+    const lessons = module.Lessons || [];
+    const lessonIndex = lessons.findIndex(l => l.id === lessonId);
+    if (lessonIndex === -1) {
+        console.error('❌ Lesson not found:', lessonId);
+        return;
+    }
+
+    const newIndex = lessonIndex + direction;
+    if (newIndex < 0 || newIndex >= lessons.length) {
+        console.warn('⚠️ Cannot move lesson – at edge');
+        return;
+    }
+
+    // Swap orderIndex
+    const lesson = lessons[lessonIndex];
+    const otherLesson = lessons[newIndex];
+    const tempOrder = lesson.orderIndex;
+    lesson.orderIndex = otherLesson.orderIndex;
+    otherLesson.orderIndex = tempOrder;
+
+    // Update both lessons in the database
+    const update1 = await updateLesson(lesson.id, { orderIndex: lesson.orderIndex });
+    const update2 = await updateLesson(otherLesson.id, { orderIndex: otherLesson.orderIndex });
+
+    if (update1 && update2) {
+        console.log('✅ Lessons reordered successfully');
+        await selectCourse(currentCourseId);
+    } else {
+        console.error('❌ Failed to update lesson order');
+        alert('Failed to reorder lessons. Please try again.');
+        // Revert the local changes
+        lesson.orderIndex = otherLesson.orderIndex;
+        otherLesson.orderIndex = tempOrder;
+    }
+}
 
         // ============================================================
         // PREVIEW LESSON
@@ -974,6 +1015,59 @@
             document.getElementById('modalDeleteBtn').style.display = 'none';
             document.getElementById('modalOverlay').classList.add('active');
         }
+        function openAddLessonModalWithType(moduleId, type) {
+    resetModal('lesson');
+    document.getElementById('editModuleId').value = moduleId;
+    document.getElementById('modalTitle').textContent = `Add ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+    document.getElementById('modalSub').textContent = `Create a new ${type} for this module.`;
+    document.getElementById('modalSubmitBtn').textContent = `Add ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+    document.getElementById('modalDeleteBtn').style.display = 'none';
+
+    // Pre-fill the lesson type
+    document.getElementById('lessonType').value = type === 'quiz' ? 'quiz' : 'lesson';
+
+    // Pre-fill the title based on type
+    const titles = {
+        'lesson': '📖 Lesson',
+        'practice': '✍️ Practice Activity',
+        'quiz': '🧠 Quiz'
+    };
+    document.getElementById('lessonTitle').value = titles[type] || 'Lesson';
+
+    // Pre-fill content for practice activities
+    if (type === 'practice') {
+        document.getElementById('lessonContent').value = '<p><strong>Practice Activity</strong></p><p>Add your exercises, Lumi iframe, or tasks here.</p>';
+    }
+
+    // Show/hide fields based on type
+    document.getElementById('moduleNameGroup').style.display = 'none';
+    document.getElementById('lessonTitleGroup').style.display = 'block';
+    document.getElementById('lessonTypeGroup').style.display = type !== 'quiz' ? 'none' : 'block';
+    document.getElementById('lessonContentGroup').style.display = type === 'quiz' ? 'none' : 'block';
+    document.getElementById('quizQuestionsGroup').style.display = type === 'quiz' ? 'block' : 'none';
+
+    // Reset quiz questions if it's a quiz
+    if (type === 'quiz') {
+        document.getElementById('quizQuestionsContainer').innerHTML = `
+            <div class="question-item" style="background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;">
+                <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <input type="text" placeholder="Option A" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                    <input type="text" placeholder="Option B" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                    <input type="text" placeholder="Option C" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                    <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                        <option value="0">A</option>
+                        <option value="1">B</option>
+                        <option value="2">C</option>
+                    </select>
+                    <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
+                </div>
+            </div>
+        `;
+    }
+
+    document.getElementById('modalOverlay').classList.add('active');
+}
 
         function editModule(moduleId) {
             const module = currentCourseData.modules.find(m => m.id === moduleId);
