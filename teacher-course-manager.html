@@ -884,8 +884,12 @@
     console.log('📦 Course data received:', courseData);
 
     if (courseData) {
+        // ✅ Ensure modules exists (even if empty)
+        if (!courseData.modules) {
+            courseData.modules = [];
+        }
         currentCourseData = courseData;
-        console.log('✅ currentCourseData set, calling renderModules()');
+        console.log('✅ currentCourseData set, modules:', currentCourseData.modules.length);
         renderModules();
     } else {
         currentCourseData = null;
