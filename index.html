@@ -1173,27 +1173,29 @@
     </script>
 
     <script>
-        function executeSearch() {
-            var query = document.getElementById("courseInput").value.toLowerCase().trim();
-            if (query.includes("beginner")) {
-                window.location.href = "services.html#A1/A2/B1";
-            } 
-            else if (query.includes("advanced")) {
-                window.location.href = "services.html#B2";
-            } 
-            else if (query.includes("baccalaureate") || query.includes("preparation") || query.includes("bac")) {
-                window.location.href = "services.html#Bac";
-            } 
-            else {
-                alert("No match found. Try 'beginner', 'advanced', or 'baccalaureate'.");
-            }
-        }
-        
-        document.getElementById("courseInput").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                executeSearch();
-            }
-        });
+       function executeSearch() {
+    var query = document.getElementById("courseInput").value.toLowerCase().trim();
+    var destination = '';
+
+    // 🔍 Track the search (even before redirect)
+    trackSearch(query);
+
+    if (query.includes("tunisian") || query.includes("program") || query.includes("collège") || query.includes("lycée")) {
+        destination = "services.html#Tunisian";
+    } else if (query.includes("beginner") || query.includes("a1") || query.includes("a2") || query.includes("b1")) {
+        destination = "services.html#A1/A2/B1";
+    } else if (query.includes("advanced") || query.includes("b2") || query.includes("c1")) {
+        destination = "services.html#B2";
+    } else if (query.includes("baccalaureate") || query.includes("preparation") || query.includes("bac") || query.includes("french bac")) {
+        destination = "services.html#Bac";
+    } else {
+        alert("No match found. Try 'beginner', 'advanced', 'baccalaureate', or 'tunisian'.");
+        return;
+    }
+
+    // Redirect
+    window.location.href = destination;
+}
     </script>
 
     <!-- ====== YOUR EXISTING LOGO (ORIGINAL - UNCHANGED) ====== -->
