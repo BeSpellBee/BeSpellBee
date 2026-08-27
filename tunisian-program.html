@@ -1,117 +1,382 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N3F5GM52DZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N3F5GM52DZ');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tunisian Program – BeSpellBee</title>
+    <title>🇹🇳 Tunisian Program – BeSpellBee</title>
+    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
+        /* ====== GLOBAL ====== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background: #0a0a0a;
             color: #e0e0e0;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
             margin: 0;
             padding: 40px 20px;
+            min-height: 100vh;
         }
+
         .container {
-            max-width: 800px;
+            max-width: 1100px;
             margin: 0 auto;
         }
-        h1 {
-            color: #00ffff;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        h1 .flag {
-            font-size: 2.8rem;
-        }
-        .subhead {
-            color: #88dddd;
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-        }
-        .card-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        .card {
-            background: #0d0d0d;
-            border: 1px solid #1a4a4a;
-            border-radius: 16px;
-            padding: 24px;
-            transition: border-color 0.3s;
-            text-align: center;
-        }
-        .card:hover {
-            border-color: #00ffff;
-        }
-        .card .emoji {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .card h2 {
-            color: #fff;
-            font-size: 1.4rem;
-            margin-bottom: 0.3rem;
-        }
-        .card p {
-            color: #888;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-        .card .btn {
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 8px 24px;
-            border: 1px solid #00ffff;
-            border-radius: 30px;
-            color: #00ffff;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        .card .btn:hover {
-            background: #00ffff;
-            color: #000;
-        }
+
+        /* ====== BACK BUTTON ====== */
         .back-link {
-            display: inline-block;
-            margin-top: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             color: #666;
             text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            margin-bottom: 20px;
         }
         .back-link:hover {
             color: #00ffff;
         }
-        @media (max-width: 600px) {
-            .card-grid {
-                grid-template-columns: 1fr;
-            }
+
+        /* ====== HEADER ====== */
+        .header {
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #1a4a4a;
+            padding-bottom: 1.5rem;
+        }
+
+        .header h1 {
+            color: #00ffff;
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+        }
+
+        .header h1 .flag {
+            font-size: 3rem;
+        }
+
+        .header .subhead {
+            color: #88dddd;
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+
+        .header .badge {
+            display: inline-block;
+            background: rgba(255, 204, 0, 0.15);
+            color: #ffcc00;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(255, 204, 0, 0.2);
+            margin-top: 8px;
+        }
+
+        /* ====== FEATURE GRID ====== */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin: 30px 0;
+        }
+
+        .card {
+            background: #0d0d0d;
+            border: 1px solid #1a4a4a;
+            border-radius: 16px;
+            padding: 28px 24px;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .card:hover {
+            border-color: #00ffff;
+            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.05);
+            transform: translateY(-4px);
+        }
+
+        .card .emoji {
+            font-size: 2.8rem;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .card h2 {
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: #888;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .card .btn {
+            display: inline-block;
+            margin-top: 1.2rem;
+            padding: 10px 28px;
+            border: 1px solid #00ffff;
+            border-radius: 40px;
+            color: #00ffff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .card .btn:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+        }
+
+        .card .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* ====== INFO SECTION ====== */
+        .info-section {
+            background: #0d0d0d;
+            border: 1px solid #1a4a4a;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .info-section h2 {
+            color: #00ffff;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-section h2 i {
+            color: #ffcc00;
+            margin-right: 10px;
+        }
+
+        .info-section p {
+            color: #aaa;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        .info-section .highlight {
+            color: #00ffff;
+            font-weight: 600;
+        }
+
+        .info-section .gold {
+            color: #ffcc00;
+        }
+
+        /* ====== CTA SECTION ====== */
+        .cta-section {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #1a4a4a;
+        }
+
+        .cta-section .btn-primary {
+            display: inline-block;
+            padding: 12px 32px;
+            background: #00ffff;
+            color: #000;
+            border: none;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .cta-section .btn-primary:hover {
+            background: #66ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        .cta-section .btn-secondary {
+            display: inline-block;
+            padding: 12px 32px;
+            background: rgba(255, 204, 0, 0.1);
+            color: #ffcc00;
+            border: 1px solid rgba(255, 204, 0, 0.3);
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .cta-section .btn-secondary:hover {
+            background: #ffcc00;
+            color: #000;
+            border-color: #ffcc00;
+        }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 768px) {
+            body { padding: 24px 16px; }
+            .header h1 { font-size: 2rem; }
+            .card-grid { grid-template-columns: 1fr; }
+            .info-section { padding: 20px; }
+            .cta-section { flex-direction: column; }
+            .cta-section .btn-primary,
+            .cta-section .btn-secondary { text-align: center; }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 { font-size: 1.6rem; }
+            .header h1 .flag { font-size: 2rem; }
+            .card { padding: 20px 16px; }
+            .card .emoji { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1><span class="flag">🇹🇳</span> Tunisian Program</h1>
-        <p class="subhead">Tunisian curriculum resources, teacher materials, and localised learning content.</p>
 
+    <div class="container">
+
+        <!-- ====== BACK BUTTON ====== -->
+        <a href="services.html" class="back-link" onclick="trackLink('Tunisian Program Back')">
+            <i class="fas fa-arrow-left"></i> Back to Services
+        </a>
+
+        <!-- ====== HEADER ====== -->
+        <div class="header">
+            <h1>
+                <span class="flag">🇹🇳</span> Collège & Lycée Program
+            </h1>
+            <p class="subhead">
+                Tunisia’s first private e‑middle school and secondary school.
+            </p>
+            <span class="badge"><i class="fas fa-star"></i> Curriculum-aligned</span>
+        </div>
+
+        <!-- ====== FEATURE GRID ====== -->
         <div class="card-grid">
             <div class="card">
-                <div class="emoji">📘</div>
+                <span class="emoji">📘</span>
                 <h2>Tunisian Curriculum</h2>
-                <p>Resources aligned with the Tunisian education system for primary and secondary levels.</p>
-                <a href="#" class="btn">Coming Soon</a>
+                <p>Resources aligned with the Tunisian education system for Collège and Lycée levels.</p>
+                <button class="btn" onclick="gtag('event', 'click', {'event_category': 'engagement', 'event_label': 'Tunisian Curriculum'}); alert('📘 More resources coming soon!');">
+                    <i class="fas fa-arrow-right"></i> Coming Soon
+                </button>
             </div>
+
             <div class="card">
-                <div class="emoji">🧑‍🏫</div>
+                <span class="emoji">🧑‍🏫</span>
                 <h2>Teacher Materials</h2>
                 <p>Lesson plans, worksheets, and teaching guides for Tunisian programme instructors.</p>
-                <a href="#" class="btn">Coming Soon</a>
+                <button class="btn" onclick="gtag('event', 'click', {'event_category': 'engagement', 'event_label': 'Teacher Materials'}); alert('📝 Teacher materials coming soon!');">
+                    <i class="fas fa-arrow-right"></i> Coming Soon
+                </button>
+            </div>
+
+            <div class="card">
+                <span class="emoji">🎯</span>
+                <h2>Exam Preparation</h2>
+                <p>Baccalaureate and Brevet preparation with real-time progress tracking.</p>
+                <a href="French-bac.html" class="btn" onclick="gtag('event', 'click', {'event_category': 'engagement', 'event_label': 'Exam Prep'});">
+                    <i class="fas fa-arrow-right"></i> Explore
+                </a>
+            </div>
+
+            <div class="card">
+                <span class="emoji">🌍</span>
+                <h2>Cultural Workshops</h2>
+                <p>Debate, literature, art, and citizenship – building confident, curious minds.</p>
+                <button class="btn" onclick="gtag('event', 'click', {'event_category': 'engagement', 'event_label': 'Cultural Workshops'}); alert('🎭 Workshops details coming soon!');">
+                    <i class="fas fa-arrow-right"></i> Coming Soon
+                </button>
             </div>
         </div>
 
-        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        <!-- ====== INFO SECTION ====== -->
+        <div class="info-section">
+            <h2><i class="fas fa-chart-line"></i> Why BeSpellBee?</h2>
+            <p>
+                Every student action – from link clicks and page views to quiz attempts and lesson completions –
+                is broadcast <span class="highlight">live</span> to teachers via WebSocket. Our system scientifically
+                calculates an <span class="gold">Engagement Score</span> based on real‑time participation and performance,
+                allowing us to deliver <span class="highlight">personalised coaching</span> that adapts to each student’s
+                needs.
+            </p>
+            <p style="margin-top: 12px;">
+                <span class="gold">📊</span> <span class="highlight">Real‑time teacher intelligence</span> –
+                every click, every quiz, every lesson completed, live.
+            </p>
+        </div>
+
+        <!-- ====== CTA SECTION ====== -->
+        <div class="cta-section">
+            <a href="services.html" class="btn-primary" onclick="gtag('event', 'click', {'event_category': 'engagement', 'event_label': 'Explore All Programs'});">
+                <i class="fas fa-rocket"></i> Explore All Programs
+            </a>
+            <a href="Contact.html" class="btn-secondary" onclick="gtag('event', 'click', {'event_category': 'engagement', 'event_label': 'Contact Us'});">
+                <i class="fas fa-envelope"></i> Contact Us
+            </a>
+        </div>
+
+        <!-- ====== PAGE VIEW TRACKING ====== -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Track page view for Tunisian Program
+                if (typeof gtag === 'function') {
+                    gtag('event', 'page_view', {
+                        page_title: 'Tunisian Program',
+                        page_location: window.location.href
+                    });
+                    console.log('✅ Google Tag: Tunisian Program page view tracked');
+                }
+
+                // Track back link click
+                document.querySelector('.back-link')?.addEventListener('click', function() {
+                    if (typeof gtag === 'function') {
+                        gtag('event', 'click', {
+                            'event_category': 'navigation',
+                            'event_label': 'Back to Services'
+                        });
+                    }
+                });
+
+                // Track all card buttons (already have onclick)
+            });
+        </script>
+
+        <!-- ====== TRACKING.JS ====== -->
+        <script src="tracking.js"></script>
+
     </div>
+
 </body>
 </html>
