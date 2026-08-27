@@ -2088,20 +2088,16 @@
 
    function updateAuthUI() {
     const isLoggedIn = !!localStorage.getItem('authToken');
-    const userRole = localStorage.getItem('userRole') || 'student';
     const studentAuthBtns = document.getElementById('studentAuthButtons');
     const teacherLoginBtn = document.getElementById('teacherLoginBtn');
 
     if (isLoggedIn) {
-        // Hide student auth buttons
+        // Hide student auth buttons when logged in
         if (studentAuthBtns) studentAuthBtns.style.display = 'none';
-        // Hide teacher login button
         if (teacherLoginBtn) teacherLoginBtn.style.display = 'none';
-        // No more authenticated buttons – they've been removed
     } else {
-        // Show student auth buttons
+        // SHOW student auth buttons when NOT logged in
         if (studentAuthBtns) studentAuthBtns.style.display = 'flex';
-        // Show teacher login button
         if (teacherLoginBtn) teacherLoginBtn.style.display = 'inline-block';
     }
 }
