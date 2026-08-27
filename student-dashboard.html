@@ -1264,6 +1264,22 @@
         `;
     }
 });
+        // Fetch a single course with modules/lessons
+async function fetchCourse(courseId) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/student/courses/${courseId}`);
+        const data = await response.json();
+        if (data.success) {
+            return data.data;
+        } else {
+            console.error('Failed to fetch course:', data.message);
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching course:', error);
+        return null;
+    }
+}
     </script>
 
 </body>
