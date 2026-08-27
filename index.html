@@ -1196,6 +1196,28 @@
     // Redirect
     window.location.href = destination;
 }
+		async function trackSearch(query) {
+    const token = localStorage.getItem('authToken');
+    if (!token) return; // Only track logged-in users
+
+    try {
+        await fetch('https://bespellbee-backend-en6l.onrender.com/api/track/search', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                query: query, 
+                page: 'home' 
+            })
+        });
+        console.log('🔍 Search tracked:', query);
+    } catch (e) {
+        // Silently fail – don't interrupt the user experience
+        console.warn('Search tracking failed:', e);
+    }
+}
     </script>
 
     <!-- ====== YOUR EXISTING LOGO (ORIGINAL - UNCHANGED) ====== -->
