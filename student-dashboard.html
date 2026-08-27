@@ -589,12 +589,12 @@
         // CONFIGURATION
         // ============================================================
         const API_BASE_URL = 'https://bespellbee-backend-en6l.onrender.com';
-        let currentCourse = null;        // stores the selected course ID (integer)
-        let currentCourseData = null;   // full course data from API
-        let courses = [];               // list of all available courses (for selector)
+        let currentCourse = null;
+        let currentCourseData = null;
+        let courses = [];
 
         // ============================================================
-        // HELPER: GET AUTH HEADERS (for student)
+        // HELPER: GET AUTH HEADERS
         // ============================================================
         function getAuthHeaders() {
             const token = localStorage.getItem('authToken');
@@ -608,41 +608,50 @@
         // API CALLS
         // ============================================================
 
-        // Fetch all available courses (public) – for now, we'll get them from the teacher/student endpoint.
-        // Since we don't have a public list endpoint, we'll use the teacher's endpoint (but it requires teacher auth).
-        // For students, we'll hardcode a list of courses that are public or we can get from a separate endpoint.
-        // For now, we'll fetch from the teacher endpoint using the student token? That won't work.
-        // Let's create a public endpoint in the backend for student courses, or we can hardcode course IDs.
-        // Since we're in development, we'll hardcode a list of course IDs (1,2,3) and fetch each.
-        // In production, you'll want a proper endpoint.
-        // We'll call /api/student/courses/:courseId for each course.
-
-       async function fetchAllCourses() {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-        console.warn('No auth token found');
-        return [];
-    }
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/student/courses`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+        // Fetch all courses for the logged-in student (by teacher association)
+        async function fetchAllCourses() {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                console.warn('No auth token found');
+                return [];
             }
-        });
-        const data = await response.json();
-        if (data.success) {
-            return data.data;
-        } else {
-            console.error('Failed to fetch courses:', data.message);
-            return [];
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/student/courses`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    return data.data;
+                } else {
+                    console.error('Failed to fetch courses:', data.message);
+                    return [];
+                }
+            } catch (error) {
+                console.error('Error fetching courses:', error);
+                return [];
+            }
         }
-    } catch (error) {
-        console.error('Error fetching courses:', error);
-        return [];
-    }
-}
+
+        // Fetch a single course with modules/lessons
+        async function fetchCourse(courseId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/student/courses/${courseId}`);
+                const data = await response.json();
+                if (data.success) {
+                    return data.data;
+                } else {
+                    console.error('Failed to fetch course:', data.message);
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error fetching course:', error);
+                return null;
+            }
+        }
 
         // ============================================================
         // STATE & HELPERS
@@ -703,18 +712,14 @@
         // ============================================================
         async function selectCourse(courseId) {
             currentCourse = courseId;
-            // Update button styles
             document.querySelectorAll('.course-btn').forEach(btn => {
                 btn.classList.toggle('active', parseInt(btn.dataset.courseId) === courseId);
             });
 
-            // Fetch full course data
             const courseData = await fetchCourse(courseId);
             if (courseData) {
                 currentCourseData = courseData;
-                // Update header
                 document.getElementById('courseTitle').textContent = courseData.title;
-                // Check if unlocked
                 const isUnlocked = localStorage.getItem(`lmsUnlocked_${courseId}`) === 'true';
                 if (isUnlocked) {
                     document.getElementById('lmsGate').style.display = 'none';
@@ -729,22 +734,20 @@
             } else {
                 currentCourseData = null;
                 document.getElementById('courseTitle').textContent = 'Error loading course';
-                document.getElementById('modulesContainer').innerHTML = `<p style="color:#ff4444;">Failed to load course data.</p>`;
+                document.getElementById('dashboardContent').innerHTML = `<p style="color:#ff4444;">Failed to load course data.</p>`;
             }
         }
 
         // ============================================================
-        // UNLOCK COURSE (access code)
+        // UNLOCK COURSE
         // ============================================================
         function unlockLMS() {
             const input = document.getElementById('lmsPassword');
             const error = document.getElementById('lmsGateError');
-            // For now, we'll check against the course's access code (stored in currentCourseData)
             if (!currentCourseData) {
                 error.innerText = '❌ Please select a course first.';
                 return;
             }
-            // Compare with access code from database
             if (input.value.trim() === currentCourseData.accessCode) {
                 localStorage.setItem(`lmsUnlocked_${currentCourse}`, 'true');
                 document.getElementById('lmsGate').style.display = 'none';
@@ -769,7 +772,6 @@
             const container = document.getElementById('dashboardContent');
             const prog = getProgress(courseId);
 
-            // Calculate progress
             let totalLessons = 0;
             let completedLessons = 0;
             if (course && course.modules) {
@@ -786,7 +788,6 @@
             }
             const overallProgress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
 
-            // Fetch engagement score from backend
             fetchStudentStats().then(statsData => {
                 let engagementScore = 0;
                 let totalPageViews = 0;
@@ -802,9 +803,6 @@
                     totalQuizzes = statsData.stats?.totalQuizzes || 0;
                 }
 
-                // ============================================================
-                // ENGAGEMENT SCORE CARD (ALWAYS VISIBLE)
-                // ============================================================
                 let html = `
                     <div style="background: #121212; border-radius: 16px; padding: 20px 24px; margin-bottom: 20px; border: 1px solid #1a4a4a;">
                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
@@ -823,9 +821,6 @@
                     </div>
                 `;
 
-                // ============================================================
-                // COURSE CONTENT (only if unlocked)
-                // ============================================================
                 if (course && course.modules && course.modules.length > 0) {
                     html += `
                         <div class="dashboard-header">
@@ -858,7 +853,6 @@
 
                 container.innerHTML = html;
 
-                // If unlocked and has modules, render them
                 if (course && course.modules && course.modules.length > 0) {
                     const moduleList = document.getElementById('moduleList');
                     let listHtml = '';
@@ -867,8 +861,7 @@
                         if (mod.Lessons && mod.Lessons.length > 0) {
                             mod.Lessons.forEach(lesson => {
                                 const done = isCompleted(courseId, lesson.id) ? 'done' : '';
-                                let label = isCompleted(courseId, lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ?
-                                    '🧠 Quiz' : '📖 Lesson');
+                                let label = isCompleted(courseId, lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson');
                                 if (lesson.type === 'quiz') {
                                     const data = prog[lesson.id];
                                     if (data && data.completed) {
@@ -1018,7 +1011,7 @@
         }
 
         // ============================================================
-        // PROGRESS REPORT (same as before)
+        // PROGRESS REPORT
         // ============================================================
         function generateReport(courseId) {
             const course = currentCourseData;
@@ -1152,7 +1145,7 @@
         }
 
         // ============================================================
-        // FETCH STUDENT STATS (engagement score)
+        // FETCH STUDENT STATS
         // ============================================================
         async function fetchStudentStats() {
             const token = localStorage.getItem('authToken');
@@ -1238,48 +1231,27 @@
         // ============================================================
         // INIT
         // ============================================================
-       
+        document.addEventListener('DOMContentLoaded', async function() {
+            loadStudentName();
 
-            // Fetch all available courses (hardcoded IDs for now)
-            document.addEventListener('DOMContentLoaded', async function() {
-    loadStudentName();
+            const fetchedCourses = await fetchAllCourses();
 
-    // Fetch all available courses from backend
-    const fetchedCourses = await fetchAllCourses();
-    
-    if (fetchedCourses && fetchedCourses.length > 0) {
-        courses = fetchedCourses;
-        renderCourseSelector();
-        // Auto-select the first course
-        await selectCourse(courses[0].id);
-    } else {
-        document.getElementById('courseSelector').innerHTML = `<p style="color:#888;">No courses available. Please contact your teacher.</p>`;
-        document.getElementById('courseTitle').textContent = 'No course selected';
-        document.getElementById('dashboardContent').innerHTML = `
-            <div style="text-align:center; padding:40px 20px; background:#121212; border-radius:16px; border:1px solid #1a4a4a;">
-                <i class="fas fa-info-circle" style="font-size:2.5rem; color:#555; margin-bottom:15px; display:block;"></i>
-                <h3 style="color:#88dddd;">No courses available</h3>
-                <p style="color:#666; margin-top:5px;">Your teacher hasn't assigned any courses to you yet.</p>
-            </div>
-        `;
-    }
-});
-        // Fetch a single course with modules/lessons
-async function fetchCourse(courseId) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/student/courses/${courseId}`);
-        const data = await response.json();
-        if (data.success) {
-            return data.data;
-        } else {
-            console.error('Failed to fetch course:', data.message);
-            return null;
-        }
-    } catch (error) {
-        console.error('Error fetching course:', error);
-        return null;
-    }
-}
+            if (fetchedCourses && fetchedCourses.length > 0) {
+                courses = fetchedCourses;
+                renderCourseSelector();
+                await selectCourse(courses[0].id);
+            } else {
+                document.getElementById('courseSelector').innerHTML = `<p style="color:#888;">No courses available. Please contact your teacher.</p>`;
+                document.getElementById('courseTitle').textContent = 'No course selected';
+                document.getElementById('dashboardContent').innerHTML = `
+                    <div style="text-align:center; padding:40px 20px; background:#121212; border-radius:16px; border:1px solid #1a4a4a;">
+                        <i class="fas fa-info-circle" style="font-size:2.5rem; color:#555; margin-bottom:15px; display:block;"></i>
+                        <h3 style="color:#88dddd;">No courses available</h3>
+                        <p style="color:#666; margin-top:5px;">Your teacher hasn't assigned any courses to you yet.</p>
+                    </div>
+                `;
+            }
+        });
     </script>
 
 </body>
