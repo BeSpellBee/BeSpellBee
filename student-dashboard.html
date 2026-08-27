@@ -1242,23 +1242,29 @@
             loadStudentName();
 
             // Fetch all available courses (hardcoded IDs for now)
-            const fetchedCourses = await fetchAllCourses();
-            if (fetchedCourses && fetchedCourses.length > 0) {
-                courses = fetchedCourses;
-                renderCourseSelector();
-                // Auto-select the first course
-                await selectCourse(courses[0].id);
-            } else {
-                document.getElementById('courseSelector').innerHTML = `<p style="color:#888;">No courses available.</p>`;
-                document.getElementById('courseTitle').textContent = 'No course selected';
-                document.getElementById('modulesContainer').innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-info-circle"></i>
-                        <p>No courses available at the moment. Please check back later.</p>
-                    </div>
-                `;
-            }
-        });
+            document.addEventListener('DOMContentLoaded', async function() {
+    loadStudentName();
+
+    // Fetch all available courses from backend
+    const fetchedCourses = await fetchAllCourses();
+    
+    if (fetchedCourses && fetchedCourses.length > 0) {
+        courses = fetchedCourses;
+        renderCourseSelector();
+        // Auto-select the first course
+        await selectCourse(courses[0].id);
+    } else {
+        document.getElementById('courseSelector').innerHTML = `<p style="color:#888;">No courses available. Please contact your teacher.</p>`;
+        document.getElementById('courseTitle').textContent = 'No course selected';
+        document.getElementById('dashboardContent').innerHTML = `
+            <div style="text-align:center; padding:40px 20px; background:#121212; border-radius:16px; border:1px solid #1a4a4a;">
+                <i class="fas fa-info-circle" style="font-size:2.5rem; color:#555; margin-bottom:15px; display:block;"></i>
+                <h3 style="color:#88dddd;">No courses available</h3>
+                <p style="color:#666; margin-top:5px;">Your teacher hasn't assigned any courses to you yet.</p>
+            </div>
+        `;
+    }
+});
     </script>
 
 </body>
