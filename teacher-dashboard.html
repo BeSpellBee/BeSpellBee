@@ -728,7 +728,7 @@
         }
 
         // ============================================================
-        // ACTIVITY FEED (UPDATED with video_watch, carousel_view, quiz_pass)
+        // ACTIVITY FEED
         // ============================================================
         function renderActivityFeed(activities) {
             const container = document.getElementById('activityFeed');
@@ -810,7 +810,7 @@
         }
 
         // ============================================================
-        // TOP ENGAGED STUDENTS (FIXED studentId)
+        // TOP ENGAGED STUDENTS
         // ============================================================
         function renderEngagedStudents(students) {
             const container = document.getElementById('onlineStudents');
@@ -869,7 +869,7 @@
         }
 
         // ============================================================
-        // PERFORMANCE GRID (FIXED studentId)
+        // PERFORMANCE GRID
         // ============================================================
         function renderPerformanceGrid(students) {
             const container = document.getElementById('performanceGrid');
@@ -936,32 +936,72 @@
                     </div>
                 `;
             }).join('');
+            
+            console.log('✅ Performance grid rendered with', sorted.length, 'students');
         }
 
         // ============================================================
-        // UPDATE PERFORMANCE GRID IN REAL-TIME
+        // UPDATE PERFORMANCE GRID IN REAL-TIME (DEBUG VERSION)
         // ============================================================
         function updatePerformanceGrid(activity) {
-            const studentName = activity.studentName || 'Student';
-            const studentId = activity.studentId || activity.Student?.id;
+            console.log('🔄 updatePerformanceGrid called with:', activity);
             
-            if (!studentId) return; // Skip if no student ID
+            // Try different ways to get student name and ID
+            const studentName = activity.studentName || activity.Student?.name || null;
+            const studentId = activity.studentId || activity.Student?.id || null;
+            
+            console.log('👤 Looking for student:', { studentName, studentId });
+            
+            if (!studentName) {
+                console.warn('⚠️ No student name found in activity');
+                return;
+            }
             
             // Find the student card in the grid
             const cards = document.querySelectorAll('.perf-card');
+            console.log(`🔍 Found ${cards.length} performance cards`);
+            
+            // Log all card names for debugging
+            cards.forEach((card, index) => {
+                const nameEl = card.querySelector('.perf-header .name');
+                if (nameEl) {
+                    console.log(`  Card ${index}: "${nameEl.textContent.trim()}"`);
+                }
+            });
+            
             let targetCard = null;
             
+            // Try exact match first
             for (const card of cards) {
                 const nameElement = card.querySelector('.perf-header .name');
-                if (nameElement && nameElement.textContent === studentName) {
-                    targetCard = card;
-                    break;
+                if (nameElement) {
+                    const cardName = nameElement.textContent.trim();
+                    if (cardName === studentName) {
+                        targetCard = card;
+                        console.log('✅ Found matching card by exact name!');
+                        break;
+                    }
+                }
+            }
+            
+            // If no exact match, try partial match
+            if (!targetCard) {
+                for (const card of cards) {
+                    if (card.textContent.includes(studentName)) {
+                        targetCard = card;
+                        console.log('✅ Found matching card by partial match!');
+                        break;
+                    }
                 }
             }
             
             if (targetCard) {
+                console.log('🎯 Updating card for:', studentName);
+                
                 // Update the stats on the card
                 const stats = targetCard.querySelectorAll('.perf-stats .stat .val');
+                console.log(`📊 Found ${stats.length} stat elements`);
+                
                 if (stats.length >= 3) {
                     let indexToUpdate = 0; // Default: participation
                     
@@ -972,7 +1012,9 @@
                     }
                     
                     const currentValue = parseInt(stats[indexToUpdate].textContent) || 0;
-                    stats[indexToUpdate].textContent = currentValue + 1;
+                    const newValue = currentValue + 1;
+                    stats[indexToUpdate].textContent = newValue;
+                    console.log(`📈 Updated stat ${indexToUpdate} from ${currentValue} to ${newValue}`);
                 }
                 
                 // Update the engagement score
@@ -989,6 +1031,7 @@
                         barFill.style.width = newScore + '%';
                         barFill.className = 'fill ' + (newScore >= 70 ? 'high' : newScore >= 40 ? 'medium' : 'low');
                     }
+                    console.log(`📈 Updated score from ${currentScore}% to ${newScore}%`);
                 }
                 
                 // Update the activity count
@@ -996,9 +1039,11 @@
                 if (activitySpan) {
                     const currentActivities = parseInt(activitySpan.textContent) || 0;
                     activitySpan.textContent = (currentActivities + 1) + ' activities';
+                    console.log(`📈 Updated activity count to ${currentActivities + 1}`);
                 }
             } else {
-                // If the student isn't in the grid yet, refresh the entire grid
+                console.warn(`❌ No card found for student: "${studentName}"`);
+                console.log('🔄 Refreshing entire grid...');
                 loadDashboard();
             }
         }
@@ -1007,10 +1052,13 @@
         // UPDATE STATS COUNTERS
         // ============================================================
         function updateStatsCounters(activity) {
+            console.log('📊 updateStatsCounters called');
             const profileViews = document.getElementById('profileViews');
             if (profileViews) {
                 const currentViews = parseInt(profileViews.textContent) || 0;
-                profileViews.textContent = currentViews + 1;
+                const newViews = currentViews + 1;
+                profileViews.textContent = newViews;
+                console.log(`📈 Updated profile views from ${currentViews} to ${newViews}`);
             }
         }
 
@@ -1035,7 +1083,7 @@
         }
 
         // ============================================================
-        // SHOW STUDENT DETAILS MODAL (FIXED)
+        // SHOW STUDENT DETAILS MODAL
         // ============================================================
         function showStudentDetails(studentId) {
             const token = localStorage.getItem('authToken');
@@ -1263,6 +1311,15 @@
 
             socket.on('new-activity', (activity) => {
                 console.log('📡 Live activity received:', activity);
+                console.log('🔍 Activity structure:', {
+                    studentName: activity.studentName,
+                    studentId: activity.studentId,
+                    activityType: activity.activityType,
+                    hasStudent: !!activity.Student,
+                    studentIdFromStudent: activity.Student?.id,
+                    studentNameFromStudent: activity.Student?.name,
+                    fullObject: JSON.stringify(activity, null, 2)
+                });
                 
                 // Update the activity feed
                 if (typeof addActivityToFeed === 'function') {
