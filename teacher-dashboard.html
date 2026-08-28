@@ -6,7 +6,6 @@
     <title>BeSpellBee - Teacher Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-        /* ====== GLOBAL ====== */
         * {
             margin: 0;
             padding: 0;
@@ -782,7 +781,7 @@
         }
 
         // ============================================================
-        // TOP ENGAGED STUDENTS
+        // TOP ENGAGED STUDENTS (FIXED studentId)
         // ============================================================
         function renderEngagedStudents(students) {
             const container = document.getElementById('onlineStudents');
@@ -801,8 +800,10 @@
                 const actions = s.activityCount || 0;
                 const score = studentData.engagementScore || 0;
                 const scoreLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
+                const studentId = studentData.id || 0;
+                if (!studentId) return ''; // skip invalid
                 return `
-                    <div class="online-student" onclick="showStudentDetails(${studentData.id || 0})">
+                    <div class="online-student" onclick="showStudentDetails(${studentId})">
                         <span class="name"><i class="fas fa-circle"></i> ${name}</span>
                         <span class="detail"><span class="highlight">${actions}</span> actions • <span class="score-badge ${scoreLevel}">${Math.round(score)}%</span></span>
                     </div>
@@ -839,7 +840,7 @@
         }
 
         // ============================================================
-        // PERFORMANCE GRID
+        // PERFORMANCE GRID (FIXED studentId)
         // ============================================================
         function renderPerformanceGrid(students) {
             const container = document.getElementById('performanceGrid');
@@ -867,6 +868,7 @@
                 const scoreLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
                 const actions = s.activityCount || 0;
                 const studentId = studentData.id || 0;
+                if (!studentId) return ''; // skip invalid
 
                 const pageViews = studentData.totalPageViews || 0;
                 const lessonViews = studentData.totalLessonViews || 0;
@@ -908,12 +910,16 @@
         }
 
         // ============================================================
-        // STUDENT DETAILS MODAL (FIXED)
+        // SHOW STUDENT DETAILS MODAL (FIXED)
         // ============================================================
         function showStudentDetails(studentId) {
             const token = localStorage.getItem('authToken');
             if (!token) {
                 alert('Please log in first.');
+                return;
+            }
+            if (!studentId || studentId === 0) {
+                showModalError('Invalid student ID. Please try again.');
                 return;
             }
 
@@ -940,7 +946,12 @@
                 }
             })
             .then(res => {
-                if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                if (!res.ok) {
+                    if (res.status === 404) {
+                        throw new Error('Student not found. Please try again.');
+                    }
+                    throw new Error(`Server error (${res.status})`);
+                }
                 return res.json();
             })
             .then(result => {
@@ -953,7 +964,7 @@
             })
             .catch(err => {
                 console.error('❌ Error loading student details:', err);
-                showModalError('Could not connect to server. Please try again.');
+                showModalError(err.message);
             });
         }
 
@@ -984,7 +995,7 @@
             const levelLabel = score >= 70 ? '🌟 Outstanding' : score >= 40 ? '📈 On Track' : '🌱 Getting Started';
             infoEl.textContent = `Engagement Score: ${Math.round(score)}% • Grade: ${grade}/4 • ${levelLabel}`;
 
-            // Build stats – use nullish coalescing to handle missing fields
+            // Build stats – use defaults if fields missing
             const stats = [
                 { label: 'Page Views', value: student.totalPageViews ?? 0, color: 'yellow' },
                 { label: 'Lesson Views', value: student.totalLessonViews ?? 0, color: 'cyan' },
@@ -992,6 +1003,7 @@
                 { label: 'Lessons Completed', value: student.totalCompleted ?? 0, color: 'green' },
                 { label: 'Link Clicks', value: student.totalLinkClicks ?? 0, color: 'orange' },
                 { label: 'Messages Sent', value: student.totalMessages ?? 0, color: 'cyan' },
+                { label: 'Practice Activities', value: student.totalPracticeActivities ?? 0, color: 'pink' },
             ];
 
             const hasActivity = stats.some(s => s.value > 0);
