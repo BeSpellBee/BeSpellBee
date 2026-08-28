@@ -2101,58 +2101,48 @@
 	updateAuthUI();
 
     // ============================================
-    // INJECT "GO TO DASHBOARD" BUTTON ON HOMEPAGE (NEW)
+    // INJECT "GO TO DASHBOARD" BUTTON ON HOMEPAGE (FIXED)
     // ============================================
 
-    function injectDashboardButton() {
-        // Only run on the homepage
-        const isHomepage = window.location.pathname.endsWith('index.html') || 
-                           window.location.pathname === '/' || 
-                           window.location.pathname === '';
-        if (!isHomepage) return;
+    (function injectDashboardButton() {
+        // Only on homepage
+        const isHome = window.location.pathname.endsWith('index.html') || 
+                       window.location.pathname === '/' || 
+                       window.location.pathname === '';
+        if (!isHome) return;
 
-        // Check if user is logged in
         const token = localStorage.getItem('authToken');
         if (!token) return;
 
-        // Check if button already exists
+        // Already exists?
         if (document.getElementById('floatingDashboardBtn')) return;
 
-        // Determine user role
         const userRole = localStorage.getItem('userRole') || 'student';
-        let buttonText = '📚 Go to Dashboard';
-        let buttonLink = 'student-dashboard.html';
+        const buttonText = userRole === 'teacher' ? '👨‍🏫 Go to Dashboard' : '📚 Go to Dashboard';
+        const buttonLink = userRole === 'teacher' ? 'teacher-dashboard.html' : 'student-dashboard.html';
 
-        if (userRole === 'teacher') {
-            buttonText = '👨‍🏫 Go to Dashboard';
-            buttonLink = 'teacher-dashboard.html';
-        }
-
-        // Create floating button
         const btn = document.createElement('a');
         btn.id = 'floatingDashboardBtn';
         btn.href = buttonLink;
         btn.innerHTML = buttonText;
-        btn.style.cssText = `
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #00ffff;
-            color: #000;
-            padding: 14px 24px;
-            border-radius: 60px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1rem;
-            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.3);
-            z-index: 9999;
-            transition: all 0.3s;
-            font-family: 'Segoe UI', sans-serif;
-            border: none;
-            cursor: pointer;
-        `;
-        
-        // Hover effects
+        Object.assign(btn.style, {
+            position: 'fixed',
+            bottom: '30px',
+            right: '30px',
+            background: '#00ffff',
+            color: '#000',
+            padding: '14px 24px',
+            borderRadius: '60px',
+            textDecoration: 'none',
+            fontWeight: '700',
+            fontSize: '1rem',
+            boxShadow: '0 8px 32px rgba(0, 255, 255, 0.3)',
+            zIndex: '9999',
+            transition: 'all 0.3s',
+            fontFamily: "'Segoe UI', sans-serif",
+            border: 'none',
+            cursor: 'pointer'
+        });
         btn.onmouseover = function() {
             this.style.transform = 'scale(1.05)';
             this.style.boxShadow = '0 12px 48px rgba(0, 255, 255, 0.5)';
@@ -2161,17 +2151,11 @@
             this.style.transform = 'scale(1)';
             this.style.boxShadow = '0 8px 32px rgba(0, 255, 255, 0.3)';
         };
-
         document.body.appendChild(btn);
-    }
+    })();
 
-    // Run when the homepage loads
-    document.addEventListener('DOMContentLoaded', function() {
-        injectDashboardButton();
-    });
-
-    // Also run after a short delay (in case DOMContentLoaded already fired)
-    setTimeout(injectDashboardButton, 100);
+    // Also run after a short delay (in case DOM isn't ready)
+    setTimeout(injectDashboardButton, 200);
 
     // ============================================
     // DASHBOARD (FIXED - Shows for both Student & Teacher)
