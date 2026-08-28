@@ -810,6 +810,8 @@
                 let totalQuizzes = 0;
                 let totalLessonViews = 0;
                 let completedLessonsCount = 0;
+                let totalMessages = 0;
+                let totalPracticeActivities = 0;
                 let studentName = 'Student';
                 let motivationalMsg = 'Start your learning journey today!';
                 let engagementColor = '#ffcc00';
@@ -826,6 +828,8 @@
                     totalQuizzes = statsData.stats?.totalQuizzes || 0;
                     totalLessonViews = statsData.stats?.totalLessonViews || 0;
                     completedLessonsCount = statsData.stats?.completedVideos || 0;
+                    totalMessages = statsData.stats?.totalMessages || 0;
+                    totalPracticeActivities = statsData.stats?.totalPracticeActivities || 0;
                     motivationalMsg = statsData.engagement?.motivationalMessage || 'Start your learning journey today!';
                     engagementColor = statsData.engagement?.level?.color || '#ffcc00';
                     engagementEmoji = statsData.engagement?.level?.emoji || '🌱';
@@ -838,6 +842,8 @@
                 const lessonViewPoints = pointsBreakdown.lesson_view?.points || 0;
                 const lessonCompletePoints = pointsBreakdown.lesson_complete?.points || 0;
                 const quizAttemptPoints = pointsBreakdown.quiz_attempt?.points || 0;
+                const messagePoints = pointsBreakdown.message_sent?.points || 0;
+                const practicePoints = pointsBreakdown.activity_practice?.points || 0;
 
                 let html = `
                     <!-- Engagement Score Card -->
@@ -891,6 +897,16 @@
                                 <div style="font-size: 0.6rem; color: #666;">Quizzes</div>
                                 <div style="font-size: 0.9rem; color: #ff66aa;">${totalQuizzes}</div>
                                 <div style="font-size: 0.6rem; color: #444;">${quizAttemptPoints} pts</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.6rem; color: #666;">Messages</div>
+                                <div style="font-size: 0.9rem; color: #6666ff;">${totalMessages}</div>
+                                <div style="font-size: 0.6rem; color: #444;">${messagePoints} pts</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.6rem; color: #666;">Practice</div>
+                                <div style="font-size: 0.9rem; color: #ff9944;">${totalPracticeActivities}</div>
+                                <div style="font-size: 0.6rem; color: #444;">${practicePoints} pts</div>
                             </div>
                         </div>
                     </div>
