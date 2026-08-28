@@ -1277,6 +1277,56 @@
                 }
             });
 
+            // ====== 🆕 LISTEN FOR ENGAGEMENT SCORE UPDATES ======
+            socket.on('student-score-updated', (data) => {
+                console.log('📊 Score updated for', data.studentName, data.engagementScore);
+
+                // Update the performance grid cards
+                const cards = document.querySelectorAll('.perf-card');
+                for (const card of cards) {
+                    const nameEl = card.querySelector('.perf-header .name');
+                    if (nameEl && nameEl.textContent.trim() === data.studentName) {
+                        // Update score display
+                        const scoreEl = card.querySelector('.perf-header .score');
+                        if (scoreEl) {
+                            const level = data.engagementScore >= 70 ? 'high' : data.engagementScore >= 40 ? 'medium' : 'low';
+                            scoreEl.textContent = Math.round(data.engagementScore) + '%';
+                            scoreEl.className = 'score ' + level;
+                        }
+                        // Update progress bar
+                        const barFill = card.querySelector('.perf-bar .fill');
+                        if (barFill) {
+                            barFill.style.width = Math.min(data.engagementScore, 100) + '%';
+                            const level = data.engagementScore >= 70 ? 'high' : data.engagementScore >= 40 ? 'medium' : 'low';
+                            barFill.className = 'fill ' + level;
+                        }
+                        // Optionally update other stats (e.g., activity count if shown)
+                        break;
+                    }
+                }
+
+                // Also update the "Top Engaged" list if present
+                const engagedList = document.getElementById('onlineStudents');
+                if (engagedList) {
+                    const items = engagedList.querySelectorAll('.online-student');
+                    for (const item of items) {
+                        const nameSpan = item.querySelector('.name');
+                        if (nameSpan && nameSpan.textContent.trim() === data.studentName) {
+                            const detailSpan = item.querySelector('.detail');
+                            if (detailSpan) {
+                                const badge = detailSpan.querySelector('.score-badge');
+                                if (badge) {
+                                    const level = data.engagementScore >= 70 ? 'high' : data.engagementScore >= 40 ? 'medium' : 'low';
+                                    badge.textContent = Math.round(data.engagementScore) + '%';
+                                    badge.className = 'score-badge ' + level;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            });
+
             socket.on('disconnect', (reason) => {
                 console.log('❌ WebSocket disconnected. Reason:', reason);
             });
