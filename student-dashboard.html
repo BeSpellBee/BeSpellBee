@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N3F5GM52DZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N3F5GM52DZ');
+    </script>
+      
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BeSpellBee - Student Dashboard</title>
@@ -527,6 +536,12 @@
         <div class="student-info">
             <span class="badge"><span class="status-dot"></span> Learning</span>
             <span class="name" id="navStudentName"><i class="fas fa-user-graduate"></i> Loading...</span>
+            
+            <!-- ✅ ADDED: Back to Home Link -->
+            <a href="index.html" style="color: #88dddd; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px; transition: color 0.3s;">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+
             <a href="#" id="logoutBtn" class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
@@ -800,7 +815,7 @@
                     engagementScore = statsData.student?.engagementScore || 0;
                     totalPageViews = statsData.stats?.totalPageViews || 0;
                     totalLinkClicks = statsData.stats?.totalLinkClicks || 0;
-                    totalQuizzes = statsData.stats?.totalQuizzes || 0;
+                    totalQuizzes = statsData.stats?.totalQuizAttempts || 0;
                 }
 
                 let html = `
