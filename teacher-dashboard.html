@@ -6,6 +6,7 @@
     <title>BeSpellBee - Teacher Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
+        /* ====== GLOBAL ====== */
         * {
             margin: 0;
             padding: 0;
@@ -40,6 +41,7 @@
             display: flex;
             align-items: center;
             gap: 16px;
+            flex-wrap: wrap;
         }
         .nav-bar .teacher-info .name {
             font-weight: 600;
@@ -298,7 +300,7 @@
             display: block;
         }
 
-        /* ====== NEW: STUDENT PERFORMANCE SECTION ====== */
+        /* ====== PERFORMANCE SECTION ====== */
         .performance-section {
             margin-top: 32px;
             border-top: 1px solid #1a4a4a;
@@ -510,6 +512,9 @@
             <span class="badge"><span class="status-dot"></span> Live</span>
             <span class="name" id="navTeacherName"><i class="fas fa-user-graduate"></i> Loading...</span>
             <span style="color: #555; font-size: 0.8rem;" id="navTeacherSubject">| ...</span>
+            <a href="index.html" style="color: #88dddd; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px; transition: color 0.3s;">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
             <a href="teacher-course-manager.html" 
                style="display:inline-block; padding:5px 16px; border:1px solid #ffcc00; border-radius:30px;
                       color:#ffcc00; text-decoration:none; font-size:0.8rem; font-weight:600;
@@ -527,7 +532,7 @@
     <!-- ====== DASHBOARD ====== -->
     <div class="dashboard">
 
-        <!-- ====== STATS (YOUR EXISTING) ====== -->
+        <!-- ====== STATS ====== -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="label"><i class="fas fa-users"></i> Total Students</div>
@@ -551,10 +556,10 @@
             </div>
         </div>
 
-        <!-- ====== TWO COLUMNS (YOUR EXISTING) ====== -->
+        <!-- ====== TWO COLUMNS ====== -->
         <div class="two-col">
 
-            <!-- LEFT: ACTIVITY FEED (YOUR EXISTING) -->
+            <!-- LEFT: ACTIVITY FEED -->
             <div class="panel">
                 <div class="panel-header">
                     <h3>
@@ -573,10 +578,10 @@
                 </div>
             </div>
 
-            <!-- RIGHT: ONLINE STUDENTS + UPCOMING (YOUR EXISTING) -->
+            <!-- RIGHT: TOP ENGAGED + RECENT BOOKINGS -->
             <div style="display: flex; flex-direction: column; gap: 24px;">
 
-                <!-- ONLINE STUDENTS / ENGAGED STUDENTS -->
+                <!-- TOP ENGAGED STUDENTS -->
                 <div class="panel">
                     <div class="panel-header">
                         <h3><i class="fas fa-circle" style="color:#00ff88; font-size:0.6rem;"></i> Top Engaged</h3>
@@ -587,7 +592,7 @@
                     </div>
                 </div>
 
-                <!-- UPCOMING SESSIONS / BOOKINGS -->
+                <!-- RECENT BOOKINGS -->
                 <div class="panel">
                     <div class="panel-header">
                         <h3><i class="fas fa-calendar-alt"></i> Recent Bookings</h3>
@@ -601,7 +606,7 @@
             </div>
         </div>
 
-        <!-- ====== NEW: STUDENT PERFORMANCE BY LEVEL ====== -->
+        <!-- ====== STUDENT PERFORMANCE BY LEVEL ====== -->
         <div class="performance-section">
             <div class="section-title">
                 <i class="fas fa-chart-pie"></i> Student Performance by Level
@@ -634,7 +639,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- ====== ALL JAVASCRIPT (YOUR EXISTING + NEW) ====== -->
+    <!-- ====== JAVASCRIPT ====== -->
     <!-- ============================================================ -->
     <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.2/dist/socket.io.min.js"></script>
     <script>
@@ -671,7 +676,7 @@
         }
 
         // ============================================================
-        // LOAD DASHBOARD DATA (REST) - YOUR EXISTING
+        // LOAD DASHBOARD DATA (REST)
         // ============================================================
         async function loadDashboard() {
             const token = localStorage.getItem('authToken');
@@ -702,7 +707,7 @@
         }
 
         // ============================================================
-        // RENDER FUNCTIONS - YOUR EXISTING (PRESERVED)
+        // RENDER FUNCTIONS
         // ============================================================
         function renderDashboard(data) {
             const { teacher, stats, recentActivity, engagementStats, bookings } = data;
@@ -718,13 +723,11 @@
             renderActivityFeed(recentActivity || []);
             renderEngagedStudents(engagementStats || []);
             renderBookings(bookings || []);
-            
-            // NEW: Render performance grid
             renderPerformanceGrid(engagementStats || []);
         }
 
         // ============================================================
-        // ACTIVITY FEED - YOUR EXISTING
+        // ACTIVITY FEED
         // ============================================================
         function renderActivityFeed(activities) {
             const container = document.getElementById('activityFeed');
@@ -779,7 +782,7 @@
         }
 
         // ============================================================
-        // ENGAGED STUDENTS - YOUR EXISTING (UPDATED with scores)
+        // TOP ENGAGED STUDENTS
         // ============================================================
         function renderEngagedStudents(students) {
             const container = document.getElementById('onlineStudents');
@@ -808,7 +811,7 @@
         }
 
         // ============================================================
-        // BOOKINGS - YOUR EXISTING
+        // RECENT BOOKINGS
         // ============================================================
         function renderBookings(bookings) {
             const container = document.getElementById('upcomingSessions');
@@ -836,7 +839,7 @@
         }
 
         // ============================================================
-        // NEW: PERFORMANCE GRID
+        // PERFORMANCE GRID
         // ============================================================
         function renderPerformanceGrid(students) {
             const container = document.getElementById('performanceGrid');
@@ -851,7 +854,6 @@
                 return;
             }
 
-            // Sort by engagement score (highest first)
             const sorted = [...students].sort((a, b) => {
                 const scoreA = a.Student?.engagementScore || 0;
                 const scoreB = b.Student?.engagementScore || 0;
@@ -866,7 +868,6 @@
                 const actions = s.activityCount || 0;
                 const studentId = studentData.id || 0;
 
-                // Calculate category breakdowns (estimates from available data)
                 const pageViews = studentData.totalPageViews || 0;
                 const lessonViews = studentData.totalLessonViews || 0;
                 const quizAttempts = studentData.totalQuizAttempts || 0;
@@ -907,102 +908,158 @@
         }
 
         // ============================================================
-        // NEW: SHOW STUDENT DETAILS MODAL
+        // STUDENT DETAILS MODAL (FIXED)
         // ============================================================
         function showStudentDetails(studentId) {
             const token = localStorage.getItem('authToken');
-            if (!token) return;
+            if (!token) {
+                alert('Please log in first.');
+                return;
+            }
 
-            // Find student data from the existing engagementStats
-            // We need to fetch fresh data or use cached data
-            // For now, we'll fetch from the API
+            // Show loading state
+            const modal = document.getElementById('studentModal');
+            const nameEl = document.getElementById('modalStudentName');
+            const infoEl = document.getElementById('modalStudentInfo');
+            const statsEl = document.getElementById('modalStats');
+
+            nameEl.textContent = 'Loading...';
+            infoEl.textContent = 'Fetching student data...';
+            statsEl.innerHTML = `
+                <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
+                    <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; color:#00ffff;"></i>
+                    <p style="margin-top:8px;">Loading student details...</p>
+                </div>
+            `;
+            modal.classList.add('active');
+
             fetch(`${API_BASE_URL}/api/track/teacher/engagement/${studentId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                return res.json();
+            })
             .then(result => {
+                console.log('📊 Student data received:', result);
                 if (result.success) {
                     renderStudentModal(result.data);
                 } else {
-                    alert('Could not load student details');
+                    showModalError(result.message || 'No data available for this student.');
                 }
             })
             .catch(err => {
-                console.error('Error loading student details:', err);
-                alert('Error loading student details');
+                console.error('❌ Error loading student details:', err);
+                showModalError('Could not connect to server. Please try again.');
             });
         }
 
+        function showModalError(message) {
+            const nameEl = document.getElementById('modalStudentName');
+            const infoEl = document.getElementById('modalStudentInfo');
+            const statsEl = document.getElementById('modalStats');
+            nameEl.textContent = '⚠️ Error';
+            infoEl.textContent = message;
+            statsEl.innerHTML = `
+                <div style="grid-column:1/-1; text-align:center; padding:20px; color:#ff6666;">
+                    <i class="fas fa-exclamation-triangle" style="font-size:1.5rem; display:block; margin-bottom:8px;"></i>
+                    <p>${message}</p>
+                    <p style="font-size:0.8rem; color:#555; margin-top:8px;">Try clicking another student or refresh the page.</p>
+                </div>
+            `;
+        }
+
         function renderStudentModal(student) {
-            const modal = document.getElementById('studentModal');
-            document.getElementById('modalStudentName').textContent = student.name || 'Student';
-            
+            const nameEl = document.getElementById('modalStudentName');
+            const infoEl = document.getElementById('modalStudentInfo');
+            const statsEl = document.getElementById('modalStats');
+
+            nameEl.textContent = student.name || 'Student';
+
             const score = parseFloat(student.engagementScore) || 0;
             const grade = Math.round((score / 100) * 4 * 10) / 10;
-            document.getElementById('modalStudentInfo').textContent = 
-                `Engagement Score: ${Math.round(score)}% • Grade: ${grade}/4 • ${score >= 70 ? '🌟 Outstanding' : score >= 40 ? '📈 On Track' : '🌱 Getting Started'}`;
+            const levelLabel = score >= 70 ? '🌟 Outstanding' : score >= 40 ? '📈 On Track' : '🌱 Getting Started';
+            infoEl.textContent = `Engagement Score: ${Math.round(score)}% • Grade: ${grade}/4 • ${levelLabel}`;
 
-            // Build stats grid
+            // Build stats – use nullish coalescing to handle missing fields
             const stats = [
-                { label: 'Page Views', value: student.totalPageViews || 0, color: 'yellow' },
-                { label: 'Lesson Views', value: student.totalLessonViews || 0, color: 'cyan' },
-                { label: 'Quiz Attempts', value: student.totalQuizAttempts || 0, color: 'pink' },
-                { label: 'Lessons Completed', value: student.totalCompleted || 0, color: 'green' },
-                { label: 'Link Clicks', value: student.totalLinkClicks || 0, color: 'orange' },
-                { label: 'Messages Sent', value: student.totalMessages || 0, color: 'cyan' },
+                { label: 'Page Views', value: student.totalPageViews ?? 0, color: 'yellow' },
+                { label: 'Lesson Views', value: student.totalLessonViews ?? 0, color: 'cyan' },
+                { label: 'Quiz Attempts', value: student.totalQuizAttempts ?? 0, color: 'pink' },
+                { label: 'Lessons Completed', value: student.totalCompleted ?? 0, color: 'green' },
+                { label: 'Link Clicks', value: student.totalLinkClicks ?? 0, color: 'orange' },
+                { label: 'Messages Sent', value: student.totalMessages ?? 0, color: 'cyan' },
             ];
 
-            document.getElementById('modalStats').innerHTML = stats.map(stat => `
-                <div class="modal-stat">
-                    <div class="label">${stat.label}</div>
-                    <div class="value ${stat.color}">${stat.value}</div>
-                </div>
-            `).join('');
+            const hasActivity = stats.some(s => s.value > 0);
 
-            modal.classList.add('active');
+            if (!hasActivity) {
+                statsEl.innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
+                        <i class="fas fa-inbox" style="font-size:2rem; display:block; margin-bottom:12px; color:#333;"></i>
+                        <p style="font-size:1rem; color:#888;">No activity recorded yet</p>
+                        <p style="font-size:0.8rem; color:#555; margin-top:4px;">Once the student starts learning, data will appear here.</p>
+                    </div>
+                `;
+            } else {
+                statsEl.innerHTML = stats.map(stat => `
+                    <div class="modal-stat">
+                        <div class="label">${stat.label}</div>
+                        <div class="value ${stat.color}">${stat.value}</div>
+                    </div>
+                `).join('');
+
+                // Recent activities if available
+                if (student.recentActivities && student.recentActivities.length > 0) {
+                    const recentHtml = `
+                        <div style="grid-column:1/-1; margin-top:12px; border-top:1px solid #1a4a4a; padding-top:12px;">
+                            <div style="color:#88dddd; font-size:0.8rem; font-weight:600; margin-bottom:8px;">📋 Recent Activity</div>
+                            ${student.recentActivities.slice(0, 5).map(act => {
+                                const type = act.activityType.replace('_', ' ');
+                                const time = new Date(act.createdAt).toLocaleString();
+                                return `
+                                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#888; padding:4px 0; border-bottom:1px solid #1a1a1a;">
+                                        <span>${type}</span>
+                                        <span style="color:#555;">${time}</span>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                    statsEl.innerHTML += recentHtml;
+                }
+            }
         }
 
         function closeModal() {
             document.getElementById('studentModal').classList.remove('active');
         }
 
-        // Close modal on overlay click
         document.getElementById('studentModal').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
         });
 
-        // Close modal on Escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') closeModal();
         });
 
         // ============================================================
-        // ADD SINGLE ACTIVITY TO FEED (WebSocket) - YOUR EXISTING
+        // ADD SINGLE ACTIVITY TO FEED (WebSocket)
         // ============================================================
         function addActivityToFeed(activity) {
-            console.log('📝 addActivityToFeed called with:', activity);
-
             const container = document.getElementById('activityFeed');
             const count = document.getElementById('activityCount');
-
-            if (!container) {
-                console.error('❌ activityFeed element not found');
-                return;
-            }
+            if (!container) return;
 
             const emptyState = container.querySelector('.empty-state');
             if (emptyState) emptyState.remove();
 
             let activityData = activity.activityData;
             if (typeof activityData === 'string') {
-                try {
-                    activityData = JSON.parse(activityData);
-                } catch (e) {
-                    activityData = {};
-                }
+                try { activityData = JSON.parse(activityData); } catch(e) { activityData = {}; }
             }
 
             let iconClass = 'view';
@@ -1011,35 +1068,17 @@
             let targetText = activityData?.page || 'Page';
 
             if (activity.activityType === 'link_click') {
-                iconClass = 'click';
-                emoji = '🔗';
-                actionText = 'clicked';
-                targetText = activityData?.link || 'Link';
+                iconClass = 'click'; emoji = '🔗'; actionText = 'clicked'; targetText = activityData?.link || 'Link';
             } else if (activity.activityType === 'carousel_view') {
-                iconClass = 'search';
-                emoji = '🔄';
-                actionText = 'viewed carousel on';
-                targetText = activityData?.page || 'Home';
+                iconClass = 'search'; emoji = '🔄'; actionText = 'viewed carousel on'; targetText = activityData?.page || 'Home';
             } else if (activity.activityType === 'lesson_view') {
-                iconClass = 'book';
-                emoji = '📖';
-                actionText = 'viewed lesson';
-                targetText = activityData?.lessonId || 'Lesson';
+                iconClass = 'book'; emoji = '📖'; actionText = 'viewed lesson'; targetText = activityData?.lessonId || 'Lesson';
             } else if (activity.activityType === 'quiz_attempt' || activity.activityType === 'quiz_pass') {
-                iconClass = 'quiz';
-                emoji = '🧠';
-                actionText = activity.activityType === 'quiz_pass' ? 'passed quiz' : 'took quiz';
-                targetText = activityData?.quizTitle || 'Quiz';
+                iconClass = 'quiz'; emoji = '🧠'; actionText = activity.activityType === 'quiz_pass' ? 'passed quiz' : 'took quiz'; targetText = activityData?.quizTitle || 'Quiz';
             } else if (activity.activityType === 'message_sent') {
-                iconClass = 'message';
-                emoji = '💬';
-                actionText = 'sent a message to teacher';
-                targetText = '';
+                iconClass = 'message'; emoji = '💬'; actionText = 'sent a message to teacher';
             } else if (activity.activityType === 'activity_practice') {
-                iconClass = 'activity';
-                emoji = '✍️';
-                actionText = 'completed practice activity';
-                targetText = activityData?.title || 'Practice';
+                iconClass = 'activity'; emoji = '✍️'; actionText = 'completed practice activity'; targetText = activityData?.title || 'Practice';
             }
 
             const item = document.createElement('div');
@@ -1064,12 +1103,10 @@
             while (container.children.length > 50) {
                 container.removeChild(container.lastChild);
             }
-
-            console.log('✅ Activity added to feed');
         }
 
         // ============================================================
-        // WEBSOCKET CONNECTION - YOUR EXISTING
+        // WEBSOCKET CONNECTION
         // ============================================================
         const token = localStorage.getItem('authToken');
 
@@ -1087,8 +1124,6 @@
                 console.log('📡 Live activity received:', activity);
                 if (typeof addActivityToFeed === 'function') {
                     addActivityToFeed(activity);
-                } else {
-                    console.warn('⚠️ addActivityToFeed is not defined');
                 }
             });
 
@@ -1099,8 +1134,6 @@
             socket.on('connect_error', (err) => {
                 console.warn('⚠️ WebSocket connection error:', err.message);
             });
-        } else {
-            console.warn('🔒 No token – WebSocket not connected');
         }
 
         // ============================================================
@@ -1108,7 +1141,6 @@
         // ============================================================
         window.onload = function() {
             loadDashboard();
-            // Optional polling fallback
             setInterval(() => {
                 if (typeof socket === 'undefined' || !socket.connected) {
                     loadDashboard();
