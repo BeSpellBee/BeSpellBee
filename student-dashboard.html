@@ -46,7 +46,6 @@
             display: flex;
             align-items: center;
             gap: 16px;
-            flex-wrap: wrap;
         }
         .nav-bar .student-info .name {
             font-weight: 600;
@@ -69,15 +68,6 @@
             transition: color 0.3s;
         }
         .nav-bar .logout-btn:hover { color: #ffdd44; }
-        .nav-bar .back-home-btn {
-            color: #88dddd;
-            text-decoration: none;
-            font-size: 0.85rem;
-            border-left: 1px solid #333;
-            padding-left: 16px;
-            transition: color 0.3s;
-        }
-        .nav-bar .back-home-btn:hover { color: #00ffff; }
 
         /* ====== DASHBOARD CONTAINER ====== */
         .dashboard-container {
@@ -521,30 +511,30 @@
 <body>
 
     <!-- ====== TOP NAV ====== -->
-    <nav class="nav-bar">
-        <div class="logo">
-            <svg width="180" height="40" viewBox="0 0 200 50">
-                <defs>
-                    <linearGradient id="lmsGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:aqua;"/>
-                        <stop offset="50%" style="stop-color:white;" />
-                        <stop offset="100%" style="stop-color:yellow;" />
-                    </linearGradient>
-                </defs>
-                <text x="0" y="38" fill="url(#lmsGradient)" font-size="36" font-weight="700" font-family="Segoe UI, sans-serif">BeSpellBee</text>
-            </svg>
-        </div>
-        <div class="student-info">
-            <span class="badge"><span class="status-dot"></span> Learning</span>
-            <span class="name" id="navStudentName"><i class="fas fa-user-graduate"></i> Loading...</span>
-            <a href="index.html" class="back-home-btn">
-                <i class="fas fa-arrow-left"></i> Back to Home
-            </a>
-            <a href="#" id="logoutBtn" class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-        </div>
-    </nav>
+   <nav class="nav-bar">
+    <div class="logo">
+        <svg width="180" height="40" viewBox="0 0 200 50">
+            <defs>
+                <linearGradient id="lmsGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:aqua;"/>
+                    <stop offset="50%" style="stop-color:white;" />
+                    <stop offset="100%" style="stop-color:yellow;" />
+                </linearGradient>
+            </defs>
+            <text x="0" y="38" fill="url(#lmsGradient)" font-size="36" font-weight="700" font-family="Segoe UI, sans-serif">BeSpellBee</text>
+        </svg>
+    </div>
+    <div class="student-info">
+        <span class="badge"><span class="status-dot"></span> Learning</span>
+        <span class="name" id="navStudentName"><i class="fas fa-user-graduate"></i> Loading...</span>
+        <a href="index.html" class="back-home-btn" style="color: #88dddd; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px; transition: color 0.3s;">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+        <a href="#" id="logoutBtn" class="logout-btn" style="color: #ffcc00; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px; transition: color 0.3s;">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+</nav>
 
     <!-- ====== DASHBOARD CONTAINER ====== -->
     <div class="dashboard-container">
@@ -803,111 +793,33 @@
 
             fetchStudentStats().then(statsData => {
                 let engagementScore = 0;
-                let totalPoints = 0;
-                let totalActivities = 0;
                 let totalPageViews = 0;
                 let totalLinkClicks = 0;
                 let totalQuizzes = 0;
-                let totalLessonViews = 0;
-                let completedLessonsCount = 0;
-                let totalMessages = 0;
-                let totalPracticeActivities = 0;
                 let studentName = 'Student';
-                let motivationalMsg = 'Start your learning journey today!';
-                let engagementColor = '#ffcc00';
-                let engagementEmoji = '🌱';
-                let pointsBreakdown = {};
 
                 if (statsData) {
                     studentName = statsData.student?.name || 'Student';
                     engagementScore = statsData.student?.engagementScore || 0;
-                    totalPoints = statsData.stats?.totalPoints || 0;
-                    totalActivities = statsData.stats?.totalActivities || 0;
                     totalPageViews = statsData.stats?.totalPageViews || 0;
                     totalLinkClicks = statsData.stats?.totalLinkClicks || 0;
                     totalQuizzes = statsData.stats?.totalQuizzes || 0;
-                    totalLessonViews = statsData.stats?.totalLessonViews || 0;
-                    completedLessonsCount = statsData.stats?.completedVideos || 0;
-                    totalMessages = statsData.stats?.totalMessages || 0;
-                    totalPracticeActivities = statsData.stats?.totalPracticeActivities || 0;
-                    motivationalMsg = statsData.engagement?.motivationalMessage || 'Start your learning journey today!';
-                    engagementColor = statsData.engagement?.level?.color || '#ffcc00';
-                    engagementEmoji = statsData.engagement?.level?.emoji || '🌱';
-                    pointsBreakdown = statsData.stats?.pointsBreakdown || {};
                 }
 
-                // Get points for each category
-                const pageViewPoints = pointsBreakdown.page_view?.points || 0;
-                const linkClickPoints = pointsBreakdown.link_click?.points || 0;
-                const lessonViewPoints = pointsBreakdown.lesson_view?.points || 0;
-                const lessonCompletePoints = pointsBreakdown.lesson_complete?.points || 0;
-                const quizAttemptPoints = pointsBreakdown.quiz_attempt?.points || 0;
-                const messagePoints = pointsBreakdown.message_sent?.points || 0;
-                const practicePoints = pointsBreakdown.activity_practice?.points || 0;
-
                 let html = `
-                    <!-- Engagement Score Card -->
                     <div style="background: #121212; border-radius: 16px; padding: 20px 24px; margin-bottom: 20px; border: 1px solid #1a4a4a;">
                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
                             <div>
-                                <span style="color: #88dddd; font-size: 0.85rem; display: block;">
-                                    ${engagementEmoji} ${studentName}'s Engagement Score
-                                </span>
-                                <span style="color: ${engagementColor}; font-size: 2.2rem; font-weight: 700;">
-                                    ${Math.round(engagementScore)}%
-                                </span>
-                                <span style="color: #666; font-size: 0.8rem; display: block; margin-top: 2px;">
-                                    ${totalPoints} points • ${totalActivities} activities
-                                </span>
+                                <span style="color: #88dddd; font-size: 0.85rem; display: block;">⭐ ${studentName}'s Engagement Score</span>
+                                <span style="color: #00ffff; font-size: 2.2rem; font-weight: 700;">${Math.round(engagementScore)}%</span>
                             </div>
                             <div style="text-align: right;">
-                                <span style="color: #555; font-size: 0.85rem; display: block;">${motivationalMsg}</span>
-                                <span style="color: #666; font-size: 0.7rem; display: block; margin-top: 4px;">
-                                    📖 ${totalLessonViews} lessons • 🧠 ${totalQuizzes} quizzes • ✅ ${completedLessonsCount} completed
-                                </span>
+                                <span style="color: #666; font-size: 0.75rem; display: block;">${totalPageViews} page views • ${totalLinkClicks} link clicks • ${totalQuizzes} quizzes</span>
+                                <span style="color: #555; font-size: 0.7rem;">${getMotivationalMessage(engagementScore)}</span>
                             </div>
                         </div>
-                        <!-- Progress Bar -->
                         <div style="width: 100%; height: 8px; background: #1a1a1a; border-radius: 4px; margin-top: 12px; overflow: hidden;">
-                            <div style="height: 100%; background: linear-gradient(90deg, #00ffff, ${engagementColor}); border-radius: 4px; width: ${Math.min(engagementScore, 100)}%; transition: width 0.8s ease;"></div>
-                        </div>
-                        <!-- Points Breakdown -->
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #1a4a4a;">
-                            <div style="text-align: center;">
-                                <div style="font-size: 0.6rem; color: #666;">Page Views</div>
-                                <div style="font-size: 0.9rem; color: #88dddd;">${totalPageViews}</div>
-                                <div style="font-size: 0.6rem; color: #444;">${pageViewPoints} pts</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 0.6rem; color: #666;">Link Clicks</div>
-                                <div style="font-size: 0.9rem; color: #ff66aa;">${totalLinkClicks}</div>
-                                <div style="font-size: 0.6rem; color: #444;">${linkClickPoints} pts</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 0.6rem; color: #666;">Lessons</div>
-                                <div style="font-size: 0.9rem; color: #00ff88;">${totalLessonViews}</div>
-                                <div style="font-size: 0.6rem; color: #444;">${lessonViewPoints} pts</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 0.6rem; color: #666;">Completed</div>
-                                <div style="font-size: 0.9rem; color: #ffcc00;">${completedLessonsCount}</div>
-                                <div style="font-size: 0.6rem; color: #444;">${lessonCompletePoints} pts</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 0.6rem; color: #666;">Quizzes</div>
-                                <div style="font-size: 0.9rem; color: #ff66aa;">${totalQuizzes}</div>
-                                <div style="font-size: 0.6rem; color: #444;">${quizAttemptPoints} pts</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 0.6rem; color: #666;">Messages</div>
-                                <div style="font-size: 0.9rem; color: #6666ff;">${totalMessages}</div>
-                                <div style="font-size: 0.6rem; color: #444;">${messagePoints} pts</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 0.6rem; color: #666;">Practice</div>
-                                <div style="font-size: 0.9rem; color: #ff9944;">${totalPracticeActivities}</div>
-                                <div style="font-size: 0.6rem; color: #444;">${practicePoints} pts</div>
-                            </div>
+                            <div style="height: 100%; background: linear-gradient(90deg, #00ffff, #ffcc00); border-radius: 4px; width: ${Math.min(engagementScore, 100)}%; transition: width 0.8s ease;"></div>
                         </div>
                     </div>
                 `;
