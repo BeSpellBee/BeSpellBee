@@ -800,7 +800,7 @@
                 const actions = s.activityCount || 0;
                 const score = studentData.engagementScore || 0;
                 const scoreLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
-                const studentId = studentData.id || 0;
+                const studentId = s.studentId || studentData.id || 0;
                 if (!studentId) return ''; // skip invalid
                 return `
                     <div class="online-student" onclick="showStudentDetails(${studentId})">
@@ -842,72 +842,73 @@
         // ============================================================
         // PERFORMANCE GRID (FIXED studentId)
         // ============================================================
-        function renderPerformanceGrid(students) {
-            const container = document.getElementById('performanceGrid');
+       function renderPerformanceGrid(students) {
+    const container = document.getElementById('performanceGrid');
 
-            if (students.length === 0) {
-                container.innerHTML = `
-                    <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
-                        <i class="fas fa-users" style="font-size:1.5rem; display:block; margin-bottom:8px;"></i>
-                        <p>No student performance data yet.</p>
+    if (students.length === 0) {
+        container.innerHTML = `
+            <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
+                <i class="fas fa-users" style="font-size:1.5rem; display:block; margin-bottom:8px;"></i>
+                <p>No student performance data yet.</p>
+            </div>
+        `;
+        return;
+    }
+
+    const sorted = [...students].sort((a, b) => {
+        const scoreA = a.Student?.engagementScore || 0;
+        const scoreB = b.Student?.engagementScore || 0;
+        return scoreB - scoreA;
+    });
+
+    container.innerHTML = sorted.map(s => {
+        const studentData = s.Student || s;
+        const name = studentData.name || 'Unknown Student';
+        const score = studentData.engagementScore || 0;
+        const scoreLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
+        const actions = s.activityCount || 0;
+        // Use s.studentId (top-level) if available, else fallback to studentData.id
+        const studentId = s.studentId || studentData.id || 0;
+        if (!studentId) return ''; // skip invalid
+
+        const pageViews = studentData.totalPageViews || 0;
+        const lessonViews = studentData.totalLessonViews || 0;
+        const quizAttempts = studentData.totalQuizAttempts || 0;
+        const messages = studentData.totalMessages || 0;
+        const completed = studentData.totalCompleted || 0;
+
+        return `
+            <div class="perf-card" onclick="showStudentDetails(${studentId})">
+                <div class="perf-header">
+                    <span class="name">${name}</span>
+                    <span class="score ${scoreLevel}">${Math.round(score)}%</span>
+                </div>
+                <div class="perf-stats">
+                    <div class="stat">
+                        <div class="val participation">${pageViews + (s.linkClicks || 0)}</div>
+                        <div class="label">Participation</div>
                     </div>
-                `;
-                return;
-            }
-
-            const sorted = [...students].sort((a, b) => {
-                const scoreA = a.Student?.engagementScore || 0;
-                const scoreB = b.Student?.engagementScore || 0;
-                return scoreB - scoreA;
-            });
-
-            container.innerHTML = sorted.map(s => {
-                const studentData = s.Student || s;
-                const name = studentData.name || 'Unknown Student';
-                const score = studentData.engagementScore || 0;
-                const scoreLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
-                const actions = s.activityCount || 0;
-                const studentId = studentData.id || 0;
-                if (!studentId) return ''; // skip invalid
-
-                const pageViews = studentData.totalPageViews || 0;
-                const lessonViews = studentData.totalLessonViews || 0;
-                const quizAttempts = studentData.totalQuizAttempts || 0;
-                const messages = studentData.totalMessages || 0;
-                const completed = studentData.totalCompleted || 0;
-
-                return `
-                    <div class="perf-card" onclick="showStudentDetails(${studentId})">
-                        <div class="perf-header">
-                            <span class="name">${name}</span>
-                            <span class="score ${scoreLevel}">${Math.round(score)}%</span>
-                        </div>
-                        <div class="perf-stats">
-                            <div class="stat">
-                                <div class="val participation">${pageViews + (s.linkClicks || 0)}</div>
-                                <div class="label">Participation</div>
-                            </div>
-                            <div class="stat">
-                                <div class="val learning">${lessonViews}</div>
-                                <div class="label">Learning</div>
-                            </div>
-                            <div class="stat">
-                                <div class="val achievement">${completed}</div>
-                                <div class="label">Achievement</div>
-                            </div>
-                        </div>
-                        <div class="perf-bar">
-                            <div class="fill ${scoreLevel}" style="width: ${Math.min(score, 100)}%;"></div>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:0.65rem; color:#555;">
-                            <span>${actions} activities</span>
-                            <span>🔄 ${quizAttempts} quizzes</span>
-                            <span>💬 ${messages} messages</span>
-                        </div>
+                    <div class="stat">
+                        <div class="val learning">${lessonViews}</div>
+                        <div class="label">Learning</div>
                     </div>
-                `;
-            }).join('');
-        }
+                    <div class="stat">
+                        <div class="val achievement">${completed}</div>
+                        <div class="label">Achievement</div>
+                    </div>
+                </div>
+                <div class="perf-bar">
+                    <div class="fill ${scoreLevel}" style="width: ${Math.min(score, 100)}%;"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:0.65rem; color:#555;">
+                    <span>${actions} activities</span>
+                    <span>🔄 ${quizAttempts} quizzes</span>
+                    <span>💬 ${messages} messages</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
 
         // ============================================================
         // SHOW STUDENT DETAILS MODAL (FIXED)
