@@ -762,7 +762,7 @@
                     actionText = 'browsed';
                     targetText = 'teacher carousel';
                 } else if (item.activityType === 'video_watch') {
-                    iconClass = 'video';  // we defined .video in CSS
+                    iconClass = 'video';
                     emoji = '🎬';
                     actionText = 'watched';
                     targetText = details.lessonId ? `lesson ${details.lessonId}` : 'video';
@@ -786,7 +786,6 @@
                     actionText = 'completed practice activity';
                     targetText = details.title || 'Practice';
                 } else if (item.activityType === 'page_view') {
-                    // default already set
                     iconClass = 'view';
                     emoji = '👁️';
                     actionText = 'viewed';
@@ -831,7 +830,7 @@
                 const score = studentData.engagementScore || 0;
                 const scoreLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
                 const studentId = s.studentId || studentData.id || 0;
-                if (!studentId) return ''; // skip invalid
+                if (!studentId) return '';
                 return `
                     <div class="online-student" onclick="showStudentDetails(${studentId})">
                         <span class="name"><i class="fas fa-circle"></i> ${name}</span>
@@ -872,73 +871,168 @@
         // ============================================================
         // PERFORMANCE GRID (FIXED studentId)
         // ============================================================
-       function renderPerformanceGrid(students) {
-    const container = document.getElementById('performanceGrid');
+        function renderPerformanceGrid(students) {
+            const container = document.getElementById('performanceGrid');
 
-    if (students.length === 0) {
-        container.innerHTML = `
-            <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
-                <i class="fas fa-users" style="font-size:1.5rem; display:block; margin-bottom:8px;"></i>
-                <p>No student performance data yet.</p>
-            </div>
-        `;
-        return;
-    }
-
-    const sorted = [...students].sort((a, b) => {
-        const scoreA = a.Student?.engagementScore || 0;
-        const scoreB = b.Student?.engagementScore || 0;
-        return scoreB - scoreA;
-    });
-
-    container.innerHTML = sorted.map(s => {
-        const studentData = s.Student || s;
-        const name = studentData.name || 'Unknown Student';
-        const score = studentData.engagementScore || 0;
-        const scoreLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
-        const actions = s.activityCount || 0;
-        // Use s.studentId (top-level) if available, else fallback to studentData.id
-        const studentId = s.studentId || studentData.id || 0;
-        if (!studentId) return ''; // skip invalid
-
-        const pageViews = studentData.totalPageViews || 0;
-        const lessonViews = studentData.totalLessonViews || 0;
-        const quizAttempts = studentData.totalQuizAttempts || 0;
-        const messages = studentData.totalMessages || 0;
-        const completed = studentData.totalCompleted || 0;
-
-        return `
-            <div class="perf-card" onclick="showStudentDetails(${studentId})">
-                <div class="perf-header">
-                    <span class="name">${name}</span>
-                    <span class="score ${scoreLevel}">${Math.round(score)}%</span>
-                </div>
-                <div class="perf-stats">
-                    <div class="stat">
-                        <div class="val participation">${pageViews + (s.linkClicks || 0)}</div>
-                        <div class="label">Participation</div>
+            if (students.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
+                        <i class="fas fa-users" style="font-size:1.5rem; display:block; margin-bottom:8px;"></i>
+                        <p>No student performance data yet.</p>
                     </div>
-                    <div class="stat">
-                        <div class="val learning">${lessonViews}</div>
-                        <div class="label">Learning</div>
+                `;
+                return;
+            }
+
+            const sorted = [...students].sort((a, b) => {
+                const scoreA = a.Student?.engagementScore || 0;
+                const scoreB = b.Student?.engagementScore || 0;
+                return scoreB - scoreA;
+            });
+
+            container.innerHTML = sorted.map(s => {
+                const studentData = s.Student || s;
+                const name = studentData.name || 'Unknown Student';
+                const score = studentData.engagementScore || 0;
+                const scoreLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
+                const actions = s.activityCount || 0;
+                const studentId = s.studentId || studentData.id || 0;
+                if (!studentId) return '';
+
+                const pageViews = studentData.totalPageViews || 0;
+                const lessonViews = studentData.totalLessonViews || 0;
+                const quizAttempts = studentData.totalQuizAttempts || 0;
+                const messages = studentData.totalMessages || 0;
+                const completed = studentData.totalCompleted || 0;
+
+                return `
+                    <div class="perf-card" onclick="showStudentDetails(${studentId})">
+                        <div class="perf-header">
+                            <span class="name">${name}</span>
+                            <span class="score ${scoreLevel}">${Math.round(score)}%</span>
+                        </div>
+                        <div class="perf-stats">
+                            <div class="stat">
+                                <div class="val participation">${pageViews + (s.linkClicks || 0)}</div>
+                                <div class="label">Participation</div>
+                            </div>
+                            <div class="stat">
+                                <div class="val learning">${lessonViews}</div>
+                                <div class="label">Learning</div>
+                            </div>
+                            <div class="stat">
+                                <div class="val achievement">${completed}</div>
+                                <div class="label">Achievement</div>
+                            </div>
+                        </div>
+                        <div class="perf-bar">
+                            <div class="fill ${scoreLevel}" style="width: ${Math.min(score, 100)}%;"></div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:0.65rem; color:#555;">
+                            <span>${actions} activities</span>
+                            <span>🔄 ${quizAttempts} quizzes</span>
+                            <span>💬 ${messages} messages</span>
+                        </div>
                     </div>
-                    <div class="stat">
-                        <div class="val achievement">${completed}</div>
-                        <div class="label">Achievement</div>
-                    </div>
-                </div>
-                <div class="perf-bar">
-                    <div class="fill ${scoreLevel}" style="width: ${Math.min(score, 100)}%;"></div>
-                </div>
-                <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:0.65rem; color:#555;">
-                    <span>${actions} activities</span>
-                    <span>🔄 ${quizAttempts} quizzes</span>
-                    <span>💬 ${messages} messages</span>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
+                `;
+            }).join('');
+        }
+
+        // ============================================================
+        // UPDATE PERFORMANCE GRID IN REAL-TIME
+        // ============================================================
+        function updatePerformanceGrid(activity) {
+            const studentName = activity.studentName || 'Student';
+            const studentId = activity.studentId || activity.Student?.id;
+            
+            if (!studentId) return; // Skip if no student ID
+            
+            // Find the student card in the grid
+            const cards = document.querySelectorAll('.perf-card');
+            let targetCard = null;
+            
+            for (const card of cards) {
+                const nameElement = card.querySelector('.perf-header .name');
+                if (nameElement && nameElement.textContent === studentName) {
+                    targetCard = card;
+                    break;
+                }
+            }
+            
+            if (targetCard) {
+                // Update the stats on the card
+                const stats = targetCard.querySelectorAll('.perf-stats .stat .val');
+                if (stats.length >= 3) {
+                    let indexToUpdate = 0; // Default: participation
+                    
+                    if (activity.activityType === 'lesson_view' || activity.activityType === 'video_watch') {
+                        indexToUpdate = 1; // Learning
+                    } else if (activity.activityType === 'quiz_pass' || activity.activityType === 'activity_practice') {
+                        indexToUpdate = 2; // Achievement
+                    }
+                    
+                    const currentValue = parseInt(stats[indexToUpdate].textContent) || 0;
+                    stats[indexToUpdate].textContent = currentValue + 1;
+                }
+                
+                // Update the engagement score
+                const scoreElement = targetCard.querySelector('.perf-header .score');
+                if (scoreElement) {
+                    const currentScore = parseInt(scoreElement.textContent) || 0;
+                    const newScore = Math.min(currentScore + 1, 100);
+                    scoreElement.textContent = newScore + '%';
+                    
+                    scoreElement.className = 'score ' + (newScore >= 70 ? 'high' : newScore >= 40 ? 'medium' : 'low');
+                    
+                    const barFill = targetCard.querySelector('.perf-bar .fill');
+                    if (barFill) {
+                        barFill.style.width = newScore + '%';
+                        barFill.className = 'fill ' + (newScore >= 70 ? 'high' : newScore >= 40 ? 'medium' : 'low');
+                    }
+                }
+                
+                // Update the activity count
+                const activitySpan = targetCard.querySelector('div[style*="margin-top:6px"] span:first-child');
+                if (activitySpan) {
+                    const currentActivities = parseInt(activitySpan.textContent) || 0;
+                    activitySpan.textContent = (currentActivities + 1) + ' activities';
+                }
+            } else {
+                // If the student isn't in the grid yet, refresh the entire grid
+                loadDashboard();
+            }
+        }
+
+        // ============================================================
+        // UPDATE STATS COUNTERS
+        // ============================================================
+        function updateStatsCounters(activity) {
+            const profileViews = document.getElementById('profileViews');
+            if (profileViews) {
+                const currentViews = parseInt(profileViews.textContent) || 0;
+                profileViews.textContent = currentViews + 1;
+            }
+        }
+
+        // ============================================================
+        // REFRESH PERFORMANCE GRID (Periodic)
+        // ============================================================
+        async function refreshPerformanceGrid() {
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/auth/teacher/dashboard`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const result = await response.json();
+                if (result.success && result.data.engagementStats) {
+                    renderPerformanceGrid(result.data.engagementStats);
+                }
+            } catch (error) {
+                console.warn('⚠️ Failed to refresh performance grid:', error);
+            }
+        }
 
         // ============================================================
         // SHOW STUDENT DETAILS MODAL (FIXED)
@@ -954,7 +1048,6 @@
                 return;
             }
 
-            // Show loading state
             const modal = document.getElementById('studentModal');
             const nameEl = document.getElementById('modalStudentName');
             const infoEl = document.getElementById('modalStudentInfo');
@@ -1026,8 +1119,6 @@
             const levelLabel = score >= 70 ? '🌟 Outstanding' : score >= 40 ? '📈 On Track' : '🌱 Getting Started';
             infoEl.textContent = `Engagement Score: ${Math.round(score)}% • Grade: ${grade}/4 • ${levelLabel}`;
 
-            // Build stats – use defaults if fields missing
-            // Added Video Watches, Carousel Views, Quiz Passes
             const stats = [
                 { label: 'Page Views', value: student.totalPageViews ?? 0, color: 'yellow' },
                 { label: 'Lesson Views', value: student.totalLessonViews ?? 0, color: 'cyan' },
@@ -1059,7 +1150,6 @@
                     </div>
                 `).join('');
 
-                // Recent activities if available
                 if (student.recentActivities && student.recentActivities.length > 0) {
                     const recentHtml = `
                         <div style="grid-column:1/-1; margin-top:12px; border-top:1px solid #1a4a4a; padding-top:12px;">
@@ -1129,7 +1219,6 @@
             } else if (activity.activityType === 'activity_practice') {
                 iconClass = 'activity'; emoji = '✍️'; actionText = 'completed practice activity'; targetText = activityData?.title || 'Practice';
             } else if (activity.activityType === 'page_view') {
-                // default
                 iconClass = 'view'; emoji = '👁️'; actionText = 'viewed'; targetText = activityData?.page || 'Page';
             }
 
@@ -1174,8 +1263,20 @@
 
             socket.on('new-activity', (activity) => {
                 console.log('📡 Live activity received:', activity);
+                
+                // Update the activity feed
                 if (typeof addActivityToFeed === 'function') {
                     addActivityToFeed(activity);
+                }
+                
+                // Update the performance grid
+                if (typeof updatePerformanceGrid === 'function') {
+                    updatePerformanceGrid(activity);
+                }
+                
+                // Update the stats counters
+                if (typeof updateStatsCounters === 'function') {
+                    updateStatsCounters(activity);
                 }
             });
 
@@ -1197,6 +1298,8 @@
                 if (typeof socket === 'undefined' || !socket.connected) {
                     loadDashboard();
                     console.log('🔄 Dashboard refreshed (polling fallback)');
+                } else {
+                    refreshPerformanceGrid();
                 }
             }, 30000);
         };
