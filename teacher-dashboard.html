@@ -728,7 +728,7 @@
         }
 
         // ============================================================
-        // ACTIVITY FEED (UPDATED with video_watch, carousel_view, quiz_pass)
+        // ACTIVITY FEED
         // ============================================================
         function renderActivityFeed(activities) {
             const container = document.getElementById('activityFeed');
@@ -762,7 +762,7 @@
                     actionText = 'browsed';
                     targetText = 'teacher carousel';
                 } else if (item.activityType === 'video_watch') {
-                    iconClass = 'video';  // we defined .video in CSS
+                    iconClass = 'video';
                     emoji = '🎬';
                     actionText = 'watched';
                     targetText = details.lessonId ? `lesson ${details.lessonId}` : 'video';
@@ -786,7 +786,6 @@
                     actionText = 'completed practice activity';
                     targetText = details.title || 'Practice';
                 } else if (item.activityType === 'page_view') {
-                    // default already set
                     iconClass = 'view';
                     emoji = '👁️';
                     actionText = 'viewed';
@@ -811,7 +810,7 @@
         }
 
         // ============================================================
-        // TOP ENGAGED STUDENTS (FIXED studentId)
+        // TOP ENGAGED STUDENTS
         // ============================================================
         function renderEngagedStudents(students) {
             const container = document.getElementById('onlineStudents');
@@ -831,7 +830,7 @@
                 const score = studentData.engagementScore || 0;
                 const scoreLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
                 const studentId = s.studentId || studentData.id || 0;
-                if (!studentId) return ''; // skip invalid
+                if (!studentId) return '';
                 return `
                     <div class="online-student" onclick="showStudentDetails(${studentId})">
                         <span class="name"><i class="fas fa-circle"></i> ${name}</span>
@@ -870,7 +869,7 @@
         }
 
         // ============================================================
-        // PERFORMANCE GRID (FIXED studentId)
+        // PERFORMANCE GRID
         // ============================================================
         function renderPerformanceGrid(students) {
             const container = document.getElementById('performanceGrid');
@@ -897,9 +896,8 @@
                 const score = studentData.engagementScore || 0;
                 const scoreLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
                 const actions = s.activityCount || 0;
-                // Use s.studentId (top-level) if available, else fallback to studentData.id
                 const studentId = s.studentId || studentData.id || 0;
-                if (!studentId) return ''; // skip invalid
+                if (!studentId) return '';
 
                 const pageViews = studentData.totalPageViews || 0;
                 const lessonViews = studentData.totalLessonViews || 0;
@@ -941,7 +939,97 @@
         }
 
         // ============================================================
-        // SHOW STUDENT DETAILS MODAL (FIXED)
+        // REAL-TIME PERFORMANCE GRID UPDATE (GOING AGAINST THE GRAIN!)
+        // ============================================================
+        function updatePerformanceGridRealTime(activity) {
+            // Get student name from activity
+            const studentName = activity.studentName || activity.Student?.name;
+            if (!studentName) {
+                console.warn('⚠️ No student name found in activity');
+                return;
+            }
+
+            console.log(`🎯 Updating performance grid for: ${studentName}`);
+
+            // Find the student's card
+            const cards = document.querySelectorAll('.perf-card');
+            let targetCard = null;
+
+            for (const card of cards) {
+                const nameEl = card.querySelector('.perf-header .name');
+                if (nameEl && nameEl.textContent.trim() === studentName) {
+                    targetCard = card;
+                    break;
+                }
+            }
+
+            if (!targetCard) {
+                console.warn(`❌ No card found for: ${studentName}`);
+                return;
+            }
+
+            // Determine which stat to update based on activity type
+            const statValues = targetCard.querySelectorAll('.perf-stats .stat .val');
+            let statIndex = 0; // Default: Participation
+
+            if (activity.activityType === 'lesson_view' || activity.activityType === 'video_watch') {
+                statIndex = 1; // Learning
+            } else if (activity.activityType === 'quiz_pass' || activity.activityType === 'activity_practice') {
+                statIndex = 2; // Achievement
+            }
+
+            // Update the stat
+            if (statValues.length > statIndex) {
+                const oldVal = parseInt(statValues[statIndex].textContent) || 0;
+                const newVal = oldVal + 1;
+                statValues[statIndex].textContent = newVal;
+                console.log(`📈 Updated ${['Participation', 'Learning', 'Achievement'][statIndex]}: ${oldVal} → ${newVal}`);
+            }
+
+            // Update engagement score (increment by 1-2 points)
+            const scoreEl = targetCard.querySelector('.perf-header .score');
+            if (scoreEl) {
+                const oldScore = parseInt(scoreEl.textContent) || 0;
+                const increment = activity.activityType === 'quiz_pass' ? 2 : 1;
+                const newScore = Math.min(oldScore + increment, 100);
+                scoreEl.textContent = newScore + '%';
+
+                // Update score color
+                const scoreLevel = newScore >= 70 ? 'high' : newScore >= 40 ? 'medium' : 'low';
+                scoreEl.className = 'score ' + scoreLevel;
+
+                // Update progress bar
+                const barFill = targetCard.querySelector('.perf-bar .fill');
+                if (barFill) {
+                    barFill.style.width = newScore + '%';
+                    barFill.className = 'fill ' + scoreLevel;
+                }
+
+                console.log(`📈 Updated score: ${oldScore}% → ${newScore}%`);
+            }
+
+            // Update activity count
+            const activitySpan = targetCard.querySelector('div[style*="margin-top:6px"] span:first-child');
+            if (activitySpan) {
+                const currentActivities = parseInt(activitySpan.textContent) || 0;
+                activitySpan.textContent = (currentActivities + 1) + ' activities';
+                console.log(`📈 Updated activity count: ${currentActivities} → ${currentActivities + 1}`);
+            }
+
+            // Visual feedback - flash the card
+            targetCard.style.transition = 'border-color 0.3s, box-shadow 0.3s';
+            targetCard.style.borderColor = '#00ff88';
+            targetCard.style.boxShadow = '0 0 30px rgba(0, 255, 136, 0.3)';
+            setTimeout(() => {
+                targetCard.style.borderColor = '#1a4a4a';
+                targetCard.style.boxShadow = 'none';
+            }, 1500);
+
+            console.log(`✅ Real-time update complete for ${studentName}!`);
+        }
+
+        // ============================================================
+        // SHOW STUDENT DETAILS MODAL
         // ============================================================
         function showStudentDetails(studentId) {
             const token = localStorage.getItem('authToken');
@@ -954,7 +1042,6 @@
                 return;
             }
 
-            // Show loading state
             const modal = document.getElementById('studentModal');
             const nameEl = document.getElementById('modalStudentName');
             const infoEl = document.getElementById('modalStudentInfo');
@@ -1026,8 +1113,6 @@
             const levelLabel = score >= 70 ? '🌟 Outstanding' : score >= 40 ? '📈 On Track' : '🌱 Getting Started';
             infoEl.textContent = `Engagement Score: ${Math.round(score)}% • Grade: ${grade}/4 • ${levelLabel}`;
 
-            // Build stats – use defaults if fields missing
-            // Added Video Watches, Carousel Views, Quiz Passes
             const stats = [
                 { label: 'Page Views', value: student.totalPageViews ?? 0, color: 'yellow' },
                 { label: 'Lesson Views', value: student.totalLessonViews ?? 0, color: 'cyan' },
@@ -1059,7 +1144,6 @@
                     </div>
                 `).join('');
 
-                // Recent activities if available
                 if (student.recentActivities && student.recentActivities.length > 0) {
                     const recentHtml = `
                         <div style="grid-column:1/-1; margin-top:12px; border-top:1px solid #1a4a4a; padding-top:12px;">
@@ -1129,7 +1213,6 @@
             } else if (activity.activityType === 'activity_practice') {
                 iconClass = 'activity'; emoji = '✍️'; actionText = 'completed practice activity'; targetText = activityData?.title || 'Practice';
             } else if (activity.activityType === 'page_view') {
-                // default
                 iconClass = 'view'; emoji = '👁️'; actionText = 'viewed'; targetText = activityData?.page || 'Page';
             }
 
@@ -1158,7 +1241,7 @@
         }
 
         // ============================================================
-        // WEBSOCKET CONNECTION - FIXED VERSION
+        // WEBSOCKET CONNECTION - REAL-TIME UPDATE VERSION
         // ============================================================
         const token = localStorage.getItem('authToken');
 
@@ -1172,24 +1255,26 @@
                 console.log('✅ WebSocket connected');
             });
 
-            // ====== FIXED: SIMPLE WEBSOCKET HANDLER ======
+            // ====== REAL-TIME UPDATES - GOING AGAINST THE GRAIN! ======
             socket.on('new-activity', (activity) => {
                 console.log('📡 Live activity received:', activity);
                 
-                // Update the activity feed
+                // 1. Update the activity feed (instant)
                 if (typeof addActivityToFeed === 'function') {
                     addActivityToFeed(activity);
                 }
                 
-                // Update the recorded activity counter
+                // 2. Update the recorded activity counter (instant)
                 const profileViews = document.getElementById('profileViews');
                 if (profileViews) {
                     const currentViews = parseInt(profileViews.textContent) || 0;
                     profileViews.textContent = currentViews + 1;
                 }
                 
-                // Just refresh the whole dashboard to update everything
-                loadDashboard();
+                // 3. Update the performance grid in REAL-TIME! (going against the grain)
+                if (typeof updatePerformanceGridRealTime === 'function') {
+                    updatePerformanceGridRealTime(activity);
+                }
             });
 
             socket.on('disconnect', (reason) => {
@@ -1206,6 +1291,7 @@
         // ============================================================
         window.onload = function() {
             loadDashboard();
+            // Still refresh periodically as a fallback
             setInterval(() => {
                 if (typeof socket === 'undefined' || !socket.connected) {
                     loadDashboard();
