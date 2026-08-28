@@ -2089,11 +2089,9 @@
     const teacherLoginBtn = document.getElementById('teacherLoginBtn');
 
     if (isLoggedIn) {
-        // Hide student auth buttons when logged in
         if (studentAuthBtns) studentAuthBtns.style.display = 'none';
         if (teacherLoginBtn) teacherLoginBtn.style.display = 'none';
     } else {
-        // SHOW student auth buttons when NOT logged in
         if (studentAuthBtns) studentAuthBtns.style.display = 'flex';
         if (teacherLoginBtn) teacherLoginBtn.style.display = 'inline-block';
     }
@@ -2114,7 +2112,6 @@
         const token = localStorage.getItem('authToken');
         if (!token) return;
 
-        // Already exists?
         if (document.getElementById('floatingDashboardBtn')) return;
 
         const userRole = localStorage.getItem('userRole') || 'student';
@@ -2154,7 +2151,7 @@
         document.body.appendChild(btn);
     })();
 
-    // Also run after a short delay (in case DOM isn't ready)
+    // Also run after a short delay
     setTimeout(injectDashboardButton, 200);
 
     // ============================================
@@ -2199,7 +2196,6 @@
 
             if (data.success) {
                 if (userRole === 'teacher') {
-                    // Teacher dashboard
                     const d = data.data;
                     content.innerHTML = `
                         <div style="color: #fff; margin-bottom: 0.5rem;">
@@ -2238,7 +2234,6 @@
                         ` : ''}
                     `;
                 } else {
-                    // Student dashboard
                     const d = data.data;
                     content.innerHTML = `
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1rem 0;">
@@ -2281,10 +2276,6 @@
         const modal = document.getElementById('dashboardModal');
         if (modal) modal.classList.remove('active');
     };
-
-    // ============================================
-    // LOGOUT (FIXED - Redirects to Root index.html)
-    // ============================================
 
     // ============================================
     // STUDENT AUTHENTICATION MODALS
