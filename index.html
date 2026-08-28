@@ -1130,9 +1130,6 @@
             👨‍🏫 Teacher
         </a>
 
-        <!-- ====== DASHBOARD & LOGOUT (REMOVED – no more green/red buttons) ====== -->
-        <!-- The old authenticatedButtons div has been removed entirely -->
-
     </div>
 </div>
 
@@ -2101,7 +2098,80 @@
         if (teacherLoginBtn) teacherLoginBtn.style.display = 'inline-block';
     }
 }
-		updateAuthUI();
+	updateAuthUI();
+
+    // ============================================
+    // INJECT "GO TO DASHBOARD" BUTTON ON HOMEPAGE (NEW)
+    // ============================================
+
+    function injectDashboardButton() {
+        // Only run on the homepage
+        const isHomepage = window.location.pathname.endsWith('index.html') || 
+                           window.location.pathname === '/' || 
+                           window.location.pathname === '';
+        if (!isHomepage) return;
+
+        // Check if user is logged in
+        const token = localStorage.getItem('authToken');
+        if (!token) return;
+
+        // Check if button already exists
+        if (document.getElementById('floatingDashboardBtn')) return;
+
+        // Determine user role
+        const userRole = localStorage.getItem('userRole') || 'student';
+        let buttonText = '📚 Go to Dashboard';
+        let buttonLink = 'student-dashboard.html';
+
+        if (userRole === 'teacher') {
+            buttonText = '👨‍🏫 Go to Dashboard';
+            buttonLink = 'teacher-dashboard.html';
+        }
+
+        // Create floating button
+        const btn = document.createElement('a');
+        btn.id = 'floatingDashboardBtn';
+        btn.href = buttonLink;
+        btn.innerHTML = buttonText;
+        btn.style.cssText = `
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #00ffff;
+            color: #000;
+            padding: 14px 24px;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.3);
+            z-index: 9999;
+            transition: all 0.3s;
+            font-family: 'Segoe UI', sans-serif;
+            border: none;
+            cursor: pointer;
+        `;
+        
+        // Hover effects
+        btn.onmouseover = function() {
+            this.style.transform = 'scale(1.05)';
+            this.style.boxShadow = '0 12px 48px rgba(0, 255, 255, 0.5)';
+        };
+        btn.onmouseout = function() {
+            this.style.transform = 'scale(1)';
+            this.style.boxShadow = '0 8px 32px rgba(0, 255, 255, 0.3)';
+        };
+
+        document.body.appendChild(btn);
+    }
+
+    // Run when the homepage loads
+    document.addEventListener('DOMContentLoaded', function() {
+        injectDashboardButton();
+    });
+
+    // Also run after a short delay (in case DOMContentLoaded already fired)
+    setTimeout(injectDashboardButton, 100);
 
     // ============================================
     // DASHBOARD (FIXED - Shows for both Student & Teacher)
@@ -2229,14 +2299,8 @@
     };
 
     // ============================================
-    // LOGOUT (FIXED - Just reloads the page)
+    // LOGOUT (FIXED - Redirects to Root index.html)
     // ============================================
-
-    // ============================================
-// LOGOUT (FIXED - Redirects to Root index.html)
-// ============================================
-
-
 
     // ============================================
     // STUDENT AUTHENTICATION MODALS
