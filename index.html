@@ -1130,6 +1130,9 @@
             👨‍🏫 Teacher
         </a>
 
+        <!-- ====== DASHBOARD & LOGOUT (REMOVED – no more green/red buttons) ====== -->
+        <!-- The old authenticatedButtons div has been removed entirely -->
+
     </div>
 </div>
 
@@ -2089,70 +2092,16 @@
     const teacherLoginBtn = document.getElementById('teacherLoginBtn');
 
     if (isLoggedIn) {
+        // Hide student auth buttons when logged in
         if (studentAuthBtns) studentAuthBtns.style.display = 'none';
         if (teacherLoginBtn) teacherLoginBtn.style.display = 'none';
     } else {
+        // SHOW student auth buttons when NOT logged in
         if (studentAuthBtns) studentAuthBtns.style.display = 'flex';
         if (teacherLoginBtn) teacherLoginBtn.style.display = 'inline-block';
     }
 }
-	updateAuthUI();
-
-    // ============================================
-    // INJECT "GO TO DASHBOARD" BUTTON ON HOMEPAGE (FIXED)
-    // ============================================
-
-    (function injectDashboardButton() {
-        // Only on homepage
-        const isHome = window.location.pathname.endsWith('index.html') || 
-                       window.location.pathname === '/' || 
-                       window.location.pathname === '';
-        if (!isHome) return;
-
-        const token = localStorage.getItem('authToken');
-        if (!token) return;
-
-        if (document.getElementById('floatingDashboardBtn')) return;
-
-        const userRole = localStorage.getItem('userRole') || 'student';
-        const buttonText = userRole === 'teacher' ? '👨‍🏫 Go to Dashboard' : '📚 Go to Dashboard';
-        const buttonLink = userRole === 'teacher' ? 'teacher-dashboard.html' : 'student-dashboard.html';
-
-        const btn = document.createElement('a');
-        btn.id = 'floatingDashboardBtn';
-        btn.href = buttonLink;
-        btn.innerHTML = buttonText;
-        Object.assign(btn.style, {
-            position: 'fixed',
-            bottom: '30px',
-            right: '30px',
-            background: '#00ffff',
-            color: '#000',
-            padding: '14px 24px',
-            borderRadius: '60px',
-            textDecoration: 'none',
-            fontWeight: '700',
-            fontSize: '1rem',
-            boxShadow: '0 8px 32px rgba(0, 255, 255, 0.3)',
-            zIndex: '9999',
-            transition: 'all 0.3s',
-            fontFamily: "'Segoe UI', sans-serif",
-            border: 'none',
-            cursor: 'pointer'
-        });
-        btn.onmouseover = function() {
-            this.style.transform = 'scale(1.05)';
-            this.style.boxShadow = '0 12px 48px rgba(0, 255, 255, 0.5)';
-        };
-        btn.onmouseout = function() {
-            this.style.transform = 'scale(1)';
-            this.style.boxShadow = '0 8px 32px rgba(0, 255, 255, 0.3)';
-        };
-        document.body.appendChild(btn);
-    })();
-
-    // Also run after a short delay
-    setTimeout(injectDashboardButton, 200);
+		updateAuthUI();
 
     // ============================================
     // DASHBOARD (FIXED - Shows for both Student & Teacher)
@@ -2196,6 +2145,7 @@
 
             if (data.success) {
                 if (userRole === 'teacher') {
+                    // Teacher dashboard
                     const d = data.data;
                     content.innerHTML = `
                         <div style="color: #fff; margin-bottom: 0.5rem;">
@@ -2234,6 +2184,7 @@
                         ` : ''}
                     `;
                 } else {
+                    // Student dashboard
                     const d = data.data;
                     content.innerHTML = `
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1rem 0;">
@@ -2276,6 +2227,16 @@
         const modal = document.getElementById('dashboardModal');
         if (modal) modal.classList.remove('active');
     };
+
+    // ============================================
+    // LOGOUT (FIXED - Just reloads the page)
+    // ============================================
+
+    // ============================================
+// LOGOUT (FIXED - Redirects to Root index.html)
+// ============================================
+
+
 
     // ============================================
     // STUDENT AUTHENTICATION MODALS
