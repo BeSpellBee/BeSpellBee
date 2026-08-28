@@ -6,363 +6,1160 @@
     <title>BeSpellBee - Teacher Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #0a0a0a;
             color: #e0e0e0;
+            min-height: 100vh;
         }
+
         .nav-bar {
             background: #0d0d0d;
             border-bottom: 1px solid #1a4a4a;
-            padding: 12px 24px;
+            padding: 16px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 12px;
         }
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 24px;
-            border-bottom: 1px solid #1a4a4a;
-            padding-bottom: 16px;
-        }
-        .page-header h1 { color: #00ffff; }
-        .student-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .student-card {
-            background: #121212;
-            border: 1px solid #1a4a4a;
-            border-radius: 16px;
-            padding: 20px;
-            transition: all 0.3s;
-        }
-        .student-card:hover { border-color: #00ffff; }
-        .student-card .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #1a4a4a;
-            padding-bottom: 10px;
-            margin-bottom: 12px;
-        }
-        .student-card .header .name { color: #00ffff; font-weight: 700; font-size: 1.1rem; }
-        .student-card .header .score {
+        .nav-bar .logo {
+            font-size: 1.4rem;
             font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.9rem;
+            color: #00ffff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
         }
-        .score.high { background: rgba(0, 255, 136, 0.15); color: #00ff88; }
-        .score.medium { background: rgba(255, 204, 0, 0.15); color: #ffcc00; }
-        .score.low { background: rgba(255, 68, 68, 0.15); color: #ff6666; }
-
-        .performance-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .performance-category {
-            background: #1a1a1a;
-            border-radius: 8px;
-            padding: 10px 12px;
-        }
-        .performance-category .cat-label {
-            font-size: 0.65rem;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .performance-category .cat-value {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #fff;
-        }
-        .performance-category .cat-detail {
-            font-size: 0.7rem;
-            color: #888;
-            margin-top: 2px;
-        }
-        .performance-category .cat-bar {
-            height: 3px;
-            background: #2a2a2a;
-            border-radius: 2px;
-            margin-top: 4px;
-            overflow: hidden;
-        }
-        .performance-category .cat-bar .fill {
-            height: 100%;
-            border-radius: 2px;
-            transition: width 0.8s ease;
-        }
-        .fill.green { background: #00ff88; }
-        .fill.cyan { background: #00ffff; }
-        .fill.yellow { background: #ffcc00; }
-        .fill.orange { background: #ff9944; }
-        .fill.red { background: #ff6666; }
-
-        .oral-section {
-            margin-top: 12px;
-            padding: 12px;
-            background: #1a1a1a;
-            border-radius: 8px;
-            border-left: 4px solid #ffcc00;
-        }
-        .oral-section .oral-label {
-            font-size: 0.7rem;
-            color: #ffcc00;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .oral-section .oral-stats {
+        .nav-bar .logo span { color: #fff; }
+        .nav-bar .teacher-info {
             display: flex;
+            align-items: center;
             gap: 16px;
             flex-wrap: wrap;
-            margin-top: 4px;
         }
-        .oral-section .oral-stats .stat {
-            font-size: 0.75rem;
-            color: #888;
-        }
-        .oral-section .oral-stats .stat .val {
-            font-weight: 700;
+        .nav-bar .teacher-info .name {
+            font-weight: 600;
             color: #fff;
         }
+        .nav-bar .teacher-info .badge {
+            background: rgba(0, 255, 255, 0.15);
+            color: #00ffff;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+        .nav-bar .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff88;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
 
-        .status-dot {
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px 32px 60px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 32px;
+        }
+        .stat-card {
+            background: #0d0d0d;
+            border: 1px solid #1a4a4a;
+            border-radius: 14px;
+            padding: 20px 24px;
+            transition: border-color 0.3s;
+        }
+        .stat-card:hover { border-color: #00ffff; }
+        .stat-card .label {
+            color: #88dddd;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        .stat-card .number {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 4px 0 2px;
+        }
+        .stat-card .sub {
+            color: #666;
+            font-size: 0.8rem;
+        }
+        .stat-card .sub i { margin-right: 4px; }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .panel {
+            background: #0d0d0d;
+            border: 1px solid #1a4a4a;
+            border-radius: 14px;
+            padding: 20px 24px;
+        }
+        .panel .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .panel .panel-header h3 {
+            color: #00ffff;
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .panel .panel-header .count-badge {
+            background: rgba(0, 255, 255, 0.12);
+            color: #00ffff;
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .panel .panel-header .live-dot {
             display: inline-block;
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            margin-right: 6px;
+            background: #ff4444;
+            animation: pulse 1.5s infinite;
         }
-        .status-dot.online { background: #00ff88; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        .panel .panel-header .live-dot.active { background: #00ff88; }
 
-        .radio-group {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
+        .activity-list {
+            max-height: 420px;
+            overflow-y: auto;
         }
-        .radio-btn {
-            padding: 8px 20px;
-            background: #0d0d0d;
-            border: 1px solid #1a4a4a;
-            border-radius: 40px;
+        .activity-list::-webkit-scrollbar { width: 4px; }
+        .activity-list::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 4px; }
+        .activity-list::-webkit-scrollbar-thumb { background: #00ffff; border-radius: 4px; }
+
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #1a1a1a;
+            animation: slideIn 0.4s ease;
+        }
+        .activity-item:last-child { border-bottom: none; }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-12px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .activity-item .left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .activity-item .left .icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+        .activity-item .left .icon.click { background: rgba(0, 255, 255, 0.12); color: #00ffff; }
+        .activity-item .left .icon.view { background: rgba(255, 204, 0, 0.12); color: #ffcc00; }
+        .activity-item .left .icon.book { background: rgba(0, 255, 136, 0.12); color: #00ff88; }
+        .activity-item .left .icon.search { background: rgba(255, 102, 170, 0.12); color: #ff66aa; }
+        .activity-item .left .icon.activity { background: rgba(255, 204, 0, 0.12); color: #ffcc00; }
+        .activity-item .left .icon.quiz { background: rgba(0, 255, 136, 0.12); color: #00ff88; }
+        .activity-item .left .icon.message { background: rgba(100, 100, 255, 0.12); color: #6666ff; }
+
+        .activity-item .left .text {
+            font-size: 0.9rem;
+        }
+        .activity-item .left .text .student {
+            color: #fff;
+            font-weight: 600;
+        }
+        .activity-item .left .text .action {
             color: #88dddd;
+        }
+        .activity-item .left .text .target {
+            color: #00ffff;
+            font-weight: 500;
+        }
+
+        .activity-item .time {
+            color: #555;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            margin-left: 12px;
+        }
+
+        .online-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .online-student {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: #121212;
+            border-radius: 10px;
+            border-left: 3px solid #00ff88;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 0.85rem;
         }
-        .radio-btn:hover { border-color: #00ffff; color: #00ffff; }
-        .radio-btn.active {
-            background: #00ffff;
-            color: #000;
+        .online-student:hover {
+            background: #1a1a1a;
             border-color: #00ffff;
         }
+        .online-student .name {
+            font-weight: 500;
+            color: #fff;
+        }
+        .online-student .name i {
+            color: #00ff88;
+            font-size: 0.6rem;
+            margin-right: 6px;
+        }
+        .online-student .detail {
+            color: #666;
+            font-size: 0.75rem;
+        }
+        .online-student .detail .highlight {
+            color: #00ffff;
+        }
+        .online-student .score-badge {
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .score-badge.high { background: rgba(0, 255, 136, 0.15); color: #00ff88; }
+        .score-badge.medium { background: rgba(255, 204, 0, 0.15); color: #ffcc00; }
+        .score-badge.low { background: rgba(255, 68, 68, 0.15); color: #ff6666; }
 
-        @media (max-width: 700px) {
-            .student-grid { grid-template-columns: 1fr; }
+        .session-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        .session-item:last-child { border-bottom: none; }
+        .session-item .left .student-name {
+            color: #fff;
+            font-weight: 500;
+        }
+        .session-item .left .subject {
+            color: #88dddd;
+            font-size: 0.8rem;
+        }
+        .session-item .time-slot {
+            color: #00ffff;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 32px 16px;
+            color: #555;
+        }
+        .empty-state i {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* ====== PERFORMANCE SECTION ====== */
+        .performance-section {
+            margin-top: 32px;
+            border-top: 1px solid #1a4a4a;
+            padding-top: 32px;
+        }
+        .performance-section .section-title {
+            color: #00ffff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .performance-section .section-title i { color: #ffcc00; }
+
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .perf-card {
+            background: #0d0d0d;
+            border: 1px solid #1a4a4a;
+            border-radius: 14px;
+            padding: 16px 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .perf-card:hover {
+            border-color: #00ffff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 255, 255, 0.05);
+        }
+        .perf-card .perf-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .perf-card .perf-header .name {
+            color: #fff;
+            font-weight: 600;
+        }
+        .perf-card .perf-header .score {
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        .perf-card .perf-header .score.high { background: rgba(0, 255, 136, 0.15); color: #00ff88; }
+        .perf-card .perf-header .score.medium { background: rgba(255, 204, 0, 0.15); color: #ffcc00; }
+        .perf-card .perf-header .score.low { background: rgba(255, 68, 68, 0.15); color: #ff6666; }
+
+        .perf-card .perf-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .perf-card .perf-stats .stat {
+            text-align: center;
+            background: #121212;
+            border-radius: 8px;
+            padding: 6px 4px;
+        }
+        .perf-card .perf-stats .stat .val {
+            font-weight: 700;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        .perf-card .perf-stats .stat .label {
+            font-size: 0.55rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .perf-card .perf-stats .stat .val.participation { color: #ffcc00; }
+        .perf-card .perf-stats .stat .val.learning { color: #00ffff; }
+        .perf-card .perf-stats .stat .val.achievement { color: #00ff88; }
+
+        .perf-card .perf-bar {
+            height: 4px;
+            background: #1a1a1a;
+            border-radius: 2px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .perf-card .perf-bar .fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.8s ease;
+        }
+        .perf-card .perf-bar .fill.high { background: linear-gradient(90deg, #00ff88, #00ffff); }
+        .perf-card .perf-bar .fill.medium { background: linear-gradient(90deg, #ffcc00, #00ffff); }
+        .perf-card .perf-bar .fill.low { background: linear-gradient(90deg, #ff6666, #ffcc00); }
+
+        /* ====== MODAL ====== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: #0d0d0d;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-content h2 {
+            color: #00ffff;
+            font-size: 1.4rem;
+            margin-bottom: 0.2rem;
+        }
+        .modal-content .modal-sub {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 1.2rem;
+        }
+        .modal-content .close-modal {
+            color: #888;
+            border: 1px solid #444;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: transparent;
+        }
+        .modal-content .close-modal:hover {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+        .modal-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .modal-stat {
+            background: #121212;
+            border-radius: 10px;
+            padding: 12px 16px;
+            border: 1px solid #1a4a4a;
+        }
+        .modal-stat .label {
+            font-size: 0.65rem;
+            color: #666;
+            text-transform: uppercase;
+        }
+        .modal-stat .value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .modal-stat .value.green { color: #00ff88; }
+        .modal-stat .value.cyan { color: #00ffff; }
+        .modal-stat .value.yellow { color: #ffcc00; }
+        .modal-stat .value.pink { color: #ff66aa; }
+        .modal-stat .value.orange { color: #ff9944; }
+
+        @media (max-width: 768px) {
+            .two-col { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .nav-bar { padding: 12px 16px; }
+            .dashboard { padding: 16px; }
+            .perf-card .perf-stats { grid-template-columns: 1fr 1fr; }
+            .modal-stats-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .activity-item { flex-wrap: wrap; gap: 4px; }
+            .activity-item .time { margin-left: 44px; font-size: 0.65rem; }
+            .perf-card .perf-stats { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
+    <!-- ====== TOP NAV ====== -->
     <nav class="nav-bar">
-        <div class="logo">BeSpellBee</div>
+        <div class="logo">
+            <svg width="180" height="40" viewBox="0 0 200 50">
+                <defs>
+                    <linearGradient id="dashboardGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:aqua;"/>
+                        <stop offset="50%" style="stop-color:white;" />
+                        <stop offset="100%" style="stop-color:yellow;" />
+                    </linearGradient>
+                </defs>
+                <text x="0" y="38" fill="url(#dashboardGradient)" font-size="36" font-weight="700" font-family="Segoe UI, sans-serif">BeSpellBee</text>
+            </svg>
+        </div>
         <div class="teacher-info">
-            <span class="name" id="teacherName"><i class="fas fa-user-graduate"></i> Loading...</span>
-            <a href="teacher-dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+            <span class="badge"><span class="status-dot"></span> Live</span>
+            <span class="name" id="navTeacherName"><i class="fas fa-user-graduate"></i> Loading...</span>
+            <span style="color: #555; font-size: 0.8rem;" id="navTeacherSubject">| ...</span>
+            <a href="index.html" style="color: #88dddd; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px; transition: color 0.3s;">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <a href="teacher-course-manager.html" 
+               style="display:inline-block; padding:5px 16px; border:1px solid #ffcc00; border-radius:30px;
+                      color:#ffcc00; text-decoration:none; font-size:0.8rem; font-weight:600;
+                      background: rgba(255,204,0,0.05); transition: all 0.3s;"
+               onmouseover="this.style.background='#ffcc00'; this.style.color='#000';"
+               onmouseout="this.style.background='rgba(255,204,0,0.05)'; this.style.color='#ffcc00';">
+                ⚙️ Manage Course
+            </a>
+            <a href="#" id="logoutBtn" style="color: #00ffff; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
         </div>
     </nav>
 
-    <div class="container">
-        <div class="page-header">
-            <h1><i class="fas fa-chart-pie"></i> Student Performance by Level</h1>
-            <div class="radio-group">
-                <button class="radio-btn active" onclick="filterStudents('all')">All</button>
-                <button class="radio-btn" onclick="filterStudents('high')">🌟 High</button>
-                <button class="radio-btn" onclick="filterStudents('medium')">🔥 Medium</button>
-                <button class="radio-btn" onclick="filterStudents('low')">🌱 Low</button>
+    <!-- ====== DASHBOARD ====== -->
+    <div class="dashboard">
+
+        <!-- ====== STATS ====== -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="label"><i class="fas fa-users"></i> Total Students</div>
+                <div class="number" id="activeStudents">0</div>
+                <div class="sub">Tracked this period</div>
+            </div>
+            <div class="stat-card">
+                <div class="label"><i class="fas fa-calendar-check"></i> Total Bookings</div>
+                <div class="number" id="todaySessions">0</div>
+                <div class="sub"><i class="fas fa-clock"></i> <span id="nextSession">All time</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="label"><i class="fas fa-eye"></i> Recorded Activity</div>
+                <div class="number" id="profileViews">0</div>
+                <div class="sub">Page views & clicks</div>
+            </div>
+            <div class="stat-card">
+                <div class="label"><i class="fas fa-clock"></i> Pending Requests</div>
+                <div class="number" id="totalClicks">0</div>
+                <div class="sub">Awaiting confirmation</div>
             </div>
         </div>
 
-        <div id="studentsContainer" class="student-grid">
-            <div style="grid-column:1/-1; text-align:center; padding:40px; color:#666;">
-                <i class="fas fa-spinner fa-spin" style="font-size:2rem; color:#00ffff;"></i>
-                <p style="margin-top:10px;">Loading student data...</p>
+        <!-- ====== TWO COLUMNS ====== -->
+        <div class="two-col">
+
+            <!-- LEFT: ACTIVITY FEED -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>
+                        <span class="live-dot active"></span> Live Activity
+                        <span class="count-badge" id="activityCount">0</span>
+                    </h3>
+                    <span style="color:#555; font-size:0.75rem;">
+                        <i class="fas fa-sync-alt fa-spin"></i> live
+                    </span>
+                </div>
+                <div class="activity-list" id="activityFeed">
+                    <div class="empty-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading real-time data...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: TOP ENGAGED + RECENT BOOKINGS -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+
+                <!-- TOP ENGAGED STUDENTS -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-circle" style="color:#00ff88; font-size:0.6rem;"></i> Top Engaged</h3>
+                        <span class="count-badge" id="onlineCount">0</span>
+                    </div>
+                    <div class="online-grid" id="onlineStudents">
+                        <div class="empty-state" style="padding:16px;"><p style="font-size:0.85rem;">Loading...</p></div>
+                    </div>
+                </div>
+
+                <!-- RECENT BOOKINGS -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-calendar-alt"></i> Recent Bookings</h3>
+                        <span class="count-badge" id="upcomingCount">0</span>
+                    </div>
+                    <div id="upcomingSessions">
+                        <div class="empty-state" style="padding:16px;"><p style="font-size:0.85rem;">Loading...</p></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ====== STUDENT PERFORMANCE BY LEVEL ====== -->
+        <div class="performance-section">
+            <div class="section-title">
+                <i class="fas fa-chart-pie"></i> Student Performance by Level
+                <span style="font-size:0.7rem; color:#555; font-weight:400;">Click any student for detailed breakdown</span>
+            </div>
+            <div class="performance-grid" id="performanceGrid">
+                <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
+                    <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; color:#00ffff;"></i>
+                    <p style="margin-top:8px;">Loading student performance data...</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ====== MODAL: STUDENT DETAIL ====== -->
+    <div class="modal-overlay" id="studentModal">
+        <div class="modal-content">
+            <h2 id="modalStudentName">Student Name</h2>
+            <p class="modal-sub" id="modalStudentInfo">Engagement Score: --% • Grade: --/4</p>
+            <div class="modal-stats-grid" id="modalStats">
+                <!-- Injected by JS -->
+            </div>
+            <div style="text-align: right; margin-top: 16px;">
+                <button class="close-modal" onclick="closeModal()">
+                    <i class="fas fa-times"></i> Close
+                </button>
             </div>
         </div>
     </div>
 
+    <!-- ============================================================ -->
+    <!-- ====== JAVASCRIPT ====== -->
+    <!-- ============================================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.2/dist/socket.io.min.js"></script>
     <script>
+        // ============================================================
+        // CONFIGURATION
+        // ============================================================
         const API_BASE_URL = 'https://bespellbee-backend-en6l.onrender.com';
-        const token = localStorage.getItem('authToken');
-        let allStudents = [];
-        let filter = 'all';
 
-        async function fetchStudents() {
+        // ============================================================
+        // LOGOUT
+        // ============================================================
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('teacherId');
+            localStorage.removeItem('teacherName');
+            localStorage.removeItem('userRole');
+            window.location.href = 'index.html';
+        });
+
+        // ============================================================
+        // HELPER: TIME AGO
+        // ============================================================
+        function timeAgo(dateString) {
+            const now = new Date();
+            const past = new Date(dateString);
+            const diffMs = now - past;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHrs = Math.floor(diffMs / 3600000);
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHrs < 24) return `${diffHrs}h ago`;
+            return past.toLocaleDateString();
+        }
+
+        // ============================================================
+        // LOAD DASHBOARD DATA (REST)
+        // ============================================================
+        async function loadDashboard() {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                alert('Please log in to view the dashboard.');
+                window.location.href = 'index.html';
+                return;
+            }
+
             try {
-                const response = await fetch(`${API_BASE_URL}/api/track/teacher/engagement`, {
+                const response = await fetch(`${API_BASE_URL}/api/auth/teacher/dashboard`, {
+                    method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     }
                 });
-                const data = await response.json();
-                if (data.success) {
-                    allStudents = data.data.students || [];
-                    renderStudents();
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || 'Failed to fetch dashboard data');
                 }
+                renderDashboard(result.data);
             } catch (error) {
-                console.error('Error fetching students:', error);
+                console.error('Dashboard Load Error:', error);
+                alert('Session expired or error loading data. Please log in again.');
+                window.location.href = 'index.html';
             }
         }
 
-        function filterStudents(filterType) {
-            filter = filterType;
-            document.querySelectorAll('.radio-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.textContent.toLowerCase().includes(filterType) || filterType === 'all');
-            });
-            renderStudents();
+        // ============================================================
+        // RENDER FUNCTIONS
+        // ============================================================
+        function renderDashboard(data) {
+            const { teacher, stats, recentActivity, engagementStats, bookings } = data;
+
+            document.getElementById('navTeacherName').innerHTML = `<i class="fas fa-user-graduate"></i> ${teacher.name}`;
+            document.getElementById('navTeacherSubject').textContent = `| ${teacher.subject || 'Teacher'}`;
+
+            document.getElementById('activeStudents').textContent = stats.totalStudents || 0;
+            document.getElementById('todaySessions').textContent = stats.totalBookings || 0;
+            document.getElementById('profileViews').textContent = stats.recentActivityCount || 0;
+            document.getElementById('totalClicks').textContent = stats.pendingBookings || 0;
+
+            renderActivityFeed(recentActivity || []);
+            renderEngagedStudents(engagementStats || []);
+            renderBookings(bookings || []);
+            renderPerformanceGrid(engagementStats || []);
         }
 
-        function getScoreLevel(score) {
-            if (score >= 70) return 'high';
-            if (score >= 40) return 'medium';
-            return 'low';
+        // ============================================================
+        // ACTIVITY FEED
+        // ============================================================
+        function renderActivityFeed(activities) {
+            const container = document.getElementById('activityFeed');
+            const count = document.getElementById('activityCount');
+
+            if (activities.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>No activity recorded yet</p></div>`;
+                count.textContent = '0';
+                return;
+            }
+
+            count.textContent = activities.length;
+            container.innerHTML = activities.map(item => {
+                let details = item.activityData;
+                if (typeof details === 'string') {
+                    try { details = JSON.parse(details); } catch(e) { details = {}; }
+                }
+                let iconClass = 'view';
+                let emoji = '👁️';
+                let actionText = 'viewed';
+                let targetText = details.page || 'Page';
+
+                if (item.activityType === 'link_click') {
+                    iconClass = 'click'; emoji = '🔗'; actionText = 'clicked'; targetText = details.link || 'Link';
+                } else if (item.activityType === 'carousel_view') {
+                    iconClass = 'search'; emoji = '🔄'; actionText = 'viewed carousel on'; targetText = details.page || 'Home';
+                } else if (item.activityType === 'lesson_view') {
+                    iconClass = 'book'; emoji = '📖'; actionText = 'viewed lesson'; targetText = details.lessonId || 'Lesson';
+                } else if (item.activityType === 'quiz_attempt' || item.activityType === 'quiz_pass') {
+                    iconClass = 'quiz'; emoji = '🧠'; actionText = item.activityType === 'quiz_pass' ? 'passed quiz' : 'took quiz'; targetText = details.quizTitle || 'Quiz';
+                } else if (item.activityType === 'message_sent') {
+                    iconClass = 'message'; emoji = '💬'; actionText = 'sent a message to teacher';
+                } else if (item.activityType === 'activity_practice') {
+                    iconClass = 'activity'; emoji = '✍️'; actionText = 'completed practice activity'; targetText = details.title || 'Practice';
+                }
+
+                const studentName = item.Student ? item.Student.name : 'Anonymous Visitor';
+                return `
+                    <div class="activity-item">
+                        <div class="left">
+                            <div class="icon ${iconClass}">${emoji}</div>
+                            <div class="text">
+                                <span class="student">${studentName}</span>
+                                <span class="action"> ${actionText} </span>
+                                <span class="target">${targetText}</span>
+                            </div>
+                        </div>
+                        <span class="time">${timeAgo(item.createdAt)}</span>
+                    </div>
+                `;
+            }).join('');
         }
 
-        function getLevelLabel(level) {
-            const labels = { high: '🌟 High', medium: '🔥 Medium', low: '🌱 Low' };
-            return labels[level] || level;
+        // ============================================================
+        // TOP ENGAGED STUDENTS (FIXED studentId)
+        // ============================================================
+        function renderEngagedStudents(students) {
+            const container = document.getElementById('onlineStudents');
+            const count = document.getElementById('onlineCount');
+
+            if (students.length === 0) {
+                container.innerHTML = `<div class="empty-state" style="padding:16px;"><p style="font-size:0.85rem;">No student data yet</p></div>`;
+                count.textContent = '0';
+                return;
+            }
+
+            count.textContent = students.length;
+            container.innerHTML = students.map(s => {
+                const studentData = s.Student || s;
+                const name = studentData.name || 'Unknown Student';
+                const actions = s.activityCount || 0;
+                const score = studentData.engagementScore || 0;
+                const scoreLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
+                const studentId = studentData.id || 0;
+                if (!studentId) return ''; // skip invalid
+                return `
+                    <div class="online-student" onclick="showStudentDetails(${studentId})">
+                        <span class="name"><i class="fas fa-circle"></i> ${name}</span>
+                        <span class="detail"><span class="highlight">${actions}</span> actions • <span class="score-badge ${scoreLevel}">${Math.round(score)}%</span></span>
+                    </div>
+                `;
+            }).join('');
         }
 
-        function renderStudents() {
-            const container = document.getElementById('studentsContainer');
-            const filtered = filter === 'all' 
-                ? allStudents 
-                : allStudents.filter(s => getScoreLevel(parseFloat(s.engagementScore)) === filter);
+        // ============================================================
+        // RECENT BOOKINGS
+        // ============================================================
+        function renderBookings(bookings) {
+            const container = document.getElementById('upcomingSessions');
+            const count = document.getElementById('upcomingCount');
 
-            if (filtered.length === 0) {
+            if (bookings.length === 0) {
+                container.innerHTML = `<div class="empty-state" style="padding:16px;"><p style="font-size:0.85rem;">No bookings yet</p></div>`;
+                count.textContent = '0';
+                return;
+            }
+
+            count.textContent = bookings.length;
+            container.innerHTML = bookings.map(b => {
+                const statusColor = b.status === 'pending' ? '#ffcc00' : '#00ff88';
+                return `
+                    <div class="session-item">
+                        <div class="left">
+                            <div class="student-name">${b.studentName || 'Student'}</div>
+                            <div class="subject" style="color: ${statusColor}; text-transform:capitalize;">${b.status || 'Pending'}</div>
+                        </div>
+                        <div class="time-slot">${timeAgo(b.createdAt)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============================================================
+        // PERFORMANCE GRID (FIXED studentId)
+        // ============================================================
+        function renderPerformanceGrid(students) {
+            const container = document.getElementById('performanceGrid');
+
+            if (students.length === 0) {
                 container.innerHTML = `
-                    <div style="grid-column:1/-1; text-align:center; padding:40px; color:#666;">
-                        <i class="fas fa-users" style="font-size:2rem; display:block; margin-bottom:10px;"></i>
-                        No students found.
+                    <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
+                        <i class="fas fa-users" style="font-size:1.5rem; display:block; margin-bottom:8px;"></i>
+                        <p>No student performance data yet.</p>
                     </div>
                 `;
                 return;
             }
 
-            let html = '';
-            filtered.forEach(student => {
-                const score = parseFloat(student.engagementScore) || 0;
-                const level = getScoreLevel(score);
-                const levelLabel = getLevelLabel(level);
-                const timeMin = Math.round((student.totalTimeSpent || 0) / 60);
+            const sorted = [...students].sort((a, b) => {
+                const scoreA = a.Student?.engagementScore || 0;
+                const scoreB = b.Student?.engagementScore || 0;
+                return scoreB - scoreA;
+            });
 
-                // Calculate performance by category
-                const pageViews = student.totalPageViews || 0;
-                const linkClicks = student.totalLinkClicks || 0;
-                const lessonViews = student.totalLessonViews || 0;
-                const quizAttempts = student.totalQuizAttempts || 0;
-                const lessonsCompleted = student.totalLessonsCompleted || 0;
-                const messagesSent = student.totalMessagesSent || 0;
+            container.innerHTML = sorted.map(s => {
+                const studentData = s.Student || s;
+                const name = studentData.name || 'Unknown Student';
+                const score = studentData.engagementScore || 0;
+                const scoreLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
+                const actions = s.activityCount || 0;
+                const studentId = studentData.id || 0;
+                if (!studentId) return ''; // skip invalid
 
-                // Oral performance metrics (from external system - see Part 2)
-                const oralSessions = student.oralSessions || 0;
-                const oralFluency = student.oralFluency || 0;
-                const oralPronunciation = student.oralPronunciation || 0;
-                const oralComprehension = student.oralComprehension || 0;
+                const pageViews = studentData.totalPageViews || 0;
+                const lessonViews = studentData.totalLessonViews || 0;
+                const quizAttempts = studentData.totalQuizAttempts || 0;
+                const messages = studentData.totalMessages || 0;
+                const completed = studentData.totalCompleted || 0;
 
-                html += `
-                    <div class="student-card">
-                        <div class="header">
-                            <span class="name">
-                                <span class="status-dot online"></span>
-                                ${student.name}
-                            </span>
-                            <span class="score ${level}">${score}% (${levelLabel})</span>
+                return `
+                    <div class="perf-card" onclick="showStudentDetails(${studentId})">
+                        <div class="perf-header">
+                            <span class="name">${name}</span>
+                            <span class="score ${scoreLevel}">${Math.round(score)}%</span>
                         </div>
-
-                        <div class="performance-grid">
-                            <!-- Participation -->
-                            <div class="performance-category">
-                                <div class="cat-label"><i class="fas fa-eye"></i> Participation</div>
-                                <div class="cat-value">${pageViews + linkClicks}</div>
-                                <div class="cat-detail">${pageViews} views • ${linkClicks} clicks</div>
-                                <div class="cat-bar"><div class="fill yellow" style="width:${Math.min((pageViews + linkClicks) / 2, 100)}%"></div></div>
+                        <div class="perf-stats">
+                            <div class="stat">
+                                <div class="val participation">${pageViews + (s.linkClicks || 0)}</div>
+                                <div class="label">Participation</div>
                             </div>
-
-                            <!-- Learning -->
-                            <div class="performance-category">
-                                <div class="cat-label"><i class="fas fa-book"></i> Learning</div>
-                                <div class="cat-value">${lessonViews}</div>
-                                <div class="cat-detail">${lessonsCompleted} completed</div>
-                                <div class="cat-bar"><div class="fill cyan" style="width:${Math.min(lessonViews * 2, 100)}%"></div></div>
+                            <div class="stat">
+                                <div class="val learning">${lessonViews}</div>
+                                <div class="label">Learning</div>
                             </div>
-
-                            <!-- Assessment -->
-                            <div class="performance-category">
-                                <div class="cat-label"><i class="fas fa-brain"></i> Assessment</div>
-                                <div class="cat-value">${quizAttempts}</div>
-                                <div class="cat-detail">${student.quizPasses || 0} passed</div>
-                                <div class="cat-bar"><div class="fill green" style="width:${Math.min(quizAttempts * 2, 100)}%"></div></div>
-                            </div>
-
-                            <!-- Communication -->
-                            <div class="performance-category">
-                                <div class="cat-label"><i class="fas fa-comment"></i> Communication</div>
-                                <div class="cat-value">${messagesSent}</div>
-                                <div class="cat-detail">Messages sent</div>
-                                <div class="cat-bar"><div class="fill orange" style="width:${Math.min(messagesSent * 5, 100)}%"></div></div>
+                            <div class="stat">
+                                <div class="val achievement">${completed}</div>
+                                <div class="label">Achievement</div>
                             </div>
                         </div>
-
-                        <!-- Oral Performance -->
-                        <div class="oral-section">
-                            <div class="oral-label"><i class="fas fa-microphone"></i> Oral Performance (40% of grade)</div>
-                            <div class="oral-stats">
-                                <span class="stat">Sessions: <span class="val">${oralSessions}</span></span>
-                                <span class="stat">Fluency: <span class="val">${oralFluency}/10</span></span>
-                                <span class="stat">Pronunciation: <span class="val">${oralPronunciation}/10</span></span>
-                                <span class="stat">Comprehension: <span class="val">${oralComprehension}/10</span></span>
-                                <span class="stat">Time: <span class="val">${timeMin}m</span></span>
-                            </div>
-                            <div style="display:flex; gap:8px; margin-top:6px;">
-                                <button style="background:rgba(255,204,0,0.1); color:#ffcc00; border:1px solid rgba(255,204,0,0.3); padding:4px 12px; border-radius:20px; font-size:0.7rem; cursor:pointer;">
-                                    <i class="fas fa-video"></i> Schedule Interview
-                                </button>
-                                <button style="background:rgba(0,255,255,0.1); color:#00ffff; border:1px solid rgba(0,255,255,0.3); padding:4px 12px; border-radius:20px; font-size:0.7rem; cursor:pointer;">
-                                    <i class="fas fa-chart-bar"></i> View Transcript
-                                </button>
-                            </div>
+                        <div class="perf-bar">
+                            <div class="fill ${scoreLevel}" style="width: ${Math.min(score, 100)}%;"></div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:0.65rem; color:#555;">
+                            <span>${actions} activities</span>
+                            <span>🔄 ${quizAttempts} quizzes</span>
+                            <span>💬 ${messages} messages</span>
                         </div>
                     </div>
                 `;
-            });
-
-            container.innerHTML = html;
+            }).join('');
         }
 
-        function loadTeacherName() {
-            if (token) {
-                try {
-                    const payload = JSON.parse(atob(token.split('.')[1]));
-                    document.getElementById('teacherName').innerHTML = `<i class="fas fa-user-graduate"></i> ${payload.name || 'Teacher'}`;
-                } catch (e) {}
+        // ============================================================
+        // SHOW STUDENT DETAILS MODAL (FIXED)
+        // ============================================================
+        function showStudentDetails(studentId) {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                alert('Please log in first.');
+                return;
+            }
+            if (!studentId || studentId === 0) {
+                showModalError('Invalid student ID. Please try again.');
+                return;
+            }
+
+            // Show loading state
+            const modal = document.getElementById('studentModal');
+            const nameEl = document.getElementById('modalStudentName');
+            const infoEl = document.getElementById('modalStudentInfo');
+            const statsEl = document.getElementById('modalStats');
+
+            nameEl.textContent = 'Loading...';
+            infoEl.textContent = 'Fetching student data...';
+            statsEl.innerHTML = `
+                <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
+                    <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; color:#00ffff;"></i>
+                    <p style="margin-top:8px;">Loading student details...</p>
+                </div>
+            `;
+            modal.classList.add('active');
+
+            fetch(`${API_BASE_URL}/api/track/teacher/engagement/${studentId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => {
+                if (!res.ok) {
+                    if (res.status === 404) {
+                        throw new Error('Student not found. Please try again.');
+                    }
+                    throw new Error(`Server error (${res.status})`);
+                }
+                return res.json();
+            })
+            .then(result => {
+                console.log('📊 Student data received:', result);
+                if (result.success) {
+                    renderStudentModal(result.data);
+                } else {
+                    showModalError(result.message || 'No data available for this student.');
+                }
+            })
+            .catch(err => {
+                console.error('❌ Error loading student details:', err);
+                showModalError(err.message);
+            });
+        }
+
+        function showModalError(message) {
+            const nameEl = document.getElementById('modalStudentName');
+            const infoEl = document.getElementById('modalStudentInfo');
+            const statsEl = document.getElementById('modalStats');
+            nameEl.textContent = '⚠️ Error';
+            infoEl.textContent = message;
+            statsEl.innerHTML = `
+                <div style="grid-column:1/-1; text-align:center; padding:20px; color:#ff6666;">
+                    <i class="fas fa-exclamation-triangle" style="font-size:1.5rem; display:block; margin-bottom:8px;"></i>
+                    <p>${message}</p>
+                    <p style="font-size:0.8rem; color:#555; margin-top:8px;">Try clicking another student or refresh the page.</p>
+                </div>
+            `;
+        }
+
+        function renderStudentModal(student) {
+            const nameEl = document.getElementById('modalStudentName');
+            const infoEl = document.getElementById('modalStudentInfo');
+            const statsEl = document.getElementById('modalStats');
+
+            nameEl.textContent = student.name || 'Student';
+
+            const score = parseFloat(student.engagementScore) || 0;
+            const grade = Math.round((score / 100) * 4 * 10) / 10;
+            const levelLabel = score >= 70 ? '🌟 Outstanding' : score >= 40 ? '📈 On Track' : '🌱 Getting Started';
+            infoEl.textContent = `Engagement Score: ${Math.round(score)}% • Grade: ${grade}/4 • ${levelLabel}`;
+
+            // Build stats – use defaults if fields missing
+            const stats = [
+                { label: 'Page Views', value: student.totalPageViews ?? 0, color: 'yellow' },
+                { label: 'Lesson Views', value: student.totalLessonViews ?? 0, color: 'cyan' },
+                { label: 'Quiz Attempts', value: student.totalQuizAttempts ?? 0, color: 'pink' },
+                { label: 'Lessons Completed', value: student.totalCompleted ?? 0, color: 'green' },
+                { label: 'Link Clicks', value: student.totalLinkClicks ?? 0, color: 'orange' },
+                { label: 'Messages Sent', value: student.totalMessages ?? 0, color: 'cyan' },
+                { label: 'Practice Activities', value: student.totalPracticeActivities ?? 0, color: 'pink' },
+            ];
+
+            const hasActivity = stats.some(s => s.value > 0);
+
+            if (!hasActivity) {
+                statsEl.innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
+                        <i class="fas fa-inbox" style="font-size:2rem; display:block; margin-bottom:12px; color:#333;"></i>
+                        <p style="font-size:1rem; color:#888;">No activity recorded yet</p>
+                        <p style="font-size:0.8rem; color:#555; margin-top:4px;">Once the student starts learning, data will appear here.</p>
+                    </div>
+                `;
+            } else {
+                statsEl.innerHTML = stats.map(stat => `
+                    <div class="modal-stat">
+                        <div class="label">${stat.label}</div>
+                        <div class="value ${stat.color}">${stat.value}</div>
+                    </div>
+                `).join('');
+
+                // Recent activities if available
+                if (student.recentActivities && student.recentActivities.length > 0) {
+                    const recentHtml = `
+                        <div style="grid-column:1/-1; margin-top:12px; border-top:1px solid #1a4a4a; padding-top:12px;">
+                            <div style="color:#88dddd; font-size:0.8rem; font-weight:600; margin-bottom:8px;">📋 Recent Activity</div>
+                            ${student.recentActivities.slice(0, 5).map(act => {
+                                const type = act.activityType.replace('_', ' ');
+                                const time = new Date(act.createdAt).toLocaleString();
+                                return `
+                                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#888; padding:4px 0; border-bottom:1px solid #1a1a1a;">
+                                        <span>${type}</span>
+                                        <span style="color:#555;">${time}</span>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                    statsEl.innerHTML += recentHtml;
+                }
             }
         }
 
-        loadTeacherName();
-        fetchStudents();
+        function closeModal() {
+            document.getElementById('studentModal').classList.remove('active');
+        }
+
+        document.getElementById('studentModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // ============================================================
+        // ADD SINGLE ACTIVITY TO FEED (WebSocket)
+        // ============================================================
+        function addActivityToFeed(activity) {
+            const container = document.getElementById('activityFeed');
+            const count = document.getElementById('activityCount');
+            if (!container) return;
+
+            const emptyState = container.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+
+            let activityData = activity.activityData;
+            if (typeof activityData === 'string') {
+                try { activityData = JSON.parse(activityData); } catch(e) { activityData = {}; }
+            }
+
+            let iconClass = 'view';
+            let emoji = '👁️';
+            let actionText = 'viewed';
+            let targetText = activityData?.page || 'Page';
+
+            if (activity.activityType === 'link_click') {
+                iconClass = 'click'; emoji = '🔗'; actionText = 'clicked'; targetText = activityData?.link || 'Link';
+            } else if (activity.activityType === 'carousel_view') {
+                iconClass = 'search'; emoji = '🔄'; actionText = 'viewed carousel on'; targetText = activityData?.page || 'Home';
+            } else if (activity.activityType === 'lesson_view') {
+                iconClass = 'book'; emoji = '📖'; actionText = 'viewed lesson'; targetText = activityData?.lessonId || 'Lesson';
+            } else if (activity.activityType === 'quiz_attempt' || activity.activityType === 'quiz_pass') {
+                iconClass = 'quiz'; emoji = '🧠'; actionText = activity.activityType === 'quiz_pass' ? 'passed quiz' : 'took quiz'; targetText = activityData?.quizTitle || 'Quiz';
+            } else if (activity.activityType === 'message_sent') {
+                iconClass = 'message'; emoji = '💬'; actionText = 'sent a message to teacher';
+            } else if (activity.activityType === 'activity_practice') {
+                iconClass = 'activity'; emoji = '✍️'; actionText = 'completed practice activity'; targetText = activityData?.title || 'Practice';
+            }
+
+            const item = document.createElement('div');
+            item.className = 'activity-item';
+            item.style.animation = 'slideIn 0.4s ease';
+            item.innerHTML = `
+                <div class="left">
+                    <div class="icon ${iconClass}">${emoji}</div>
+                    <div class="text">
+                        <span class="student">${activity.studentName || 'Student'}</span>
+                        <span class="action"> ${actionText} </span>
+                        <span class="target">${targetText}</span>
+                    </div>
+                </div>
+                <span class="time">Just now</span>
+            `;
+
+            container.prepend(item);
+            const currentCount = parseInt(count.textContent) || 0;
+            count.textContent = currentCount + 1;
+
+            while (container.children.length > 50) {
+                container.removeChild(container.lastChild);
+            }
+        }
+
+        // ============================================================
+        // WEBSOCKET CONNECTION
+        // ============================================================
+        const token = localStorage.getItem('authToken');
+
+        if (token) {
+            const socket = io('https://bespellbee-backend-en6l.onrender.com', {
+                auth: { token: token },
+                transports: ['websocket']
+            });
+
+            socket.on('connect', () => {
+                console.log('✅ WebSocket connected');
+            });
+
+            socket.on('new-activity', (activity) => {
+                console.log('📡 Live activity received:', activity);
+                if (typeof addActivityToFeed === 'function') {
+                    addActivityToFeed(activity);
+                }
+            });
+
+            socket.on('disconnect', (reason) => {
+                console.log('❌ WebSocket disconnected. Reason:', reason);
+            });
+
+            socket.on('connect_error', (err) => {
+                console.warn('⚠️ WebSocket connection error:', err.message);
+            });
+        }
+
+        // ============================================================
+        // INIT ON LOAD
+        // ============================================================
+        window.onload = function() {
+            loadDashboard();
+            setInterval(() => {
+                if (typeof socket === 'undefined' || !socket.connected) {
+                    loadDashboard();
+                    console.log('🔄 Dashboard refreshed (polling fallback)');
+                }
+            }, 30000);
+        };
     </script>
 
 </body>
