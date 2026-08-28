@@ -4,14 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BeSpellBee - Teacher Dashboard</title>
+    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #0a0a0a;
@@ -40,7 +36,6 @@
             display: flex;
             align-items: center;
             gap: 16px;
-            flex-wrap: wrap;
         }
         .nav-bar .teacher-info .name {
             font-weight: 600;
@@ -193,9 +188,6 @@
         .activity-item .left .icon.view { background: rgba(255, 204, 0, 0.12); color: #ffcc00; }
         .activity-item .left .icon.book { background: rgba(0, 255, 136, 0.12); color: #00ff88; }
         .activity-item .left .icon.search { background: rgba(255, 102, 170, 0.12); color: #ff66aa; }
-        .activity-item .left .icon.activity { background: rgba(255, 204, 0, 0.12); color: #ffcc00; }
-        .activity-item .left .icon.quiz { background: rgba(0, 255, 136, 0.12); color: #00ff88; }
-        .activity-item .left .icon.message { background: rgba(100, 100, 255, 0.12); color: #6666ff; }
 
         .activity-item .left .text {
             font-size: 0.9rem;
@@ -232,12 +224,6 @@
             background: #121212;
             border-radius: 10px;
             border-left: 3px solid #00ff88;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .online-student:hover {
-            background: #1a1a1a;
-            border-color: #00ffff;
         }
         .online-student .name {
             font-weight: 500;
@@ -255,15 +241,6 @@
         .online-student .detail .highlight {
             color: #00ffff;
         }
-        .online-student .score-badge {
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-        .score-badge.high { background: rgba(0, 255, 136, 0.15); color: #00ff88; }
-        .score-badge.medium { background: rgba(255, 204, 0, 0.15); color: #ffcc00; }
-        .score-badge.low { background: rgba(255, 68, 68, 0.15); color: #ff6666; }
 
         .session-item {
             display: flex;
@@ -299,195 +276,16 @@
             display: block;
         }
 
-        /* ====== PERFORMANCE SECTION ====== */
-        .performance-section {
-            margin-top: 32px;
-            border-top: 1px solid #1a4a4a;
-            padding-top: 32px;
-        }
-        .performance-section .section-title {
-            color: #00ffff;
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .performance-section .section-title i { color: #ffcc00; }
-
-        .performance-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
-        }
-
-        .perf-card {
-            background: #0d0d0d;
-            border: 1px solid #1a4a4a;
-            border-radius: 14px;
-            padding: 16px 20px;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        .perf-card:hover {
-            border-color: #00ffff;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 255, 255, 0.05);
-        }
-        .perf-card .perf-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .perf-card .perf-header .name {
-            color: #fff;
-            font-weight: 600;
-        }
-        .perf-card .perf-header .score {
-            font-weight: 700;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-        .perf-card .perf-header .score.high { background: rgba(0, 255, 136, 0.15); color: #00ff88; }
-        .perf-card .perf-header .score.medium { background: rgba(255, 204, 0, 0.15); color: #ffcc00; }
-        .perf-card .perf-header .score.low { background: rgba(255, 68, 68, 0.15); color: #ff6666; }
-
-        .perf-card .perf-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 6px;
-            margin-top: 8px;
-        }
-        .perf-card .perf-stats .stat {
-            text-align: center;
-            background: #121212;
-            border-radius: 8px;
-            padding: 6px 4px;
-        }
-        .perf-card .perf-stats .stat .val {
-            font-weight: 700;
-            color: #fff;
-            font-size: 0.9rem;
-        }
-        .perf-card .perf-stats .stat .label {
-            font-size: 0.55rem;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-        .perf-card .perf-stats .stat .val.participation { color: #ffcc00; }
-        .perf-card .perf-stats .stat .val.learning { color: #00ffff; }
-        .perf-card .perf-stats .stat .val.achievement { color: #00ff88; }
-
-        .perf-card .perf-bar {
-            height: 4px;
-            background: #1a1a1a;
-            border-radius: 2px;
-            margin-top: 10px;
-            overflow: hidden;
-        }
-        .perf-card .perf-bar .fill {
-            height: 100%;
-            border-radius: 2px;
-            transition: width 0.8s ease;
-        }
-        .perf-card .perf-bar .fill.high { background: linear-gradient(90deg, #00ff88, #00ffff); }
-        .perf-card .perf-bar .fill.medium { background: linear-gradient(90deg, #ffcc00, #00ffff); }
-        .perf-card .perf-bar .fill.low { background: linear-gradient(90deg, #ff6666, #ffcc00); }
-
-        /* ====== MODAL ====== */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(10px);
-            padding: 20px;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal-content {
-            background: #0d0d0d;
-            border: 2px solid #00ffff;
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 700px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .modal-content h2 {
-            color: #00ffff;
-            font-size: 1.4rem;
-            margin-bottom: 0.2rem;
-        }
-        .modal-content .modal-sub {
-            color: #888;
-            font-size: 0.85rem;
-            margin-bottom: 1.2rem;
-        }
-        .modal-content .close-modal {
-            color: #888;
-            border: 1px solid #444;
-            padding: 8px 20px;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: transparent;
-        }
-        .modal-content .close-modal:hover {
-            border-color: #ff4444;
-            color: #ff4444;
-        }
-        .modal-stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin: 16px 0;
-        }
-        .modal-stat {
-            background: #121212;
-            border-radius: 10px;
-            padding: 12px 16px;
-            border: 1px solid #1a4a4a;
-        }
-        .modal-stat .label {
-            font-size: 0.65rem;
-            color: #666;
-            text-transform: uppercase;
-        }
-        .modal-stat .value {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #fff;
-        }
-        .modal-stat .value.green { color: #00ff88; }
-        .modal-stat .value.cyan { color: #00ffff; }
-        .modal-stat .value.yellow { color: #ffcc00; }
-        .modal-stat .value.pink { color: #ff66aa; }
-        .modal-stat .value.orange { color: #ff9944; }
-
         @media (max-width: 768px) {
             .two-col { grid-template-columns: 1fr; }
             .stats-grid { grid-template-columns: 1fr 1fr; }
             .nav-bar { padding: 12px 16px; }
             .dashboard { padding: 16px; }
-            .perf-card .perf-stats { grid-template-columns: 1fr 1fr; }
-            .modal-stats-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 480px) {
             .stats-grid { grid-template-columns: 1fr; }
             .activity-item { flex-wrap: wrap; gap: 4px; }
             .activity-item .time { margin-left: 44px; font-size: 0.65rem; }
-            .perf-card .perf-stats { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -511,9 +309,7 @@
             <span class="badge"><span class="status-dot"></span> Live</span>
             <span class="name" id="navTeacherName"><i class="fas fa-user-graduate"></i> Loading...</span>
             <span style="color: #555; font-size: 0.8rem;" id="navTeacherSubject">| ...</span>
-            <a href="index.html" style="color: #88dddd; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px; transition: color 0.3s;">
-                <i class="fas fa-arrow-left"></i> Back to Home
-            </a>
+            <!-- ====== MANAGE COURSE BUTTON ====== -->
             <a href="teacher-course-manager.html" 
                style="display:inline-block; padding:5px 16px; border:1px solid #ffcc00; border-radius:30px;
                       color:#ffcc00; text-decoration:none; font-size:0.8rem; font-weight:600;
@@ -522,6 +318,7 @@
                onmouseout="this.style.background='rgba(255,204,0,0.05)'; this.style.color='#ffcc00';">
                 ⚙️ Manage Course
             </a>
+            <!-- ====== LOGOUT BUTTON ====== -->
             <a href="#" id="logoutBtn" style="color: #00ffff; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px;">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
@@ -577,10 +374,10 @@
                 </div>
             </div>
 
-            <!-- RIGHT: TOP ENGAGED + RECENT BOOKINGS -->
+            <!-- RIGHT: ONLINE STUDENTS + UPCOMING -->
             <div style="display: flex; flex-direction: column; gap: 24px;">
 
-                <!-- TOP ENGAGED STUDENTS -->
+                <!-- ONLINE STUDENTS / ENGAGED STUDENTS -->
                 <div class="panel">
                     <div class="panel-header">
                         <h3><i class="fas fa-circle" style="color:#00ff88; font-size:0.6rem;"></i> Top Engaged</h3>
@@ -591,7 +388,7 @@
                     </div>
                 </div>
 
-                <!-- RECENT BOOKINGS -->
+                <!-- UPCOMING SESSIONS / BOOKINGS -->
                 <div class="panel">
                     <div class="panel-header">
                         <h3><i class="fas fa-calendar-alt"></i> Recent Bookings</h3>
@@ -604,41 +401,10 @@
 
             </div>
         </div>
-
-        <!-- ====== STUDENT PERFORMANCE BY LEVEL ====== -->
-        <div class="performance-section">
-            <div class="section-title">
-                <i class="fas fa-chart-pie"></i> Student Performance by Level
-                <span style="font-size:0.7rem; color:#555; font-weight:400;">Click any student for detailed breakdown</span>
-            </div>
-            <div class="performance-grid" id="performanceGrid">
-                <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
-                    <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; color:#00ffff;"></i>
-                    <p style="margin-top:8px;">Loading student performance data...</p>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- ====== MODAL: STUDENT DETAIL ====== -->
-    <div class="modal-overlay" id="studentModal">
-        <div class="modal-content">
-            <h2 id="modalStudentName">Student Name</h2>
-            <p class="modal-sub" id="modalStudentInfo">Engagement Score: --% • Grade: --/4</p>
-            <div class="modal-stats-grid" id="modalStats">
-                <!-- Injected by JS -->
-            </div>
-            <div style="text-align: right; margin-top: 16px;">
-                <button class="close-modal" onclick="closeModal()">
-                    <i class="fas fa-times"></i> Close
-                </button>
-            </div>
-        </div>
     </div>
 
     <!-- ============================================================ -->
-    <!-- ====== JAVASCRIPT ====== -->
+    <!-- ====== ALL JAVASCRIPT (Dashboard + WebSocket) ====== -->
     <!-- ============================================================ -->
     <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.2/dist/socket.io.min.js"></script>
     <script>
@@ -722,12 +488,8 @@
             renderActivityFeed(recentActivity || []);
             renderEngagedStudents(engagementStats || []);
             renderBookings(bookings || []);
-            renderPerformanceGrid(engagementStats || []);
         }
 
-        // ============================================================
-        // ACTIVITY FEED
-        // ============================================================
         function renderActivityFeed(activities) {
             const container = document.getElementById('activityFeed');
             const count = document.getElementById('activityCount');
@@ -753,14 +515,6 @@
                     iconClass = 'click'; emoji = '🔗'; actionText = 'clicked'; targetText = details.link || 'Link';
                 } else if (item.activityType === 'carousel_view') {
                     iconClass = 'search'; emoji = '🔄'; actionText = 'viewed carousel on'; targetText = details.page || 'Home';
-                } else if (item.activityType === 'lesson_view') {
-                    iconClass = 'book'; emoji = '📖'; actionText = 'viewed lesson'; targetText = details.lessonId || 'Lesson';
-                } else if (item.activityType === 'quiz_attempt' || item.activityType === 'quiz_pass') {
-                    iconClass = 'quiz'; emoji = '🧠'; actionText = item.activityType === 'quiz_pass' ? 'passed quiz' : 'took quiz'; targetText = details.quizTitle || 'Quiz';
-                } else if (item.activityType === 'message_sent') {
-                    iconClass = 'message'; emoji = '💬'; actionText = 'sent a message to teacher';
-                } else if (item.activityType === 'activity_practice') {
-                    iconClass = 'activity'; emoji = '✍️'; actionText = 'completed practice activity'; targetText = details.title || 'Practice';
                 }
 
                 const studentName = item.Student ? item.Student.name : 'Anonymous Visitor';
@@ -780,9 +534,6 @@
             }).join('');
         }
 
-        // ============================================================
-        // TOP ENGAGED STUDENTS (FIXED studentId)
-        // ============================================================
         function renderEngagedStudents(students) {
             const container = document.getElementById('onlineStudents');
             const count = document.getElementById('onlineCount');
@@ -798,22 +549,15 @@
                 const studentData = s.Student || s;
                 const name = studentData.name || 'Unknown Student';
                 const actions = s.activityCount || 0;
-                const score = studentData.engagementScore || 0;
-                const scoreLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
-                const studentId = studentData.id || 0;
-                if (!studentId) return ''; // skip invalid
                 return `
-                    <div class="online-student" onclick="showStudentDetails(${studentId})">
+                    <div class="online-student">
                         <span class="name"><i class="fas fa-circle"></i> ${name}</span>
-                        <span class="detail"><span class="highlight">${actions}</span> actions • <span class="score-badge ${scoreLevel}">${Math.round(score)}%</span></span>
+                        <span class="detail"><span class="highlight">${actions}</span> actions</span>
                     </div>
                 `;
             }).join('');
         }
 
-        // ============================================================
-        // RECENT BOOKINGS
-        // ============================================================
         function renderBookings(bookings) {
             const container = document.getElementById('upcomingSessions');
             const count = document.getElementById('upcomingCount');
@@ -840,231 +584,18 @@
         }
 
         // ============================================================
-        // PERFORMANCE GRID (FIXED studentId)
-        // ============================================================
-        function renderPerformanceGrid(students) {
-            const container = document.getElementById('performanceGrid');
-
-            if (students.length === 0) {
-                container.innerHTML = `
-                    <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
-                        <i class="fas fa-users" style="font-size:1.5rem; display:block; margin-bottom:8px;"></i>
-                        <p>No student performance data yet.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const sorted = [...students].sort((a, b) => {
-                const scoreA = a.Student?.engagementScore || 0;
-                const scoreB = b.Student?.engagementScore || 0;
-                return scoreB - scoreA;
-            });
-
-            container.innerHTML = sorted.map(s => {
-                const studentData = s.Student || s;
-                const name = studentData.name || 'Unknown Student';
-                const score = studentData.engagementScore || 0;
-                const scoreLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
-                const actions = s.activityCount || 0;
-                const studentId = studentData.id || 0;
-                if (!studentId) return ''; // skip invalid
-
-                const pageViews = studentData.totalPageViews || 0;
-                const lessonViews = studentData.totalLessonViews || 0;
-                const quizAttempts = studentData.totalQuizAttempts || 0;
-                const messages = studentData.totalMessages || 0;
-                const completed = studentData.totalCompleted || 0;
-
-                return `
-                    <div class="perf-card" onclick="showStudentDetails(${studentId})">
-                        <div class="perf-header">
-                            <span class="name">${name}</span>
-                            <span class="score ${scoreLevel}">${Math.round(score)}%</span>
-                        </div>
-                        <div class="perf-stats">
-                            <div class="stat">
-                                <div class="val participation">${pageViews + (s.linkClicks || 0)}</div>
-                                <div class="label">Participation</div>
-                            </div>
-                            <div class="stat">
-                                <div class="val learning">${lessonViews}</div>
-                                <div class="label">Learning</div>
-                            </div>
-                            <div class="stat">
-                                <div class="val achievement">${completed}</div>
-                                <div class="label">Achievement</div>
-                            </div>
-                        </div>
-                        <div class="perf-bar">
-                            <div class="fill ${scoreLevel}" style="width: ${Math.min(score, 100)}%;"></div>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:0.65rem; color:#555;">
-                            <span>${actions} activities</span>
-                            <span>🔄 ${quizAttempts} quizzes</span>
-                            <span>💬 ${messages} messages</span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // ============================================================
-        // SHOW STUDENT DETAILS MODAL (FIXED)
-        // ============================================================
-        function showStudentDetails(studentId) {
-            const token = localStorage.getItem('authToken');
-            if (!token) {
-                alert('Please log in first.');
-                return;
-            }
-            if (!studentId || studentId === 0) {
-                showModalError('Invalid student ID. Please try again.');
-                return;
-            }
-
-            // Show loading state
-            const modal = document.getElementById('studentModal');
-            const nameEl = document.getElementById('modalStudentName');
-            const infoEl = document.getElementById('modalStudentInfo');
-            const statsEl = document.getElementById('modalStats');
-
-            nameEl.textContent = 'Loading...';
-            infoEl.textContent = 'Fetching student data...';
-            statsEl.innerHTML = `
-                <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
-                    <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; color:#00ffff;"></i>
-                    <p style="margin-top:8px;">Loading student details...</p>
-                </div>
-            `;
-            modal.classList.add('active');
-
-            fetch(`${API_BASE_URL}/api/track/teacher/engagement/${studentId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(res => {
-                if (!res.ok) {
-                    if (res.status === 404) {
-                        throw new Error('Student not found. Please try again.');
-                    }
-                    throw new Error(`Server error (${res.status})`);
-                }
-                return res.json();
-            })
-            .then(result => {
-                console.log('📊 Student data received:', result);
-                if (result.success) {
-                    renderStudentModal(result.data);
-                } else {
-                    showModalError(result.message || 'No data available for this student.');
-                }
-            })
-            .catch(err => {
-                console.error('❌ Error loading student details:', err);
-                showModalError(err.message);
-            });
-        }
-
-        function showModalError(message) {
-            const nameEl = document.getElementById('modalStudentName');
-            const infoEl = document.getElementById('modalStudentInfo');
-            const statsEl = document.getElementById('modalStats');
-            nameEl.textContent = '⚠️ Error';
-            infoEl.textContent = message;
-            statsEl.innerHTML = `
-                <div style="grid-column:1/-1; text-align:center; padding:20px; color:#ff6666;">
-                    <i class="fas fa-exclamation-triangle" style="font-size:1.5rem; display:block; margin-bottom:8px;"></i>
-                    <p>${message}</p>
-                    <p style="font-size:0.8rem; color:#555; margin-top:8px;">Try clicking another student or refresh the page.</p>
-                </div>
-            `;
-        }
-
-        function renderStudentModal(student) {
-            const nameEl = document.getElementById('modalStudentName');
-            const infoEl = document.getElementById('modalStudentInfo');
-            const statsEl = document.getElementById('modalStats');
-
-            nameEl.textContent = student.name || 'Student';
-
-            const score = parseFloat(student.engagementScore) || 0;
-            const grade = Math.round((score / 100) * 4 * 10) / 10;
-            const levelLabel = score >= 70 ? '🌟 Outstanding' : score >= 40 ? '📈 On Track' : '🌱 Getting Started';
-            infoEl.textContent = `Engagement Score: ${Math.round(score)}% • Grade: ${grade}/4 • ${levelLabel}`;
-
-            // Build stats – use defaults if fields missing
-            const stats = [
-                { label: 'Page Views', value: student.totalPageViews ?? 0, color: 'yellow' },
-                { label: 'Lesson Views', value: student.totalLessonViews ?? 0, color: 'cyan' },
-                { label: 'Quiz Attempts', value: student.totalQuizAttempts ?? 0, color: 'pink' },
-                { label: 'Lessons Completed', value: student.totalCompleted ?? 0, color: 'green' },
-                { label: 'Link Clicks', value: student.totalLinkClicks ?? 0, color: 'orange' },
-                { label: 'Messages Sent', value: student.totalMessages ?? 0, color: 'cyan' },
-                { label: 'Practice Activities', value: student.totalPracticeActivities ?? 0, color: 'pink' },
-            ];
-
-            const hasActivity = stats.some(s => s.value > 0);
-
-            if (!hasActivity) {
-                statsEl.innerHTML = `
-                    <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
-                        <i class="fas fa-inbox" style="font-size:2rem; display:block; margin-bottom:12px; color:#333;"></i>
-                        <p style="font-size:1rem; color:#888;">No activity recorded yet</p>
-                        <p style="font-size:0.8rem; color:#555; margin-top:4px;">Once the student starts learning, data will appear here.</p>
-                    </div>
-                `;
-            } else {
-                statsEl.innerHTML = stats.map(stat => `
-                    <div class="modal-stat">
-                        <div class="label">${stat.label}</div>
-                        <div class="value ${stat.color}">${stat.value}</div>
-                    </div>
-                `).join('');
-
-                // Recent activities if available
-                if (student.recentActivities && student.recentActivities.length > 0) {
-                    const recentHtml = `
-                        <div style="grid-column:1/-1; margin-top:12px; border-top:1px solid #1a4a4a; padding-top:12px;">
-                            <div style="color:#88dddd; font-size:0.8rem; font-weight:600; margin-bottom:8px;">📋 Recent Activity</div>
-                            ${student.recentActivities.slice(0, 5).map(act => {
-                                const type = act.activityType.replace('_', ' ');
-                                const time = new Date(act.createdAt).toLocaleString();
-                                return `
-                                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#888; padding:4px 0; border-bottom:1px solid #1a1a1a;">
-                                        <span>${type}</span>
-                                        <span style="color:#555;">${time}</span>
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
-                    `;
-                    statsEl.innerHTML += recentHtml;
-                }
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('studentModal').classList.remove('active');
-        }
-
-        document.getElementById('studentModal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeModal();
-        });
-
-        // ============================================================
-        // ADD SINGLE ACTIVITY TO FEED (WebSocket)
+        // ADD SINGLE ACTIVITY TO FEED (for WebSocket real-time updates)
         // ============================================================
         function addActivityToFeed(activity) {
+            console.log('📝 addActivityToFeed called with:', activity);
+
             const container = document.getElementById('activityFeed');
             const count = document.getElementById('activityCount');
-            if (!container) return;
+
+            if (!container) {
+                console.error('❌ activityFeed element not found');
+                return;
+            }
 
             const emptyState = container.querySelector('.empty-state');
             if (emptyState) emptyState.remove();
@@ -1080,17 +611,15 @@
             let targetText = activityData?.page || 'Page';
 
             if (activity.activityType === 'link_click') {
-                iconClass = 'click'; emoji = '🔗'; actionText = 'clicked'; targetText = activityData?.link || 'Link';
+                iconClass = 'click';
+                emoji = '🔗';
+                actionText = 'clicked';
+                targetText = activityData?.link || 'Link';
             } else if (activity.activityType === 'carousel_view') {
-                iconClass = 'search'; emoji = '🔄'; actionText = 'viewed carousel on'; targetText = activityData?.page || 'Home';
-            } else if (activity.activityType === 'lesson_view') {
-                iconClass = 'book'; emoji = '📖'; actionText = 'viewed lesson'; targetText = activityData?.lessonId || 'Lesson';
-            } else if (activity.activityType === 'quiz_attempt' || activity.activityType === 'quiz_pass') {
-                iconClass = 'quiz'; emoji = '🧠'; actionText = activity.activityType === 'quiz_pass' ? 'passed quiz' : 'took quiz'; targetText = activityData?.quizTitle || 'Quiz';
-            } else if (activity.activityType === 'message_sent') {
-                iconClass = 'message'; emoji = '💬'; actionText = 'sent a message to teacher';
-            } else if (activity.activityType === 'activity_practice') {
-                iconClass = 'activity'; emoji = '✍️'; actionText = 'completed practice activity'; targetText = activityData?.title || 'Practice';
+                iconClass = 'search';
+                emoji = '🔄';
+                actionText = 'viewed carousel on';
+                targetText = activityData?.page || 'Home';
             }
 
             const item = document.createElement('div');
@@ -1115,6 +644,8 @@
             while (container.children.length > 50) {
                 container.removeChild(container.lastChild);
             }
+
+            console.log('✅ Activity added to feed');
         }
 
         // ============================================================
@@ -1136,6 +667,8 @@
                 console.log('📡 Live activity received:', activity);
                 if (typeof addActivityToFeed === 'function') {
                     addActivityToFeed(activity);
+                } else {
+                    console.warn('⚠️ addActivityToFeed is not defined');
                 }
             });
 
@@ -1146,6 +679,8 @@
             socket.on('connect_error', (err) => {
                 console.warn('⚠️ WebSocket connection error:', err.message);
             });
+        } else {
+            console.warn('🔒 No token – WebSocket not connected');
         }
 
         // ============================================================
@@ -1161,6 +696,5 @@
             }, 30000);
         };
     </script>
-
 </body>
 </html>
