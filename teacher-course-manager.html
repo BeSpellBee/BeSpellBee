@@ -221,10 +221,6 @@
             background: rgba(255, 204, 0, 0.1);
             color: #ffcc00;
         }
-        .lesson-item .lesson-info .lesson-type.activity {
-            background: rgba(0, 255, 136, 0.1);
-            color: #00ff88;
-        }
         .lesson-item .lesson-actions {
             display: flex;
             gap: 6px;
@@ -500,6 +496,7 @@
         <!-- Course Editor -->
         <div id="courseEditor">
             <div id="modulesContainer"></div>
+            <!-- The "Add New Module" button is inside renderModules -->
         </div>
 
     </div>
@@ -530,7 +527,7 @@
         </div>
     </div>
 
-    <!-- ====== EDIT MODAL (Module / Lesson / Activity / Quiz) ====== -->
+    <!-- ====== EDIT MODAL (Module / Lesson) ====== -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <h2 id="modalTitle">Add Module</h2>
@@ -546,15 +543,14 @@
                 </div>
 
                 <div class="form-group" id="lessonTitleGroup" style="display:none;">
-                    <label for="lessonTitle">Title</label>
+                    <label for="lessonTitle">Lesson Title</label>
                     <input type="text" id="lessonTitle" placeholder="e.g. Present Tenses Review">
                 </div>
 
                 <div class="form-group" id="lessonTypeGroup" style="display:none;">
-                    <label for="lessonType">Type</label>
+                    <label for="lessonType">Lesson Type</label>
                     <select id="lessonType">
                         <option value="lesson">📖 Lesson</option>
-                        <option value="activity">🎯 Activity</option>
                         <option value="quiz">🧠 Quiz</option>
                     </select>
                 </div>
@@ -779,12 +775,12 @@
         document.getElementById('createCourseModal').addEventListener('click', function(e) { if (e.target === this) closeCreateCourseModal(); });
 
         // ============================================================
-        // DELETE COURSE - SPECIFIC CONFIRMATION
+        // DELETE COURSE
         // ============================================================
         async function confirmDeleteCourse(courseId) {
             const course = courses.find(c => c.id === courseId);
             if (!course) return;
-            if (confirm(`⚠️ Delete the course "${course.title}" and ALL of its content (modules, lessons, activities, and quizzes)? This action CANNOT be undone!`)) {
+            if (confirm(`⚠️ Delete course "${course.title}" and all its content? This cannot be undone.`)) {
                 const success = await deleteCourse(courseId);
                 if (success) {
                     alert('✅ Course deleted.');
@@ -821,9 +817,9 @@
                     orderIndex: 0
                 },
                 {
-                    title: '🎯 Activity',
-                    type: 'activity',
-                    content: '<p><strong>Activity goes here.</strong></p><p>Add exercises, Lumi iframe, or a task for students.</p>',
+                    title: '✍️ Practice Activity',
+                    type: 'lesson',
+                    content: '<p><strong>Practice activity goes here.</strong></p><p>Add exercises, Lumi iframe, or a task for students.</p>',
                     orderIndex: 1
                 },
                 {
@@ -914,12 +910,8 @@
                     html += `<p style="color:#555; font-size:0.85rem; padding:8px 0;">No lessons yet.</p>`;
                 } else {
                     sortedLessons.forEach((lesson, index) => {
-                        const typeLabels = {
-                            'quiz': '🧠 Quiz',
-                            'activity': '🎯 Activity'
-                        };
-                        const typeLabel = typeLabels[lesson.type] || '📖 Lesson';
-                        const typeClass = lesson.type === 'quiz' ? 'quiz' : lesson.type === 'activity' ? 'activity' : '';
+                        const typeLabel = lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson';
+                        const typeClass = lesson.type === 'quiz' ? 'quiz' : '';
                         const isFirst = index === 0;
                         const isLast = index === sortedLessons.length - 1;
                         html += `
@@ -955,11 +947,11 @@
                                 onmouseout="this.style.borderColor='#1a4a4a'; this.style.color='#88dddd';">
                             <i class="fas fa-plus-circle"></i> Lesson
                         </button>
-                        <button class="add-btn" onclick="openAddLessonModalWithType(${mod.id}, 'activity')" 
+                        <button class="add-btn" onclick="openAddLessonModalWithType(${mod.id}, 'practice')" 
                                 style="flex:1; min-width:80px; background:rgba(0,255,255,0.05); border:1px dashed #1a4a4a; color:#88dddd; padding:8px 12px; border-radius:12px; cursor:pointer; transition:all 0.3s;"
                                 onmouseover="this.style.borderColor='#00ffff'; this.style.color='#00ffff';"
                                 onmouseout="this.style.borderColor='#1a4a4a'; this.style.color='#88dddd';">
-                            <i class="fas fa-plus-circle"></i> Activity
+                            <i class="fas fa-plus-circle"></i> Practice Activity
                         </button>
                         <button class="add-btn" onclick="openAddLessonModalWithType(${mod.id}, 'quiz')" 
                                 style="flex:1; min-width:80px; background:rgba(0,255,255,0.05); border:1px dashed #1a4a4a; color:#88dddd; padding:8px 12px; border-radius:12px; cursor:pointer; transition:all 0.3s;"
@@ -1102,22 +1094,15 @@
             document.getElementById('modalDeleteBtn').style.display = 'block';
             document.getElementById('modalDeleteBtn').textContent = '🗑️ Delete Module';
             document.getElementById('modalDeleteBtn').onclick = function() {
-                confirmDeleteModule(moduleId);
+                if (confirm('Delete this module and all its lessons?')) {
+                    confirmDeleteModule(moduleId);
+                }
             };
             document.getElementById('modalOverlay').classList.add('active');
         }
 
-        // ============================================================
-        // DELETE MODULE - SPECIFIC CONFIRMATION
-        // ============================================================
         async function confirmDeleteModule(moduleId) {
-            const module = currentCourseData.modules.find(m => m.id === moduleId);
-            if (!module) return;
-            const lessonCount = module.Lessons ? module.Lessons.length : 0;
-            const msg = lessonCount > 0 
-                ? `⚠️ Delete the module "${module.title}" and all ${lessonCount} lesson(s)/activity(s)/quiz(es) inside it? This CANNOT be undone!`
-                : `⚠️ Delete the module "${module.title}"? This CANNOT be undone!`;
-            if (!confirm(msg)) return;
+            if (!confirm('Delete this module and all its lessons?')) return;
             const success = await deleteModule(moduleId);
             if (success) {
                 closeModal();
@@ -1131,21 +1116,20 @@
         function openAddLessonModalWithType(moduleId, type) {
             resetModal('lesson');
             document.getElementById('editModuleId').value = moduleId;
-            const typeDisplay = type.charAt(0).toUpperCase() + type.slice(1);
-            document.getElementById('modalTitle').textContent = `Add ${typeDisplay}`;
+            document.getElementById('modalTitle').textContent = `Add ${type.charAt(0).toUpperCase() + type.slice(1)}`;
             document.getElementById('modalSub').textContent = `Create a new ${type} for this module.`;
-            document.getElementById('modalSubmitBtn').textContent = `Add ${typeDisplay}`;
+            document.getElementById('modalSubmitBtn').textContent = `Add ${type.charAt(0).toUpperCase() + type.slice(1)}`;
             document.getElementById('modalDeleteBtn').style.display = 'none';
 
-            document.getElementById('lessonType').value = type === 'quiz' ? 'quiz' : type === 'activity' ? 'activity' : 'lesson';
+            document.getElementById('lessonType').value = type === 'quiz' ? 'quiz' : 'lesson';
             const titles = {
                 'lesson': '📖 Lesson',
-                'activity': '🎯 Activity',
+                'practice': '✍️ Practice Activity',
                 'quiz': '🧠 Quiz'
             };
             document.getElementById('lessonTitle').value = titles[type] || 'Lesson';
-            if (type === 'activity') {
-                document.getElementById('lessonContent').value = '<p><strong>Activity</strong></p><p>Add your exercises, Lumi iframe, or tasks here.</p>';
+            if (type === 'practice') {
+                document.getElementById('lessonContent').value = '<p><strong>Practice Activity</strong></p><p>Add your exercises, Lumi iframe, or tasks here.</p>';
             }
 
             document.getElementById('moduleNameGroup').style.display = 'none';
@@ -1186,7 +1170,7 @@
             document.getElementById('editModuleId').value = moduleId;
             document.getElementById('editLessonId').value = lessonId;
             document.getElementById('modalTitle').textContent = 'Edit Lesson';
-            document.getElementById('modalSub').textContent = 'Update this lesson, activity, or quiz.';
+            document.getElementById('modalSub').textContent = 'Update this lesson or quiz.';
             document.getElementById('lessonTitle').value = lesson.title;
             document.getElementById('lessonType').value = lesson.type || 'lesson';
 
@@ -1222,37 +1206,17 @@
 
             document.getElementById('modalSubmitBtn').textContent = 'Save Changes';
             document.getElementById('modalDeleteBtn').style.display = 'block';
-            const typeLabels = {
-                'lesson': 'Lesson',
-                'activity': 'Activity',
-                'quiz': 'Quiz'
-            };
-            const typeLabel = typeLabels[lesson.type] || 'Lesson';
-            document.getElementById('modalDeleteBtn').textContent = `🗑️ Delete ${typeLabel}`;
+            document.getElementById('modalDeleteBtn').textContent = '🗑️ Delete Lesson';
             document.getElementById('modalDeleteBtn').onclick = function() {
-                confirmDeleteLesson(moduleId, lessonId);
+                if (confirm('Delete this lesson permanently?')) {
+                    confirmDeleteLesson(moduleId, lessonId);
+                }
             };
             document.getElementById('modalOverlay').classList.add('active');
         }
 
-        // ============================================================
-        // DELETE LESSON - SPECIFIC CONFIRMATION
-        // ============================================================
         async function confirmDeleteLesson(moduleId, lessonId) {
-            const module = currentCourseData.modules.find(m => m.id === moduleId);
-            if (!module) return;
-            const lesson = module.Lessons.find(l => l.id === lessonId);
-            if (!lesson) return;
-            
-            const typeLabels = {
-                'lesson': '📖 Lesson',
-                'activity': '🎯 Activity',
-                'quiz': '🧠 Quiz'
-            };
-            const typeLabel = typeLabels[lesson.type] || 'Lesson';
-            
-            if (!confirm(`⚠️ Delete this ${typeLabel} titled "${lesson.title}"? This CANNOT be undone!`)) return;
-            
+            if (!confirm('Delete this lesson permanently?')) return;
             const success = await deleteLesson(lessonId);
             if (success) {
                 closeModal();
@@ -1411,7 +1375,7 @@
                     const title = document.getElementById('lessonTitle').value.trim();
                     const lessonType = document.getElementById('lessonType').value;
                     const rawContent = document.getElementById('lessonContent').value;
-                    if (!title) { alert('Title is required.'); return; }
+                    if (!title) { alert('Lesson title is required.'); return; }
 
                     const lessonData = {
                         title,
