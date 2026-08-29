@@ -99,14 +99,26 @@
 
         .course-selector {
             display: flex;
+            flex-wrap: wrap;
             gap: 12px;
             margin-bottom: 24px;
-            flex-wrap: wrap;
+            align-items: center;
         }
-        .course-btn {
-            padding: 10px 24px;
+        .course-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             background: #0d0d0d;
+            border-radius: 40px;
+            padding: 2px 8px 2px 2px;
             border: 1px solid #1a4a4a;
+            transition: border-color 0.3s;
+        }
+        .course-item:hover { border-color: #00ffff; }
+        .course-btn {
+            padding: 8px 18px;
+            background: transparent;
+            border: none;
             border-radius: 40px;
             color: #88dddd;
             font-weight: 600;
@@ -114,13 +126,24 @@
             transition: all 0.3s;
             font-size: 0.9rem;
         }
-        .course-btn:hover { border-color: #00ffff; color: #00ffff; }
+        .course-btn:hover { color: #00ffff; }
         .course-btn.active {
             background: #00ffff;
             color: #000;
-            border-color: #00ffff;
         }
         .course-btn .course-icon { margin-right: 6px; }
+
+        .delete-course-btn {
+            background: transparent;
+            border: none;
+            color: #555;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0 4px;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+        .delete-course-btn:hover { color: #ff4444; }
 
         .module-card {
             background: #121212;
@@ -160,6 +183,14 @@
             border-color: #00ffff;
             color: #00ffff;
         }
+        .module-card .module-header .module-actions .delete-module-btn {
+            border-color: #441a1a;
+            color: #ff6666;
+        }
+        .module-card .module-header .module-actions .delete-module-btn:hover {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
 
         .lesson-item {
             display: flex;
@@ -190,6 +221,10 @@
             background: rgba(255, 204, 0, 0.1);
             color: #ffcc00;
         }
+        .lesson-item .lesson-info .lesson-type.activity {
+            background: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+        }
         .lesson-item .lesson-actions {
             display: flex;
             gap: 6px;
@@ -213,6 +248,14 @@
         .lesson-item .lesson-actions .preview-btn:hover {
             border-color: #ffcc00;
             color: #ffcc00;
+        }
+        .lesson-item .lesson-actions .delete-lesson-btn {
+            border-color: #441a1a;
+            color: #ff6666;
+        }
+        .lesson-item .lesson-actions .delete-lesson-btn:hover {
+            border-color: #ff4444;
+            color: #ff4444;
         }
         .lesson-item .lesson-actions .move-btn {
             padding: 2px 6px;
@@ -402,13 +445,14 @@
             .page-header h1 { font-size: 1.4rem; }
             .module-card .module-header { flex-direction: column; align-items: flex-start; }
             .modal-content { padding: 1.5rem; }
-            .course-btn { padding: 8px 16px; font-size: 0.8rem; }
+            .course-btn { padding: 6px 12px; font-size: 0.8rem; }
             .lesson-item { flex-direction: column; align-items: flex-start; }
             .lesson-item .lesson-actions { width: 100%; justify-content: flex-start; }
             .modal-actions { flex-direction: column; }
             .modal-actions .btn-primary,
             .modal-actions .btn-secondary,
             .modal-actions .btn-danger { width: 100%; text-align: center; }
+            .course-item { width: 100%; justify-content: space-between; }
         }
     </style>
 </head>
@@ -456,9 +500,6 @@
         <!-- Course Editor -->
         <div id="courseEditor">
             <div id="modulesContainer"></div>
-            <button class="add-btn" onclick="openAddModuleModal()">
-                <i class="fas fa-plus-circle"></i> Add New Module
-            </button>
         </div>
 
     </div>
@@ -489,7 +530,7 @@
         </div>
     </div>
 
-    <!-- ====== EDIT MODAL (Module / Lesson) ====== -->
+    <!-- ====== EDIT MODAL (Module / Lesson / Activity / Quiz) ====== -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <h2 id="modalTitle">Add Module</h2>
@@ -505,14 +546,15 @@
                 </div>
 
                 <div class="form-group" id="lessonTitleGroup" style="display:none;">
-                    <label for="lessonTitle">Lesson Title</label>
+                    <label for="lessonTitle">Title</label>
                     <input type="text" id="lessonTitle" placeholder="e.g. Present Tenses Review">
                 </div>
 
                 <div class="form-group" id="lessonTypeGroup" style="display:none;">
-                    <label for="lessonType">Lesson Type</label>
+                    <label for="lessonType">Type</label>
                     <select id="lessonType">
                         <option value="lesson">📖 Lesson</option>
+                        <option value="activity">🎯 Activity</option>
                         <option value="quiz">🧠 Quiz</option>
                     </select>
                 </div>
@@ -555,7 +597,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- JAVASCRIPT -->
+    <!-- JAVASCRIPT – FULLY UPDATED WITH SEAMLESS AUTO‑PPP -->
     <!-- ============================================================ -->
     <script>
         // ============================================================
@@ -614,6 +656,19 @@
             } catch (error) { console.error('Error creating course:', error); alert('Network error creating course.'); return null; }
         }
 
+        async function deleteCourse(courseId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/courses/${courseId}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+                const data = await response.json();
+                if (data.success) return true;
+                alert('Failed to delete course: ' + (data.message || 'Unknown error'));
+                return false;
+            } catch (error) { console.error('Error deleting course:', error); alert('Network error deleting course.'); return false; }
+        }
+
         async function createModule(courseId, title) {
             try {
                 const response = await fetch(`${API_BASE_URL}/api/teacher/courses/${courseId}/modules`, {
@@ -657,16 +712,23 @@
 
         async function createLesson(moduleId, lessonData) {
             try {
+                console.log(`📤 Creating lesson in module ${moduleId}:`, lessonData.title);
                 const response = await fetch(`${API_BASE_URL}/api/teacher/modules/${moduleId}/lessons`, {
                     method: 'POST',
                     headers: getAuthHeaders(),
                     body: JSON.stringify(lessonData)
                 });
                 const data = await response.json();
-                if (data.success) return data.data;
-                alert('Failed to create lesson: ' + (data.message || 'Unknown error'));
+                if (data.success) {
+                    console.log(`✅ Lesson created: ${lessonData.title}`);
+                    return data.data;
+                }
+                console.error(`❌ Failed to create lesson "${lessonData.title}":`, data.message);
                 return null;
-            } catch (error) { console.error('Error creating lesson:', error); alert('Network error creating lesson.'); return null; }
+            } catch (error) {
+                console.error(`❌ Network error creating lesson "${lessonData.title}":`, error);
+                return null;
+            }
         }
 
         async function updateLesson(lessonId, lessonData) {
@@ -697,6 +759,33 @@
         }
 
         // ============================================================
+        // CONFIRM DELETE COURSE
+        // ============================================================
+        async function confirmDeleteCourse(courseId) {
+            const course = courses.find(c => c.id === courseId);
+            if (!course) return;
+            if (!confirm(`⚠️ Delete the course "${course.title}" and ALL of its content (modules, lessons, activities, quizzes)? This CANNOT be undone!`)) return;
+            const success = await deleteCourse(courseId);
+            if (success) {
+                alert('✅ Course deleted.');
+                await fetchCourses();
+                renderCourseSelector();
+                if (courses.length > 0) {
+                    await selectCourse(courses[0].id);
+                } else {
+                    currentCourseId = null;
+                    currentCourseData = null;
+                    document.getElementById('modulesContainer').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-plus-circle"></i>
+                            <p>You don't have any courses yet. Click "Create New Course" to get started.</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // ============================================================
         // CREATE COURSE MODAL (with auto-select)
         // ============================================================
         function openCreateCourseModal() {
@@ -724,52 +813,6 @@
         document.getElementById('createCourseModal').addEventListener('click', function(e) { if (e.target === this) closeCreateCourseModal(); });
 
         // ============================================================
-        // PPP TEMPLATE – always returns the module (even if lessons fail)
-        // ============================================================
-        async function createModuleWithPlaceholders(courseId, title) {
-            const module = await createModule(courseId, title);
-            if (!module) return null;
-
-            const placeholders = [
-                {
-                    title: '📖 Lesson',
-                    type: 'lesson',
-                    content: '<p><strong>Lesson content goes here.</strong></p><p>Add your presentation, text, or embed a video.</p>',
-                    orderIndex: 0
-                },
-                {
-                    title: '✍️ Practice Activity',
-                    type: 'lesson',
-                    content: '<p><strong>Practice activity goes here.</strong></p><p>Add exercises, Lumi iframe, or a task for students.</p>',
-                    orderIndex: 1
-                },
-                {
-                    title: '🧠 Quiz',
-                    type: 'quiz',
-                    questions: [
-                        { question: 'Question 1?', options: ['Option A', 'Option B', 'Option C'], correct: 0 },
-                        { question: 'Question 2?', options: ['Option A', 'Option B', 'Option C'], correct: 1 }
-                    ],
-                    orderIndex: 2
-                }
-            ];
-
-            let allSuccess = true;
-            for (const data of placeholders) {
-                const result = await createLesson(module.id, data);
-                if (!result) {
-                    allSuccess = false;
-                    console.warn('Failed to create placeholder lesson:', data.title);
-                }
-            }
-            if (!allSuccess) {
-                alert('⚠️ Some placeholder lessons were not created. You can add them manually.');
-            }
-            // ✅ Always return the module
-            return module;
-        }
-
-        // ============================================================
         // RENDER FUNCTIONS
         // ============================================================
         function renderCourseSelector() {
@@ -782,188 +825,172 @@
             courses.forEach(course => {
                 const active = course.id === currentCourseId ? 'active' : '';
                 html += `
-                    <button class="course-btn ${active}" data-course-id="${course.id}" onclick="selectCourse(${course.id})">
-                        <span class="course-icon">${course.icon || '📚'}</span> ${course.title}
-                    </button>
+                    <div class="course-item">
+                        <button class="course-btn ${active}" data-course-id="${course.id}" onclick="selectCourse(${course.id})">
+                            <span class="course-icon">${course.icon || '📚'}</span> ${course.title}
+                        </button>
+                        <button class="delete-course-btn" onclick="confirmDeleteCourse(${course.id})" title="Delete course">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
                 `;
             });
             container.innerHTML = html;
         }
 
         function renderModules() {
-    const container = document.getElementById('modulesContainer');
-    if (!container) return;
+            const container = document.getElementById('modulesContainer');
+            if (!container) return;
 
-    if (!currentCourseData || !currentCourseData.modules || currentCourseData.modules.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-folder-open"></i>
-                <p>No modules yet. Click "Add New Module" to get started.</p>
-            </div>
-        `;
-        return;
-    }
-
-    let html = '';
-    currentCourseData.modules.forEach(mod => {
-        html += `
-            <div class="module-card">
-                <div class="module-header">
-                    <h3><i class="fas fa-folder"></i> ${mod.title}</h3>
-                    <div class="module-actions">
-                        <button onclick="editModule(${mod.id})"><i class="fas fa-edit"></i> Edit</button>
+            if (!currentCourseData || !currentCourseData.modules || currentCourseData.modules.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <p>No modules yet. Click "Add New Module" to get started.</p>
                     </div>
-                </div>
-                <div class="module-lessons">
-        `;
+                    <button class="add-btn" onclick="openAddModuleModal()" style="margin-top: 10px;">
+                        <i class="fas fa-plus-circle"></i> Add New Module
+                    </button>
+                `;
+                return;
+            }
 
-        // Sort lessons by orderIndex
-        const sortedLessons = mod.Lessons ? [...mod.Lessons].sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0)) : [];
-
-        if (sortedLessons.length === 0) {
-            html += `<p style="color:#555; font-size:0.85rem; padding:8px 0;">No lessons yet.</p>`;
-        } else {
-            sortedLessons.forEach((lesson, index) => {
-                const typeLabel = lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson';
-                const typeClass = lesson.type === 'quiz' ? 'quiz' : '';
-                const isFirst = index === 0;
-                const isLast = index === sortedLessons.length - 1;
+            let html = '';
+            currentCourseData.modules.forEach(mod => {
                 html += `
-                    <div class="lesson-item" data-lesson-id="${lesson.id}">
-                        <div class="lesson-info">
-                            <span>${lesson.title}</span>
-                            <span class="lesson-type ${typeClass}">${typeLabel}</span>
+                    <div class="module-card">
+                        <div class="module-header">
+                            <h3><i class="fas fa-folder"></i> ${mod.title}</h3>
+                            <div class="module-actions">
+                                <button onclick="editModule(${mod.id})"><i class="fas fa-edit"></i> Edit</button>
+                                <button class="delete-module-btn" onclick="confirmDeleteModule(${mod.id})"><i class="fas fa-trash"></i> Delete</button>
+                            </div>
                         </div>
-                        <div class="lesson-actions">
-                            <button class="preview-btn" onclick="previewLesson(${mod.id}, ${lesson.id})" title="Preview Lesson">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button onclick="editLesson(${mod.id}, ${lesson.id})"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="move-btn" onclick="moveLesson(${mod.id}, ${lesson.id}, -1)" title="Move Up" ${isFirst ? 'disabled' : ''}>
-                                <i class="fas fa-chevron-up"></i>
-                            </button>
-                            <button class="move-btn" onclick="moveLesson(${mod.id}, ${lesson.id}, 1)" title="Move Down" ${isLast ? 'disabled' : ''}>
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
+                        <div class="module-lessons">
+                `;
+
+                const sortedLessons = mod.Lessons ? [...mod.Lessons].sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0)) : [];
+
+                if (sortedLessons.length === 0) {
+                    html += `<p style="color:#555; font-size:0.85rem; padding:8px 0;">No lessons yet.</p>`;
+                } else {
+                    sortedLessons.forEach((lesson, index) => {
+                        const typeLabels = {
+                            'quiz': '🧠 Quiz',
+                            'activity': '🎯 Activity'
+                        };
+                        const typeLabel = typeLabels[lesson.type] || '📖 Lesson';
+                        const typeClass = lesson.type === 'quiz' ? 'quiz' : lesson.type === 'activity' ? 'activity' : '';
+                        const isFirst = index === 0;
+                        const isLast = index === sortedLessons.length - 1;
+                        html += `
+                            <div class="lesson-item" data-lesson-id="${lesson.id}">
+                                <div class="lesson-info">
+                                    <span>${lesson.title}</span>
+                                    <span class="lesson-type ${typeClass}">${typeLabel}</span>
+                                </div>
+                                <div class="lesson-actions">
+                                    <button class="preview-btn" onclick="previewLesson(${mod.id}, ${lesson.id})" title="Preview Lesson">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button onclick="editLesson(${mod.id}, ${lesson.id})"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="delete-lesson-btn" onclick="confirmDeleteLesson(${mod.id}, ${lesson.id})"><i class="fas fa-trash"></i></button>
+                                    <button class="move-btn" onclick="moveLesson(${mod.id}, ${lesson.id}, -1)" title="Move Up" ${isFirst ? 'disabled' : ''}>
+                                        <i class="fas fa-chevron-up"></i>
+                                    </button>
+                                    <button class="move-btn" onclick="moveLesson(${mod.id}, ${lesson.id}, 1)" title="Move Down" ${isLast ? 'disabled' : ''}>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                // Three separate "+" buttons
+                html += `
+                    <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+                        <button class="add-btn" onclick="openAddLessonModalWithType(${mod.id}, 'lesson')" 
+                                style="flex:1; min-width:80px; background:rgba(0,255,255,0.05); border:1px dashed #1a4a4a; color:#88dddd; padding:8px 12px; border-radius:12px; cursor:pointer; transition:all 0.3s;"
+                                onmouseover="this.style.borderColor='#00ffff'; this.style.color='#00ffff';"
+                                onmouseout="this.style.borderColor='#1a4a4a'; this.style.color='#88dddd';">
+                            <i class="fas fa-plus-circle"></i> Lesson
+                        </button>
+                        <button class="add-btn" onclick="openAddLessonModalWithType(${mod.id}, 'activity')" 
+                                style="flex:1; min-width:80px; background:rgba(0,255,255,0.05); border:1px dashed #1a4a4a; color:#88dddd; padding:8px 12px; border-radius:12px; cursor:pointer; transition:all 0.3s;"
+                                onmouseover="this.style.borderColor='#00ffff'; this.style.color='#00ffff';"
+                                onmouseout="this.style.borderColor='#1a4a4a'; this.style.color='#88dddd';">
+                            <i class="fas fa-plus-circle"></i> Activity
+                        </button>
+                        <button class="add-btn" onclick="openAddLessonModalWithType(${mod.id}, 'quiz')" 
+                                style="flex:1; min-width:80px; background:rgba(0,255,255,0.05); border:1px dashed #1a4a4a; color:#88dddd; padding:8px 12px; border-radius:12px; cursor:pointer; transition:all 0.3s;"
+                                onmouseover="this.style.borderColor='#00ffff'; this.style.color='#00ffff';"
+                                onmouseout="this.style.borderColor='#1a4a4a'; this.style.color='#88dddd';">
+                            <i class="fas fa-plus-circle"></i> Quiz
+                        </button>
+                    </div>
+                `;
+
+                html += `
                         </div>
                     </div>
                 `;
             });
+
+            container.innerHTML = html;
         }
-
-        // ============================================================
-        // THREE SEPARATE "+" BUTTONS
-        // ============================================================
-        html += `
-            <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
-                <button class="add-btn" onclick="openAddLessonModalWithType(${mod.id}, 'lesson')" 
-                        style="flex:1; min-width:80px; background:rgba(0,255,255,0.05); border:1px dashed #1a4a4a; color:#88dddd; padding:8px 12px; border-radius:12px; cursor:pointer; transition:all 0.3s;"
-                        onmouseover="this.style.borderColor='#00ffff'; this.style.color='#00ffff';"
-                        onmouseout="this.style.borderColor='#1a4a4a'; this.style.color='#88dddd';">
-                    <i class="fas fa-plus-circle"></i> Lesson
-                </button>
-                <button class="add-btn" onclick="openAddLessonModalWithType(${mod.id}, 'practice')" 
-                        style="flex:1; min-width:80px; background:rgba(0,255,255,0.05); border:1px dashed #1a4a4a; color:#88dddd; padding:8px 12px; border-radius:12px; cursor:pointer; transition:all 0.3s;"
-                        onmouseover="this.style.borderColor='#00ffff'; this.style.color='#00ffff';"
-                        onmouseout="this.style.borderColor='#1a4a4a'; this.style.color='#88dddd';">
-                    <i class="fas fa-plus-circle"></i> Practice Activity
-                </button>
-                <button class="add-btn" onclick="openAddLessonModalWithType(${mod.id}, 'quiz')" 
-                        style="flex:1; min-width:80px; background:rgba(0,255,255,0.05); border:1px dashed #1a4a4a; color:#88dddd; padding:8px 12px; border-radius:12px; cursor:pointer; transition:all 0.3s;"
-                        onmouseover="this.style.borderColor='#00ffff'; this.style.color='#00ffff';"
-                        onmouseout="this.style.borderColor='#1a4a4a'; this.style.color='#88dddd';">
-                    <i class="fas fa-plus-circle"></i> Quiz
-                </button>
-            </div>
-        `;
-
-        html += `
-                </div>
-            </div>
-        `;
-    });
-
-    container.innerHTML = html;
-}
 
         // ============================================================
         // COURSE SELECTION
         // ============================================================
         async function selectCourse(courseId) {
-    console.log('🔄 selectCourse called with ID:', courseId);
-    currentCourseId = courseId;
+            console.log('🔄 selectCourse called with ID:', courseId);
+            currentCourseId = courseId;
 
-    document.querySelectorAll('.course-btn').forEach(btn => {
-        btn.classList.toggle('active', parseInt(btn.dataset.courseId) === courseId);
-    });
+            document.querySelectorAll('.course-btn').forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.courseId) === courseId);
+            });
 
-    console.log('📡 Fetching course data for ID:', courseId);
-    const courseData = await fetchCourse(courseId);
-    console.log('📦 Course data received:', courseData);
-
-    if (courseData) {
-        // ✅ Ensure modules exists (even if empty)
-        if (!courseData.modules) {
-            courseData.modules = [];
+            const courseData = await fetchCourse(courseId);
+            if (courseData) {
+                if (!courseData.modules) courseData.modules = [];
+                currentCourseData = courseData;
+                renderModules();
+            } else {
+                currentCourseData = null;
+                document.getElementById('modulesContainer').innerHTML = `<p style="color:#ff4444;">Error loading course data.</p>`;
+            }
         }
-        currentCourseData = courseData;
-        console.log('✅ currentCourseData set, modules:', currentCourseData.modules.length);
-        renderModules();
-    } else {
-        currentCourseData = null;
-        console.error('❌ No course data received');
-        document.getElementById('modulesContainer').innerHTML = `<p style="color:#ff4444;">Error loading course data.</p>`;
-    }
-}
 
         // ============================================================
         // MOVE LESSON
         // ============================================================
-       async function moveLesson(moduleId, lessonId, direction) {
-    console.log(`🔄 Moving lesson ${lessonId} direction: ${direction}`);
-    if (!currentCourseData) return;
+        async function moveLesson(moduleId, lessonId, direction) {
+            if (!currentCourseData) return;
+            const module = currentCourseData.modules.find(m => m.id === moduleId);
+            if (!module) return;
+            const lessons = module.Lessons || [];
+            const lessonIndex = lessons.findIndex(l => l.id === lessonId);
+            if (lessonIndex === -1) return;
+            const newIndex = lessonIndex + direction;
+            if (newIndex < 0 || newIndex >= lessons.length) return;
 
-    const module = currentCourseData.modules.find(m => m.id === moduleId);
-    if (!module) {
-        console.error('❌ Module not found:', moduleId);
-        return;
-    }
+            const lesson = lessons[lessonIndex];
+            const otherLesson = lessons[newIndex];
+            const tempOrder = lesson.orderIndex;
+            lesson.orderIndex = otherLesson.orderIndex;
+            otherLesson.orderIndex = tempOrder;
 
-    const lessons = module.Lessons || [];
-    const lessonIndex = lessons.findIndex(l => l.id === lessonId);
-    if (lessonIndex === -1) {
-        console.error('❌ Lesson not found:', lessonId);
-        return;
-    }
-
-    const newIndex = lessonIndex + direction;
-    if (newIndex < 0 || newIndex >= lessons.length) {
-        console.warn('⚠️ Cannot move lesson – at edge');
-        return;
-    }
-
-    // Swap orderIndex
-    const lesson = lessons[lessonIndex];
-    const otherLesson = lessons[newIndex];
-    const tempOrder = lesson.orderIndex;
-    lesson.orderIndex = otherLesson.orderIndex;
-    otherLesson.orderIndex = tempOrder;
-
-    // Update both lessons in the database
-    const update1 = await updateLesson(lesson.id, { orderIndex: lesson.orderIndex });
-    const update2 = await updateLesson(otherLesson.id, { orderIndex: otherLesson.orderIndex });
-
-    if (update1 && update2) {
-        console.log('✅ Lessons reordered successfully');
-        await selectCourse(currentCourseId);
-    } else {
-        console.error('❌ Failed to update lesson order');
-        alert('Failed to reorder lessons. Please try again.');
-        // Revert the local changes
-        lesson.orderIndex = otherLesson.orderIndex;
-        otherLesson.orderIndex = tempOrder;
-    }
-}
+            const update1 = await updateLesson(lesson.id, { orderIndex: lesson.orderIndex });
+            const update2 = await updateLesson(otherLesson.id, { orderIndex: otherLesson.orderIndex });
+            if (update1 && update2) {
+                await selectCourse(currentCourseId);
+            } else {
+                alert('Failed to reorder lessons. Please try again.');
+                lesson.orderIndex = otherLesson.orderIndex;
+                otherLesson.orderIndex = tempOrder;
+            }
+        }
 
         // ============================================================
         // PREVIEW LESSON
@@ -1015,64 +1042,10 @@
             document.getElementById('modalDeleteBtn').style.display = 'none';
             document.getElementById('modalOverlay').classList.add('active');
         }
-        function openAddLessonModalWithType(moduleId, type) {
-    resetModal('lesson');
-    document.getElementById('editModuleId').value = moduleId;
-    document.getElementById('modalTitle').textContent = `Add ${type.charAt(0).toUpperCase() + type.slice(1)}`;
-    document.getElementById('modalSub').textContent = `Create a new ${type} for this module.`;
-    document.getElementById('modalSubmitBtn').textContent = `Add ${type.charAt(0).toUpperCase() + type.slice(1)}`;
-    document.getElementById('modalDeleteBtn').style.display = 'none';
-
-    // Pre-fill the lesson type
-    document.getElementById('lessonType').value = type === 'quiz' ? 'quiz' : 'lesson';
-
-    // Pre-fill the title based on type
-    const titles = {
-        'lesson': '📖 Lesson',
-        'practice': '✍️ Practice Activity',
-        'quiz': '🧠 Quiz'
-    };
-    document.getElementById('lessonTitle').value = titles[type] || 'Lesson';
-
-    // Pre-fill content for practice activities
-    if (type === 'practice') {
-        document.getElementById('lessonContent').value = '<p><strong>Practice Activity</strong></p><p>Add your exercises, Lumi iframe, or tasks here.</p>';
-    }
-
-    // Show/hide fields based on type
-    document.getElementById('moduleNameGroup').style.display = 'none';
-    document.getElementById('lessonTitleGroup').style.display = 'block';
-    document.getElementById('lessonTypeGroup').style.display = type !== 'quiz' ? 'none' : 'block';
-    document.getElementById('lessonContentGroup').style.display = type === 'quiz' ? 'none' : 'block';
-    document.getElementById('quizQuestionsGroup').style.display = type === 'quiz' ? 'block' : 'none';
-
-    // Reset quiz questions if it's a quiz
-    if (type === 'quiz') {
-        document.getElementById('quizQuestionsContainer').innerHTML = `
-            <div class="question-item" style="background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;">
-                <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
-                <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                    <input type="text" placeholder="Option A" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
-                    <input type="text" placeholder="Option B" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
-                    <input type="text" placeholder="Option C" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
-                    <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
-                        <option value="0">A</option>
-                        <option value="1">B</option>
-                        <option value="2">C</option>
-                    </select>
-                    <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
-                </div>
-            </div>
-        `;
-    }
-
-    document.getElementById('modalOverlay').classList.add('active');
-}
 
         function editModule(moduleId) {
             const module = currentCourseData.modules.find(m => m.id === moduleId);
             if (!module) return;
-
             resetModal('module');
             document.getElementById('editModuleId').value = moduleId;
             document.getElementById('modalTitle').textContent = 'Edit Module';
@@ -1082,14 +1055,19 @@
             document.getElementById('modalDeleteBtn').style.display = 'block';
             document.getElementById('modalDeleteBtn').textContent = '🗑️ Delete Module';
             document.getElementById('modalDeleteBtn').onclick = function() {
-                if (confirm('Delete this module and all its lessons?')) {
-                    confirmDeleteModule(moduleId);
-                }
+                confirmDeleteModule(moduleId);
             };
             document.getElementById('modalOverlay').classList.add('active');
         }
 
         async function confirmDeleteModule(moduleId) {
+            const module = currentCourseData.modules.find(m => m.id === moduleId);
+            if (!module) return;
+            const lessonCount = module.Lessons ? module.Lessons.length : 0;
+            const msg = lessonCount > 0 
+                ? `⚠️ Delete the module "${module.title}" and all ${lessonCount} lesson(s)/activity(s)/quiz(es) inside it? This CANNOT be undone!`
+                : `⚠️ Delete the module "${module.title}"? This CANNOT be undone!`;
+            if (!confirm(msg)) return;
             const success = await deleteModule(moduleId);
             if (success) {
                 closeModal();
@@ -1100,13 +1078,51 @@
         // ============================================================
         // LESSON CRUD
         // ============================================================
-        function openAddLessonModal(moduleId) {
+        function openAddLessonModalWithType(moduleId, type) {
             resetModal('lesson');
             document.getElementById('editModuleId').value = moduleId;
-            document.getElementById('modalTitle').textContent = 'Add Lesson';
-            document.getElementById('modalSub').textContent = 'Create a new lesson or quiz.';
-            document.getElementById('modalSubmitBtn').textContent = 'Add Lesson';
+            const typeDisplay = type.charAt(0).toUpperCase() + type.slice(1);
+            document.getElementById('modalTitle').textContent = `Add ${typeDisplay}`;
+            document.getElementById('modalSub').textContent = `Create a new ${type} for this module.`;
+            document.getElementById('modalSubmitBtn').textContent = `Add ${typeDisplay}`;
             document.getElementById('modalDeleteBtn').style.display = 'none';
+
+            document.getElementById('lessonType').value = type === 'quiz' ? 'quiz' : type === 'activity' ? 'activity' : 'lesson';
+            const titles = {
+                'lesson': '📖 Lesson',
+                'activity': '🎯 Activity',
+                'quiz': '🧠 Quiz'
+            };
+            document.getElementById('lessonTitle').value = titles[type] || 'Lesson';
+            if (type === 'activity') {
+                document.getElementById('lessonContent').value = '<p><strong>Activity</strong></p><p>Add your exercises, Lumi iframe, or tasks here.</p>';
+            }
+
+            document.getElementById('moduleNameGroup').style.display = 'none';
+            document.getElementById('lessonTitleGroup').style.display = 'block';
+            document.getElementById('lessonTypeGroup').style.display = type !== 'quiz' ? 'none' : 'block';
+            document.getElementById('lessonContentGroup').style.display = type === 'quiz' ? 'none' : 'block';
+            document.getElementById('quizQuestionsGroup').style.display = type === 'quiz' ? 'block' : 'none';
+
+            if (type === 'quiz') {
+                document.getElementById('quizQuestionsContainer').innerHTML = `
+                    <div class="question-item" style="background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;">
+                        <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                            <input type="text" placeholder="Option A" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                            <input type="text" placeholder="Option B" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                            <input type="text" placeholder="Option C" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                            <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                <option value="0">A</option>
+                                <option value="1">B</option>
+                                <option value="2">C</option>
+                            </select>
+                            <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
+                        </div>
+                    </div>
+                `;
+            }
+
             document.getElementById('modalOverlay').classList.add('active');
         }
 
@@ -1120,7 +1136,7 @@
             document.getElementById('editModuleId').value = moduleId;
             document.getElementById('editLessonId').value = lessonId;
             document.getElementById('modalTitle').textContent = 'Edit Lesson';
-            document.getElementById('modalSub').textContent = 'Update this lesson or quiz.';
+            document.getElementById('modalSub').textContent = 'Update this lesson, activity, or quiz.';
             document.getElementById('lessonTitle').value = lesson.title;
             document.getElementById('lessonType').value = lesson.type || 'lesson';
 
@@ -1156,16 +1172,31 @@
 
             document.getElementById('modalSubmitBtn').textContent = 'Save Changes';
             document.getElementById('modalDeleteBtn').style.display = 'block';
-            document.getElementById('modalDeleteBtn').textContent = '🗑️ Delete Lesson';
+            const typeLabels = {
+                'lesson': 'Lesson',
+                'activity': 'Activity',
+                'quiz': 'Quiz'
+            };
+            const typeLabel = typeLabels[lesson.type] || 'Lesson';
+            document.getElementById('modalDeleteBtn').textContent = `🗑️ Delete ${typeLabel}`;
             document.getElementById('modalDeleteBtn').onclick = function() {
-                if (confirm('Delete this lesson permanently?')) {
-                    confirmDeleteLesson(lessonId);
-                }
+                confirmDeleteLesson(moduleId, lessonId);
             };
             document.getElementById('modalOverlay').classList.add('active');
         }
 
-        async function confirmDeleteLesson(lessonId) {
+        async function confirmDeleteLesson(moduleId, lessonId) {
+            const module = currentCourseData.modules.find(m => m.id === moduleId);
+            if (!module) return;
+            const lesson = module.Lessons.find(l => l.id === lessonId);
+            if (!lesson) return;
+            const typeLabels = {
+                'lesson': '📖 Lesson',
+                'activity': '🎯 Activity',
+                'quiz': '🧠 Quiz'
+            };
+            const typeLabel = typeLabels[lesson.type] || 'Lesson';
+            if (!confirm(`⚠️ Delete this ${typeLabel} titled "${lesson.title}"? This CANNOT be undone!`)) return;
             const success = await deleteLesson(lessonId);
             if (success) {
                 closeModal();
@@ -1282,7 +1313,7 @@
         }
 
         // ============================================================
-        // MODAL SUBMIT (with automatic PPP and always refresh)
+        // MODAL SUBMIT – SEAMLESS AUTO‑PPP RESTORED
         // ============================================================
         document.getElementById('modalForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -1305,20 +1336,75 @@
 
                     let result;
                     if (moduleId) {
+                        // EDITING existing module
                         result = await updateModule(parseInt(moduleId), title);
+                        closeModal();
+                        if (result) {
+                            await selectCourse(currentCourseId);
+                        }
                     } else {
-                        result = await createModuleWithPlaceholders(currentCourseId, title);
-                    }
-                    // ✅ ALWAYS close modal and refresh
-                    closeModal();
-                    if (result) {
+                        // ✅ NEW MODULE – CREATE WITH PPP TEMPLATE
+                        console.log('📦 Creating module with PPP template...');
+                        
+                        // Step 1: Create the module
+                        const module = await createModule(currentCourseId, title);
+                        if (!module) {
+                            alert('Failed to create module. Please try again.');
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = originalText;
+                            return;
+                        }
+
+                        console.log('✅ Module created:', module);
+
+                        // Step 2: Create PPP placeholders (Lesson + Activity + Quiz)
+                        const placeholders = [
+                            {
+                                title: '📖 Lesson',
+                                type: 'lesson',
+                                content: '<p><strong>Lesson content goes here.</strong></p><p>Add your presentation, text, or embed a video.</p>',
+                                orderIndex: 0
+                            },
+                            {
+                                title: '🎯 Activity',
+                                type: 'activity',
+                                content: '<p><strong>Activity goes here.</strong></p><p>Add exercises, Lumi iframe, or a task for students.</p>',
+                                orderIndex: 1
+                            },
+                            {
+                                title: '🧠 Quiz',
+                                type: 'quiz',
+                                questions: [
+                                    { question: 'Sample Question 1?', options: ['Option A', 'Option B', 'Option C'], correct: 0 },
+                                    { question: 'Sample Question 2?', options: ['Option A', 'Option B', 'Option C'], correct: 1 }
+                                ],
+                                orderIndex: 2
+                            }
+                        ];
+
+                        let allCreated = true;
+                        for (const data of placeholders) {
+                            console.log(`📤 Creating: ${data.title}`);
+                            const lesson = await createLesson(module.id, data);
+                            if (!lesson) {
+                                console.error(`❌ Failed to create: ${data.title}`);
+                                allCreated = false;
+                            } else {
+                                console.log(`✅ Created: ${data.title}`);
+                            }
+                        }
+
+                        closeModal();
+
+                        if (!allCreated) {
+                            alert('⚠️ Module created but some PPP items failed. You can add them manually using the buttons below the module.');
+                        } else {
+                            console.log('✅ All PPP items created successfully!');
+                            // Optional: show success briefly
+                        }
+
+                        // ✅ CRITICAL: Refresh the course data to show the new module + lessons
                         await selectCourse(currentCourseId);
-                    } else {
-                        // If result is null, module creation failed entirely – but still try to refresh
-                        await fetchCourses();
-                        renderCourseSelector();
-                        if (currentCourseId) await selectCourse(currentCourseId);
-                        else alert('Failed to create module. Please try again.');
                     }
                 } else if (type === 'lesson') {
                     const moduleId = document.getElementById('editModuleId').value;
