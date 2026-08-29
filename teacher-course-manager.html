@@ -1344,76 +1344,31 @@
                         return; 
                     }
 
-                    if (moduleId) {
-                        // EDITING existing module
-                        const result = await updateModule(parseInt(moduleId), title);
-                        closeModal();
-                        if (result) {
-                            await selectCourse(currentCourseId);
-                        }
-                    } else {
-                        // ✅ NEW MODULE – CREATE WITH PPP TEMPLATE
-                        console.log('📦 Creating module with PPP template...');
+                   if (moduleId) {
+    // EDITING existing module
+    const result = await updateModule(parseInt(moduleId), title);
+    closeModal();
+    if (result) {
+        await selectCourse(currentCourseId);
+    }
+} else {
+    // ✅ NEW MODULE - Backend handles PPP template automatically!
+    console.log('📦 Creating module (backend adds PPP template)...');
+    
+    const module = await createModule(currentCourseId, title);
+    if (!module) {
+        alert('Failed to create module. Please try again.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+        return;
+    }
 
-                        // Step 1: Create the module
-                        const module = await createModule(currentCourseId, title);
-                        if (!module) {
-                            alert('Failed to create module. Please try again.');
-                            submitBtn.disabled = false;
-                            submitBtn.textContent = originalText;
-                            return;
-                        }
-
-                        console.log('✅ Module created:', module);
-
-                        // Step 2: Create PPP placeholders (Lesson + Activity + Quiz)
-                        const placeholders = [
-                            {
-                                title: '📖 Lesson: ' + title,
-                                type: 'lesson',
-                                content: '<p><strong>📖 ' + title + ' - Lesson</strong></p><p>Add your presentation, text, or embed a video here.</p><p><em>This is the Presentation phase of PPP.</em></p>',
-                                orderIndex: 0
-                            },
-                            {
-                                title: '🎯 Activity: ' + title,
-                                type: 'activity',
-                                content: '<p><strong>🎯 ' + title + ' - Practice Activity</strong></p><p>Add exercises, Lumi iframe, or tasks for students to practice.</p><p><em>This is the Practice phase of PPP.</em></p>',
-                                orderIndex: 1
-                            },
-                            {
-                                title: '🧠 Quiz: ' + title,
-                                type: 'quiz',
-                                questions: [
-                                    { question: 'What is the main topic of this module?', options: ['Option A', 'Option B', 'Option C'], correct: 0 },
-                                    { question: 'Which concept is most important?', options: ['Option A', 'Option B', 'Option C'], correct: 1 }
-                                ],
-                                orderIndex: 2
-                            }
-                        ];
-
-                        let allCreated = true;
-                        for (const data of placeholders) {
-                            console.log(`📤 Creating: ${data.title}`);
-                            const lesson = await createLesson(module.id, data);
-                            if (!lesson) {
-                                console.error(`❌ Failed to create: ${data.title}`);
-                                allCreated = false;
-                            } else {
-                                console.log(`✅ Created: ${data.title}`);
-                            }
-                        }
-
-                        closeModal();
-
-                        if (!allCreated) {
-                            alert('⚠️ Module created but some PPP items failed. You can add them manually using the buttons below the module.');
-                        } else {
-                            console.log('✅ All PPP items created successfully!');
-                        }
-
-                        // ✅ CRITICAL: Refresh the course data to show the new module + lessons
-                        await selectCourse(currentCourseId);
-                    }
+    console.log('✅ Module created with template:', module);
+    closeModal();
+    
+    // Refresh to show the new module with its auto-created lessons
+    await selectCourse(currentCourseId);
+}
                 } else if (type === 'lesson') {
                     const moduleId = document.getElementById('editModuleId').value;
                     const lessonId = document.getElementById('editLessonId').value;
