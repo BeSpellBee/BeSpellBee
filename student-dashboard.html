@@ -738,32 +738,40 @@
         // COURSE SELECTION
         // ============================================================
         async function selectCourse(courseId) {
-            currentCourse = courseId;
-            document.querySelectorAll('.course-btn').forEach(btn => {
-                btn.classList.toggle('active', parseInt(btn.dataset.courseId) === courseId);
-            });
+    currentCourse = courseId;
+    document.querySelectorAll('.course-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.courseId) === courseId);
+    });
 
-            const courseData = await fetchCourse(courseId);
-            if (courseData) {
-                currentCourseData = courseData;
-                document.getElementById('courseTitle').textContent = courseData.title;
-                const isUnlocked = localStorage.getItem(`lmsUnlocked_${courseId}`) === 'true';
-                if (isUnlocked) {
-                    document.getElementById('lmsGate').style.display = 'none';
-                    document.getElementById('lmsViews').style.display = 'block';
-                    renderDashboard(courseId);
-                } else {
-                    document.getElementById('lmsGate').style.display = 'block';
-                    document.getElementById('lmsViews').style.display = 'none';
-                    document.getElementById('lmsPassword').value = '';
-                    document.getElementById('lmsGateError').textContent = '';
-                }
-            } else {
-                currentCourseData = null;
-                document.getElementById('courseTitle').textContent = 'Error loading course';
-                document.getElementById('dashboardContent').innerHTML = `<p style="color:#ff4444;">Failed to load course data.</p>`;
-            }
+    const courseData = await fetchCourse(courseId);
+    if (courseData) {
+        currentCourseData = courseData;
+        document.getElementById('courseTitle').textContent = courseData.title || 'Course';
+        const isUnlocked = localStorage.getItem(`lmsUnlocked_${courseId}`) === 'true';
+        if (isUnlocked) {
+            document.getElementById('lmsGate').style.display = 'none';
+            document.getElementById('lmsViews').style.display = 'block';
+            renderDashboard(courseId);
+        } else {
+            document.getElementById('lmsGate').style.display = 'block';
+            document.getElementById('lmsViews').style.display = 'none';
+            document.getElementById('lmsPassword').value = '';
+            document.getElementById('lmsGateError').textContent = '';
         }
+    } else {
+        currentCourseData = null;
+        document.getElementById('courseTitle').textContent = 'Error loading course';
+        document.getElementById('lmsViews').style.display = 'none';
+        document.getElementById('lmsGate').style.display = 'none';
+        document.getElementById('dashboardContent').innerHTML = `
+            <div style="text-align:center; padding:40px 20px; background:#121212; border-radius:16px; border:1px solid #1a4a4a;">
+                <i class="fas fa-exclamation-triangle" style="font-size:2rem; color:#ff4444; margin-bottom:15px; display:block;"></i>
+                <h3 style="color:#ff6666;">Error loading course</h3>
+                <p style="color:#666; margin-top:8px;">Try selecting the course again.</p>
+            </div>
+        `;
+    }
+}
 
         // ============================================================
         // UNLOCK COURSE
