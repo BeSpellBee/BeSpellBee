@@ -984,31 +984,33 @@
         // MOVE LESSON
         // ============================================================
         async function moveLesson(moduleId, lessonId, direction) {
-            if (!currentCourseData) return;
-            const module = currentCourseData.modules.find(m => m.id === moduleId);
-            if (!module) return;
-            const lessons = module.Lessons || [];
-            const lessonIndex = lessons.findIndex(l => l.id === lessonId);
-            if (lessonIndex === -1) return;
-            const newIndex = lessonIndex + direction;
-            if (newIndex < 0 || newIndex >= lessons.length) return;
+    if (!currentCourseData) return;
+    const module = currentCourseData.modules.find(m => m.id === moduleId);
+    if (!module) return;
+    const lessons = module.Lessons || [];
+    const lessonIndex = lessons.findIndex(l => l.id === lessonId);
+    if (lessonIndex === -1) return;
+    const newIndex = lessonIndex + direction;
+    if (newIndex < 0 || newIndex >= lessons.length) return;
 
-            const lesson = lessons[lessonIndex];
-            const otherLesson = lessons[newIndex];
-            const tempOrder = lesson.orderIndex;
-            lesson.orderIndex = otherLesson.orderIndex;
-            otherLesson.orderIndex = tempOrder;
+    const lesson = lessons[lessonIndex];
+    const otherLesson = lessons[newIndex];
+    
+    // Swap orderIndex values
+    const tempOrder = lesson.orderIndex;
+    lesson.orderIndex = otherLesson.orderIndex;
+    otherLesson.orderIndex = tempOrder;
 
-            const update1 = await updateLesson(lesson.id, { orderIndex: lesson.orderIndex });
-            const update2 = await updateLesson(otherLesson.id, { orderIndex: otherLesson.orderIndex });
-            if (update1 && update2) {
-                await selectCourse(currentCourseId);
-            } else {
-                alert('Failed to reorder lessons. Please try again.');
-                lesson.orderIndex = otherLesson.orderIndex;
-                otherLesson.orderIndex = tempOrder;
-            }
-        }
+    // Swap positions in array
+    [lessons[lessonIndex], lessons[newIndex]] = [lessons[newIndex], lessons[lessonIndex]];
+
+    // Instant visual update (no API wait)
+    renderModules();
+
+    // Save to backend in background (don't wait)
+    updateLesson(lesson.id, { orderIndex: lesson.orderIndex });
+    updateLesson(otherLesson.id, { orderIndex: otherLesson.orderIndex });
+}
 
         // ============================================================
         // PREVIEW LESSON
