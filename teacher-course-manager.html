@@ -597,7 +597,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- JAVASCRIPT – FULLY UPDATED WITH SEAMLESS AUTO‑PPP -->
+    <!-- JAVASCRIPT – FIXED VERSION WITH NO DUPLICATE EVENT LISTENERS -->
     <!-- ============================================================ -->
     <script>
         // ============================================================
@@ -786,7 +786,7 @@
         }
 
         // ============================================================
-        // CREATE COURSE MODAL (with auto-select)
+        // CREATE COURSE MODAL
         // ============================================================
         function openCreateCourseModal() {
             document.getElementById('createCourseModal').classList.add('active');
@@ -1034,158 +1034,16 @@
         // ============================================================
         // MODULE CRUD
         // ============================================================
-        // ============================================================
-// REPLACE openAddModuleModal with this version
-// ============================================================
-function openAddModuleModal() {
-    resetModal('module');
-    document.getElementById('modalTitle').textContent = 'Add Module';
-    document.getElementById('modalSub').textContent = 'Create a new module for your course.';
-    document.getElementById('modalSubmitBtn').textContent = 'Add Module';
-    document.getElementById('modalDeleteBtn').style.display = 'none';
-    document.getElementById('editModuleId').value = ''; // Clear any existing ID
-    document.getElementById('moduleName').value = '';
-    document.getElementById('modalOverlay').classList.add('active');
-}
-
-// ============================================================
-// REPLACE the modal form submit handler entirely
-// ============================================================
-document.getElementById('modalForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    if (!currentCourseId) {
-        alert('Please select a course first.');
-        return;
-    }
-
-    const type = document.getElementById('modalType').value;
-    const submitBtn = document.getElementById('modalSubmitBtn');
-    const originalText = submitBtn.textContent;
-    submitBtn.disabled = true;
-    submitBtn.textContent = '⏳ Saving...';
-
-    try {
-        if (type === 'module') {
-            const moduleId = document.getElementById('editModuleId').value;
-            const title = document.getElementById('moduleName').value.trim();
-            if (!title) { alert('Module title is required.'); return; }
-
-            if (moduleId) {
-                // EDITING existing module
-                const result = await updateModule(parseInt(moduleId), title);
-                closeModal();
-                if (result) {
-                    await selectCourse(currentCourseId);
-                }
-            } else {
-                // ✅ NEW MODULE – CREATE WITH PPP TEMPLATE
-                console.log('📦 Creating module with PPP template...');
-
-                // Step 1: Create the module
-                const module = await createModule(currentCourseId, title);
-                if (!module) {
-                    alert('Failed to create module. Please try again.');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = originalText;
-                    return;
-                }
-
-                console.log('✅ Module created:', module);
-
-                // Step 2: Create PPP placeholders (Lesson + Activity + Quiz)
-                const placeholders = [
-                    {
-                        title: '📖 Lesson: ' + title,
-                        type: 'lesson',
-                        content: '<p><strong>📖 ' + title + ' - Lesson</strong></p><p>Add your presentation, text, or embed a video here.</p><p><em>This is the Presentation phase of PPP.</em></p>',
-                        orderIndex: 0
-                    },
-                    {
-                        title: '🎯 Activity: ' + title,
-                        type: 'activity',
-                        content: '<p><strong>🎯 ' + title + ' - Practice Activity</strong></p><p>Add exercises, Lumi iframe, or tasks for students to practice.</p><p><em>This is the Practice phase of PPP.</em></p>',
-                        orderIndex: 1
-                    },
-                    {
-                        title: '🧠 Quiz: ' + title,
-                        type: 'quiz',
-                        questions: [
-                            { question: 'What is the main topic of this module?', options: ['Option A', 'Option B', 'Option C'], correct: 0 },
-                            { question: 'Which concept is most important?', options: ['Option A', 'Option B', 'Option C'], correct: 1 }
-                        ],
-                        orderIndex: 2
-                    }
-                ];
-
-                let allCreated = true;
-                for (const data of placeholders) {
-                    console.log(`📤 Creating: ${data.title}`);
-                    const lesson = await createLesson(module.id, data);
-                    if (!lesson) {
-                        console.error(`❌ Failed to create: ${data.title}`);
-                        allCreated = false;
-                    } else {
-                        console.log(`✅ Created: ${data.title}`);
-                    }
-                }
-
-                closeModal();
-
-                if (!allCreated) {
-                    alert('⚠️ Module created but some PPP items failed. You can add them manually using the buttons below the module.');
-                } else {
-                    console.log('✅ All PPP items created successfully!');
-                }
-
-                // ✅ CRITICAL: Refresh the course data to show the new module + lessons
-                await selectCourse(currentCourseId);
-            }
-        } else if (type === 'lesson') {
-            const moduleId = document.getElementById('editModuleId').value;
-            const lessonId = document.getElementById('editLessonId').value;
-            const title = document.getElementById('lessonTitle').value.trim();
-            const lessonType = document.getElementById('lessonType').value;
-            const rawContent = document.getElementById('lessonContent').value;
-            
-            if (!title) { alert('Lesson title is required.'); return; }
-
-            const lessonData = {
-                title,
-                type: lessonType,
-                content: rawContent || '<p>No content yet.</p>',
-                orderIndex: 0
-            };
-
-            if (lessonType === 'quiz') {
-                const questions = collectQuizQuestions();
-                if (questions.length === 0) { alert('Please add at least one question.'); return; }
-                lessonData.questions = questions;
-            }
-
-            let result;
-            if (lessonId) {
-                result = await updateLesson(parseInt(lessonId), lessonData);
-            } else {
-                result = await createLesson(parseInt(moduleId), lessonData);
-            }
-            
-            if (result) {
-                closeModal();
-                await selectCourse(currentCourseId);
-            } else {
-                alert('Failed to create/update lesson.');
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalText;
-            }
+        function openAddModuleModal() {
+            resetModal('module');
+            document.getElementById('modalTitle').textContent = 'Add Module';
+            document.getElementById('modalSub').textContent = 'Create a new module for your course.';
+            document.getElementById('modalSubmitBtn').textContent = 'Add Module';
+            document.getElementById('modalDeleteBtn').style.display = 'none';
+            document.getElementById('editModuleId').value = '';
+            document.getElementById('moduleName').value = '';
+            document.getElementById('modalOverlay').classList.add('active');
         }
-    } catch (error) {
-        console.error('Error in form submission:', error);
-        alert('An unexpected error occurred. Please check the console.');
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalText;
-    }
-});
 
         function editModule(moduleId) {
             const module = currentCourseData.modules.find(m => m.id === moduleId);
@@ -1457,10 +1315,11 @@ document.getElementById('modalForm').addEventListener('submit', async function(e
         }
 
         // ============================================================
-        // MODAL SUBMIT – SEAMLESS AUTO‑PPP RESTORED
+        // ✅ SINGLE MODAL FORM SUBMIT HANDLER (FIXED)
         // ============================================================
         document.getElementById('modalForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+            
             if (!currentCourseId) {
                 alert('Please select a course first.');
                 return;
@@ -1469,6 +1328,7 @@ document.getElementById('modalForm').addEventListener('submit', async function(e
             const type = document.getElementById('modalType').value;
             const submitBtn = document.getElementById('modalSubmitBtn');
             const originalText = submitBtn.textContent;
+            
             submitBtn.disabled = true;
             submitBtn.textContent = '⏳ Saving...';
 
@@ -1476,12 +1336,17 @@ document.getElementById('modalForm').addEventListener('submit', async function(e
                 if (type === 'module') {
                     const moduleId = document.getElementById('editModuleId').value;
                     const title = document.getElementById('moduleName').value.trim();
-                    if (!title) { alert('Module title is required.'); return; }
+                    
+                    if (!title) { 
+                        alert('Module title is required.'); 
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalText;
+                        return; 
+                    }
 
-                    let result;
                     if (moduleId) {
                         // EDITING existing module
-                        result = await updateModule(parseInt(moduleId), title);
+                        const result = await updateModule(parseInt(moduleId), title);
                         closeModal();
                         if (result) {
                             await selectCourse(currentCourseId);
@@ -1489,7 +1354,7 @@ document.getElementById('modalForm').addEventListener('submit', async function(e
                     } else {
                         // ✅ NEW MODULE – CREATE WITH PPP TEMPLATE
                         console.log('📦 Creating module with PPP template...');
-                        
+
                         // Step 1: Create the module
                         const module = await createModule(currentCourseId, title);
                         if (!module) {
@@ -1504,23 +1369,23 @@ document.getElementById('modalForm').addEventListener('submit', async function(e
                         // Step 2: Create PPP placeholders (Lesson + Activity + Quiz)
                         const placeholders = [
                             {
-                                title: '📖 Lesson',
+                                title: '📖 Lesson: ' + title,
                                 type: 'lesson',
-                                content: '<p><strong>Lesson content goes here.</strong></p><p>Add your presentation, text, or embed a video.</p>',
+                                content: '<p><strong>📖 ' + title + ' - Lesson</strong></p><p>Add your presentation, text, or embed a video here.</p><p><em>This is the Presentation phase of PPP.</em></p>',
                                 orderIndex: 0
                             },
                             {
-                                title: '🎯 Activity',
+                                title: '🎯 Activity: ' + title,
                                 type: 'activity',
-                                content: '<p><strong>Activity goes here.</strong></p><p>Add exercises, Lumi iframe, or a task for students.</p>',
+                                content: '<p><strong>🎯 ' + title + ' - Practice Activity</strong></p><p>Add exercises, Lumi iframe, or tasks for students to practice.</p><p><em>This is the Practice phase of PPP.</em></p>',
                                 orderIndex: 1
                             },
                             {
-                                title: '🧠 Quiz',
+                                title: '🧠 Quiz: ' + title,
                                 type: 'quiz',
                                 questions: [
-                                    { question: 'Sample Question 1?', options: ['Option A', 'Option B', 'Option C'], correct: 0 },
-                                    { question: 'Sample Question 2?', options: ['Option A', 'Option B', 'Option C'], correct: 1 }
+                                    { question: 'What is the main topic of this module?', options: ['Option A', 'Option B', 'Option C'], correct: 0 },
+                                    { question: 'Which concept is most important?', options: ['Option A', 'Option B', 'Option C'], correct: 1 }
                                 ],
                                 orderIndex: 2
                             }
@@ -1544,7 +1409,6 @@ document.getElementById('modalForm').addEventListener('submit', async function(e
                             alert('⚠️ Module created but some PPP items failed. You can add them manually using the buttons below the module.');
                         } else {
                             console.log('✅ All PPP items created successfully!');
-                            // Optional: show success briefly
                         }
 
                         // ✅ CRITICAL: Refresh the course data to show the new module + lessons
@@ -1556,18 +1420,29 @@ document.getElementById('modalForm').addEventListener('submit', async function(e
                     const title = document.getElementById('lessonTitle').value.trim();
                     const lessonType = document.getElementById('lessonType').value;
                     const rawContent = document.getElementById('lessonContent').value;
-                    if (!title) { alert('Lesson title is required.'); return; }
+                    
+                    if (!title) { 
+                        alert('Lesson title is required.'); 
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalText;
+                        return; 
+                    }
 
                     const lessonData = {
                         title,
                         type: lessonType,
-                        content: rawContent,
+                        content: rawContent || '<p>No content yet.</p>',
                         orderIndex: 0
                     };
 
                     if (lessonType === 'quiz') {
                         const questions = collectQuizQuestions();
-                        if (questions.length === 0) { alert('Please add at least one question.'); return; }
+                        if (questions.length === 0) { 
+                            alert('Please add at least one question.'); 
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = originalText;
+                            return; 
+                        }
                         lessonData.questions = questions;
                     }
 
@@ -1577,6 +1452,7 @@ document.getElementById('modalForm').addEventListener('submit', async function(e
                     } else {
                         result = await createLesson(parseInt(moduleId), lessonData);
                     }
+                    
                     if (result) {
                         closeModal();
                         await selectCourse(currentCourseId);
