@@ -3,18 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BeSpellBee - Teacher Dashboard</title>
+    <title>BeSpellBee - Manage Course</title>
+    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-        /* ====== All existing styles (unchanged) ====== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* ====== GLOBAL ====== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
             background: #0a0a0a;
             color: #e0e0e0;
             min-height: 100vh;
@@ -23,7 +19,7 @@
         .nav-bar {
             background: #0d0d0d;
             border-bottom: 1px solid #1a4a4a;
-            padding: 16px 32px;
+            padding: 12px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -31,374 +27,240 @@
             gap: 12px;
         }
         .nav-bar .logo {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #00ffff;
             text-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
         }
-        .nav-bar .logo span { color: #fff; }
         .nav-bar .teacher-info {
             display: flex;
             align-items: center;
             gap: 16px;
-            flex-wrap: wrap;
         }
         .nav-bar .teacher-info .name {
             font-weight: 600;
             color: #fff;
         }
-        .nav-bar .teacher-info .badge {
-            background: rgba(0, 255, 255, 0.15);
-            color: #00ffff;
-            padding: 4px 14px;
-            border-radius: 40px;
-            font-size: 0.75rem;
-            border: 1px solid rgba(0, 255, 255, 0.2);
-        }
-        .nav-bar .status-dot {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #00ff88;
-            margin-right: 6px;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
-        }
 
-        .dashboard {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 24px 32px 60px;
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
         }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 18px;
-            margin-bottom: 32px;
-        }
-        .stat-card {
-            background: #0d0d0d;
-            border: 1px solid #1a4a4a;
-            border-radius: 14px;
-            padding: 20px 24px;
-            transition: border-color 0.3s;
-        }
-        .stat-card:hover { border-color: #00ffff; }
-        .stat-card .label {
-            color: #88dddd;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-        }
-        .stat-card .number {
-            font-size: 2.4rem;
-            font-weight: 700;
-            color: #fff;
-            margin: 4px 0 2px;
-        }
-        .stat-card .sub {
-            color: #666;
-            font-size: 0.8rem;
-        }
-        .stat-card .sub i { margin-right: 4px; }
-
-        .two-col {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-
-        .panel {
-            background: #0d0d0d;
-            border: 1px solid #1a4a4a;
-            border-radius: 14px;
-            padding: 20px 24px;
-        }
-        .panel .panel-header {
+        .page-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
-        }
-        .panel .panel-header h3 {
-            color: #00ffff;
-            font-size: 1rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .panel .panel-header .count-badge {
-            background: rgba(0, 255, 255, 0.12);
-            color: #00ffff;
-            padding: 2px 10px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-        .panel .panel-header .live-dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #ff4444;
-            animation: pulse 1.5s infinite;
-        }
-        .panel .panel-header .live-dot.active { background: #00ff88; }
-
-        .activity-list {
-            max-height: 420px;
-            overflow-y: auto;
-        }
-        .activity-list::-webkit-scrollbar { width: 4px; }
-        .activity-list::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 4px; }
-        .activity-list::-webkit-scrollbar-thumb { background: #00ffff; border-radius: 4px; }
-
-        .activity-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #1a1a1a;
-            animation: slideIn 0.4s ease;
-        }
-        .activity-item:last-child { border-bottom: none; }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-12px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        .activity-item .left {
-            display: flex;
-            align-items: center;
+            flex-wrap: wrap;
             gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #1a4a4a;
+            padding-bottom: 16px;
         }
-        .activity-item .left .icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            flex-shrink: 0;
+        .page-header h1 {
+            color: #00ffff;
+            font-size: 1.8rem;
         }
-        .activity-item .left .icon.click { background: rgba(0, 255, 255, 0.12); color: #00ffff; }
-        .activity-item .left .icon.view { background: rgba(255, 204, 0, 0.12); color: #ffcc00; }
-        .activity-item .left .icon.book { background: rgba(0, 255, 136, 0.12); color: #00ff88; }
-        .activity-item .left .icon.search { background: rgba(255, 102, 170, 0.12); color: #ff66aa; }
-        .activity-item .left .icon.activity { background: rgba(255, 204, 0, 0.12); color: #ffcc00; }
-        .activity-item .left .icon.quiz { background: rgba(0, 255, 136, 0.12); color: #00ff88; }
-        .activity-item .left .icon.message { background: rgba(100, 100, 255, 0.12); color: #6666ff; }
-        .activity-item .left .icon.video { background: rgba(255, 102, 102, 0.12); color: #ff6666; }
+        .page-header h1 i { color: #ffcc00; margin-right: 10px; }
+        .back-btn {
+            color: #88dddd;
+            text-decoration: none;
+            padding: 8px 20px;
+            border: 1px solid #1a4a4a;
+            border-radius: 40px;
+            transition: all 0.3s;
+        }
+        .back-btn:hover { border-color: #00ffff; color: #00ffff; }
 
-        .activity-item .left .text {
+        .create-course-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .create-course-btn {
+            background: #00ffff;
+            color: #000;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+        .create-course-btn:hover {
+            background: #66ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        .course-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .course-btn {
+            padding: 10px 24px;
+            background: #0d0d0d;
+            border: 1px solid #1a4a4a;
+            border-radius: 40px;
+            color: #88dddd;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
             font-size: 0.9rem;
         }
-        .activity-item .left .text .student {
-            color: #fff;
-            font-weight: 600;
+        .course-btn:hover { border-color: #00ffff; color: #00ffff; }
+        .course-btn.active {
+            background: #00ffff;
+            color: #000;
+            border-color: #00ffff;
         }
-        .activity-item .left .text .action {
-            color: #88dddd;
-        }
-        .activity-item .left .text .target {
-            color: #00ffff;
-            font-weight: 500;
-        }
+        .course-btn .course-icon { margin-right: 6px; }
 
-        .activity-item .time {
-            color: #555;
-            font-size: 0.7rem;
-            white-space: nowrap;
-            margin-left: 12px;
+        .module-card {
+            background: #121212;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #1a4a4a;
+            border-left: 6px solid #ffcc00;
         }
-
-        .online-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .online-student {
+        .module-card .module-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 14px;
-            background: #121212;
-            border-radius: 10px;
-            border-left: 3px solid #00ff88;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .module-card .module-header h3 {
+            color: #00ffff;
+            font-size: 1.1rem;
+        }
+        .module-card .module-header .module-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .module-card .module-header .module-actions button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #1a4a4a;
+            color: #88dddd;
+            padding: 4px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.3s;
+        }
+        .module-card .module-header .module-actions button:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .lesson-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1a1a1a;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 1px solid #1a4a4a;
+            margin: 6px 0;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .lesson-item .lesson-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .lesson-item .lesson-info .lesson-type {
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+        }
+        .lesson-item .lesson-info .lesson-type.quiz {
+            background: rgba(255, 204, 0, 0.1);
+            color: #ffcc00;
+        }
+        .lesson-item .lesson-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .lesson-item .lesson-actions button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #1a4a4a;
+            color: #88dddd;
+            padding: 4px 10px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.3s;
+        }
+        .lesson-item .lesson-actions button:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+        .lesson-item .lesson-actions .preview-btn:hover {
+            border-color: #ffcc00;
+            color: #ffcc00;
+        }
+        .lesson-item .lesson-actions .move-btn {
+            padding: 2px 6px;
+            font-size: 0.65rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #1a4a4a;
+            color: #88dddd;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s;
         }
-        .online-student:hover {
-            background: #1a1a1a;
+        .lesson-item .lesson-actions .move-btn:hover {
             border-color: #00ffff;
-        }
-        .online-student .name {
-            font-weight: 500;
-            color: #fff;
-        }
-        .online-student .name i {
-            color: #00ff88;
-            font-size: 0.6rem;
-            margin-right: 6px;
-        }
-        .online-student .detail {
-            color: #666;
-            font-size: 0.75rem;
-        }
-        .online-student .detail .highlight {
             color: #00ffff;
         }
-        .online-student .score-badge {
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
+        .lesson-item .lesson-actions .move-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
         }
-        .score-badge.high { background: rgba(0, 255, 136, 0.15); color: #00ff88; }
-        .score-badge.medium { background: rgba(255, 204, 0, 0.15); color: #ffcc00; }
-        .score-badge.low { background: rgba(255, 68, 68, 0.15); color: #ff6666; }
 
-        .session-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #1a1a1a;
-        }
-        .session-item:last-child { border-bottom: none; }
-        .session-item .left .student-name {
-            color: #fff;
-            font-weight: 500;
-        }
-        .session-item .left .subject {
+        .add-btn {
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px dashed #1a4a4a;
             color: #88dddd;
-            font-size: 0.8rem;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            margin-top: 10px;
         }
-        .session-item .time-slot {
+        .add-btn:hover {
+            border-color: #00ffff;
             color: #00ffff;
-            font-size: 0.8rem;
-            font-weight: 600;
+            background: rgba(0, 255, 255, 0.05);
         }
-
         .empty-state {
             text-align: center;
-            padding: 32px 16px;
+            padding: 40px 20px;
             color: #555;
         }
         .empty-state i {
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: #333;
             margin-bottom: 12px;
             display: block;
         }
-
-        /* ====== PERFORMANCE SECTION ====== */
-        .performance-section {
-            margin-top: 32px;
-            border-top: 1px solid #1a4a4a;
-            padding-top: 32px;
-        }
-        .performance-section .section-title {
-            color: #00ffff;
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .performance-section .section-title i { color: #ffcc00; }
-
-        .performance-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
-        }
-
-        .perf-card {
-            background: #0d0d0d;
-            border: 1px solid #1a4a4a;
-            border-radius: 14px;
-            padding: 16px 20px;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        .perf-card:hover {
-            border-color: #00ffff;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 255, 255, 0.05);
-        }
-        .perf-card .perf-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .perf-card .perf-header .name {
-            color: #fff;
-            font-weight: 600;
-        }
-        .perf-card .perf-header .score {
-            font-weight: 700;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-        .perf-card .perf-header .score.high { background: rgba(0, 255, 136, 0.15); color: #00ff88; }
-        .perf-card .perf-header .score.medium { background: rgba(255, 204, 0, 0.15); color: #ffcc00; }
-        .perf-card .perf-header .score.low { background: rgba(255, 68, 68, 0.15); color: #ff6666; }
-
-        .perf-card .perf-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 6px;
-            margin-top: 8px;
-        }
-        .perf-card .perf-stats .stat {
-            text-align: center;
-            background: #121212;
-            border-radius: 8px;
-            padding: 6px 4px;
-        }
-        .perf-card .perf-stats .stat .val {
-            font-weight: 700;
-            color: #fff;
-            font-size: 0.9rem;
-        }
-        .perf-card .perf-stats .stat .label {
-            font-size: 0.55rem;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-        .perf-card .perf-stats .stat .val.participation { color: #ffcc00; }
-        .perf-card .perf-stats .stat .val.learning { color: #00ffff; }
-        .perf-card .perf-stats .stat .val.achievement { color: #00ff88; }
-
-        .perf-card .perf-bar {
-            height: 4px;
-            background: #1a1a1a;
-            border-radius: 2px;
-            margin-top: 10px;
-            overflow: hidden;
-        }
-        .perf-card .perf-bar .fill {
-            height: 100%;
-            border-radius: 2px;
-            transition: width 0.8s ease;
-        }
-        .perf-card .perf-bar .fill.high { background: linear-gradient(90deg, #00ff88, #00ffff); }
-        .perf-card .perf-bar .fill.medium { background: linear-gradient(90deg, #ffcc00, #00ffff); }
-        .perf-card .perf-bar .fill.low { background: linear-gradient(90deg, #ff6666, #ffcc00); }
 
         /* ====== MODAL ====== */
         .modal-overlay {
@@ -408,11 +270,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.85);
             z-index: 9999;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
             padding: 20px;
         }
         .modal-overlay.active { display: flex; }
@@ -421,7 +283,7 @@
             border: 2px solid #00ffff;
             border-radius: 20px;
             padding: 2rem;
-            max-width: 700px;
+            max-width: 600px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
@@ -429,67 +291,124 @@
         .modal-content h2 {
             color: #00ffff;
             font-size: 1.4rem;
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.5rem;
         }
-        .modal-content .modal-sub {
+        .modal-content .sub {
             color: #888;
             font-size: 0.85rem;
             margin-bottom: 1.2rem;
         }
-        .modal-content .close-modal {
-            color: #888;
-            border: 1px solid #444;
-            padding: 8px 20px;
-            border-radius: 40px;
+        .modal-content .form-group {
+            margin-bottom: 1rem;
+        }
+        .modal-content .form-group label {
+            display: block;
+            color: #88dddd;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+        .modal-content .form-group input,
+        .modal-content .form-group select,
+        .modal-content .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            background: #1a1a1a;
+            border: 1px solid #2a4a4a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.85rem;
+            box-sizing: border-box;
+        }
+        .modal-content .form-group input:focus,
+        .modal-content .form-group select:focus,
+        .modal-content .form-group textarea:focus {
+            outline: none;
+            border-color: #00ffff;
+        }
+        .modal-content .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .modal-content .form-group select option { background: #1a1a1a; color: #fff; }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+        }
+        .modal-actions .btn-primary {
+            background: #00ffff;
+            color: #000;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
-            background: transparent;
+            flex: 1;
+            min-width: 100px;
         }
-        .modal-content .close-modal:hover {
+        .modal-actions .btn-primary:hover {
+            background: #66ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+        }
+        .modal-actions .btn-secondary {
+            background: transparent;
+            color: #888;
+            border: 1px solid #444;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 80px;
+        }
+        .modal-actions .btn-secondary:hover {
             border-color: #ff4444;
             color: #ff4444;
         }
-        .modal-stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin: 16px 0;
-        }
-        .modal-stat {
-            background: #121212;
-            border-radius: 10px;
-            padding: 12px 16px;
-            border: 1px solid #1a4a4a;
-        }
-        .modal-stat .label {
-            font-size: 0.65rem;
-            color: #666;
-            text-transform: uppercase;
-        }
-        .modal-stat .value {
-            font-size: 1.3rem;
-            font-weight: 700;
+        .modal-actions .btn-danger {
+            background: #ff4444;
             color: #fff;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 80px;
         }
-        .modal-stat .value.green { color: #00ff88; }
-        .modal-stat .value.cyan { color: #00ffff; }
-        .modal-stat .value.yellow { color: #ffcc00; }
-        .modal-stat .value.pink { color: #ff66aa; }
-        .modal-stat .value.orange { color: #ff9944; }
+        .modal-actions .btn-danger:hover {
+            background: #cc0000;
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
+        }
 
-        @media (max-width: 768px) {
-            .two-col { grid-template-columns: 1fr; }
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-            .nav-bar { padding: 12px 16px; }
-            .dashboard { padding: 16px; }
-            .perf-card .perf-stats { grid-template-columns: 1fr 1fr; }
-            .modal-stats-grid { grid-template-columns: 1fr; }
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff88;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
         }
-        @media (max-width: 480px) {
-            .stats-grid { grid-template-columns: 1fr; }
-            .activity-item { flex-wrap: wrap; gap: 4px; }
-            .activity-item .time { margin-left: 44px; font-size: 0.65rem; }
-            .perf-card .perf-stats { grid-template-columns: 1fr; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+        @media (max-width: 600px) {
+            .page-header h1 { font-size: 1.4rem; }
+            .module-card .module-header { flex-direction: column; align-items: flex-start; }
+            .modal-content { padding: 1.5rem; }
+            .course-btn { padding: 8px 16px; font-size: 0.8rem; }
+            .lesson-item { flex-direction: column; align-items: flex-start; }
+            .lesson-item .lesson-actions { width: 100%; justify-content: flex-start; }
+            .modal-actions { flex-direction: column; }
+            .modal-actions .btn-primary,
+            .modal-actions .btn-secondary,
+            .modal-actions .btn-danger { width: 100%; text-align: center; }
         }
     </style>
 </head>
@@ -500,855 +419,963 @@
         <div class="logo">
             <svg width="180" height="40" viewBox="0 0 200 50">
                 <defs>
-                    <linearGradient id="dashboardGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%" style="stop-color:aqua;"/>
                         <stop offset="50%" style="stop-color:white;" />
                         <stop offset="100%" style="stop-color:yellow;" />
                     </linearGradient>
                 </defs>
-                <text x="0" y="38" fill="url(#dashboardGradient)" font-size="36" font-weight="700" font-family="Segoe UI, sans-serif">BeSpellBee</text>
+                <text x="0" y="38" fill="url(#gradient)" font-size="36" font-weight="700" font-family="Segoe UI, sans-serif">BeSpellBee</text>
             </svg>
         </div>
         <div class="teacher-info">
             <span class="badge"><span class="status-dot"></span> Live</span>
             <span class="name" id="navTeacherName"><i class="fas fa-user-graduate"></i> Loading...</span>
-            <span style="color: #555; font-size: 0.8rem;" id="navTeacherSubject">| ...</span>
-            <a href="index.html" style="color: #88dddd; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px; transition: color 0.3s;">
-                <i class="fas fa-arrow-left"></i> Back to Home
-            </a>
-            <a href="teacher-course-manager.html" 
-               style="display:inline-block; padding:5px 16px; border:1px solid #ffcc00; border-radius:30px;
-                      color:#ffcc00; text-decoration:none; font-size:0.8rem; font-weight:600;
-                      background: rgba(255,204,0,0.05); transition: all 0.3s;"
-               onmouseover="this.style.background='#ffcc00'; this.style.color='#000';"
-               onmouseout="this.style.background='rgba(255,204,0,0.05)'; this.style.color='#ffcc00';">
-                ⚙️ Manage Course
-            </a>
-            <a href="#" id="logoutBtn" style="color: #00ffff; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px;">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
         </div>
     </nav>
 
-    <!-- ====== DASHBOARD ====== -->
-    <div class="dashboard">
+    <!-- ====== MAIN CONTENT ====== -->
+    <div class="container">
 
-        <!-- ====== STATS ====== -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="label"><i class="fas fa-users"></i> Total Students</div>
-                <div class="number" id="activeStudents">0</div>
-                <div class="sub">Tracked this period</div>
-            </div>
-            <div class="stat-card">
-                <div class="label"><i class="fas fa-calendar-check"></i> Total Bookings</div>
-                <div class="number" id="todaySessions">0</div>
-                <div class="sub"><i class="fas fa-clock"></i> <span id="nextSession">All time</span></div>
-            </div>
-            <div class="stat-card">
-                <div class="label"><i class="fas fa-eye"></i> Recorded Activity</div>
-                <div class="number" id="profileViews">0</div>
-                <div class="sub">Page views & clicks</div>
-            </div>
-            <div class="stat-card">
-                <div class="label"><i class="fas fa-clock"></i> Pending Requests</div>
-                <div class="number" id="totalClicks">0</div>
-                <div class="sub">Awaiting confirmation</div>
-            </div>
+        <div class="page-header">
+            <h1><i class="fas fa-pencil-alt"></i> Manage Your Course</h1>
+            <a href="teacher-dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
         </div>
 
-        <!-- ====== TWO COLUMNS ====== -->
-        <div class="two-col">
-
-            <!-- LEFT: ACTIVITY FEED -->
-            <div class="panel">
-                <div class="panel-header">
-                    <h3>
-                        <span class="live-dot active"></span> Live Activity
-                        <span class="count-badge" id="activityCount">0</span>
-                    </h3>
-                    <span style="color:#555; font-size:0.75rem;">
-                        <i class="fas fa-sync-alt fa-spin"></i> live
-                    </span>
-                </div>
-                <div class="activity-list" id="activityFeed">
-                    <div class="empty-state">
-                        <i class="fas fa-spinner fa-spin"></i>
-                        <p>Loading real-time data...</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- RIGHT: TOP ENGAGED + RECENT BOOKINGS -->
-            <div style="display: flex; flex-direction: column; gap: 24px;">
-
-                <!-- TOP ENGAGED STUDENTS -->
-                <div class="panel">
-                    <div class="panel-header">
-                        <h3><i class="fas fa-circle" style="color:#00ff88; font-size:0.6rem;"></i> Top Engaged</h3>
-                        <span class="count-badge" id="onlineCount">0</span>
-                    </div>
-                    <div class="online-grid" id="onlineStudents">
-                        <div class="empty-state" style="padding:16px;"><p style="font-size:0.85rem;">Loading...</p></div>
-                    </div>
-                </div>
-
-                <!-- RECENT BOOKINGS -->
-                <div class="panel">
-                    <div class="panel-header">
-                        <h3><i class="fas fa-calendar-alt"></i> Recent Bookings</h3>
-                        <span class="count-badge" id="upcomingCount">0</span>
-                    </div>
-                    <div id="upcomingSessions">
-                        <div class="empty-state" style="padding:16px;"><p style="font-size:0.85rem;">Loading...</p></div>
-                    </div>
-                </div>
-
-            </div>
+        <div class="create-course-area">
+            <button class="create-course-btn" onclick="openCreateCourseModal()">
+                <i class="fas fa-plus-circle"></i> Create New Course
+            </button>
         </div>
 
-        <!-- ====== STUDENT PERFORMANCE BY LEVEL ====== -->
-        <div class="performance-section">
-            <div class="section-title">
-                <i class="fas fa-chart-pie"></i> Student Performance by Level
-                <span style="font-size:0.7rem; color:#555; font-weight:400;">Click any student for detailed breakdown</span>
-            </div>
-            <div class="performance-grid" id="performanceGrid">
-                <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
-                    <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; color:#00ffff;"></i>
-                    <p style="margin-top:8px;">Loading student performance data...</p>
-                </div>
-            </div>
+        <!-- Course Selector -->
+        <div class="course-selector" id="courseSelector">
+            <!-- Injected by JS -->
+        </div>
+
+        <!-- Course Editor -->
+        <div id="courseEditor">
+            <div id="modulesContainer"></div>
         </div>
 
     </div>
 
-    <!-- ====== MODAL: STUDENT DETAIL ====== -->
-    <div class="modal-overlay" id="studentModal">
+    <!-- ====== CREATE COURSE MODAL ====== -->
+    <div class="modal-overlay" id="createCourseModal">
         <div class="modal-content">
-            <h2 id="modalStudentName">Student Name</h2>
-            <p class="modal-sub" id="modalStudentInfo">Engagement Score: --% • Grade: --/4</p>
-            <div class="modal-stats-grid" id="modalStats">
-                <!-- Injected by JS -->
-            </div>
-            <div style="text-align: right; margin-top: 16px;">
-                <button class="close-modal" onclick="closeModal()">
-                    <i class="fas fa-times"></i> Close
-                </button>
-            </div>
+            <h2>📚 Create New Course</h2>
+            <p class="sub">Set up a new course for your students.</p>
+            <form id="createCourseForm">
+                <div class="form-group">
+                    <label for="courseTitle">Course Title</label>
+                    <input type="text" id="courseTitle" placeholder="e.g. Advanced English B2" required>
+                </div>
+                <div class="form-group">
+                    <label for="courseIcon">Icon (emoji)</label>
+                    <input type="text" id="courseIcon" placeholder="📚" value="📚" maxlength="2">
+                </div>
+                <div class="form-group">
+                    <label for="courseAccessCode">Access Code</label>
+                    <input type="text" id="courseAccessCode" placeholder="e.g. B2-2024" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Create Course</button>
+                    <button type="button" class="btn-secondary" onclick="closeCreateCourseModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ====== EDIT MODAL (Module / Lesson) ====== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <h2 id="modalTitle">Add Module</h2>
+            <p class="sub" id="modalSub">Create a new module for your course.</p>
+            <form id="modalForm" novalidate>
+                <input type="hidden" id="modalType" value="module">
+                <input type="hidden" id="editModuleId" value="">
+                <input type="hidden" id="editLessonId" value="">
+
+                <div class="form-group" id="moduleNameGroup">
+                    <label for="moduleName">Module Title</label>
+                    <input type="text" id="moduleName" placeholder="e.g. Module 1: Grammar Foundations">
+                </div>
+
+                <div class="form-group" id="lessonTitleGroup" style="display:none;">
+                    <label for="lessonTitle">Lesson Title</label>
+                    <input type="text" id="lessonTitle" placeholder="e.g. Present Tenses Review">
+                </div>
+
+                <div class="form-group" id="lessonTypeGroup" style="display:none;">
+                    <label for="lessonType">Lesson Type</label>
+                    <select id="lessonType">
+                        <option value="lesson">📖 Lesson</option>
+                        <option value="quiz">🧠 Quiz</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="lessonContentGroup" style="display:none;">
+                    <label for="lessonContent">Content (HTML / iframe embed)</label>
+                    <textarea id="lessonContent" placeholder="Paste your lesson content, iframe embed code, or HTML here..."></textarea>
+                </div>
+
+                <div class="form-group" id="quizQuestionsGroup" style="display:none;">
+                    <label>Quiz Questions</label>
+                    <div id="quizQuestionsContainer">
+                        <div class="question-item" style="background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;">
+                            <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                <input type="text" placeholder="Option A" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                <input type="text" placeholder="Option B" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                <input type="text" placeholder="Option C" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                    <option value="0">A</option>
+                                    <option value="1">B</option>
+                                    <option value="2">C</option>
+                                </select>
+                                <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" onclick="addQuestionField()" style="background:rgba(0,255,255,0.05); border:1px dashed #2a4a4a; color:#88dddd; padding:8px; border-radius:8px; cursor:pointer; width:100%; margin-top:6px;">
+                        <i class="fas fa-plus"></i> Add Question
+                    </button>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary" id="modalSubmitBtn">Save</button>
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="btn-danger" id="modalDeleteBtn" style="display:none;" onclick="confirmDelete()">🗑️ Delete</button>
+                </div>
+            </form>
         </div>
     </div>
 
     <!-- ============================================================ -->
-    <!-- ====== JAVASCRIPT ====== -->
+    <!-- JAVASCRIPT - FULLY UPDATED WITH SEAMLESS AUTO-PPP -->
     <!-- ============================================================ -->
-    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.2/dist/socket.io.min.js"></script>
     <script>
         // ============================================================
         // CONFIGURATION
         // ============================================================
         const API_BASE_URL = 'https://bespellbee-backend-en6l.onrender.com';
+        let currentCourseId = null;
+        let courses = [];
+        let currentCourseData = null;
 
         // ============================================================
-        // LOGOUT
+        // HELPER: GET AUTH HEADERS
         // ============================================================
-        document.getElementById('logoutBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('teacherId');
-            localStorage.removeItem('teacherName');
-            localStorage.removeItem('userRole');
-            window.location.href = 'index.html';
-        });
-
-        // ============================================================
-        // HELPER: TIME AGO
-        // ============================================================
-        function timeAgo(dateString) {
-            const now = new Date();
-            const past = new Date(dateString);
-            const diffMs = now - past;
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHrs = Math.floor(diffMs / 3600000);
-            if (diffMins < 1) return 'Just now';
-            if (diffMins < 60) return `${diffMins}m ago`;
-            if (diffHrs < 24) return `${diffHrs}h ago`;
-            return past.toLocaleDateString();
-        }
-
-        // ============================================================
-        // LOAD DASHBOARD DATA (REST)
-        // ============================================================
-        async function loadDashboard() {
+        function getAuthHeaders() {
             const token = localStorage.getItem('authToken');
-            if (!token) {
-                alert('Please log in to view the dashboard.');
-                window.location.href = 'index.html';
-                return;
-            }
+            return {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            };
+        }
 
+        // ============================================================
+        // API CALLS
+        // ============================================================
+        async function fetchCourses() {
             try {
-                const response = await fetch(`${API_BASE_URL}/api/auth/teacher/dashboard`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
+                const response = await fetch(`${API_BASE_URL}/api/teacher/courses`, { headers: getAuthHeaders() });
+                const data = await response.json();
+                if (data.success) { courses = data.data; return courses; }
+                console.error('Failed to fetch courses:', data.message);
+                return [];
+            } catch (error) { console.error('Error fetching courses:', error); return []; }
+        }
+
+        async function fetchCourse(courseId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/courses/${courseId}`, { headers: getAuthHeaders() });
+                const data = await response.json();
+                if (data.success) return data.data;
+                console.error('Failed to fetch course:', data.message);
+                return null;
+            } catch (error) { console.error('Error fetching course:', error); return null; }
+        }
+
+        async function createCourse(title, icon, accessCode) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/courses`, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({ title, icon, accessCode })
                 });
-                const result = await response.json();
-                if (!response.ok || !result.success) {
-                    throw new Error(result.message || 'Failed to fetch dashboard data');
+                const data = await response.json();
+                if (data.success) return data.data;
+                alert('❌ Failed to create course: ' + (data.message || 'Unknown error'));
+                return null;
+            } catch (error) { console.error('Error creating course:', error); alert('Network error creating course.'); return null; }
+        }
+
+        async function createModule(courseId, title) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/courses/${courseId}/modules`, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({ title })
+                });
+                const data = await response.json();
+                if (data.success) return data.data;
+                alert('Failed to create module: ' + (data.message || 'Unknown error'));
+                return null;
+            } catch (error) { console.error('Error creating module:', error); alert('Network error creating module.'); return null; }
+        }
+
+        async function updateModule(moduleId, title) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/modules/${moduleId}`, {
+                    method: 'PUT',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({ title })
+                });
+                const data = await response.json();
+                if (data.success) return data.data;
+                alert('Failed to update module: ' + (data.message || 'Unknown error'));
+                return null;
+            } catch (error) { console.error('Error updating module:', error); alert('Network error updating module.'); return null; }
+        }
+
+        async function deleteModule(moduleId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/modules/${moduleId}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+                const data = await response.json();
+                if (data.success) return true;
+                alert('Failed to delete module: ' + (data.message || 'Unknown error'));
+                return false;
+            } catch (error) { console.error('Error deleting module:', error); alert('Network error deleting module.'); return false; }
+        }
+
+        async function createLesson(moduleId, lessonData) {
+            try {
+                console.log(`📤 Creating lesson in module ${moduleId}:`, lessonData.title);
+                const response = await fetch(`${API_BASE_URL}/api/teacher/modules/${moduleId}/lessons`, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(lessonData)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    console.log(`✅ Lesson created: ${lessonData.title}`);
+                    return data.data;
                 }
-                renderDashboard(result.data);
+                console.error(`❌ Failed to create lesson "${lessonData.title}":`, data.message);
+                return null;
             } catch (error) {
-                console.error('Dashboard Load Error:', error);
-                alert('Session expired or error loading data. Please log in again.');
-                window.location.href = 'index.html';
+                console.error(`❌ Network error creating lesson "${lessonData.title}":`, error);
+                return null;
             }
         }
+
+        async function updateLesson(lessonId, lessonData) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/lessons/${lessonId}`, {
+                    method: 'PUT',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(lessonData)
+                });
+                const data = await response.json();
+                if (data.success) return data.data;
+                alert('Failed to update lesson: ' + (data.message || 'Unknown error'));
+                return null;
+            } catch (error) { console.error('Error updating lesson:', error); alert('Network error updating lesson.'); return null; }
+        }
+
+        async function deleteLesson(lessonId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/teacher/lessons/${lessonId}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+                const data = await response.json();
+                if (data.success) return true;
+                alert('Failed to delete lesson: ' + (data.message || 'Unknown error'));
+                return false;
+            } catch (error) { console.error('Error deleting lesson:', error); alert('Network error deleting lesson.'); return false; }
+        }
+
+        // ============================================================
+        // CREATE COURSE MODAL
+        // ============================================================
+        function openCreateCourseModal() {
+            document.getElementById('createCourseModal').classList.add('active');
+            document.getElementById('createCourseForm').reset();
+        }
+        function closeCreateCourseModal() {
+            document.getElementById('createCourseModal').classList.remove('active');
+        }
+        document.getElementById('createCourseForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const title = document.getElementById('courseTitle').value.trim();
+            const icon = document.getElementById('courseIcon').value.trim() || '📚';
+            const accessCode = document.getElementById('courseAccessCode').value.trim();
+            if (!title || !accessCode) { alert('Title and access code are required.'); return; }
+            const newCourse = await createCourse(title, icon, accessCode);
+            if (newCourse) {
+                alert('✅ Course created successfully!');
+                closeCreateCourseModal();
+                await fetchCourses();
+                renderCourseSelector();
+                await selectCourse(newCourse.id);
+            }
+        });
+        document.getElementById('createCourseModal').addEventListener('click', function(e) { if (e.target === this) closeCreateCourseModal(); });
 
         // ============================================================
         // RENDER FUNCTIONS
         // ============================================================
-        function renderDashboard(data) {
-            const { teacher, stats, recentActivity, engagementStats, bookings } = data;
-
-            document.getElementById('navTeacherName').innerHTML = `<i class="fas fa-user-graduate"></i> ${teacher.name}`;
-            document.getElementById('navTeacherSubject').textContent = `| ${teacher.subject || 'Teacher'}`;
-
-            document.getElementById('activeStudents').textContent = stats.totalStudents || 0;
-            document.getElementById('todaySessions').textContent = stats.totalBookings || 0;
-            document.getElementById('profileViews').textContent = stats.recentActivityCount || 0;
-            document.getElementById('totalClicks').textContent = stats.pendingBookings || 0;
-
-            renderActivityFeed(recentActivity || []);
-            renderEngagedStudents(engagementStats || []);
-            renderBookings(bookings || []);
-            renderPerformanceGrid(engagementStats || []);
-        }
-
-        // ============================================================
-        // ACTIVITY FEED
-        // ============================================================
-        function renderActivityFeed(activities) {
-            const container = document.getElementById('activityFeed');
-            const count = document.getElementById('activityCount');
-
-            if (activities.length === 0) {
-                container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>No activity recorded yet</p></div>`;
-                count.textContent = '0';
+        function renderCourseSelector() {
+            const container = document.getElementById('courseSelector');
+            if (!courses || courses.length === 0) {
+                container.innerHTML = `<p style="color:#888;">No courses yet. Create your first course above.</p>`;
                 return;
             }
-
-            count.textContent = activities.length;
-            container.innerHTML = activities.map(item => {
-                let details = item.activityData;
-                if (typeof details === 'string') {
-                    try { details = JSON.parse(details); } catch(e) { details = {}; }
-                }
-                let iconClass = 'view';
-                let emoji = '👁️';
-                let actionText = 'viewed';
-                let targetText = details.page || 'Page';
-
-                if (item.activityType === 'link_click') {
-                    iconClass = 'click';
-                    emoji = '🔗';
-                    actionText = 'clicked';
-                    targetText = details.link || 'Link';
-                } else if (item.activityType === 'carousel_view') {
-                    iconClass = 'search';
-                    emoji = '🔄';
-                    actionText = 'browsed';
-                    targetText = 'teacher carousel';
-                } else if (item.activityType === 'video_watch') {
-                    iconClass = 'video';
-                    emoji = '🎬';
-                    actionText = 'watched';
-                    targetText = details.lessonId ? `lesson ${details.lessonId}` : 'video';
-                } else if (item.activityType === 'lesson_view') {
-                    iconClass = 'book';
-                    emoji = '📖';
-                    actionText = 'viewed lesson';
-                    targetText = details.lessonId || 'Lesson';
-                } else if (item.activityType === 'quiz_attempt' || item.activityType === 'quiz_pass') {
-                    iconClass = 'quiz';
-                    emoji = '🧠';
-                    actionText = item.activityType === 'quiz_pass' ? 'passed quiz' : 'took quiz';
-                    targetText = details.quizTitle || 'Quiz';
-                } else if (item.activityType === 'message_sent') {
-                    iconClass = 'message';
-                    emoji = '💬';
-                    actionText = 'sent a message to teacher';
-                } else if (item.activityType === 'activity_practice') {
-                    iconClass = 'activity';
-                    emoji = '✍️';
-                    actionText = 'completed practice activity';
-                    targetText = details.title || 'Practice';
-                } else if (item.activityType === 'page_view') {
-                    iconClass = 'view';
-                    emoji = '👁️';
-                    actionText = 'viewed';
-                    targetText = details.page || 'Page';
-                }
-
-                const studentName = item.Student ? item.Student.name : 'Anonymous Visitor';
-                return `
-                    <div class="activity-item">
-                        <div class="left">
-                            <div class="icon ${iconClass}">${emoji}</div>
-                            <div class="text">
-                                <span class="student">${studentName}</span>
-                                <span class="action"> ${actionText} </span>
-                                <span class="target">${targetText}</span>
-                            </div>
-                        </div>
-                        <span class="time">${timeAgo(item.createdAt)}</span>
-                    </div>
+            let html = '';
+            courses.forEach(course => {
+                const active = course.id === currentCourseId ? 'active' : '';
+                html += `
+                    <button class="course-btn ${active}" data-course-id="${course.id}" onclick="selectCourse(${course.id})">
+                        <span class="course-icon">${course.icon || '📚'}</span> ${course.title}
+                    </button>
                 `;
-            }).join('');
+            });
+            container.innerHTML = html;
         }
 
-        // ============================================================
-        // TOP ENGAGED STUDENTS
-        // ============================================================
-        function renderEngagedStudents(students) {
-            const container = document.getElementById('onlineStudents');
-            const count = document.getElementById('onlineCount');
+        function renderModules() {
+            const container = document.getElementById('modulesContainer');
+            if (!container) return;
 
-            if (students.length === 0) {
-                container.innerHTML = `<div class="empty-state" style="padding:16px;"><p style="font-size:0.85rem;">No student data yet</p></div>`;
-                count.textContent = '0';
-                return;
-            }
-
-            count.textContent = students.length;
-            container.innerHTML = students.map(s => {
-                const studentData = s.Student || s;
-                const name = studentData.name || 'Unknown Student';
-                const actions = s.activityCount || 0;
-                const score = studentData.engagementScore || 0;
-                const scoreLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
-                const studentId = s.studentId || studentData.id || 0;
-                if (!studentId) return '';
-                return `
-                    <div class="online-student" onclick="showStudentDetails(${studentId})">
-                        <span class="name"><i class="fas fa-circle"></i> ${name}</span>
-                        <span class="detail"><span class="highlight">${actions}</span> actions • <span class="score-badge ${scoreLevel}">${Math.round(score)}%</span></span>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // ============================================================
-        // RECENT BOOKINGS
-        // ============================================================
-        function renderBookings(bookings) {
-            const container = document.getElementById('upcomingSessions');
-            const count = document.getElementById('upcomingCount');
-
-            if (bookings.length === 0) {
-                container.innerHTML = `<div class="empty-state" style="padding:16px;"><p style="font-size:0.85rem;">No bookings yet</p></div>`;
-                count.textContent = '0';
-                return;
-            }
-
-            count.textContent = bookings.length;
-            container.innerHTML = bookings.map(b => {
-                const statusColor = b.status === 'pending' ? '#ffcc00' : '#00ff88';
-                return `
-                    <div class="session-item">
-                        <div class="left">
-                            <div class="student-name">${b.studentName || 'Student'}</div>
-                            <div class="subject" style="color: ${statusColor}; text-transform:capitalize;">${b.status || 'Pending'}</div>
-                        </div>
-                        <div class="time-slot">${timeAgo(b.createdAt)}</div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // ============================================================
-        // PERFORMANCE GRID
-        // ============================================================
-        function renderPerformanceGrid(students) {
-            const container = document.getElementById('performanceGrid');
-
-            if (students.length === 0) {
+            if (!currentCourseData || !currentCourseData.modules || currentCourseData.modules.length === 0) {
                 container.innerHTML = `
-                    <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
-                        <i class="fas fa-users" style="font-size:1.5rem; display:block; margin-bottom:8px;"></i>
-                        <p>No student performance data yet.</p>
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <p>No modules yet. Click "Add New Module" to get started.</p>
                     </div>
+                    <button class="add-btn" onclick="openAddModuleModal()" style="margin-top: 10px;">
+                        <i class="fas fa-plus-circle"></i> Add New Module
+                    </button>
                 `;
                 return;
             }
 
-            const sorted = [...students].sort((a, b) => {
-                const scoreA = a.Student?.engagementScore || 0;
-                const scoreB = b.Student?.engagementScore || 0;
-                return scoreB - scoreA;
-            });
-
-            container.innerHTML = sorted.map(s => {
-                const studentData = s.Student || s;
-                const name = studentData.name || 'Unknown Student';
-                const score = studentData.engagementScore || 0;
-                const scoreLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
-                const actions = s.activityCount || 0;
-                const studentId = s.studentId || studentData.id || 0;
-                if (!studentId) return '';
-
-                const pageViews = studentData.totalPageViews || 0;
-                const lessonViews = studentData.totalLessonViews || 0;
-                const quizAttempts = studentData.totalQuizAttempts || 0;
-                const messages = studentData.totalMessages || 0;
-                const completed = studentData.totalCompleted || 0;
-
-                return `
-                    <div class="perf-card" onclick="showStudentDetails(${studentId})">
-                        <div class="perf-header">
-                            <span class="name">${name}</span>
-                            <span class="score ${scoreLevel}">${Math.round(score)}%</span>
-                        </div>
-                        <div class="perf-stats">
-                            <div class="stat">
-                                <div class="val participation">${pageViews + (s.linkClicks || 0)}</div>
-                                <div class="label">Participation</div>
-                            </div>
-                            <div class="stat">
-                                <div class="val learning">${lessonViews}</div>
-                                <div class="label">Learning</div>
-                            </div>
-                            <div class="stat">
-                                <div class="val achievement">${completed}</div>
-                                <div class="label">Achievement</div>
+            let html = '';
+            currentCourseData.modules.forEach(mod => {
+                html += `
+                    <div class="module-card">
+                        <div class="module-header">
+                            <h3><i class="fas fa-folder"></i> ${mod.title}</h3>
+                            <div class="module-actions">
+                                <button onclick="editModule(${mod.id})"><i class="fas fa-edit"></i> Edit</button>
+                                <button class="delete-module-btn" onclick="confirmDeleteModule(${mod.id})"><i class="fas fa-trash"></i> Delete</button>
                             </div>
                         </div>
-                        <div class="perf-bar">
-                            <div class="fill ${scoreLevel}" style="width: ${Math.min(score, 100)}%;"></div>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:0.65rem; color:#555;">
-                            <span>${actions} activities</span>
-                            <span>🔄 ${quizAttempts} quizzes</span>
-                            <span>💬 ${messages} messages</span>
-                        </div>
-                    </div>
+                        <div class="module-lessons">
                 `;
-            }).join('');
-        }
 
-        // ============================================================
-        // REAL-TIME PERFORMANCE GRID UPDATE (GOING AGAINST THE GRAIN!)
-        // ============================================================
-        function updatePerformanceGridRealTime(activity) {
-            // Get student name from activity
-            const studentName = activity.studentName || activity.Student?.name;
-            if (!studentName) {
-                console.warn('⚠️ No student name found in activity');
-                return;
-            }
+                const sortedLessons = mod.Lessons ? [...mod.Lessons].sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0)) : [];
 
-            console.log(`🎯 Updating performance grid for: ${studentName}`);
-
-            // Find the student's card
-            const cards = document.querySelectorAll('.perf-card');
-            let targetCard = null;
-
-            for (const card of cards) {
-                const nameEl = card.querySelector('.perf-header .name');
-                if (nameEl && nameEl.textContent.trim() === studentName) {
-                    targetCard = card;
-                    break;
-                }
-            }
-
-            if (!targetCard) {
-                console.warn(`❌ No card found for: ${studentName}`);
-                return;
-            }
-
-            // Determine which stat to update based on activity type
-            const statValues = targetCard.querySelectorAll('.perf-stats .stat .val');
-            let statIndex = 0; // Default: Participation
-
-            if (activity.activityType === 'lesson_view' || activity.activityType === 'video_watch') {
-                statIndex = 1; // Learning
-            } else if (activity.activityType === 'quiz_pass' || activity.activityType === 'activity_practice') {
-                statIndex = 2; // Achievement
-            }
-
-            // Update the stat
-            if (statValues.length > statIndex) {
-                const oldVal = parseInt(statValues[statIndex].textContent) || 0;
-                const newVal = oldVal + 1;
-                statValues[statIndex].textContent = newVal;
-                console.log(`📈 Updated ${['Participation', 'Learning', 'Achievement'][statIndex]}: ${oldVal} → ${newVal}`);
-            }
-
-            // Update engagement score (increment by 1-2 points)
-            const scoreEl = targetCard.querySelector('.perf-header .score');
-            if (scoreEl) {
-                const oldScore = parseInt(scoreEl.textContent) || 0;
-                const increment = activity.activityType === 'quiz_pass' ? 2 : 1;
-                const newScore = Math.min(oldScore + increment, 100);
-                scoreEl.textContent = newScore + '%';
-
-                // Update score color
-                const scoreLevel = newScore >= 70 ? 'high' : newScore >= 40 ? 'medium' : 'low';
-                scoreEl.className = 'score ' + scoreLevel;
-
-                // Update progress bar
-                const barFill = targetCard.querySelector('.perf-bar .fill');
-                if (barFill) {
-                    barFill.style.width = newScore + '%';
-                    barFill.className = 'fill ' + scoreLevel;
-                }
-
-                console.log(`📈 Updated score: ${oldScore}% → ${newScore}%`);
-            }
-
-            // Update activity count
-            const activitySpan = targetCard.querySelector('div[style*="margin-top:6px"] span:first-child');
-            if (activitySpan) {
-                const currentActivities = parseInt(activitySpan.textContent) || 0;
-                activitySpan.textContent = (currentActivities + 1) + ' activities';
-                console.log(`📈 Updated activity count: ${currentActivities} → ${currentActivities + 1}`);
-            }
-
-            // Visual feedback - flash the card
-            targetCard.style.transition = 'border-color 0.3s, box-shadow 0.3s';
-            targetCard.style.borderColor = '#00ff88';
-            targetCard.style.boxShadow = '0 0 30px rgba(0, 255, 136, 0.3)';
-            setTimeout(() => {
-                targetCard.style.borderColor = '#1a4a4a';
-                targetCard.style.boxShadow = 'none';
-            }, 1500);
-
-            console.log(`✅ Real-time update complete for ${studentName}!`);
-        }
-
-        // ============================================================
-        // SHOW STUDENT DETAILS MODAL
-        // ============================================================
-        function showStudentDetails(studentId) {
-            const token = localStorage.getItem('authToken');
-            if (!token) {
-                alert('Please log in first.');
-                return;
-            }
-            if (!studentId || studentId === 0) {
-                showModalError('Invalid student ID. Please try again.');
-                return;
-            }
-
-            const modal = document.getElementById('studentModal');
-            const nameEl = document.getElementById('modalStudentName');
-            const infoEl = document.getElementById('modalStudentInfo');
-            const statsEl = document.getElementById('modalStats');
-
-            nameEl.textContent = 'Loading...';
-            infoEl.textContent = 'Fetching student data...';
-            statsEl.innerHTML = `
-                <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
-                    <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; color:#00ffff;"></i>
-                    <p style="margin-top:8px;">Loading student details...</p>
-                </div>
-            `;
-            modal.classList.add('active');
-
-            fetch(`${API_BASE_URL}/api/track/teacher/engagement/${studentId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(res => {
-                if (!res.ok) {
-                    if (res.status === 404) {
-                        throw new Error('Student not found. Please try again.');
-                    }
-                    throw new Error(`Server error (${res.status})`);
-                }
-                return res.json();
-            })
-            .then(result => {
-                console.log('📊 Student data received:', result);
-                if (result.success) {
-                    renderStudentModal(result.data);
+                if (sortedLessons.length === 0) {
+                    html += `<p style="color:#555; font-size:0.85rem; padding:8px 0;">No lessons yet.</p>`;
                 } else {
-                    showModalError(result.message || 'No data available for this student.');
+                    sortedLessons.forEach((lesson, index) => {
+                        const typeLabel = lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson';
+                        const typeClass = lesson.type === 'quiz' ? 'quiz' : '';
+                        const isFirst = index === 0;
+                        const isLast = index === sortedLessons.length - 1;
+                        html += `
+                            <div class="lesson-item" data-lesson-id="${lesson.id}">
+                                <div class="lesson-info">
+                                    <span>${lesson.title}</span>
+                                    <span class="lesson-type ${typeClass}">${typeLabel}</span>
+                                </div>
+                                <div class="lesson-actions">
+                                    <button class="preview-btn" onclick="previewLesson(${mod.id}, ${lesson.id})" title="Preview Lesson">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button onclick="editLesson(${mod.id}, ${lesson.id})"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="delete-lesson-btn" onclick="confirmDeleteLesson(${mod.id}, ${lesson.id})"><i class="fas fa-trash"></i></button>
+                                    <button class="move-btn" onclick="moveLesson(${mod.id}, ${lesson.id}, -1)" title="Move Up" ${isFirst ? 'disabled' : ''}>
+                                        <i class="fas fa-chevron-up"></i>
+                                    </button>
+                                    <button class="move-btn" onclick="moveLesson(${mod.id}, ${lesson.id}, 1)" title="Move Down" ${isLast ? 'disabled' : ''}>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
                 }
-            })
-            .catch(err => {
-                console.error('❌ Error loading student details:', err);
-                showModalError(err.message);
-            });
-        }
 
-        function showModalError(message) {
-            const nameEl = document.getElementById('modalStudentName');
-            const infoEl = document.getElementById('modalStudentInfo');
-            const statsEl = document.getElementById('modalStats');
-            nameEl.textContent = '⚠️ Error';
-            infoEl.textContent = message;
-            statsEl.innerHTML = `
-                <div style="grid-column:1/-1; text-align:center; padding:20px; color:#ff6666;">
-                    <i class="fas fa-exclamation-triangle" style="font-size:1.5rem; display:block; margin-bottom:8px;"></i>
-                    <p>${message}</p>
-                    <p style="font-size:0.8rem; color:#555; margin-top:8px;">Try clicking another student or refresh the page.</p>
-                </div>
-            `;
-        }
-
-        function renderStudentModal(student) {
-            const nameEl = document.getElementById('modalStudentName');
-            const infoEl = document.getElementById('modalStudentInfo');
-            const statsEl = document.getElementById('modalStats');
-
-            nameEl.textContent = student.name || 'Student';
-
-            const score = parseFloat(student.engagementScore) || 0;
-            const grade = Math.round((score / 100) * 4 * 10) / 10;
-            const levelLabel = score >= 70 ? '🌟 Outstanding' : score >= 40 ? '📈 On Track' : '🌱 Getting Started';
-            infoEl.textContent = `Engagement Score: ${Math.round(score)}% • Grade: ${grade}/4 • ${levelLabel}`;
-
-            const stats = [
-                { label: 'Page Views', value: student.totalPageViews ?? 0, color: 'yellow' },
-                { label: 'Lesson Views', value: student.totalLessonViews ?? 0, color: 'cyan' },
-                { label: 'Video Watches', value: student.totalVideoWatches ?? 0, color: 'pink' },
-                { label: 'Carousel Views', value: student.totalCarouselViews ?? 0, color: 'orange' },
-                { label: 'Quiz Attempts', value: student.totalQuizAttempts ?? 0, color: 'pink' },
-                { label: 'Quiz Passes', value: student.totalQuizPasses ?? 0, color: 'green' },
-                { label: 'Lessons Completed', value: student.totalCompleted ?? 0, color: 'green' },
-                { label: 'Link Clicks', value: student.totalLinkClicks ?? 0, color: 'orange' },
-                { label: 'Messages Sent', value: student.totalMessages ?? 0, color: 'cyan' },
-                { label: 'Practice Activities', value: student.totalPracticeActivities ?? 0, color: 'pink' },
-            ];
-
-            const hasActivity = stats.some(s => s.value > 0);
-
-            if (!hasActivity) {
-                statsEl.innerHTML = `
-                    <div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">
-                        <i class="fas fa-inbox" style="font-size:2rem; display:block; margin-bottom:12px; color:#333;"></i>
-                        <p style="font-size:1rem; color:#888;">No activity recorded yet</p>
-                        <p style="font-size:0.8rem; color:#555; margin-top:4px;">Once the student starts learning, data will appear here.</p>
+                // Three separate "+" buttons
+                html += `
+                    <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+                        <button class="add-btn" onclick="openAddLessonModalWithType(${mod.id}, 'lesson')" 
+                                style="flex:1; min-width:80px; background:rgba(0,255,255,0.05); border:1px dashed #1a4a4a; color:#88dddd; padding:8px 12px; border-radius:12px; cursor:pointer; transition:all 0.3s;"
+                                onmouseover="this.style.borderColor='#00ffff'; this.style.color='#00ffff';"
+                                onmouseout="this.style.borderColor='#1a4a4a'; this.style.color='#88dddd';">
+                            <i class="fas fa-plus-circle"></i> Lesson
+                        </button>
+                        <button class="add-btn" onclick="openAddLessonModalWithType(${mod.id}, 'practice')" 
+                                style="flex:1; min-width:80px; background:rgba(0,255,255,0.05); border:1px dashed #1a4a4a; color:#88dddd; padding:8px 12px; border-radius:12px; cursor:pointer; transition:all 0.3s;"
+                                onmouseover="this.style.borderColor='#00ffff'; this.style.color='#00ffff';"
+                                onmouseout="this.style.borderColor='#1a4a4a'; this.style.color='#88dddd';">
+                            <i class="fas fa-plus-circle"></i> Practice Activity
+                        </button>
+                        <button class="add-btn" onclick="openAddLessonModalWithType(${mod.id}, 'quiz')" 
+                                style="flex:1; min-width:80px; background:rgba(0,255,255,0.05); border:1px dashed #1a4a4a; color:#88dddd; padding:8px 12px; border-radius:12px; cursor:pointer; transition:all 0.3s;"
+                                onmouseover="this.style.borderColor='#00ffff'; this.style.color='#00ffff';"
+                                onmouseout="this.style.borderColor='#1a4a4a'; this.style.color='#88dddd';">
+                            <i class="fas fa-plus-circle"></i> Quiz
+                        </button>
                     </div>
                 `;
-            } else {
-                statsEl.innerHTML = stats.map(stat => `
-                    <div class="modal-stat">
-                        <div class="label">${stat.label}</div>
-                        <div class="value ${stat.color}">${stat.value}</div>
-                    </div>
-                `).join('');
 
-                if (student.recentActivities && student.recentActivities.length > 0) {
-                    const recentHtml = `
-                        <div style="grid-column:1/-1; margin-top:12px; border-top:1px solid #1a4a4a; padding-top:12px;">
-                            <div style="color:#88dddd; font-size:0.8rem; font-weight:600; margin-bottom:8px;">📋 Recent Activity</div>
-                            ${student.recentActivities.slice(0, 5).map(act => {
-                                const type = act.activityType.replace('_', ' ');
-                                const time = new Date(act.createdAt).toLocaleString();
-                                return `
-                                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#888; padding:4px 0; border-bottom:1px solid #1a1a1a;">
-                                        <span>${type}</span>
-                                        <span style="color:#555;">${time}</span>
-                                    </div>
-                                `;
-                            }).join('')}
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // ============================================================
+        // COURSE SELECTION
+        // ============================================================
+        async function selectCourse(courseId) {
+            console.log('🔄 selectCourse called with ID:', courseId);
+            currentCourseId = courseId;
+
+            document.querySelectorAll('.course-btn').forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.courseId) === courseId);
+            });
+
+            const courseData = await fetchCourse(courseId);
+            if (courseData) {
+                if (!courseData.modules) courseData.modules = [];
+                currentCourseData = courseData;
+                renderModules();
+            } else {
+                currentCourseData = null;
+                document.getElementById('modulesContainer').innerHTML = `<p style="color:#ff4444;">Error loading course data.</p>`;
+            }
+        }
+
+        // ============================================================
+        // MOVE LESSON
+        // ============================================================
+        async function moveLesson(moduleId, lessonId, direction) {
+            if (!currentCourseData) return;
+            const module = currentCourseData.modules.find(m => m.id === moduleId);
+            if (!module) return;
+            const lessons = module.Lessons || [];
+            const lessonIndex = lessons.findIndex(l => l.id === lessonId);
+            if (lessonIndex === -1) return;
+            const newIndex = lessonIndex + direction;
+            if (newIndex < 0 || newIndex >= lessons.length) return;
+
+            const lesson = lessons[lessonIndex];
+            const otherLesson = lessons[newIndex];
+            const tempOrder = lesson.orderIndex;
+            lesson.orderIndex = otherLesson.orderIndex;
+            otherLesson.orderIndex = tempOrder;
+
+            const update1 = await updateLesson(lesson.id, { orderIndex: lesson.orderIndex });
+            const update2 = await updateLesson(otherLesson.id, { orderIndex: otherLesson.orderIndex });
+            if (update1 && update2) {
+                await selectCourse(currentCourseId);
+            } else {
+                alert('Failed to reorder lessons. Please try again.');
+                lesson.orderIndex = otherLesson.orderIndex;
+                otherLesson.orderIndex = tempOrder;
+            }
+        }
+
+        // ============================================================
+        // PREVIEW LESSON
+        // ============================================================
+        function previewLesson(moduleId, lessonId) {
+            if (!currentCourseData) return;
+            const module = currentCourseData.modules.find(m => m.id === moduleId);
+            if (!module) return;
+            const lesson = module.Lessons.find(l => l.id === lessonId);
+            if (!lesson) return;
+
+            const previewWindow = window.open('', '_blank');
+            previewWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Preview: ${lesson.title}</title>
+                    <style>
+                        body { font-family: 'Segoe UI', sans-serif; padding: 30px; max-width: 1000px; margin: auto; background: #f5f7fc; }
+                        .container { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+                        .preview-badge { background: #FFEB3B; color: #000; padding: 4px 12px; border-radius: 40px; font-size: 0.8rem; display: inline-block; margin-bottom: 20px; }
+                        h2 { color: #0056B3; border-bottom: 2px solid #eef4fe; padding-bottom: 10px; }
+                        .content { line-height: 1.6; }
+                        .content iframe { width: 100% !important; max-width: 100% !important; min-height: 500px !important; height: auto !important; aspect-ratio: 16/9; border: 2px solid #eef4fe; border-radius: 16px; background: #fff; margin: 15px 0; }
+                        .footer { margin-top: 30px; padding-top: 20px; border-top: 2px solid #eef4fe; color: #888; font-size: 0.85rem; text-align: center; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <span class="preview-badge">👁️ Teacher Preview</span>
+                        <h2>${lesson.title}</h2>
+                        <div class="content">${lesson.content || '<p style="color:#999;">No content yet. Add content to this lesson.</p>'}</div>
+                        <div class="footer">This is how students will see this lesson.</div>
+                    </div>
+                </body>
+                </html>
+            `);
+            previewWindow.document.close();
+        }
+
+        // ============================================================
+        // MODULE CRUD
+        // ============================================================
+        function openAddModuleModal() {
+            resetModal('module');
+            document.getElementById('modalTitle').textContent = 'Add Module';
+            document.getElementById('modalSub').textContent = 'Create a new module for your course.';
+            document.getElementById('modalSubmitBtn').textContent = 'Add Module';
+            document.getElementById('modalDeleteBtn').style.display = 'none';
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function editModule(moduleId) {
+            const module = currentCourseData.modules.find(m => m.id === moduleId);
+            if (!module) return;
+            resetModal('module');
+            document.getElementById('editModuleId').value = moduleId;
+            document.getElementById('modalTitle').textContent = 'Edit Module';
+            document.getElementById('modalSub').textContent = 'Update this module.';
+            document.getElementById('moduleName').value = module.title;
+            document.getElementById('modalSubmitBtn').textContent = 'Save Changes';
+            document.getElementById('modalDeleteBtn').style.display = 'block';
+            document.getElementById('modalDeleteBtn').textContent = '🗑️ Delete Module';
+            document.getElementById('modalDeleteBtn').onclick = function() {
+                confirmDeleteModule(moduleId);
+            };
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        async function confirmDeleteModule(moduleId) {
+            if (!confirm('Delete this module and all its lessons?')) return;
+            const success = await deleteModule(moduleId);
+            if (success) {
+                closeModal();
+                await selectCourse(currentCourseId);
+            }
+        }
+
+        // ============================================================
+        // LESSON CRUD
+        // ============================================================
+        function openAddLessonModalWithType(moduleId, type) {
+            resetModal('lesson');
+            document.getElementById('editModuleId').value = moduleId;
+            const typeDisplay = type.charAt(0).toUpperCase() + type.slice(1);
+            document.getElementById('modalTitle').textContent = `Add ${typeDisplay}`;
+            document.getElementById('modalSub').textContent = `Create a new ${type} for this module.`;
+            document.getElementById('modalSubmitBtn').textContent = `Add ${typeDisplay}`;
+            document.getElementById('modalDeleteBtn').style.display = 'none';
+
+            document.getElementById('lessonType').value = type === 'quiz' ? 'quiz' : 'lesson';
+            const titles = {
+                'lesson': '📖 Lesson',
+                'practice': '✍️ Practice Activity',
+                'quiz': '🧠 Quiz'
+            };
+            document.getElementById('lessonTitle').value = titles[type] || 'Lesson';
+            if (type === 'practice') {
+                document.getElementById('lessonContent').value = '<p><strong>Practice Activity</strong></p><p>Add your exercises, Lumi iframe, or tasks here.</p>';
+            }
+
+            document.getElementById('moduleNameGroup').style.display = 'none';
+            document.getElementById('lessonTitleGroup').style.display = 'block';
+            document.getElementById('lessonTypeGroup').style.display = type !== 'quiz' ? 'none' : 'block';
+            document.getElementById('lessonContentGroup').style.display = type === 'quiz' ? 'none' : 'block';
+            document.getElementById('quizQuestionsGroup').style.display = type === 'quiz' ? 'block' : 'none';
+
+            if (type === 'quiz') {
+                document.getElementById('quizQuestionsContainer').innerHTML = `
+                    <div class="question-item" style="background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;">
+                        <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                            <input type="text" placeholder="Option A" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                            <input type="text" placeholder="Option B" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                            <input type="text" placeholder="Option C" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                            <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                <option value="0">A</option>
+                                <option value="1">B</option>
+                                <option value="2">C</option>
+                            </select>
+                            <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function editLesson(moduleId, lessonId) {
+            const module = currentCourseData.modules.find(m => m.id === moduleId);
+            if (!module) return;
+            const lesson = module.Lessons.find(l => l.id === lessonId);
+            if (!lesson) return;
+
+            resetModal('lesson');
+            document.getElementById('editModuleId').value = moduleId;
+            document.getElementById('editLessonId').value = lessonId;
+            document.getElementById('modalTitle').textContent = 'Edit Lesson';
+            document.getElementById('modalSub').textContent = 'Update this lesson, activity, or quiz.';
+            document.getElementById('lessonTitle').value = lesson.title;
+            document.getElementById('lessonType').value = lesson.type || 'lesson';
+
+            if (lesson.type === 'quiz' && lesson.questions) {
+                document.getElementById('quizQuestionsGroup').style.display = 'block';
+                document.getElementById('lessonContentGroup').style.display = 'none';
+                const container = document.getElementById('quizQuestionsContainer');
+                container.innerHTML = '';
+                lesson.questions.forEach((q, idx) => {
+                    const qDiv = document.createElement('div');
+                    qDiv.className = 'question-item';
+                    qDiv.style.cssText = 'background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;';
+                    qDiv.innerHTML = `
+                        <input type="text" placeholder="Question text" class="q-text" value="${q.question}" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                            ${q.options.map((opt, oi) => `
+                                <input type="text" placeholder="Option ${String.fromCharCode(65 + oi)}" class="q-option" value="${opt}" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                            `).join('')}
+                            <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                                ${q.options.map((_, oi) => `<option value="${oi}" ${oi === q.correct ? 'selected' : ''}>${String.fromCharCode(65 + oi)}</option>`).join('')}
+                            </select>
+                            <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
                         </div>
                     `;
-                    statsEl.innerHTML += recentHtml;
-                }
+                    container.appendChild(qDiv);
+                });
+                if (lesson.questions.length === 0) addQuestionField();
+            } else {
+                document.getElementById('quizQuestionsGroup').style.display = 'none';
+                document.getElementById('lessonContentGroup').style.display = 'block';
+                document.getElementById('lessonContent').value = lesson.content || '';
             }
+
+            document.getElementById('modalSubmitBtn').textContent = 'Save Changes';
+            document.getElementById('modalDeleteBtn').style.display = 'block';
+            const typeLabels = { 'lesson': 'Lesson', 'activity': 'Activity', 'quiz': 'Quiz' };
+            document.getElementById('modalDeleteBtn').textContent = `🗑️ Delete ${typeLabels[lesson.type] || 'Lesson'}`;
+            document.getElementById('modalDeleteBtn').onclick = function() {
+                confirmDeleteLesson(moduleId, lessonId);
+            };
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        async function confirmDeleteLesson(moduleId, lessonId) {
+            if (!confirm('Delete this lesson permanently?')) return;
+            const success = await deleteLesson(lessonId);
+            if (success) {
+                closeModal();
+                await selectCourse(currentCourseId);
+            }
+        }
+
+        // ============================================================
+        // MODAL HELPERS
+        // ============================================================
+        function resetModal(type) {
+            document.getElementById('modalType').value = type;
+            document.getElementById('editModuleId').value = '';
+            document.getElementById('editLessonId').value = '';
+
+            document.getElementById('moduleNameGroup').style.display = type === 'module' ? 'block' : 'none';
+            document.getElementById('lessonTitleGroup').style.display = type === 'lesson' ? 'block' : 'none';
+            document.getElementById('lessonTypeGroup').style.display = type === 'lesson' ? 'block' : 'none';
+            document.getElementById('lessonContentGroup').style.display = 'none';
+            document.getElementById('quizQuestionsGroup').style.display = 'none';
+
+            document.getElementById('moduleName').value = '';
+            document.getElementById('lessonTitle').value = '';
+            document.getElementById('lessonType').value = 'lesson';
+            document.getElementById('lessonContent').value = '';
+
+            document.getElementById('quizQuestionsContainer').innerHTML = `
+                <div class="question-item" style="background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;">
+                    <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <input type="text" placeholder="Option A" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                        <input type="text" placeholder="Option B" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                        <input type="text" placeholder="Option C" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                        <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                            <option value="0">A</option>
+                            <option value="1">B</option>
+                            <option value="2">C</option>
+                        </select>
+                        <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
+                    </div>
+                </div>
+            `;
+            toggleQuizFields('lesson');
         }
 
         function closeModal() {
-            document.getElementById('studentModal').classList.remove('active');
+            document.getElementById('modalOverlay').classList.remove('active');
         }
 
-        document.getElementById('studentModal').addEventListener('click', function(e) {
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
         });
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeModal();
+        // ============================================================
+        // QUIZ HELPERS
+        // ============================================================
+        function addQuestionField() {
+            const container = document.getElementById('quizQuestionsContainer');
+            const qDiv = document.createElement('div');
+            qDiv.className = 'question-item';
+            qDiv.style.cssText = 'background:#1a1a1a; padding:12px; border-radius:8px; margin-bottom:8px; border:1px solid #2a4a4a;';
+            qDiv.innerHTML = `
+                <input type="text" placeholder="Question text" class="q-text" style="width:100%; padding:6px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff; margin-bottom:4px;">
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <input type="text" placeholder="Option A" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                    <input type="text" placeholder="Option B" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                    <input type="text" placeholder="Option C" class="q-option" style="flex:1; min-width:60px; padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                    <select class="q-correct" style="padding:4px 8px; background:#111; border:1px solid #2a4a4a; border-radius:6px; color:#fff;">
+                        <option value="0">A</option>
+                        <option value="1">B</option>
+                        <option value="2">C</option>
+                    </select>
+                    <button type="button" onclick="removeQuestion(this)" style="background:#ff4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; cursor:pointer;">✕</button>
+                </div>
+            `;
+            container.appendChild(qDiv);
+        }
+
+        function removeQuestion(btn) {
+            const container = document.getElementById('quizQuestionsContainer');
+            if (container.children.length <= 1) { alert('You must have at least one question.'); return; }
+            btn.closest('.question-item').remove();
+        }
+
+        function toggleQuizFields(type) {
+            const quizGroup = document.getElementById('quizQuestionsGroup');
+            const contentGroup = document.getElementById('lessonContentGroup');
+            if (type === 'quiz') {
+                quizGroup.style.display = 'block';
+                contentGroup.style.display = 'none';
+            } else {
+                quizGroup.style.display = 'none';
+                contentGroup.style.display = 'block';
+            }
+        }
+
+        document.getElementById('lessonType').addEventListener('change', function() {
+            toggleQuizFields(this.value);
+        });
+
+        function collectQuizQuestions() {
+            const items = document.querySelectorAll('.question-item');
+            const questions = [];
+            items.forEach(item => {
+                const text = item.querySelector('.q-text').value.trim();
+                const options = item.querySelectorAll('.q-option');
+                const opts = Array.from(options).map(o => o.value.trim());
+                const correct = parseInt(item.querySelector('.q-correct').value);
+                if (text && opts.every(o => o)) {
+                    questions.push({ question: text, options: opts, correct: correct });
+                }
+            });
+            return questions;
+        }
+
+        // ============================================================
+        // MODAL SUBMIT - SEAMLESS AUTO-PPP RESTORED
+        // ============================================================
+        document.getElementById('modalForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (!currentCourseId) {
+                alert('Please select a course first.');
+                return;
+            }
+
+            const type = document.getElementById('modalType').value;
+            const submitBtn = document.getElementById('modalSubmitBtn');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Saving...';
+
+            try {
+                if (type === 'module') {
+                    const moduleId = document.getElementById('editModuleId').value;
+                    const title = document.getElementById('moduleName').value.trim();
+                    if (!title) { alert('Module title is required.'); return; }
+
+                    let result;
+                    if (moduleId) {
+                        // EDITING existing module
+                        result = await updateModule(parseInt(moduleId), title);
+                        closeModal();
+                        if (result) {
+                            await selectCourse(currentCourseId);
+                        }
+                    } else {
+                        // ✅ NEW MODULE - CREATE WITH PPP TEMPLATE
+                        console.log('📦 Creating module with PPP template...');
+                        
+                        // Step 1: Create the module
+                        const module = await createModule(currentCourseId, title);
+                        if (!module) {
+                            alert('Failed to create module. Please try again.');
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = originalText;
+                            return;
+                        }
+
+                        console.log('✅ Module created:', module);
+
+                        // Step 2: Create PPP placeholders (Lesson + Practice + Quiz)
+                        const placeholders = [
+                            {
+                                title: '📖 Lesson',
+                                type: 'lesson',
+                                content: '<p><strong>Lesson content goes here.</strong></p><p>Add your presentation, text, or embed a video.</p>',
+                                orderIndex: 0
+                            },
+                            {
+                                title: '✍️ Practice Activity',
+                                type: 'lesson',
+                                content: '<p><strong>Practice activity goes here.</strong></p><p>Add exercises, Lumi iframe, or a task for students.</p>',
+                                orderIndex: 1
+                            },
+                            {
+                                title: '🧠 Quiz',
+                                type: 'quiz',
+                                questions: [
+                                    { question: 'Sample Question 1?', options: ['Option A', 'Option B', 'Option C'], correct: 0 },
+                                    { question: 'Sample Question 2?', options: ['Option A', 'Option B', 'Option C'], correct: 1 }
+                                ],
+                                orderIndex: 2
+                            }
+                        ];
+
+                        let allCreated = true;
+                        for (const data of placeholders) {
+                            console.log(`📤 Creating: ${data.title}`);
+                            const lesson = await createLesson(module.id, data);
+                            if (!lesson) {
+                                console.error(`❌ Failed to create: ${data.title}`);
+                                allCreated = false;
+                            } else {
+                                console.log(`✅ Created: ${data.title}`);
+                            }
+                        }
+
+                        closeModal();
+
+                        if (!allCreated) {
+                            alert('⚠️ Module created but some PPP items failed. You can add them manually using the buttons below the module.');
+                        } else {
+                            console.log('✅ All PPP items created successfully!');
+                        }
+
+                        // ✅ CRITICAL: Refresh the course data to show the new module + lessons
+                        await selectCourse(currentCourseId);
+                    }
+                } else if (type === 'lesson') {
+                    const moduleId = document.getElementById('editModuleId').value;
+                    const lessonId = document.getElementById('editLessonId').value;
+                    const title = document.getElementById('lessonTitle').value.trim();
+                    const lessonType = document.getElementById('lessonType').value;
+                    const rawContent = document.getElementById('lessonContent').value;
+                    if (!title) { alert('Lesson title is required.'); return; }
+
+                    const lessonData = {
+                        title,
+                        type: lessonType,
+                        content: rawContent,
+                        orderIndex: 0
+                    };
+
+                    if (lessonType === 'quiz') {
+                        const questions = collectQuizQuestions();
+                        if (questions.length === 0) { alert('Please add at least one question.'); return; }
+                        lessonData.questions = questions;
+                    }
+
+                    let result;
+                    if (lessonId) {
+                        result = await updateLesson(parseInt(lessonId), lessonData);
+                    } else {
+                        result = await createLesson(parseInt(moduleId), lessonData);
+                    }
+                    if (result) {
+                        closeModal();
+                        await selectCourse(currentCourseId);
+                    } else {
+                        alert('Failed to create/update lesson.');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalText;
+                    }
+                }
+            } catch (error) {
+                console.error('Error in form submission:', error);
+                alert('An unexpected error occurred. Please check the console.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
         });
 
         // ============================================================
-        // ADD SINGLE ACTIVITY TO FEED (WebSocket)
+        // LOAD TEACHER NAME
         // ============================================================
-        function addActivityToFeed(activity) {
-            const container = document.getElementById('activityFeed');
-            const count = document.getElementById('activityCount');
-            if (!container) return;
-
-            const emptyState = container.querySelector('.empty-state');
-            if (emptyState) emptyState.remove();
-
-            let activityData = activity.activityData;
-            if (typeof activityData === 'string') {
-                try { activityData = JSON.parse(activityData); } catch(e) { activityData = {}; }
+        function loadTeacherName() {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    const name = payload.name || 'Teacher';
+                    document.getElementById('navTeacherName').innerHTML = `<i class="fas fa-user-graduate"></i> ${name}`;
+                } catch (e) {
+                    document.getElementById('navTeacherName').innerHTML = `<i class="fas fa-user-graduate"></i> Teacher`;
+                }
+            } else {
+                document.getElementById('navTeacherName').innerHTML = `<i class="fas fa-user-graduate"></i> Teacher`;
             }
+        }
 
-            let iconClass = 'view';
-            let emoji = '👁️';
-            let actionText = 'viewed';
-            let targetText = activityData?.page || 'Page';
+        // ============================================================
+        // INIT
+        // ============================================================
+        async function init() {
+            loadTeacherName();
 
-            if (activity.activityType === 'link_click') {
-                iconClass = 'click'; emoji = '🔗'; actionText = 'clicked'; targetText = activityData?.link || 'Link';
-            } else if (activity.activityType === 'carousel_view') {
-                iconClass = 'search'; emoji = '🔄'; actionText = 'browsed'; targetText = 'teacher carousel';
-            } else if (activity.activityType === 'video_watch') {
-                iconClass = 'video'; emoji = '🎬'; actionText = 'watched'; targetText = activityData?.lessonId ? `lesson ${activityData.lessonId}` : 'video';
-            } else if (activity.activityType === 'lesson_view') {
-                iconClass = 'book'; emoji = '📖'; actionText = 'viewed lesson'; targetText = activityData?.lessonId || 'Lesson';
-            } else if (activity.activityType === 'quiz_attempt' || activity.activityType === 'quiz_pass') {
-                iconClass = 'quiz'; emoji = '🧠'; actionText = activity.activityType === 'quiz_pass' ? 'passed quiz' : 'took quiz'; targetText = activityData?.quizTitle || 'Quiz';
-            } else if (activity.activityType === 'message_sent') {
-                iconClass = 'message'; emoji = '💬'; actionText = 'sent a message to teacher';
-            } else if (activity.activityType === 'activity_practice') {
-                iconClass = 'activity'; emoji = '✍️'; actionText = 'completed practice activity'; targetText = activityData?.title || 'Practice';
-            } else if (activity.activityType === 'page_view') {
-                iconClass = 'view'; emoji = '👁️'; actionText = 'viewed'; targetText = activityData?.page || 'Page';
-            }
-
-            const item = document.createElement('div');
-            item.className = 'activity-item';
-            item.style.animation = 'slideIn 0.4s ease';
-            item.innerHTML = `
-                <div class="left">
-                    <div class="icon ${iconClass}">${emoji}</div>
-                    <div class="text">
-                        <span class="student">${activity.studentName || 'Student'}</span>
-                        <span class="action"> ${actionText} </span>
-                        <span class="target">${targetText}</span>
+            const fetchedCourses = await fetchCourses();
+            if (fetchedCourses && fetchedCourses.length > 0) {
+                courses = fetchedCourses;
+                renderCourseSelector();
+                await selectCourse(courses[0].id);
+            } else {
+                document.getElementById('courseSelector').innerHTML = `<p style="color:#888;">No courses yet. Create your first course above.</p>`;
+                document.getElementById('modulesContainer').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-plus-circle"></i>
+                        <p>You don't have any courses yet. Click "Create New Course" to get started.</p>
                     </div>
-                </div>
-                <span class="time">Just now</span>
-            `;
-
-            container.prepend(item);
-            const currentCount = parseInt(count.textContent) || 0;
-            count.textContent = currentCount + 1;
-
-            while (container.children.length > 50) {
-                container.removeChild(container.lastChild);
+                `;
             }
         }
 
-        // ============================================================
-        // WEBSOCKET CONNECTION - REAL-TIME UPDATE VERSION
-        // ============================================================
-        const token = localStorage.getItem('authToken');
-
-        if (token) {
-            const socket = io('https://bespellbee-backend-en6l.onrender.com', {
-                auth: { token: token },
-                transports: ['websocket']
-            });
-
-            socket.on('connect', () => {
-                console.log('✅ WebSocket connected');
-            });
-
-            // ====== REAL-TIME UPDATES - GOING AGAINST THE GRAIN! ======
-            socket.on('new-activity', (activity) => {
-                console.log('📡 Live activity received:', activity);
-                
-                // 1. Update the activity feed (instant)
-                if (typeof addActivityToFeed === 'function') {
-                    addActivityToFeed(activity);
-                }
-                
-                // 2. Update the recorded activity counter (instant)
-                const profileViews = document.getElementById('profileViews');
-                if (profileViews) {
-                    const currentViews = parseInt(profileViews.textContent) || 0;
-                    profileViews.textContent = currentViews + 1;
-                }
-                
-                // 3. Update the performance grid in REAL-TIME! (going against the grain)
-                if (typeof updatePerformanceGridRealTime === 'function') {
-                    updatePerformanceGridRealTime(activity);
-                }
-            });
-
-            // ====== 🆕 LISTEN FOR ENGAGEMENT SCORE UPDATES ======
-            socket.on('student-score-updated', (data) => {
-                console.log('📊 Score updated for', data.studentName, data.engagementScore);
-
-                // Update the performance grid cards
-                const cards = document.querySelectorAll('.perf-card');
-                for (const card of cards) {
-                    const nameEl = card.querySelector('.perf-header .name');
-                    if (nameEl && nameEl.textContent.trim() === data.studentName) {
-                        // Update score display
-                        const scoreEl = card.querySelector('.perf-header .score');
-                        if (scoreEl) {
-                            const level = data.engagementScore >= 70 ? 'high' : data.engagementScore >= 40 ? 'medium' : 'low';
-                            scoreEl.textContent = Math.round(data.engagementScore) + '%';
-                            scoreEl.className = 'score ' + level;
-                        }
-                        // Update progress bar
-                        const barFill = card.querySelector('.perf-bar .fill');
-                        if (barFill) {
-                            barFill.style.width = Math.min(data.engagementScore, 100) + '%';
-                            const level = data.engagementScore >= 70 ? 'high' : data.engagementScore >= 40 ? 'medium' : 'low';
-                            barFill.className = 'fill ' + level;
-                        }
-                        // Optionally update other stats (e.g., activity count if shown)
-                        break;
-                    }
-                }
-
-                // Also update the "Top Engaged" list if present
-                const engagedList = document.getElementById('onlineStudents');
-                if (engagedList) {
-                    const items = engagedList.querySelectorAll('.online-student');
-                    for (const item of items) {
-                        const nameSpan = item.querySelector('.name');
-                        if (nameSpan && nameSpan.textContent.trim() === data.studentName) {
-                            const detailSpan = item.querySelector('.detail');
-                            if (detailSpan) {
-                                const badge = detailSpan.querySelector('.score-badge');
-                                if (badge) {
-                                    const level = data.engagementScore >= 70 ? 'high' : data.engagementScore >= 40 ? 'medium' : 'low';
-                                    badge.textContent = Math.round(data.engagementScore) + '%';
-                                    badge.className = 'score-badge ' + level;
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-            });
-
-            socket.on('disconnect', (reason) => {
-                console.log('❌ WebSocket disconnected. Reason:', reason);
-            });
-
-            socket.on('connect_error', (err) => {
-                console.warn('⚠️ WebSocket connection error:', err.message);
-            });
-        }
-
-        // ============================================================
-        // INIT ON LOAD
-        // ============================================================
-        window.onload = function() {
-            loadDashboard();
-            // Still refresh periodically as a fallback
-            setInterval(() => {
-                if (typeof socket === 'undefined' || !socket.connected) {
-                    loadDashboard();
-                    console.log('🔄 Dashboard refreshed (polling fallback)');
-                }
-            }, 30000);
-        };
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 
 </body>
