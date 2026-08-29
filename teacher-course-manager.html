@@ -622,6 +622,24 @@
         // ============================================================
         // API CALLS
         // ============================================================
+        async function fetchCourses() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/teacher/courses`, { headers: getAuthHeaders() });
+        const data = await response.json();
+        if (data.success) {
+            const courses = data.data;
+            courses.forEach(c => {
+                c.modules = c.Modules || c.modules || [];
+            });
+            return courses;
+        }
+        console.error('Failed to fetch courses:', data.message);
+        return [];
+    } catch (error) { 
+        console.error('Error fetching courses:', error); 
+        return []; 
+    }
+}
        async function fetchCourse(courseId) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/teacher/courses/${courseId}`, { headers: getAuthHeaders() });
