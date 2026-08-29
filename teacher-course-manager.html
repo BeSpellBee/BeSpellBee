@@ -622,30 +622,25 @@
         // ============================================================
         // API CALLS
         // ============================================================
-        async function fetchCourse(courseId) {
+       async function fetchCourse(courseId) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/teacher/courses/${courseId}`, { headers: getAuthHeaders() });
         const data = await response.json();
         if (data.success) {
             const course = data.data;
-            course.modules = course.Modules || course.modules || [];  // <<< ADD THIS LINE
+            course.modules = course.Modules || course.modules || [];
+            course.modules.forEach(mod => {
+                mod.Lessons = mod.Lessons || mod.lessons || [];
+            });
             return course;
         }
         console.error('Failed to fetch course:', data.message);
         return null;
-    } catch (error) { console.error('Error fetching course:', error); return null; }
+    } catch (error) { 
+        console.error('Error fetching course:', error); 
+        return null; 
+    }
 }
-
-        async function fetchCourse(courseId) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/teacher/courses/${courseId}`, { headers: getAuthHeaders() });
-                const data = await response.json();
-                console.log('📥 fetchCourse returned:', data.data);  // <<< ADD THIS LINE
-                if (data.success) return data.data;
-                console.error('Failed to fetch course:', data.message);
-                return null;
-            } catch (error) { console.error('Error fetching course:', error); return null; }
-        }
 
         async function createCourse(title, icon, accessCode) {
             try {
