@@ -941,12 +941,17 @@
         // ============================================================
         // REAL-TIME PERFORMANCE GRID UPDATE
         // ============================================================
+                // ============================================================
+        // REAL-TIME PERFORMANCE GRID UPDATE (FIXED - Adds New Students)
+        // ============================================================
         function updatePerformanceGridRealTime(activity) {
             const studentName = activity.studentName || activity.Student?.name;
             if (!studentName) return;
 
-            const cards = document.querySelectorAll('.perf-card');
+            const container = document.getElementById('performanceGrid');
+            const cards = container.querySelectorAll('.perf-card');
             let targetCard = null;
+            
             for (const card of cards) {
                 const nameEl = card.querySelector('.perf-header .name');
                 if (nameEl && nameEl.textContent.trim() === studentName) {
@@ -954,8 +959,55 @@
                     break;
                 }
             }
-            if (!targetCard) return;
 
+            // ✅ NEW: If student NOT in grid, ADD them!
+            if (!targetCard) {
+                const studentId = activity.studentId || activity.Student?.id || 0;
+                if (!studentId) return;
+                
+                const newCard = document.createElement('div');
+                newCard.className = 'perf-card';
+                newCard.dataset.studentId = studentId;
+                newCard.onclick = () => showStudentDetails(studentId);
+                newCard.style.animation = 'slideIn 0.4s ease';
+                newCard.innerHTML = `
+                    <div class="perf-header">
+                        <span class="name">${studentName}</span>
+                        <span class="score low">1%</span>
+                    </div>
+                    <div class="perf-stats">
+                        <div class="stat">
+                            <div class="val participation">1</div>
+                            <div class="label">Participation</div>
+                        </div>
+                        <div class="stat">
+                            <div class="val learning">0</div>
+                            <div class="label">Learning</div>
+                        </div>
+                        <div class="stat">
+                            <div class="val achievement">0</div>
+                            <div class="label">Achievement</div>
+                        </div>
+                    </div>
+                    <div class="perf-bar">
+                        <div class="fill low" style="width: 1%;"></div>
+                    </div>
+                    <div class="perf-footer" style="display:flex; justify-content:space-between; margin-top:6px; font-size:0.65rem; color:#555;">
+                        <span>1 activities</span>
+                        <span>🔄 0 quizzes</span>
+                        <span>💬 0 messages</span>
+                    </div>
+                `;
+                
+                // Remove empty state if exists
+                const emptyState = container.querySelector('[style*="grid-column:1/-1"]');
+                if (emptyState) emptyState.remove();
+                
+                container.prepend(newCard);
+                targetCard = newCard;
+            }
+
+            // Update stats based on activity type
             const statValues = targetCard.querySelectorAll('.perf-stats .stat .val');
             let statIndex = 0;
             if (activity.activityType === 'lesson_view' || activity.activityType === 'video_watch') {
@@ -963,11 +1015,17 @@
             } else if (activity.activityType === 'quiz_pass' || activity.activityType === 'activity_practice') {
                 statIndex = 2;
             }
-            if (statValues.length > statIndex) {
+            if (statValues[statIndex]) {
                 const oldVal = parseInt(statValues[statIndex].textContent) || 0;
                 statValues[statIndex].textContent = oldVal + 1;
             }
+            // Also increment participation for all activity types
+            if (statIndex !== 0 && statValues[0]) {
+                const oldParticipation = parseInt(statValues[0].textContent) || 0;
+                statValues[0].textContent = oldParticipation + 1;
+            }
 
+            // Update score
             const scoreEl = targetCard.querySelector('.perf-header .score');
             if (scoreEl) {
                 const oldScore = parseInt(scoreEl.textContent) || 0;
@@ -976,6 +1034,7 @@
                 scoreEl.textContent = newScore + '%';
                 const scoreLevel = newScore >= 70 ? 'high' : newScore >= 40 ? 'medium' : 'low';
                 scoreEl.className = 'score ' + scoreLevel;
+                
                 const barFill = targetCard.querySelector('.perf-bar .fill');
                 if (barFill) {
                     barFill.style.width = newScore + '%';
@@ -983,12 +1042,32 @@
                 }
             }
 
-            const activitySpan = targetCard.querySelector('div[style*="margin-top:6px"] span:first-child');
-            if (activitySpan) {
-                const currentActivities = parseInt(activitySpan.textContent) || 0;
-                activitySpan.textContent = (currentActivities + 1) + ' activities';
+            // Update activity count
+            const footerSpan = targetCard.querySelector('.perf-footer span:first-child');
+            if (footerSpan) {
+                const currentActivities = parseInt(footerSpan.textContent) || 0;
+                footerSpan.textContent = (currentActivities + 1) + ' activities';
             }
 
+            // Update quiz count if applicable
+            if (activity.activityType === 'quiz_attempt' || activity.activityType === 'quiz_pass') {
+                const quizSpan = targetCard.querySelector('.perf-footer span:nth-child(2)');
+                if (quizSpan) {
+                    const currentQuizzes = parseInt(quizSpan.textContent) || 0;
+                    quizSpan.textContent = '🔄 ' + (currentQuizzes + 1) + ' quizzes';
+                }
+            }
+
+            // Update message count if applicable
+            if (activity.activityType === 'message_sent') {
+                const msgSpan = targetCard.querySelector('.perf-footer span:nth-child(3)');
+                if (msgSpan) {
+                    const currentMsgs = parseInt(msgSpan.textContent) || 0;
+                    msgSpan.textContent = '💬 ' + (currentMsgs + 1) + ' messages';
+                }
+            }
+
+            // Flash effect
             targetCard.style.transition = 'border-color 0.3s, box-shadow 0.3s';
             targetCard.style.borderColor = '#00ff88';
             targetCard.style.boxShadow = '0 0 30px rgba(0, 255, 136, 0.3)';
@@ -996,6 +1075,56 @@
                 targetCard.style.borderColor = '#1a4a4a';
                 targetCard.style.boxShadow = 'none';
             }, 1500);
+        }
+
+        // ============================================================
+        // ADD STUDENT TO ENGAGED LIST (NEW - Real-time additions)
+        // ============================================================
+        function addStudentToEngagedList(activity) {
+            const studentName = activity.studentName || activity.Student?.name;
+            const studentId = activity.studentId || activity.Student?.id || 0;
+            if (!studentName || !studentId) return;
+            
+            const container = document.getElementById('onlineStudents');
+            const count = document.getElementById('onlineCount');
+            if (!container) return;
+            
+            // Check if student already exists in list
+            const existingItems = container.querySelectorAll('.online-student');
+            for (const item of existingItems) {
+                const onclickAttr = item.getAttribute('onclick') || '';
+                if (onclickAttr.includes(`(${studentId})`)) {
+                    // Student exists - update their action count
+                    const highlightSpan = item.querySelector('.highlight');
+                    if (highlightSpan) {
+                        highlightSpan.textContent = (parseInt(highlightSpan.textContent) || 0) + 1;
+                    }
+                    // Flash effect
+                    item.style.background = 'rgba(0, 255, 136, 0.1)';
+                    setTimeout(() => { item.style.background = ''; }, 1000);
+                    return;
+                }
+            }
+            
+            // Remove empty state if exists
+            const emptyState = container.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+            
+            // Add new student to list
+            const item = document.createElement('div');
+            item.className = 'online-student';
+            item.onclick = () => showStudentDetails(studentId);
+            item.style.animation = 'slideIn 0.4s ease';
+            item.innerHTML = `
+                <span class="name"><i class="fas fa-circle"></i> ${studentName}</span>
+                <span class="detail"><span class="highlight">1</span> actions • <span class="score-badge low">1%</span></span>
+            `;
+            container.prepend(item);
+            count.textContent = (parseInt(count.textContent) || 0) + 1;
+            
+            // Flash effect
+            item.style.background = 'rgba(0, 255, 255, 0.1)';
+            setTimeout(() => { item.style.background = ''; }, 1500);
         }
 
         // ============================================================
@@ -1034,9 +1163,7 @@
                 }
             })
             .then(res => {
-                if (!res.ok) {
-                    throw new Error(`Server error (${res.status})`);
-                }
+                if (!res.ok) throw new Error(`Server error (${res.status})`);
                 return res.json();
             })
             .then(result => {
@@ -1053,12 +1180,9 @@
         }
 
         function showModalError(message) {
-            const nameEl = document.getElementById('modalStudentName');
-            const infoEl = document.getElementById('modalStudentInfo');
-            const statsEl = document.getElementById('modalStats');
-            nameEl.textContent = '⚠️ Error';
-            infoEl.textContent = message;
-            statsEl.innerHTML = `
+            document.getElementById('modalStudentName').textContent = '⚠️ Error';
+            document.getElementById('modalStudentInfo').textContent = message;
+            document.getElementById('modalStats').innerHTML = `
                 <div style="grid-column:1/-1; text-align:center; padding:20px; color:#ff6666;">
                     <i class="fas fa-exclamation-triangle" style="font-size:1.5rem; display:block; margin-bottom:8px;"></i>
                     <p>${message}</p>
@@ -1109,7 +1233,7 @@
                 `).join('');
 
                 if (student.recentActivities && student.recentActivities.length > 0) {
-                    const recentHtml = `
+                    statsEl.innerHTML += `
                         <div style="grid-column:1/-1; margin-top:12px; border-top:1px solid #1a4a4a; padding-top:12px;">
                             <div style="color:#88dddd; font-size:0.8rem; font-weight:600; margin-bottom:8px;">📋 Recent Activity</div>
                             ${student.recentActivities.slice(0, 5).map(act => {
@@ -1124,7 +1248,6 @@
                             }).join('')}
                         </div>
                     `;
-                    statsEl.innerHTML += recentHtml;
                 }
             }
         }
@@ -1195,16 +1318,16 @@
             `;
 
             container.prepend(item);
-            const currentCount = parseInt(count.textContent) || 0;
-            count.textContent = currentCount + 1;
+            count.textContent = (parseInt(count.textContent) || 0) + 1;
 
+            // Keep max 50 items
             while (container.children.length > 50) {
                 container.removeChild(container.lastChild);
             }
         }
 
         // ============================================================
-        // WEBSOCKET CONNECTION
+        // WEBSOCKET CONNECTION (FIXED - Full real-time updates)
         // ============================================================
         const token = localStorage.getItem('authToken');
         let socket = null;
@@ -1221,23 +1344,33 @@
 
             socket.on('new-activity', (activity) => {
                 console.log('📡 Live activity received:', activity);
+                
+                // 1. Update activity feed
                 if (typeof addActivityToFeed === 'function') {
                     addActivityToFeed(activity);
                 }
+                
+                // 2. Update profile views count
                 const profileViews = document.getElementById('profileViews');
                 if (profileViews) {
-                    const currentViews = parseInt(profileViews.textContent) || 0;
-                    profileViews.textContent = currentViews + 1;
+                    profileViews.textContent = (parseInt(profileViews.textContent) || 0) + 1;
                 }
+                
+                // 3. Update performance grid (now adds new students!)
                 if (typeof updatePerformanceGridRealTime === 'function') {
                     updatePerformanceGridRealTime(activity);
                 }
+                
+                // 4. Update engaged students list (now adds new students!)
+                if (typeof addStudentToEngagedList === 'function') {
+                    addStudentToEngagedList(activity);
+                }
             });
 
-            // ====== REAL-TIME SCORE UPDATES ======
             socket.on('student-score-updated', (data) => {
                 console.log('📊 Score updated for', data.studentName, data.engagementScore);
 
+                // Update performance grid card
                 const cards = document.querySelectorAll('.perf-card');
                 for (const card of cards) {
                     const nameEl = card.querySelector('.perf-header .name');
@@ -1254,24 +1387,29 @@
                             const level = data.engagementScore >= 70 ? 'high' : data.engagementScore >= 40 ? 'medium' : 'low';
                             barFill.className = 'fill ' + level;
                         }
+                        // Flash effect
+                        card.style.borderColor = '#ffcc00';
+                        card.style.boxShadow = '0 0 30px rgba(255, 204, 0, 0.3)';
+                        setTimeout(() => {
+                            card.style.borderColor = '#1a4a4a';
+                            card.style.boxShadow = 'none';
+                        }, 1500);
                         break;
                     }
                 }
 
+                // Update engaged students sidebar
                 const engagedList = document.getElementById('onlineStudents');
                 if (engagedList) {
                     const items = engagedList.querySelectorAll('.online-student');
                     for (const item of items) {
                         const nameSpan = item.querySelector('.name');
                         if (nameSpan && nameSpan.textContent.trim() === data.studentName) {
-                            const detailSpan = item.querySelector('.detail');
-                            if (detailSpan) {
-                                const badge = detailSpan.querySelector('.score-badge');
-                                if (badge) {
-                                    const level = data.engagementScore >= 70 ? 'high' : data.engagementScore >= 40 ? 'medium' : 'low';
-                                    badge.textContent = Math.round(data.engagementScore) + '%';
-                                    badge.className = 'score-badge ' + level;
-                                }
+                            const badge = item.querySelector('.score-badge');
+                            if (badge) {
+                                const level = data.engagementScore >= 70 ? 'high' : data.engagementScore >= 40 ? 'medium' : 'low';
+                                badge.textContent = Math.round(data.engagementScore) + '%';
+                                badge.className = 'score-badge ' + level;
                             }
                             break;
                         }
@@ -1289,15 +1427,35 @@
         }
 
         // ============================================================
-        // INIT ON LOAD
+        // INIT ON LOAD (FIXED - Smart polling + full refresh)
         // ============================================================
         window.onload = function() {
             loadDashboard();
-            // Fallback polling
-            setInterval(() => {
-                if (!socket || !socket.connected) {
-                    loadDashboard();
-                    console.log('🔄 Dashboard refreshed (polling fallback)');
+            
+            // Smart polling: Refresh grid every 30s to sync with backend
+            setInterval(async () => {
+                const token = localStorage.getItem('authToken');
+                if (!token) return;
+                
+                try {
+                    // If WebSocket is connected, only refresh grid (lightweight)
+                    if (socket && socket.connected) {
+                        const response = await fetch(`${API_BASE_URL}/api/auth/teacher/dashboard`, {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        const result = await response.json();
+                        if (result.success) {
+                            // Only refresh the grid, not the whole page
+                            renderPerformanceGrid(result.data.engagementStats || []);
+                            renderEngagedStudents(result.data.engagementStats || []);
+                        }
+                    } else {
+                        // If WebSocket disconnected, do full refresh
+                        console.log('🔄 WebSocket offline, full dashboard refresh');
+                        loadDashboard();
+                    }
+                } catch (e) {
+                    console.error('Polling failed:', e);
                 }
             }, 30000);
         };
