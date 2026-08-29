@@ -624,32 +624,33 @@
         // ============================================================
 
         // Fetch all courses for the logged-in student (by teacher association)
-        async function fetchAllCourses() {
-            const token = localStorage.getItem('authToken');
-            if (!token) {
-                console.warn('No auth token found');
-                return [];
-            }
+       async function fetchAllCourses() {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        console.warn('No auth token found');
+        return [];
+    }
 
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/student/courses`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                const data = await response.json();
-                if (data.success) {
-                    return data.data;
-                } else {
-                    console.error('Failed to fetch courses:', data.message);
-                    return [];
-                }
-            } catch (error) {
-                console.error('Error fetching courses:', error);
-                return [];
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/student/courses`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             }
+        });
+        const data = await response.json();
+        console.log('📥 Student courses response:', data);  // <<< ADD THIS
+        if (data.success) {
+            return data.data;
+        } else {
+            console.error('Failed to fetch courses:', data.message);
+            return [];
         }
+    } catch (error) {
+        console.error('Error fetching courses:', error);
+        return [];
+    }
+}
 
         // Fetch a single course with modules/lessons
         async function fetchCourse(courseId) {
