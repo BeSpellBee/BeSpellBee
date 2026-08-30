@@ -632,7 +632,7 @@
             }
         }
 
-        /* ====== TOAST NOTIFICATION ====== */
+        /* ====== TOAST ====== */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -753,7 +753,7 @@
     <div id="toast" class="toast"><i class="fas fa-info-circle"></i> <span id="toastMsg">Hello</span></div>
 
     <!-- ============================================================ -->
-    <!-- ====== COMPLETE LMS JAVASCRIPT (FIXED) ====== -->
+    <!-- ====== JAVASCRIPT WITH FULL TRACKING INTEGRATION ====== -->
     <!-- ============================================================ -->
     <script>
         // ============================================================
@@ -775,10 +775,29 @@
             msg.textContent = message;
             el.className = 'toast ' + type;
             clearTimeout(toastTimer);
-            // force reflow
             void el.offsetWidth;
             el.classList.add('show');
             toastTimer = setTimeout(() => el.classList.remove('show'), 4000);
+        }
+
+        // ============================================================
+        // TRACKING HELPER – sends authenticated POST to /api/track/...
+        // ============================================================
+        async function trackActivity(endpoint, data) {
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+            try {
+                await fetch(`${API_BASE_URL}/api/track/${endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+            } catch (e) {
+                console.warn('Tracking failed:', e);
+            }
         }
 
         // ============================================================
@@ -796,31 +815,22 @@
         // API CALLS
         // ============================================================
 
-        // Fetch all courses for the logged-in student
         async function fetchAllCourses() {
             const token = localStorage.getItem('authToken');
-            if (!token) {
-                console.warn('No auth token found');
-                return [];
-            }
+            if (!token) return [];
             try {
                 const response = await fetch(`${API_BASE_URL}/api/student/courses`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await response.json();
-                if (data.success) {
-                    return data.data;
-                } else {
-                    console.error('Failed to fetch courses:', data.message);
-                    return [];
-                }
+                if (data.success) return data.data || data.courses || [];
+                return [];
             } catch (error) {
                 console.error('Error fetching courses:', error);
                 return [];
             }
         }
 
-        // Fetch a single course with modules/lessons — NORMALIZED
         async function fetchCourse(courseId) {
             try {
                 const response = await fetch(`${API_BASE_URL}/api/student/courses/${courseId}`, {
@@ -832,27 +842,20 @@
                 const data = await response.json();
                 if (data.success) {
                     const course = data.data;
-                    // Normalize: Modules -> modules, Lessons -> lessons, Questions -> questions
+                    // Normalize
                     course.modules = course.Modules || course.modules || [];
                     course.modules.forEach(mod => {
                         mod.Lessons = mod.Lessons || mod.lessons || [];
                         mod.Lessons.forEach(lesson => {
-                            // Normalize quiz questions
-                            if (lesson.type === 'quiz' || lesson.type === 'Quiz') {
-                                lesson.questions = lesson.Questions || lesson.questions || [];
-                                lesson.type = 'quiz';
-                            }
-                            // Ensure content field exists
+                            lesson.questions = lesson.Questions || lesson.questions || [];
                             lesson.content = lesson.Content || lesson.content || '';
-                            // Ensure title
                             lesson.title = lesson.Title || lesson.title || 'Untitled';
+                            lesson.type = lesson.type || 'lesson';
                         });
                     });
                     return course;
-                } else {
-                    console.error('Failed to fetch course:', data.message);
-                    return null;
                 }
+                return null;
             } catch (error) {
                 console.error('Error fetching course:', error);
                 return null;
@@ -1111,32 +1114,33 @@
         }
 
         // ============================================================
-        // OPEN LESSON / QUIZ — FIXED ID COMPARISON
+        // OPEN LESSON / QUIZ – with tracking
         // ============================================================
         function openLesson(courseId, moduleId, lessonId) {
-            console.log('🔍 openLesson called:', { courseId, moduleId, lessonId });
-
             if (!currentCourseData) {
                 showToast('❌ Course data not loaded. Please refresh.', 'error');
                 return;
             }
 
-            // Find module — using String() for type-safe comparison
             const module = currentCourseData.modules.find(m => String(m.id) === String(moduleId));
             if (!module) {
-                console.error('Module not found:', moduleId);
-                showToast('❌ Module not found. Please refresh.', 'error');
+                showToast('❌ Module not found.', 'error');
                 return;
             }
 
             const lesson = module.Lessons.find(l => String(l.id) === String(lessonId));
             if (!lesson) {
-                console.error('Lesson not found:', lessonId);
-                showToast('❌ Lesson not found. Please refresh.', 'error');
+                showToast('❌ Lesson not found.', 'error');
                 return;
             }
 
-            console.log('✅ Found lesson:', lesson);
+            // 🔹 TRACK: lesson view (for both lessons and quizzes)
+            trackActivity('lesson-view', {
+                lessonId: lesson.id,
+                lessonTitle: lesson.title,
+                moduleId: module.id,
+                courseId: courseId
+            });
 
             if (lesson.type === 'quiz') {
                 showView('viewQuiz');
@@ -1154,10 +1158,8 @@
             const container = document.getElementById('lessonContent');
             const done = isCompleted(courseId, lesson.id);
 
-            // Support both plain text and HTML content
             let contentHtml = lesson.content || '<p style="color:#666;">No content yet.</p>';
 
-            // If content looks like a URL or embed, wrap appropriately
             if (typeof lesson.content === 'string' && lesson.content.trim().startsWith('http')) {
                 const url = lesson.content.trim();
                 if (url.includes('youtube.com') || url.includes('youtu.be')) {
@@ -1195,19 +1197,55 @@
                 `;
         }
 
-        function markLessonComplete(courseId, lessonId) {
+        // ============================================================
+        // MARK LESSON COMPLETE – with tracking (lesson-complete or practice)
+        // ============================================================
+        async function markLessonComplete(courseId, lessonId) {
+            // Find the lesson and module
+            const course = currentCourseData;
+            let lesson = null,
+                moduleId = null;
+            for (let mod of course.modules) {
+                const found = mod.Lessons.find(l => String(l.id) === String(lessonId));
+                if (found) {
+                    lesson = found;
+                    moduleId = mod.id;
+                    break;
+                }
+            }
+            if (!lesson) {
+                showToast('❌ Lesson not found.', 'error');
+                return;
+            }
+
+            // Mark local progress
             markCompleted(courseId, lessonId);
+
+            // 🔹 TRACK: choose endpoint based on lesson type
+            if (lesson.type === 'activity') {
+                await trackActivity('practice', {
+                    activityId: lesson.id,
+                    title: lesson.title,
+                    type: 'activity'
+                });
+            } else {
+                await trackActivity('lesson-complete', {
+                    lessonId: lesson.id,
+                    lessonTitle: lesson.title,
+                    moduleId: moduleId,
+                    courseId: courseId
+                });
+            }
+
             showToast('✅ Lesson marked as complete!', 'success');
             showDashboard();
         }
 
         // ============================================================
-        // RENDER QUIZ — FIXED: uses lesson data directly
+        // RENDER QUIZ
         // ============================================================
         function renderQuiz(courseId, quiz) {
             const container = document.getElementById('quizContent');
-
-            // Ensure questions array exists
             const questions = quiz.questions || [];
             if (questions.length === 0) {
                 container.innerHTML = `
@@ -1255,22 +1293,20 @@
         }
 
         // ============================================================
-        // SUBMIT QUIZ — FIXED: uses the quiz data from currentCourseData
+        // SUBMIT QUIZ – with tracking
         // ============================================================
-        function submitQuiz(courseId, quizId) {
+        async function submitQuiz(courseId, quizId) {
             const course = currentCourseData;
             if (!course) {
                 showToast('❌ Course data not available.', 'error');
                 return;
             }
 
-            // Find the quiz data — using String() for type-safe comparison
             let quizData = null;
             for (let m of course.modules) {
                 const found = m.Lessons.find(l => String(l.id) === String(quizId));
                 if (found) { quizData = found; break; }
             }
-
             if (!quizData) {
                 showToast('❌ Quiz data not found.', 'error');
                 return;
@@ -1284,7 +1320,6 @@
 
             let score = 0;
             let allAnswered = true;
-
             for (let i = 0; i < questions.length; i++) {
                 const selected = document.querySelector(`input[name="q${i}"]:checked`);
                 if (!selected) { allAnswered = false; continue; }
@@ -1301,11 +1336,21 @@
             const total = questions.length;
             const passed = score >= total * 0.6;
 
-            // Store progress
+            // 🔹 TRACK: quiz attempt
+            await trackActivity('quiz-attempt', {
+                quizId: quizId,
+                quizTitle: quizData.title,
+                score: score,
+                totalQuestions: total,
+                passed: passed
+            });
+
+            // Save local progress
             const prog = getProgress(courseId);
             prog[quizId] = { completed: true, score: score, total: total };
             saveProgress(courseId, prog);
 
+            // Show result
             if (passed) {
                 resultDiv.className = 'quiz-result pass';
                 resultDiv.innerHTML = `<h3>✅ You scored ${score}/${total}. Well done!</h3>`;
@@ -1316,7 +1361,6 @@
                 showToast(`📝 Quiz score: ${score}/${total}. Keep learning!`, 'info');
             }
 
-            // Disable all radio buttons
             document.querySelectorAll('#quizForm input[type="radio"]').forEach(el => el.disabled = true);
         }
 
@@ -1380,7 +1424,7 @@
         }
 
         // ============================================================
-        // SEND PROGRESS TO BACKEND — sends a report, not duplicate data
+        // SEND PROGRESS TO BACKEND
         // ============================================================
         async function sendProgress() {
             const token = localStorage.getItem('authToken');
@@ -1446,7 +1490,6 @@
                 });
 
                 const data = await response.json();
-
                 if (data.success) {
                     showToast('✅ Progress report sent to your teacher!', 'success');
                 } else {
@@ -1464,7 +1507,7 @@
         }
 
         // ============================================================
-        // FETCH STUDENT STATS — REAL DATA FROM BACKEND
+        // FETCH STUDENT STATS (real from DB)
         // ============================================================
         async function fetchStudentStats() {
             const token = localStorage.getItem('authToken');
@@ -1527,7 +1570,7 @@
         }
 
         // ============================================================
-        // BACK TO TOP BUTTON
+        // BACK TO TOP
         // ============================================================
         const topBtn = document.getElementById("topBtn");
         window.onscroll = function() {
