@@ -2,19 +2,21 @@
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N3F5GM52DZ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-N3F5GM52DZ');
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N3F5GM52DZ">
     </script>
-      
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-N3F5GM52DZ');
+    </script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BeSpellBee - Student Dashboard</title>
-    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <style>
         /* ====== GLOBAL ====== */
         * {
@@ -31,7 +33,9 @@
             opacity: 0;
             transition: opacity 0.4s ease;
         }
-        body.loaded { opacity: 1; }
+        body.loaded {
+            opacity: 1;
+        }
 
         /* ====== TOP NAV ====== */
         .nav-bar {
@@ -50,11 +54,14 @@
             color: #00ffff;
             text-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
         }
-        .nav-bar .logo span { color: #fff; }
+        .nav-bar .logo span {
+            color: #fff;
+        }
         .nav-bar .student-info {
             display: flex;
             align-items: center;
             gap: 16px;
+            flex-wrap: wrap;
         }
         .nav-bar .student-info .name {
             font-weight: 600;
@@ -76,7 +83,20 @@
             padding-left: 16px;
             transition: color 0.3s;
         }
-        .nav-bar .logout-btn:hover { color: #ffdd44; }
+        .nav-bar .logout-btn:hover {
+            color: #ffdd44;
+        }
+        .nav-bar .home-link {
+            color: #88dddd;
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-left: 1px solid #333;
+            padding-left: 16px;
+            transition: color 0.3s;
+        }
+        .nav-bar .home-link:hover {
+            color: #00ffff;
+        }
 
         /* ====== DASHBOARD CONTAINER ====== */
         .dashboard-container {
@@ -144,7 +164,9 @@
             gap: 8px;
             color: #00ffff;
         }
-        .lms-header h2 i { color: #ffcc00; }
+        .lms-header h2 i {
+            color: #ffcc00;
+        }
         .lms-badge {
             background: rgba(255, 204, 0, 0.15);
             color: #ffcc00;
@@ -155,7 +177,10 @@
             border: 1px solid rgba(255, 204, 0, 0.3);
             letter-spacing: 0.5px;
         }
-        .lms-body { padding: 24px; background: #0d0d0d; }
+        .lms-body {
+            padding: 24px;
+            background: #0d0d0d;
+        }
 
         /* ====== ACCESS GATE ====== */
         .lms-gate {
@@ -172,7 +197,9 @@
             font-size: 1.5rem;
             margin-bottom: 8px;
         }
-        .lms-gate h3 i { color: #ffcc00; }
+        .lms-gate h3 i {
+            color: #ffcc00;
+        }
         .lms-gate p {
             color: #888;
             margin-bottom: 20px;
@@ -215,8 +242,12 @@
         }
 
         /* ====== LMS VIEWS ====== */
-        .lms-view { display: none; }
-        .lms-view.active { display: block; }
+        .lms-view {
+            display: none;
+        }
+        .lms-view.active {
+            display: block;
+        }
 
         /* ====== DASHBOARD VIEW ====== */
         .dashboard-header {
@@ -234,7 +265,9 @@
             margin: 0;
             font-size: 1.4rem;
         }
-        .dashboard-header h2 i { color: #ffcc00; }
+        .dashboard-header h2 i {
+            color: #ffcc00;
+        }
         .dashboard-actions {
             display: flex;
             gap: 10px;
@@ -285,7 +318,10 @@
             margin-top: 0;
             font-size: 1.1rem;
         }
-        .module-card h3 i { color: #ffcc00; margin-right: 8px; }
+        .module-card h3 i {
+            color: #ffcc00;
+            margin-right: 8px;
+        }
 
         /* ====== LESSON ITEMS ====== */
         .lesson-item {
@@ -325,11 +361,23 @@
             border-radius: 24px;
             line-height: 1.7;
             border: 1px solid #1a4a4a;
+            margin-top: 12px;
         }
-        .lesson-content h3 { color: #00ffff; margin-top: 20px; margin-bottom: 10px; }
-        .lesson-content p { color: #ccc; }
-        .lesson-content ul { color: #ccc; padding-left: 20px; }
-        .lesson-content li { margin: 8px 0; }
+        .lesson-content h3 {
+            color: #00ffff;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .lesson-content p {
+            color: #ccc;
+        }
+        .lesson-content ul {
+            color: #ccc;
+            padding-left: 20px;
+        }
+        .lesson-content li {
+            margin: 8px 0;
+        }
         .lesson-content iframe {
             width: 100%;
             height: 500px;
@@ -337,6 +385,27 @@
             border-radius: 16px;
             background: #0d0d0d;
             margin-top: 15px;
+        }
+        .lesson-content img {
+            max-width: 100%;
+            border-radius: 12px;
+            margin: 12px 0;
+        }
+        .lesson-content .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            margin: 12px 0;
+        }
+        .lesson-content .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         /* ====== NAV ROW ====== */
@@ -394,7 +463,9 @@
             color: #00ff88;
             font-weight: 600;
         }
-        .completed-text i { margin-right: 6px; }
+        .completed-text i {
+            margin-right: 6px;
+        }
 
         /* ====== QUIZ BLOCKS ====== */
         .question-block {
@@ -405,7 +476,10 @@
             border-left: 6px solid #00ffff;
             border: 1px solid #1a4a4a;
         }
-        .question-block p { color: #fff; font-weight: 600; }
+        .question-block p {
+            color: #fff;
+            font-weight: 600;
+        }
         .question-block label {
             display: block;
             margin: 8px 0;
@@ -438,34 +512,76 @@
             display: block;
             border: 1px solid rgba(0, 255, 136, 0.3);
         }
-        .quiz-result.pass h3 { color: #00ff88; }
+        .quiz-result.pass h3 {
+            color: #00ff88;
+        }
         .quiz-result.fail {
             background: rgba(255, 68, 68, 0.1);
             border-left: 6px solid #ff4444;
             display: block;
             border: 1px solid rgba(255, 68, 68, 0.3);
         }
-        .quiz-result.fail h3 { color: #ff4444; }
+        .quiz-result.fail h3 {
+            color: #ff4444;
+        }
 
         /* ====== RESPONSIVE ====== */
         @media (max-width: 700px) {
-            .lms-header h2 { font-size: 1.2rem; }
-            .lesson-content iframe { height: 350px; }
-            .nav-row { flex-direction: column; align-items: stretch; }
-            .nav-row button, .nav-row a { text-align: center; }
-            .dashboard-header { flex-direction: column; align-items: flex-start; }
-            .dashboard-actions { width: 100%; }
-            .dashboard-actions button { flex: 1; text-align: center; }
-            .course-selector { justify-content: center; }
+            .lms-header h2 {
+                font-size: 1.2rem;
+            }
+            .lesson-content iframe {
+                height: 350px;
+            }
+            .nav-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .nav-row button,
+            .nav-row a {
+                text-align: center;
+            }
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .dashboard-actions {
+                width: 100%;
+            }
+            .dashboard-actions button {
+                flex: 1;
+                text-align: center;
+            }
+            .course-selector {
+                justify-content: center;
+            }
         }
         @media (max-width: 480px) {
-            .lms-header { flex-direction: column; align-items: flex-start; }
-            .lms-gate input { max-width: 100%; }
-            .lesson-content iframe { height: 250px; }
-            .module-card { padding: 16px; }
-            .lesson-item { flex-direction: column; align-items: flex-start; gap: 8px; }
-            .lms-body { padding: 16px; }
-            .course-btn { padding: 8px 16px; font-size: 0.8rem; }
+            .lms-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .lms-gate input {
+                max-width: 100%;
+            }
+            .lesson-content iframe {
+                height: 250px;
+            }
+            .module-card {
+                padding: 16px;
+            }
+            .lesson-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .lms-body {
+                padding: 16px;
+            }
+            .course-btn {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
         }
 
         /* ====== BACK TO TOP ====== */
@@ -505,15 +621,59 @@
             animation: pulse 2s infinite;
         }
         @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
+            100% {
+                opacity: 1;
+            }
         }
-        .course-btn.active {
-            background: #00ffff;
-            color: #000;
+
+        /* ====== TOAST NOTIFICATION ====== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1a1a1a;
+            border: 1px solid #1a4a4a;
+            border-radius: 16px;
+            padding: 16px 24px;
+            color: #e0e0e0;
+            font-size: 0.95rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            transform: translateY(120px);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 1000;
+            max-width: 400px;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .toast.success {
+            border-color: #00ff88;
+        }
+        .toast.success i {
+            color: #00ff88;
+        }
+        .toast.error {
+            border-color: #ff4444;
+        }
+        .toast.error i {
+            color: #ff4444;
+        }
+        .toast.info {
             border-color: #00ffff;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+        }
+        .toast.info i {
+            color: #00ffff;
+        }
+        .toast i {
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -525,7 +685,7 @@
             <svg width="180" height="40" viewBox="0 0 200 50">
                 <defs>
                     <linearGradient id="lmsGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:aqua;"/>
+                        <stop offset="0%" style="stop-color:aqua;" />
                         <stop offset="50%" style="stop-color:white;" />
                         <stop offset="100%" style="stop-color:yellow;" />
                     </linearGradient>
@@ -536,24 +696,17 @@
         <div class="student-info">
             <span class="badge"><span class="status-dot"></span> Learning</span>
             <span class="name" id="navStudentName"><i class="fas fa-user-graduate"></i> Loading...</span>
-            
-            <!-- ✅ ADDED: Back to Home Link -->
-            <a href="index.html" style="color: #88dddd; text-decoration: none; font-size: 0.85rem; border-left: 1px solid #333; padding-left: 16px; transition: color 0.3s;">
-                <i class="fas fa-arrow-left"></i> Back to Home
-            </a>
-
-            <a href="#" id="logoutBtn" class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
+            <a href="index.html" class="home-link"><i class="fas fa-arrow-left"></i> Home</a>
+            <a href="#" id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
     </nav>
 
     <!-- ====== DASHBOARD CONTAINER ====== -->
     <div class="dashboard-container">
 
-        <!-- ====== COURSE SELECTOR (dynamic) ====== -->
+        <!-- ====== COURSE SELECTOR ====== -->
         <div class="course-selector" id="courseSelector">
-            <!-- Buttons will be injected here -->
+            <!-- Injected -->
         </div>
 
         <!-- ====== LMS WRAPPER ====== -->
@@ -568,8 +721,8 @@
                 <div id="lmsGate" class="lms-gate">
                     <h3><i class="fas fa-key"></i> Enter your access code</h3>
                     <p>Purchase access to unlock your course materials.</p>
-                    <input type="password" id="lmsPassword" placeholder="Your access code...">
-                    <br>
+                    <input type="password" id="lmsPassword" placeholder="Your access code..." />
+                    <br />
                     <button onclick="unlockLMS()"><i class="fas fa-unlock-alt"></i> Unlock Course</button>
                     <div id="lmsGateError" class="error"></div>
                 </div>
@@ -593,11 +746,14 @@
         </div>
     </div>
 
-    <!-- ====== BACK TO TOP BUTTON ====== -->
+    <!-- ====== BACK TO TOP ====== -->
     <button id="topBtn" title="Go to top"><i class="fas fa-arrow-up"></i></button>
 
+    <!-- ====== TOAST ====== -->
+    <div id="toast" class="toast"><i class="fas fa-info-circle"></i> <span id="toastMsg">Hello</span></div>
+
     <!-- ============================================================ -->
-    <!-- ====== COMPLETE LMS JAVASCRIPT (API-INTEGRATED) ====== -->
+    <!-- ====== COMPLETE LMS JAVASCRIPT (FIXED) ====== -->
     <!-- ============================================================ -->
     <script>
         // ============================================================
@@ -607,6 +763,23 @@
         let currentCourse = null;
         let currentCourseData = null;
         let courses = [];
+
+        // ============================================================
+        // TOAST SYSTEM
+        // ============================================================
+        let toastTimer = null;
+
+        function showToast(message, type = 'info') {
+            const el = document.getElementById('toast');
+            const msg = document.getElementById('toastMsg');
+            msg.textContent = message;
+            el.className = 'toast ' + type;
+            clearTimeout(toastTimer);
+            // force reflow
+            void el.offsetWidth;
+            el.classList.add('show');
+            toastTimer = setTimeout(() => el.classList.remove('show'), 4000);
+        }
 
         // ============================================================
         // HELPER: GET AUTH HEADERS
@@ -623,62 +796,68 @@
         // API CALLS
         // ============================================================
 
-        // Fetch all courses for the logged-in student (by teacher association)
-       async function fetchAllCourses() {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-        console.warn('No auth token found');
-        return [];
-    }
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/student/courses`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+        // Fetch all courses for the logged-in student
+        async function fetchAllCourses() {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                console.warn('No auth token found');
+                return [];
             }
-        });
-        const data = await response.json();
-        console.log('📥 Student courses response:', data);  // <<< ADD THIS
-        if (data.success) {
-            return data.data;
-        } else {
-            console.error('Failed to fetch courses:', data.message);
-            return [];
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/student/courses`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    return data.data;
+                } else {
+                    console.error('Failed to fetch courses:', data.message);
+                    return [];
+                }
+            } catch (error) {
+                console.error('Error fetching courses:', error);
+                return [];
+            }
         }
-    } catch (error) {
-        console.error('Error fetching courses:', error);
-        return [];
-    }
-}
 
-        // Fetch a single course with modules/lessons
+        // Fetch a single course with modules/lessons — NORMALIZED
         async function fetchCourse(courseId) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/student/courses/${courseId}`, {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-                'Content-Type': 'application/json'
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/student/courses/${courseId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    const course = data.data;
+                    // Normalize: Modules -> modules, Lessons -> lessons, Questions -> questions
+                    course.modules = course.Modules || course.modules || [];
+                    course.modules.forEach(mod => {
+                        mod.Lessons = mod.Lessons || mod.lessons || [];
+                        mod.Lessons.forEach(lesson => {
+                            // Normalize quiz questions
+                            if (lesson.type === 'quiz' || lesson.type === 'Quiz') {
+                                lesson.questions = lesson.Questions || lesson.questions || [];
+                                lesson.type = 'quiz';
+                            }
+                            // Ensure content field exists
+                            lesson.content = lesson.Content || lesson.content || '';
+                            // Ensure title
+                            lesson.title = lesson.Title || lesson.title || 'Untitled';
+                        });
+                    });
+                    return course;
+                } else {
+                    console.error('Failed to fetch course:', data.message);
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error fetching course:', error);
+                return null;
             }
-        });
-        const data = await response.json();
-        console.log('📥 fetchCourse response:', data);
-        if (data.success) {
-            const course = data.data;
-            course.modules = course.Modules || course.modules || [];
-            course.modules.forEach(mod => {
-                mod.Lessons = mod.Lessons || mod.lessons || [];
-            });
-            return course;
-        } else {
-            console.error('Failed to fetch course:', data.message);
-            return null;
         }
-    } catch (error) {
-        console.error('Error fetching course:', error);
-        return null;
-    }
-}
 
         // ============================================================
         // STATE & HELPERS
@@ -719,17 +898,18 @@
         function renderCourseSelector() {
             const container = document.getElementById('courseSelector');
             if (!courses || courses.length === 0) {
-                container.innerHTML = `<p style="color:#888;">No courses available at the moment.</p>`;
+                container.innerHTML =
+                `<p style="color:#888;">No courses available at the moment.</p>`;
                 return;
             }
             let html = '';
             courses.forEach(course => {
                 const active = course.id === currentCourse ? 'active' : '';
                 html += `
-                    <button class="course-btn ${active}" data-course-id="${course.id}" onclick="selectCourse(${course.id})">
-                        ${course.icon || '📚'} ${course.title}
-                    </button>
-                `;
+                        <button class="course-btn ${active}" data-course-id="${course.id}" onclick="selectCourse(${course.id})">
+                            ${course.icon || '📚'} ${course.title}
+                        </button>
+                    `;
             });
             container.innerHTML = html;
         }
@@ -761,7 +941,8 @@
             } else {
                 currentCourseData = null;
                 document.getElementById('courseTitle').textContent = 'Error loading course';
-                document.getElementById('dashboardContent').innerHTML = `<p style="color:#ff4444;">Failed to load course data.</p>`;
+                document.getElementById('dashboardContent').innerHTML =
+                    `<p style="color:#ff4444;">Failed to load course data. Please refresh.</p>`;
             }
         }
 
@@ -780,6 +961,7 @@
                 document.getElementById('lmsGate').style.display = 'none';
                 document.getElementById('lmsViews').style.display = 'block';
                 renderDashboard(currentCourse);
+                showToast('✅ Course unlocked!', 'success');
             } else {
                 error.innerText = '❌ Incorrect access code. Please try again.';
                 input.value = '';
@@ -831,51 +1013,57 @@
                 }
 
                 let html = `
-                    <div style="background: #121212; border-radius: 16px; padding: 20px 24px; margin-bottom: 20px; border: 1px solid #1a4a4a;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-                            <div>
-                                <span style="color: #88dddd; font-size: 0.85rem; display: block;">⭐ ${studentName}'s Engagement Score</span>
-                                <span style="color: #00ffff; font-size: 2.2rem; font-weight: 700;">${Math.round(engagementScore)}%</span>
+                        <div style="background: #121212; border-radius: 16px; padding: 20px 24px; margin-bottom: 20px; border: 1px solid #1a4a4a;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                                <div>
+                                    <span style="color: #88dddd; font-size: 0.85rem; display: block;">⭐ ${studentName}'s Engagement Score</span>
+                                    <span style="color: #00ffff; font-size: 2.2rem; font-weight: 700;">${Math.round(engagementScore)}%</span>
+                                </div>
+                                <div style="text-align: right;">
+                                    <span style="color: #666; font-size: 0.75rem; display: block;">${totalPageViews} page views • ${totalLinkClicks} link clicks • ${totalQuizzes} quizzes</span>
+                                    <span style="color: #555; font-size: 0.7rem;">${getMotivationalMessage(engagementScore)}</span>
+                                </div>
                             </div>
-                            <div style="text-align: right;">
-                                <span style="color: #666; font-size: 0.75rem; display: block;">${totalPageViews} page views • ${totalLinkClicks} link clicks • ${totalQuizzes} quizzes</span>
-                                <span style="color: #555; font-size: 0.7rem;">${getMotivationalMessage(engagementScore)}</span>
+                            <div style="width: 100%; height: 8px; background: #1a1a1a; border-radius: 4px; margin-top: 12px; overflow: hidden;">
+                                <div style="height: 100%; background: linear-gradient(90deg, #00ffff, #ffcc00); border-radius: 4px; width: ${Math.min(engagementScore, 100)}%; transition: width 0.8s ease;"></div>
+                            </div>
+                            <div style="margin-top: 6px; font-size: 0.7rem; color: #444; text-align: right;">
+                                <i class="fas fa-database"></i> Real-time from server
                             </div>
                         </div>
-                        <div style="width: 100%; height: 8px; background: #1a1a1a; border-radius: 4px; margin-top: 12px; overflow: hidden;">
-                            <div style="height: 100%; background: linear-gradient(90deg, #00ffff, #ffcc00); border-radius: 4px; width: ${Math.min(engagementScore, 100)}%; transition: width 0.8s ease;"></div>
-                        </div>
-                    </div>
-                `;
+                    `;
 
                 if (course && course.modules && course.modules.length > 0) {
                     html += `
-                        <div class="dashboard-header">
-                            <h2><i class="fas fa-list-ul"></i> ${course.icon || '📚'} ${course.title}</h2>
-                            <div class="dashboard-actions">
-                                <button onclick="downloadProgress()"><i class="fas fa-download"></i> Download Progress</button>
-                                <button class="send-btn" onclick="sendProgress()"><i class="fas fa-paper-plane"></i> Send Progress</button>
+                            <div class="dashboard-header">
+                                <h2><i class="fas fa-list-ul"></i> ${course.icon || '📚'} ${course.title}</h2>
+                                <div class="dashboard-actions">
+                                    <button onclick="downloadProgress()"><i class="fas fa-download"></i> Download Progress</button>
+                                    <button class="send-btn" onclick="sendProgress()"><i class="fas fa-paper-plane"></i> Send Progress</button>
+                                </div>
                             </div>
-                        </div>
-                        <div style="background:#121212; border-radius:16px; padding:16px 20px; margin-bottom:20px; border:1px solid #1a4a4a;">
-                            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                                <span style="color:#88dddd;"><i class="fas fa-chart-line"></i> Overall Progress</span>
-                                <span style="color:#00ffff; font-weight:700;">${overallProgress}% (${completedLessons}/${totalLessons})</span>
+                            <div style="background:#121212; border-radius:16px; padding:16px 20px; margin-bottom:20px; border:1px solid #1a4a4a;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                                    <span style="color:#88dddd;"><i class="fas fa-chart-line"></i> Overall Progress</span>
+                                    <span style="color:#00ffff; font-weight:700;">${overallProgress}% (${completedLessons}/${totalLessons})</span>
+                                </div>
+                                <div style="width:100%; height:6px; background:#1a1a1a; border-radius:4px; margin-top:8px; overflow:hidden;">
+                                    <div style="height:100%; background:linear-gradient(90deg, #00ffff, #ffcc00); border-radius:4px; width:${overallProgress}%; transition:width 0.5s;"></div>
+                                </div>
+                                <div style="margin-top:4px; font-size:0.65rem; color:#444; text-align:right;">
+                                    <i class="fas fa-save"></i> Saved locally on your device
+                                </div>
                             </div>
-                            <div style="width:100%; height:6px; background:#1a1a1a; border-radius:4px; margin-top:8px; overflow:hidden;">
-                                <div style="height:100%; background:linear-gradient(90deg, #00ffff, #ffcc00); border-radius:4px; width:${overallProgress}%; transition:width 0.5s;"></div>
-                            </div>
-                        </div>
-                        <div id="moduleList"></div>
-                    `;
+                            <div id="moduleList"></div>
+                        `;
                 } else {
                     html += `
-                        <div style="text-align:center; padding:40px 20px; background:#121212; border-radius:16px; border:1px solid #1a4a4a; margin-top:10px;">
-                            <i class="fas fa-info-circle" style="font-size:2.5rem; color:#555; margin-bottom:15px; display:block;"></i>
-                            <h3 style="color:#88dddd;">No content yet</h3>
-                            <p style="color:#666; margin-top:5px;">This course has no modules or lessons yet.</p>
-                        </div>
-                    `;
+                            <div style="text-align:center; padding:40px 20px; background:#121212; border-radius:16px; border:1px solid #1a4a4a; margin-top:10px;">
+                                <i class="fas fa-info-circle" style="font-size:2.5rem; color:#555; margin-bottom:15px; display:block;"></i>
+                                <h3 style="color:#88dddd;">No content yet</h3>
+                                <p style="color:#666; margin-top:5px;">This course has no modules or lessons yet.</p>
+                            </div>
+                        `;
                 }
 
                 container.innerHTML = html;
@@ -888,11 +1076,12 @@
                         if (mod.Lessons && mod.Lessons.length > 0) {
                             mod.Lessons.forEach(lesson => {
                                 const done = isCompleted(courseId, lesson.id) ? 'done' : '';
-                                let label = isCompleted(courseId, lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson');
+                                let label = isCompleted(courseId, lesson.id) ? '✅ Completed' : (lesson
+                                    .type === 'quiz' ? '🧠 Quiz' : '📖 Lesson');
                                 if (lesson.type === 'quiz') {
                                     const data = prog[lesson.id];
                                     if (data && data.completed) {
-                                        label = `✅ Completed (${data.score}/${data.total})`;
+                                        label = `✅ Completed (${data.score || 0}/${data.total || 0})`;
                                     }
                                 }
                                 const icon = lesson.type === 'quiz' ? '🧠' : '📖';
@@ -913,97 +1102,186 @@
             }).catch(err => {
                 console.error('Error rendering dashboard:', err);
                 container.innerHTML = `
-                    <div style="color:#ff6666; text-align:center; padding:20px;">
-                        <i class="fas fa-exclamation-triangle" style="font-size:2rem; display:block; margin-bottom:10px;"></i>
-                        Error loading dashboard. Please refresh.
-                    </div>
-                `;
+                        <div style="color:#ff6666; text-align:center; padding:20px;">
+                            <i class="fas fa-exclamation-triangle" style="font-size:2rem; display:block; margin-bottom:10px;"></i>
+                            Error loading dashboard. Please refresh.
+                        </div>
+                    `;
             });
         }
 
         // ============================================================
-        // OPEN LESSON / QUIZ
+        // OPEN LESSON / QUIZ — FIXED ID COMPARISON
         // ============================================================
         function openLesson(courseId, moduleId, lessonId) {
-            if (!currentCourseData) return;
-            const module = currentCourseData.modules.find(m => m.id === moduleId);
-            if (!module) return;
-            const lesson = module.Lessons.find(l => l.id === lessonId);
-            if (!lesson) return;
+            console.log('🔍 openLesson called:', { courseId, moduleId, lessonId });
+
+            if (!currentCourseData) {
+                showToast('❌ Course data not loaded. Please refresh.', 'error');
+                return;
+            }
+
+            // Find module — using String() for type-safe comparison
+            const module = currentCourseData.modules.find(m => String(m.id) === String(moduleId));
+            if (!module) {
+                console.error('Module not found:', moduleId);
+                showToast('❌ Module not found. Please refresh.', 'error');
+                return;
+            }
+
+            const lesson = module.Lessons.find(l => String(l.id) === String(lessonId));
+            if (!lesson) {
+                console.error('Lesson not found:', lessonId);
+                showToast('❌ Lesson not found. Please refresh.', 'error');
+                return;
+            }
+
+            console.log('✅ Found lesson:', lesson);
 
             if (lesson.type === 'quiz') {
                 showView('viewQuiz');
                 renderQuiz(courseId, lesson);
             } else {
                 showView('viewLesson');
-                renderLesson(courseId, lesson, moduleId);
+                renderLesson(courseId, lesson, module.id);
             }
         }
 
+        // ============================================================
+        // RENDER LESSON
+        // ============================================================
         function renderLesson(courseId, lesson, moduleId) {
             const container = document.getElementById('lessonContent');
             const done = isCompleted(courseId, lesson.id);
+
+            // Support both plain text and HTML content
+            let contentHtml = lesson.content || '<p style="color:#666;">No content yet.</p>';
+
+            // If content looks like a URL or embed, wrap appropriately
+            if (typeof lesson.content === 'string' && lesson.content.trim().startsWith('http')) {
+                const url = lesson.content.trim();
+                if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                    const embedUrl = url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/');
+                    contentHtml = `
+                            <div class="video-wrapper">
+                                <iframe src="${embedUrl}" allowfullscreen></iframe>
+                            </div>
+                        `;
+                } else if (url.match(/\.(mp4|webm|ogg)$/i)) {
+                    contentHtml = `
+                            <video controls style="width:100%; border-radius:12px; margin:12px 0;">
+                                <source src="${url}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        `;
+                } else {
+                    contentHtml = `
+                            <div style="background:#1a1a1a; border-radius:12px; padding:16px; margin:12px 0;">
+                                <a href="${url}" target="_blank" style="color:#00ffff;">🔗 Open resource: ${url}</a>
+                            </div>
+                        `;
+                }
+            }
+
             container.innerHTML = `
-                <h2 style="color: #00ffff;"><i class="fas fa-book"></i> ${lesson.title}</h2>
-                <div class="lesson-content">${lesson.content || '<p>No content yet.</p>'}</div>
-                <div class="nav-row">
-                    <button onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Dashboard</button>
-                    <div>
-                        ${!done ? `<button class="complete-btn" onclick="markLessonComplete('${courseId}','${lesson.id}')"><i class="fas fa-check"></i> Mark as Complete</button>` : '<span class="completed-text"><i class="fas fa-check-circle"></i> Completed</span>'}
+                    <h2 style="color: #00ffff;"><i class="fas fa-book"></i> ${lesson.title}</h2>
+                    <div class="lesson-content">${contentHtml}</div>
+                    <div class="nav-row">
+                        <button onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Dashboard</button>
+                        <div>
+                            ${!done ? `<button class="complete-btn" onclick="markLessonComplete('${courseId}','${lesson.id}')"><i class="fas fa-check"></i> Mark as Complete</button>` : '<span class="completed-text"><i class="fas fa-check-circle"></i> Completed</span>'}
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
         }
 
         function markLessonComplete(courseId, lessonId) {
             markCompleted(courseId, lessonId);
-            alert('✅ Lesson marked as complete!');
+            showToast('✅ Lesson marked as complete!', 'success');
             showDashboard();
         }
 
+        // ============================================================
+        // RENDER QUIZ — FIXED: uses lesson data directly
+        // ============================================================
         function renderQuiz(courseId, quiz) {
             const container = document.getElementById('quizContent');
-            let html = `<h2 style="color: #00ffff;"><i class="fas fa-brain"></i> ${quiz.title}</h2>`;
-            html += `<form id="quizForm">`;
-            quiz.questions.forEach((q, idx) => {
+
+            // Ensure questions array exists
+            const questions = quiz.questions || [];
+            if (questions.length === 0) {
+                container.innerHTML = `
+                        <h2 style="color: #00ffff;"><i class="fas fa-brain"></i> ${quiz.title}</h2>
+                        <div style="background:#121212; border-radius:16px; padding:24px; border:1px solid #1a4a4a; text-align:center;">
+                            <p style="color:#888;">This quiz has no questions yet.</p>
+                            <button class="back-btn" onclick="showDashboard()" style="margin-top:16px;"><i class="fas fa-arrow-left"></i> Back</button>
+                        </div>
+                    `;
+                return;
+            }
+
+            let html = `
+                    <h2 style="color: #00ffff;"><i class="fas fa-brain"></i> ${quiz.title}</h2>
+                    <form id="quizForm">
+                `;
+
+            questions.forEach((q, idx) => {
+                const options = q.options || [];
                 html += `
-                    <div class="question-block">
-                        <p><strong>${idx+1}. ${q.question}</strong></p>
-                        ${q.options.map((opt, oi) => `
-                            <label><input type="radio" name="q${idx}" value="${oi}"> ${opt}</label>
-                        `).join('')}
+                        <div class="question-block">
+                            <p><strong>${idx+1}. ${q.question}</strong></p>
+                            ${options.map((opt, oi) => `
+                                <label><input type="radio" name="q${idx}" value="${oi}"> ${opt}</label>
+                            `).join('')}
+                        </div>
+                    `;
+            });
+
+            html += `
+                        <button type="button" style="background:rgba(255,204,0,0.1); color:#ffcc00; border:1px solid rgba(255,204,0,0.3); padding:14px 32px; border-radius:60px; font-weight:700; cursor:pointer; transition:all 0.3s; font-size:1rem;" 
+                                onmouseover="this.style.background='#ffcc00'; this.style.color='#000';" 
+                                onmouseout="this.style.background='rgba(255,204,0,0.1)'; this.style.color='#ffcc00';" 
+                                onclick="submitQuiz('${courseId}','${quiz.id}')">
+                            <i class="fas fa-check"></i> Check Answers
+                        </button>
+                    </form>
+                    <div id="quizResult" class="quiz-result"></div>
+                    <div class="nav-row" style="margin-top:20px;">
+                        <button onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Dashboard</button>
                     </div>
                 `;
-            });
-            html += `
-                <button type="button" style="background:rgba(255,204,0,0.1); color:#ffcc00; border:1px solid rgba(255,204,0,0.3); padding:14px 32px; border-radius:60px; font-weight:700; cursor:pointer; transition:all 0.3s; font-size:1rem;" 
-                        onmouseover="this.style.background='#ffcc00'; this.style.color='#000';" 
-                        onmouseout="this.style.background='rgba(255,204,0,0.1)'; this.style.color='#ffcc00';" 
-                        onclick="submitQuiz('${courseId}','${quiz.id}')">
-                    <i class="fas fa-check"></i> Check Answers
-                </button>
-            </form>
-            <div id="quizResult" class="quiz-result"></div>
-            <div class="nav-row" style="margin-top:20px;">
-                <button onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Dashboard</button>
-            </div>
-            `;
+
             container.innerHTML = html;
         }
 
         // ============================================================
-        // SUBMIT QUIZ
+        // SUBMIT QUIZ — FIXED: uses the quiz data from currentCourseData
         // ============================================================
         function submitQuiz(courseId, quizId) {
             const course = currentCourseData;
+            if (!course) {
+                showToast('❌ Course data not available.', 'error');
+                return;
+            }
+
+            // Find the quiz data — using String() for type-safe comparison
             let quizData = null;
             for (let m of course.modules) {
-                const found = m.Lessons.find(l => l.id === quizId);
+                const found = m.Lessons.find(l => String(l.id) === String(quizId));
                 if (found) { quizData = found; break; }
             }
-            if (!quizData) return;
 
-            const questions = quizData.questions;
+            if (!quizData) {
+                showToast('❌ Quiz data not found.', 'error');
+                return;
+            }
+
+            const questions = quizData.questions || [];
+            if (questions.length === 0) {
+                showToast('⚠️ This quiz has no questions.', 'info');
+                return;
+            }
+
             let score = 0;
             let allAnswered = true;
 
@@ -1023,6 +1301,7 @@
             const total = questions.length;
             const passed = score >= total * 0.6;
 
+            // Store progress
             const prog = getProgress(courseId);
             prog[quizId] = { completed: true, score: score, total: total };
             saveProgress(courseId, prog);
@@ -1030,10 +1309,14 @@
             if (passed) {
                 resultDiv.className = 'quiz-result pass';
                 resultDiv.innerHTML = `<h3>✅ You scored ${score}/${total}. Well done!</h3>`;
+                showToast(`🎉 Quiz passed! ${score}/${total}`, 'success');
             } else {
                 resultDiv.className = 'quiz-result fail';
                 resultDiv.innerHTML = `<h3>❌ You scored ${score}/${total}. Review the lessons and try again.</h3>`;
+                showToast(`📝 Quiz score: ${score}/${total}. Keep learning!`, 'info');
             }
+
+            // Disable all radio buttons
             document.querySelectorAll('#quizForm input[type="radio"]').forEach(el => el.disabled = true);
         }
 
@@ -1059,7 +1342,7 @@
                         if (lesson.type === 'quiz') {
                             if (data && data.completed) {
                                 completedLessons++;
-                                report += `  🧠 ${lesson.title}: ✅ Completed (Score: ${data.score}/${data.total})\n`;
+                                report += `  🧠 ${lesson.title}: ✅ Completed (Score: ${data.score || 0}/${data.total || 0})\n`;
                             } else {
                                 report += `  🧠 ${lesson.title}: ⬜ Not started\n`;
                             }
@@ -1083,21 +1366,30 @@
         }
 
         function downloadProgress() {
+            if (!currentCourseData) {
+                showToast('❌ No course loaded.', 'error');
+                return;
+            }
             const report = generateReport(currentCourse);
             const blob = new Blob([report], { type: 'text/plain' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = `progress_${currentCourse}_${new Date().toISOString().slice(0,10)}.txt`;
             a.click();
+            showToast('📥 Progress downloaded!', 'success');
         }
 
         // ============================================================
-        // SEND PROGRESS TO BACKEND
+        // SEND PROGRESS TO BACKEND — sends a report, not duplicate data
         // ============================================================
         async function sendProgress() {
             const token = localStorage.getItem('authToken');
             if (!token) {
-                alert('Please log in first.');
+                showToast('❌ Please log in first.', 'error');
+                return;
+            }
+            if (!currentCourseData) {
+                showToast('❌ No course loaded.', 'error');
                 return;
             }
 
@@ -1156,13 +1448,13 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    alert('✅ Progress report sent successfully! Your teacher will see it.');
+                    showToast('✅ Progress report sent to your teacher!', 'success');
                 } else {
-                    alert('❌ Failed to send: ' + (data.message || 'Unknown error'));
+                    showToast('❌ Failed to send: ' + (data.message || 'Unknown error'), 'error');
                 }
             } catch (error) {
                 console.error('Error sending progress:', error);
-                alert('❌ Network error. Please try again.');
+                showToast('❌ Network error. Please try again.', 'error');
             } finally {
                 if (btn) {
                     btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Progress';
@@ -1172,7 +1464,7 @@
         }
 
         // ============================================================
-        // FETCH STUDENT STATS
+        // FETCH STUDENT STATS — REAL DATA FROM BACKEND
         // ============================================================
         async function fetchStudentStats() {
             const token = localStorage.getItem('authToken');
@@ -1226,7 +1518,8 @@
                     document.getElementById('navStudentName').innerHTML =
                         `<i class="fas fa-user-graduate"></i> ${name}`;
                 } catch (e) {
-                    document.getElementById('navStudentName').innerHTML = `<i class="fas fa-user-graduate"></i> Student`;
+                    document.getElementById('navStudentName').innerHTML =
+                    `<i class="fas fa-user-graduate"></i> Student`;
                 }
             } else {
                 document.getElementById('navStudentName').innerHTML = `<i class="fas fa-user-graduate"></i> Guest`;
@@ -1268,15 +1561,16 @@
                 renderCourseSelector();
                 await selectCourse(courses[0].id);
             } else {
-                document.getElementById('courseSelector').innerHTML = `<p style="color:#888;">No courses available. Please contact your teacher.</p>`;
+                document.getElementById('courseSelector').innerHTML =
+                    `<p style="color:#888;">No courses available. Please contact your teacher.</p>`;
                 document.getElementById('courseTitle').textContent = 'No course selected';
                 document.getElementById('dashboardContent').innerHTML = `
-                    <div style="text-align:center; padding:40px 20px; background:#121212; border-radius:16px; border:1px solid #1a4a4a;">
-                        <i class="fas fa-info-circle" style="font-size:2.5rem; color:#555; margin-bottom:15px; display:block;"></i>
-                        <h3 style="color:#88dddd;">No courses available</h3>
-                        <p style="color:#666; margin-top:5px;">Your teacher hasn't assigned any courses to you yet.</p>
-                    </div>
-                `;
+                        <div style="text-align:center; padding:40px 20px; background:#121212; border-radius:16px; border:1px solid #1a4a4a;">
+                            <i class="fas fa-info-circle" style="font-size:2.5rem; color:#555; margin-bottom:15px; display:block;"></i>
+                            <h3 style="color:#88dddd;">No courses available</h3>
+                            <p style="color:#666; margin-top:5px;">Your teacher hasn't assigned any courses to you yet.</p>
+                        </div>
+                    `;
             }
         });
     </script>
