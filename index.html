@@ -2034,74 +2034,104 @@
     // STUDENT TRACKING CONFIGURATION
     // ============================================
 
-    const TRACKING_API = 'https://bespellbee-backend-en6l.onrender.com/api';
-    const authToken = localStorage.getItem('authToken');
-    const sessionId = localStorage.getItem('sessionId') || generateSessionId();
-    let currentPage = 'home';
-    let pageStartTime = Date.now();
-    let isTrackingEnabled = !!authToken;
+ // ============================================
+// STUDENT TRACKING CONFIGURATION
+// ============================================
 
-    // ============================================
-    // TRACKING FUNCTIONS
-    // ============================================
+const TRACKING_API = 'https://bespellbee-backend-en6l.onrender.com/api';
+const authToken = localStorage.getItem('authToken');
+const sessionId = localStorage.getItem('sessionId') || generateSessionId();
+let currentPage = 'home';
+let pageStartTime = Date.now();
+let isTrackingEnabled = !!authToken;
+let isNavigatingAway = false;  // ✅ NEW: Navigation flag
 
-    function generateSessionId() {
-        const id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('sessionId', id);
-        return id;
+// ============================================
+// TRACKING FUNCTIONS
+// ============================================
+
+function generateSessionId() {
+    const id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('sessionId', id);
+    return id;
+}
+
+function getHeaders() {
+    return {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+        'X-Session-Id': sessionId
+    };
+}
+
+function trackActivity(action, data = {}) {
+    if (!isTrackingEnabled || !authToken) return;
+    if (isNavigatingAway) return;  // ✅ NEW: Skip if navigating
+
+    const duration = Math.floor((Date.now() - pageStartTime) / 1000);
+    pageStartTime = Date.now();
+
+    fetch(`${TRACKING_API}/track/page-view`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({
+            page: document.title || 'BeSpellBee',
+            url: window.location.href,
+            duration: duration,
+            action: action,
+            ...data
+        })
+    }).catch(() => {});
+}
+
+// ============================================
+// FIX: Prevent "home" glitch when navigating away
+// ============================================
+
+document.addEventListener('click', function(e) {
+    const link = e.target.closest('a[href]');
+    if (link && !link.hasAttribute('download')) {
+        isNavigatingAway = true;
     }
+});
 
-    function getHeaders() {
-        return {
-            'Authorization': `Bearer ${authToken}`,
-            'Content-Type': 'application/json',
-            'X-Session-Id': sessionId
-        };
+window.addEventListener('beforeunload', function() {
+    isNavigatingAway = true;
+});
+
+// ============================================
+// TRACK HOME PAGE VIEW
+// ============================================
+
+setTimeout(function() {
+    if (isTrackingEnabled && !isNavigatingAway) {
+        trackActivity('page_view', {
+            page: 'Home',
+            url: window.location.href
+        });
+        console.log('🚀 Tracking system initialized!');
     }
+}, 1000);
 
-    // ============================================
-    // MODIFIED: trackActivity with duration
-    // ============================================
+// ============================================
+// UPDATE UI BASED ON LOGIN STATUS
+// ============================================
 
-    function trackActivity(action, data = {}) {
-        if (!isTrackingEnabled || !authToken) return;
-
-        const duration = Math.floor((Date.now() - pageStartTime) / 1000);
-        pageStartTime = Date.now();
-
-        fetch(`${TRACKING_API}/track/page-view`, {
-            method: 'POST',
-            headers: getHeaders(),
-            body: JSON.stringify({
-                page: document.title || 'BeSpellBee',
-                url: window.location.href,
-                duration: duration,
-                action: action,
-                ...data
-            })
-        }).catch(() => {});
-    }
-
-    // ============================================
-    // UPDATE UI BASED ON LOGIN STATUS (FIXED)
-    // ============================================
-
-   function updateAuthUI() {
+function updateAuthUI() {
     const isLoggedIn = !!localStorage.getItem('authToken');
     const studentAuthBtns = document.getElementById('studentAuthButtons');
     const teacherLoginBtn = document.getElementById('teacherLoginBtn');
 
     if (isLoggedIn) {
-        // Hide student auth buttons when logged in
         if (studentAuthBtns) studentAuthBtns.style.display = 'none';
         if (teacherLoginBtn) teacherLoginBtn.style.display = 'none';
     } else {
-        // SHOW student auth buttons when NOT logged in
         if (studentAuthBtns) studentAuthBtns.style.display = 'flex';
         if (teacherLoginBtn) teacherLoginBtn.style.display = 'inline-block';
     }
 }
-		updateAuthUI();
+
+updateAuthUI();
 
     // ============================================
     // DASHBOARD (FIXED - Shows for both Student & Teacher)
