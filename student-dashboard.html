@@ -250,6 +250,7 @@
         let currentCourseData = null;
         let courses = [];
         let currentPage = 'dashboard';
+        let pageViewTracked = false;          // 🔹 PREVENT DUPLICATE PAGE VIEWS
 
         // ============================================================
         // TOAST SYSTEM
@@ -373,6 +374,8 @@
         // PAGE VIEW TRACKING (single call)
         // ============================================================
         function trackPageView(page) {
+            if (pageViewTracked) return;          // 🔹 Only once per session
+            pageViewTracked = true;
             currentPage = page || 'dashboard';
             trackActivity('page-view', {
                 page: currentPage,
@@ -422,8 +425,7 @@
                     document.getElementById('lmsGate').style.display = 'none';
                     document.getElementById('lmsViews').style.display = 'block';
                     renderDashboard(courseId);
-                    // ✅ Only one page view here
-                    trackPageView('dashboard');
+                    trackPageView('dashboard');   // 🔹 Only one call
                 } else {
                     document.getElementById('lmsGate').style.display = 'block';
                     document.getElementById('lmsViews').style.display = 'none';
@@ -453,8 +455,7 @@
                 document.getElementById('lmsGate').style.display = 'none';
                 document.getElementById('lmsViews').style.display = 'block';
                 renderDashboard(currentCourse);
-                // ✅ Page view after unlock
-                trackPageView('dashboard');
+                trackPageView('dashboard');      // 🔹 Only one call
                 showToast('✅ Course unlocked!', 'success');
             } else {
                 error.innerText = '❌ Incorrect access code. Please try again.';
@@ -1087,8 +1088,6 @@
         document.addEventListener('click', function(e) {
             const link = e.target.closest('a');
             if (link && link.href && link.href.startsWith('http')) {
-                // Avoid tracking the logout or home links if they are handled elsewhere
-                // but it's safe to track all external clicks
                 trackActivity('link-click', {
                     link: link.href,
                     page: currentPage || 'dashboard',
@@ -1098,23 +1097,17 @@
         });
 
         // ============================================================
-        // CAROUSEL VIEW TRACKING (fixed)
+        // CAROUSEL VIEW TRACKING (global listener)
         // ============================================================
         function setupCarouselTracking() {
-            const carousel = document.getElementById('demoCarousel');
-            if (carousel) {
-                // Use 'slid.bs.carousel' event (fired after slide transition)
-                carousel.addEventListener('slid.bs.carousel', function(e) {
-                    console.log('Carousel slide tracked', e);
-                    trackActivity('carousel-view', {
-                        teacher: 'Demo Teacher',
-                        subject: 'Demo Subject',
-                        page: 'dashboard'
-                    });
+            document.addEventListener('slid.bs.carousel', function(e) {
+                console.log('Carousel slide detected', e.target);
+                trackActivity('carousel-view', {
+                    teacher: 'Demo Teacher',
+                    subject: 'Demo Subject',
+                    page: 'dashboard'
                 });
-            } else {
-                console.warn('Carousel element not found');
-            }
+            });
         }
 
         // ============================================================
@@ -1155,7 +1148,7 @@
         // ============================================================
         window.addEventListener('load', function() {
             document.body.classList.add('loaded');
-            setupCarouselTracking();
+            setupCarouselTracking();   // 🔹 Attach carousel listener
         });
 
         // ============================================================
