@@ -2,12 +2,10 @@
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N3F5GM52DZ">
-    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N3F5GM52DZ"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-
-        function gtag() { dataLayer.push(arguments); }
+        function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-N3F5GM52DZ');
     </script>
@@ -16,665 +14,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BeSpellBee - Student Dashboard</title>
     <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560" />
+    <!-- Bootstrap CSS (for carousel) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <style>
-        /* ====== GLOBAL ====== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-            background: #0a0a0a;
-            color: #e0e0e0;
-            min-height: 100vh;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        body.loaded {
-            opacity: 1;
-        }
-
-        /* ====== TOP NAV ====== */
-        .nav-bar {
-            background: #0d0d0d;
-            border-bottom: 1px solid #1a4a4a;
-            padding: 12px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .nav-bar .logo {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #00ffff;
-            text-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
-        }
-        .nav-bar .logo span {
-            color: #fff;
-        }
-        .nav-bar .student-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-        .nav-bar .student-info .name {
-            font-weight: 600;
-            color: #fff;
-        }
-        .nav-bar .student-info .badge {
-            background: rgba(0, 255, 255, 0.15);
-            color: #00ffff;
-            padding: 4px 14px;
-            border-radius: 40px;
-            font-size: 0.75rem;
-            border: 1px solid rgba(0, 255, 255, 0.2);
-        }
-        .nav-bar .logout-btn {
-            color: #ffcc00;
-            text-decoration: none;
-            font-size: 0.85rem;
-            border-left: 1px solid #333;
-            padding-left: 16px;
-            transition: color 0.3s;
-        }
-        .nav-bar .logout-btn:hover {
-            color: #ffdd44;
-        }
-        .nav-bar .home-link {
-            color: #88dddd;
-            text-decoration: none;
-            font-size: 0.85rem;
-            border-left: 1px solid #333;
-            padding-left: 16px;
-            transition: color 0.3s;
-        }
-        .nav-bar .home-link:hover {
-            color: #00ffff;
-        }
-
-        /* ====== DASHBOARD CONTAINER ====== */
-        .dashboard-container {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        /* ====== COURSE SELECTOR ====== */
-        .course-selector {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        .course-btn {
-            padding: 12px 28px;
-            background: #0d0d0d;
-            border: 1px solid #1a4a4a;
-            border-radius: 40px;
-            color: #88dddd;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.95rem;
-        }
-        .course-btn:hover {
-            border-color: #00ffff;
-            color: #00ffff;
-        }
-        .course-btn.active {
-            background: #00ffff;
-            color: #000;
-            border-color: #00ffff;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
-        }
-
-        /* ====== LMS WRAPPER ====== */
-        .lms-wrapper {
-            max-width: 1100px;
-            margin: 0 auto 20px auto;
-            background: #0d0d0d;
-            border-radius: 32px;
-            box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            border: 1px solid #1a4a4a;
-        }
-        .lms-header {
-            background: #0d0d0d;
-            padding: 18px 24px;
-            color: #00ffff;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            border-bottom: 1px solid #1a4a4a;
-        }
-        .lms-header h2 {
-            font-weight: 700;
-            font-size: 1.4rem;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #00ffff;
-        }
-        .lms-header h2 i {
-            color: #ffcc00;
-        }
-        .lms-badge {
-            background: rgba(255, 204, 0, 0.15);
-            color: #ffcc00;
-            font-size: 0.85rem;
-            font-weight: 700;
-            padding: 6px 16px;
-            border-radius: 40px;
-            border: 1px solid rgba(255, 204, 0, 0.3);
-            letter-spacing: 0.5px;
-        }
-        .lms-body {
-            padding: 24px;
-            background: #0d0d0d;
-        }
-
-        /* ====== ACCESS GATE ====== */
-        .lms-gate {
-            background: #121212;
-            border-radius: 24px;
-            padding: 40px 20px;
-            text-align: center;
-            max-width: 500px;
-            margin: 0 auto;
-            border: 1px solid #1a4a4a;
-        }
-        .lms-gate h3 {
-            color: #00ffff;
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-        }
-        .lms-gate h3 i {
-            color: #ffcc00;
-        }
-        .lms-gate p {
-            color: #888;
-            margin-bottom: 20px;
-        }
-        .lms-gate input {
-            padding: 14px 20px;
-            border: 2px solid #1a4a4a;
-            border-radius: 60px;
-            font-size: 1rem;
-            width: 100%;
-            max-width: 300px;
-            outline: none;
-            margin: 10px 0;
-            background: #1a1a1a;
-            color: #fff;
-        }
-        .lms-gate input:focus {
-            border-color: #00ffff;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
-        }
-        .lms-gate button {
-            padding: 14px 32px;
-            background: #00ffff;
-            border: none;
-            color: #000;
-            font-weight: 700;
-            font-size: 1.1rem;
-            border-radius: 60px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .lms-gate button:hover {
-            background: #66ffff;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
-            transform: scale(1.02);
-        }
-        .lms-gate .error {
-            color: #ff4444;
-            margin-top: 10px;
-        }
-
-        /* ====== LMS VIEWS ====== */
-        .lms-view {
-            display: none;
-        }
-        .lms-view.active {
-            display: block;
-        }
-
-        /* ====== DASHBOARD VIEW ====== */
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .dashboard-header h2 {
-            color: #00ffff;
-            border-left: 6px solid #ffcc00;
-            padding-left: 16px;
-            margin: 0;
-            font-size: 1.4rem;
-        }
-        .dashboard-header h2 i {
-            color: #ffcc00;
-        }
-        .dashboard-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .dashboard-actions button {
-            background: rgba(0, 255, 255, 0.1);
-            color: #00ffff;
-            border: 1px solid #1a4a4a;
-            padding: 10px 20px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-size: 0.85rem;
-        }
-        .dashboard-actions button:hover {
-            background: #00ffff;
-            color: #000;
-            border-color: #00ffff;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
-        }
-        .dashboard-actions .send-btn {
-            background: rgba(255, 204, 0, 0.1);
-            color: #ffcc00;
-            border: 1px solid rgba(255, 204, 0, 0.3);
-        }
-        .dashboard-actions .send-btn:hover {
-            background: #ffcc00;
-            color: #000;
-        }
-        .dashboard-actions button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* ====== MODULE CARDS ====== */
-        .module-card {
-            background: #121212;
-            border-radius: 24px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-left: 6px solid #ffcc00;
-            border: 1px solid #1a4a4a;
-        }
-        .module-card h3 {
-            color: #00ffff;
-            margin-top: 0;
-            font-size: 1.1rem;
-        }
-        .module-card h3 i {
-            color: #ffcc00;
-            margin-right: 8px;
-        }
-
-        /* ====== LESSON ITEMS ====== */
-        .lesson-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #1a1a1a;
-            padding: 12px 18px;
-            border-radius: 16px;
-            border: 1px solid #1a4a4a;
-            margin: 8px 0;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .lesson-item:hover {
-            background: #252525;
-            border-color: #00ffff;
-        }
-        .lesson-item .status {
-            font-size: 0.8rem;
-            padding: 4px 12px;
-            border-radius: 40px;
-            background: #1a1a1a;
-            color: #666;
-            border: 1px solid #1a4a4a;
-        }
-        .lesson-item .status.done {
-            background: rgba(0, 255, 136, 0.1);
-            color: #00ff88;
-            border-color: rgba(0, 255, 136, 0.3);
-        }
-
-        /* ====== LESSON CONTENT ====== */
-        .lesson-content {
-            background: #121212;
-            padding: 24px;
-            border-radius: 24px;
-            line-height: 1.7;
-            border: 1px solid #1a4a4a;
-            margin-top: 12px;
-        }
-        .lesson-content h3 {
-            color: #00ffff;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-        .lesson-content p {
-            color: #ccc;
-        }
-        .lesson-content ul {
-            color: #ccc;
-            padding-left: 20px;
-        }
-        .lesson-content li {
-            margin: 8px 0;
-        }
-        .lesson-content iframe {
-            width: 100%;
-            height: 500px;
-            border: 1px solid #1a4a4a;
-            border-radius: 16px;
-            background: #0d0d0d;
-            margin-top: 15px;
-        }
-        .lesson-content img {
-            max-width: 100%;
-            border-radius: 12px;
-            margin: 12px 0;
-        }
-        .lesson-content .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 12px;
-            margin: 12px 0;
-        }
-        .lesson-content .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* ====== NAV ROW ====== */
-        .nav-row {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 12px;
-            margin-top: 24px;
-            padding-top: 20px;
-            border-top: 1px solid #1a4a4a;
-        }
-        .nav-row button,
-        .nav-row a {
-            background: rgba(0, 255, 255, 0.1);
-            color: #00ffff;
-            padding: 12px 28px;
-            border-radius: 60px;
-            border: 1px solid #1a4a4a;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        .nav-row button:hover,
-        .nav-row a:hover {
-            background: #00ffff;
-            color: #000;
-            border-color: #00ffff;
-        }
-        .nav-row .complete-btn {
-            background: rgba(255, 204, 0, 0.1);
-            color: #ffcc00;
-            border-color: rgba(255, 204, 0, 0.3);
-        }
-        .nav-row .complete-btn:hover {
-            background: #ffcc00;
-            color: #000;
-            border-color: #ffcc00;
-        }
-        .back-btn {
-            background: none !important;
-            border: none !important;
-            color: #888 !important;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 8px 0 !important;
-        }
-        .back-btn:hover {
-            color: #00ffff !important;
-            background: none !important;
-        }
-        .completed-text {
-            color: #00ff88;
-            font-weight: 600;
-        }
-        .completed-text i {
-            margin-right: 6px;
-        }
-
-        /* ====== QUIZ BLOCKS ====== */
-        .question-block {
-            background: #121212;
-            padding: 20px;
-            border-radius: 24px;
-            margin-bottom: 20px;
-            border-left: 6px solid #00ffff;
-            border: 1px solid #1a4a4a;
-        }
-        .question-block p {
-            color: #fff;
-            font-weight: 600;
-        }
-        .question-block label {
-            display: block;
-            margin: 8px 0;
-            padding: 10px 16px;
-            background: #1a1a1a;
-            border-radius: 40px;
-            cursor: pointer;
-            color: #ccc;
-            transition: all 0.3s;
-        }
-        .question-block label:hover {
-            background: #252525;
-            border-color: #00ffff;
-        }
-        .question-block input[type="radio"] {
-            margin-right: 10px;
-            accent-color: #00ffff;
-        }
-
-        /* ====== QUIZ RESULT ====== */
-        .quiz-result {
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 24px;
-            display: none;
-        }
-        .quiz-result.pass {
-            background: rgba(0, 255, 136, 0.1);
-            border-left: 6px solid #00ff88;
-            display: block;
-            border: 1px solid rgba(0, 255, 136, 0.3);
-        }
-        .quiz-result.pass h3 {
-            color: #00ff88;
-        }
-        .quiz-result.fail {
-            background: rgba(255, 68, 68, 0.1);
-            border-left: 6px solid #ff4444;
-            display: block;
-            border: 1px solid rgba(255, 68, 68, 0.3);
-        }
-        .quiz-result.fail h3 {
-            color: #ff4444;
-        }
-
-        /* ====== RESPONSIVE ====== */
-        @media (max-width: 700px) {
-            .lms-header h2 {
-                font-size: 1.2rem;
-            }
-            .lesson-content iframe {
-                height: 350px;
-            }
-            .nav-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .nav-row button,
-            .nav-row a {
-                text-align: center;
-            }
-            .dashboard-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .dashboard-actions {
-                width: 100%;
-            }
-            .dashboard-actions button {
-                flex: 1;
-                text-align: center;
-            }
-            .course-selector {
-                justify-content: center;
-            }
-        }
-        @media (max-width: 480px) {
-            .lms-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .lms-gate input {
-                max-width: 100%;
-            }
-            .lesson-content iframe {
-                height: 250px;
-            }
-            .module-card {
-                padding: 16px;
-            }
-            .lesson-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-            .lms-body {
-                padding: 16px;
-            }
-            .course-btn {
-                padding: 8px 16px;
-                font-size: 0.8rem;
-            }
-        }
-
-        /* ====== BACK TO TOP ====== */
-        #topBtn {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            right: 30px;
-            z-index: 99;
-            font-size: 20px;
-            border: none;
-            outline: none;
-            background-color: #00ffff;
-            color: #000;
-            cursor: pointer;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            line-height: 50px;
-            padding: 0;
-            transition: 0.1s;
-        }
-        #topBtn:hover {
-            background-color: #66ffff;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 255, 255, 0.3);
-        }
-
-        .status-dot {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #00ff88;
-            margin-right: 6px;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.4;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
-        /* ====== TOAST ====== */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #1a1a1a;
-            border: 1px solid #1a4a4a;
-            border-radius: 16px;
-            padding: 16px 24px;
-            color: #e0e0e0;
-            font-size: 0.95rem;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-            transform: translateY(120px);
-            opacity: 0;
-            transition: all 0.4s ease;
-            z-index: 1000;
-            max-width: 400px;
-        }
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        .toast.success {
-            border-color: #00ff88;
-        }
-        .toast.success i {
-            color: #00ff88;
-        }
-        .toast.error {
-            border-color: #ff4444;
-        }
-        .toast.error i {
-            color: #ff4444;
-        }
-        .toast.info {
-            border-color: #00ffff;
-        }
-        .toast.info i {
-            color: #00ffff;
-        }
-        .toast i {
-            margin-right: 10px;
-        }
+        /* ====== GLOBAL (same as before) ====== */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Segoe UI',Roboto,system-ui,sans-serif; background:#0a0a0a; color:#e0e0e0; min-height:100vh; opacity:0; transition:opacity 0.4s ease; }
+        body.loaded { opacity:1; }
+        .nav-bar { background:#0d0d0d; border-bottom:1px solid #1a4a4a; padding:12px 24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+        .nav-bar .logo { font-size:1.3rem; font-weight:700; color:#00ffff; text-shadow:0 0 20px rgba(0,255,255,0.15); }
+        .nav-bar .student-info { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+        .nav-bar .student-info .name { font-weight:600; color:#fff; }
+        .nav-bar .student-info .badge { background:rgba(0,255,255,0.15); color:#00ffff; padding:4px 14px; border-radius:40px; font-size:0.75rem; border:1px solid rgba(0,255,255,0.2); }
+        .nav-bar .logout-btn { color:#ffcc00; text-decoration:none; font-size:0.85rem; border-left:1px solid #333; padding-left:16px; transition:color 0.3s; }
+        .nav-bar .logout-btn:hover { color:#ffdd44; }
+        .nav-bar .home-link { color:#88dddd; text-decoration:none; font-size:0.85rem; border-left:1px solid #333; padding-left:16px; transition:color 0.3s; }
+        .nav-bar .home-link:hover { color:#00ffff; }
+        .dashboard-container { max-width:1100px; margin:30px auto; padding:0 20px; }
+        .course-selector { display:flex; gap:12px; margin-bottom:30px; flex-wrap:wrap; }
+        .course-btn { padding:12px 28px; background:#0d0d0d; border:1px solid #1a4a4a; border-radius:40px; color:#88dddd; font-weight:600; cursor:pointer; transition:all 0.3s; font-size:0.95rem; }
+        .course-btn:hover { border-color:#00ffff; color:#00ffff; }
+        .course-btn.active { background:#00ffff; color:#000; border-color:#00ffff; box-shadow:0 0 30px rgba(0,255,255,0.15); }
+        .lms-wrapper { max-width:1100px; margin:0 auto 20px auto; background:#0d0d0d; border-radius:32px; box-shadow:0 20px 35px -8px rgba(0,0,0,0.5); overflow:hidden; border:1px solid #1a4a4a; }
+        .lms-header { background:#0d0d0d; padding:18px 24px; color:#00ffff; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:15px; border-bottom:1px solid #1a4a4a; }
+        .lms-header h2 { font-weight:700; font-size:1.4rem; margin:0; display:flex; align-items:center; gap:8px; color:#00ffff; }
+        .lms-header h2 i { color:#ffcc00; }
+        .lms-badge { background:rgba(255,204,0,0.15); color:#ffcc00; font-size:0.85rem; font-weight:700; padding:6px 16px; border-radius:40px; border:1px solid rgba(255,204,0,0.3); letter-spacing:0.5px; }
+        .lms-body { padding:24px; background:#0d0d0d; }
+        .lms-gate { background:#121212; border-radius:24px; padding:40px 20px; text-align:center; max-width:500px; margin:0 auto; border:1px solid #1a4a4a; }
+        .lms-gate h3 { color:#00ffff; font-size:1.5rem; margin-bottom:8px; }
+        .lms-gate h3 i { color:#ffcc00; }
+        .lms-gate p { color:#888; margin-bottom:20px; }
+        .lms-gate input { padding:14px 20px; border:2px solid #1a4a4a; border-radius:60px; font-size:1rem; width:100%; max-width:300px; outline:none; margin:10px 0; background:#1a1a1a; color:#fff; }
+        .lms-gate input:focus { border-color:#00ffff; box-shadow:0 0 20px rgba(0,255,255,0.1); }
+        .lms-gate button { padding:14px 32px; background:#00ffff; border:none; color:#000; font-weight:700; font-size:1.1rem; border-radius:60px; cursor:pointer; transition:all 0.3s; }
+        .lms-gate button:hover { background:#66ffff; box-shadow:0 0 30px rgba(0,255,255,0.2); transform:scale(1.02); }
+        .lms-gate .error { color:#ff4444; margin-top:10px; }
+        .lms-view { display:none; }
+        .lms-view.active { display:block; }
+        .dashboard-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px; }
+        .dashboard-header h2 { color:#00ffff; border-left:6px solid #ffcc00; padding-left:16px; margin:0; font-size:1.4rem; }
+        .dashboard-header h2 i { color:#ffcc00; }
+        .dashboard-actions { display:flex; gap:10px; flex-wrap:wrap; }
+        .dashboard-actions button { background:rgba(0,255,255,0.1); color:#00ffff; border:1px solid #1a4a4a; padding:10px 20px; border-radius:40px; cursor:pointer; font-weight:600; transition:all 0.3s; font-size:0.85rem; }
+        .dashboard-actions button:hover { background:#00ffff; color:#000; border-color:#00ffff; box-shadow:0 0 30px rgba(0,255,255,0.1); }
+        .dashboard-actions .send-btn { background:rgba(255,204,0,0.1); color:#ffcc00; border:1px solid rgba(255,204,0,0.3); }
+        .dashboard-actions .send-btn:hover { background:#ffcc00; color:#000; }
+        .dashboard-actions button:disabled { opacity:0.5; cursor:not-allowed; }
+        .module-card { background:#121212; border-radius:24px; padding:20px; margin-bottom:20px; border-left:6px solid #ffcc00; border:1px solid #1a4a4a; }
+        .module-card h3 { color:#00ffff; margin-top:0; font-size:1.1rem; }
+        .module-card h3 i { color:#ffcc00; margin-right:8px; }
+        .lesson-item { display:flex; justify-content:space-between; align-items:center; background:#1a1a1a; padding:12px 18px; border-radius:16px; border:1px solid #1a4a4a; margin:8px 0; cursor:pointer; transition:all 0.3s; }
+        .lesson-item:hover { background:#252525; border-color:#00ffff; }
+        .lesson-item .status { font-size:0.8rem; padding:4px 12px; border-radius:40px; background:#1a1a1a; color:#666; border:1px solid #1a4a4a; }
+        .lesson-item .status.done { background:rgba(0,255,136,0.1); color:#00ff88; border-color:rgba(0,255,136,0.3); }
+        .lesson-content { background:#121212; padding:24px; border-radius:24px; line-height:1.7; border:1px solid #1a4a4a; margin-top:12px; }
+        .lesson-content h3 { color:#00ffff; margin-top:20px; margin-bottom:10px; }
+        .lesson-content p { color:#ccc; }
+        .lesson-content ul { color:#ccc; padding-left:20px; }
+        .lesson-content li { margin:8px 0; }
+        .lesson-content iframe { width:100%; height:500px; border:1px solid #1a4a4a; border-radius:16px; background:#0d0d0d; margin-top:15px; }
+        .lesson-content img { max-width:100%; border-radius:12px; margin:12px 0; }
+        .lesson-content .video-wrapper { position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:12px; margin:12px 0; }
+        .lesson-content .video-wrapper iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
+        .lesson-content video { width:100%; border-radius:12px; margin:12px 0; background:#000; }
+        .nav-row { display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; margin-top:24px; padding-top:20px; border-top:1px solid #1a4a4a; }
+        .nav-row button, .nav-row a { background:rgba(0,255,255,0.1); color:#00ffff; padding:12px 28px; border-radius:60px; border:1px solid #1a4a4a; font-weight:600; cursor:pointer; transition:all 0.3s; text-decoration:none; font-size:0.9rem; }
+        .nav-row button:hover, .nav-row a:hover { background:#00ffff; color:#000; border-color:#00ffff; }
+        .nav-row .complete-btn { background:rgba(255,204,0,0.1); color:#ffcc00; border-color:rgba(255,204,0,0.3); }
+        .nav-row .complete-btn:hover { background:#ffcc00; color:#000; border-color:#ffcc00; }
+        .back-btn { background:none !important; border:none !important; color:#888 !important; font-weight:600; cursor:pointer; padding:8px 0 !important; }
+        .back-btn:hover { color:#00ffff !important; background:none !important; }
+        .completed-text { color:#00ff88; font-weight:600; }
+        .completed-text i { margin-right:6px; }
+        .question-block { background:#121212; padding:20px; border-radius:24px; margin-bottom:20px; border-left:6px solid #00ffff; border:1px solid #1a4a4a; }
+        .question-block p { color:#fff; font-weight:600; }
+        .question-block label { display:block; margin:8px 0; padding:10px 16px; background:#1a1a1a; border-radius:40px; cursor:pointer; color:#ccc; transition:all 0.3s; }
+        .question-block label:hover { background:#252525; border-color:#00ffff; }
+        .question-block input[type="radio"] { margin-right:10px; accent-color:#00ffff; }
+        .quiz-result { margin-top:20px; padding:20px; border-radius:24px; display:none; }
+        .quiz-result.pass { background:rgba(0,255,136,0.1); border-left:6px solid #00ff88; display:block; border:1px solid rgba(0,255,136,0.3); }
+        .quiz-result.pass h3 { color:#00ff88; }
+        .quiz-result.fail { background:rgba(255,68,68,0.1); border-left:6px solid #ff4444; display:block; border:1px solid rgba(255,68,68,0.3); }
+        .quiz-result.fail h3 { color:#ff4444; }
+        @media (max-width:700px) { .lms-header h2 { font-size:1.2rem; } .lesson-content iframe { height:350px; } .nav-row { flex-direction:column; align-items:stretch; } .nav-row button, .nav-row a { text-align:center; } .dashboard-header { flex-direction:column; align-items:flex-start; } .dashboard-actions { width:100%; } .dashboard-actions button { flex:1; text-align:center; } .course-selector { justify-content:center; } }
+        @media (max-width:480px) { .lms-header { flex-direction:column; align-items:flex-start; } .lms-gate input { max-width:100%; } .lesson-content iframe { height:250px; } .module-card { padding:16px; } .lesson-item { flex-direction:column; align-items:flex-start; gap:8px; } .lms-body { padding:16px; } .course-btn { padding:8px 16px; font-size:0.8rem; } }
+        #topBtn { display:none; position:fixed; bottom:20px; right:30px; z-index:99; font-size:20px; border:none; outline:none; background-color:#00ffff; color:#000; cursor:pointer; border-radius:50%; width:50px; height:50px; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:50px; padding:0; transition:0.1s; }
+        #topBtn:hover { background-color:#66ffff; transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,255,255,0.3); }
+        .status-dot { display:inline-block; width:10px; height:10px; border-radius:50%; background:#00ff88; margin-right:6px; animation:pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity:1; } 50% { opacity:0.4; } 100% { opacity:1; } }
+        .toast { position:fixed; bottom:30px; right:30px; background:#1a1a1a; border:1px solid #1a4a4a; border-radius:16px; padding:16px 24px; color:#e0e0e0; font-size:0.95rem; box-shadow:0 8px 30px rgba(0,0,0,0.5); transform:translateY(120px); opacity:0; transition:all 0.4s ease; z-index:1000; max-width:400px; }
+        .toast.show { transform:translateY(0); opacity:1; }
+        .toast.success { border-color:#00ff88; }
+        .toast.success i { color:#00ff88; }
+        .toast.error { border-color:#ff4444; }
+        .toast.error i { color:#ff4444; }
+        .toast.info { border-color:#00ffff; }
+        .toast.info i { color:#00ffff; }
+        .toast i { margin-right:10px; }
+        /* Carousel styling (Bootstrap override) */
+        .carousel-item img { height:300px; object-fit:cover; border-radius:16px; }
+        .carousel-control-prev-icon, .carousel-control-next-icon { background-color:#00ffff; border-radius:50%; padding:20px; }
     </style>
 </head>
 <body>
@@ -744,6 +185,48 @@
 
             </div>
         </div>
+
+        <!-- ====== EXTRA SECTION: MESSAGE & CAROUSEL (for demo tracking) ====== -->
+        <div class="lms-wrapper" style="margin-top:20px; border:1px solid #1a4a4a;">
+            <div class="lms-header">
+                <h2><i class="fas fa-comment"></i> Message & Carousel Demo</h2>
+                <span class="lms-badge"><i class="fas fa-cog"></i> Tracking demo</span>
+            </div>
+            <div class="lms-body" style="padding:20px;">
+                <!-- Message form -->
+                <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:20px;">
+                    <input type="text" id="messageInput" placeholder="Type a message..." style="flex:1; min-width:200px; padding:12px 16px; background:#1a1a1a; border:1px solid #1a4a4a; border-radius:40px; color:#fff;" />
+                    <button onclick="sendDemoMessage()" style="padding:12px 28px; background:#ffcc00; border:none; border-radius:40px; color:#000; font-weight:600; cursor:pointer;">
+                        <i class="fas fa-paper-plane"></i> Send Message (tracked)
+                    </button>
+                </div>
+                <!-- Bootstrap Carousel -->
+                <div id="demoCarousel" class="carousel slide" data-bs-ride="carousel" style="max-width:600px; margin:0 auto;">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="https://picsum.photos/600/300?random=1" class="d-block w-100" alt="Slide 1" />
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://picsum.photos/600/300?random=2" class="d-block w-100" alt="Slide 2" />
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://picsum.photos/600/300?random=3" class="d-block w-100" alt="Slide 3" />
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#demoCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#demoCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+                <p style="color:#555; text-align:center; margin-top:12px; font-size:0.8rem;">
+                    <i class="fas fa-info-circle"></i> Carousel slides and messages are tracked to Aiven.
+                </p>
+            </div>
+        </div>
     </div>
 
     <!-- ====== BACK TO TOP ====== -->
@@ -752,8 +235,11 @@
     <!-- ====== TOAST ====== -->
     <div id="toast" class="toast"><i class="fas fa-info-circle"></i> <span id="toastMsg">Hello</span></div>
 
+    <!-- Bootstrap JS (for carousel) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- ============================================================ -->
-    <!-- ====== JAVASCRIPT WITH FULL TRACKING INTEGRATION ====== -->
+    <!-- ====== JAVASCRIPT WITH ALL 12 TRACKING INTEGRATED ====== -->
     <!-- ============================================================ -->
     <script>
         // ============================================================
@@ -763,6 +249,7 @@
         let currentCourse = null;
         let currentCourseData = null;
         let courses = [];
+        let currentPage = 'dashboard'; // for page view tracking
 
         // ============================================================
         // TOAST SYSTEM
@@ -785,9 +272,12 @@
         // ============================================================
         async function trackActivity(endpoint, data) {
             const token = localStorage.getItem('authToken');
-            if (!token) return;
+            if (!token) {
+                console.warn('No token, tracking skipped');
+                return;
+            }
             try {
-                await fetch(`${API_BASE_URL}/api/track/${endpoint}`, {
+                const response = await fetch(`${API_BASE_URL}/api/track/${endpoint}`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -795,26 +285,17 @@
                     },
                     body: JSON.stringify(data)
                 });
+                if (!response.ok) {
+                    console.warn(`Tracking ${endpoint} returned ${response.status}`);
+                }
             } catch (e) {
                 console.warn('Tracking failed:', e);
             }
         }
 
         // ============================================================
-        // HELPER: GET AUTH HEADERS
-        // ============================================================
-        function getAuthHeaders() {
-            const token = localStorage.getItem('authToken');
-            return {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            };
-        }
-
-        // ============================================================
         // API CALLS
         // ============================================================
-
         async function fetchAllCourses() {
             const token = localStorage.getItem('authToken');
             if (!token) return [];
@@ -842,7 +323,6 @@
                 const data = await response.json();
                 if (data.success) {
                     const course = data.data;
-                    // Normalize
                     course.modules = course.Modules || course.modules || [];
                     course.modules.forEach(mod => {
                         mod.Lessons = mod.Lessons || mod.lessons || [];
@@ -918,7 +398,7 @@
         }
 
         // ============================================================
-        // COURSE SELECTION
+        // COURSE SELECTION (with page view tracking)
         // ============================================================
         async function selectCourse(courseId) {
             currentCourse = courseId;
@@ -935,6 +415,8 @@
                     document.getElementById('lmsGate').style.display = 'none';
                     document.getElementById('lmsViews').style.display = 'block';
                     renderDashboard(courseId);
+                    // Track page view after rendering
+                    trackPageView('dashboard');
                 } else {
                     document.getElementById('lmsGate').style.display = 'block';
                     document.getElementById('lmsViews').style.display = 'none';
@@ -947,6 +429,19 @@
                 document.getElementById('dashboardContent').innerHTML =
                     `<p style="color:#ff4444;">Failed to load course data. Please refresh.</p>`;
             }
+        }
+
+        // ============================================================
+        // PAGE VIEW TRACKING
+        // ============================================================
+        function trackPageView(page) {
+            currentPage = page || 'dashboard';
+            trackActivity('page-view', {
+                page: currentPage,
+                url: window.location.href,
+                duration: 0,
+                action: 'view'
+            });
         }
 
         // ============================================================
@@ -964,6 +459,7 @@
                 document.getElementById('lmsGate').style.display = 'none';
                 document.getElementById('lmsViews').style.display = 'block';
                 renderDashboard(currentCourse);
+                trackPageView('dashboard');
                 showToast('✅ Course unlocked!', 'success');
             } else {
                 error.innerText = '❌ Incorrect access code. Please try again.';
@@ -977,7 +473,7 @@
         });
 
         // ============================================================
-        // RENDER DASHBOARD
+        // RENDER DASHBOARD (with page view tracking)
         // ============================================================
         function renderDashboard(courseId) {
             const course = currentCourseData;
@@ -1102,6 +598,10 @@
                     });
                     moduleList.innerHTML = listHtml;
                 }
+
+                // 🔹 After rendering, track page view (if not already tracked elsewhere)
+                trackPageView('dashboard');
+
             }).catch(err => {
                 console.error('Error rendering dashboard:', err);
                 container.innerHTML = `
@@ -1152,7 +652,7 @@
         }
 
         // ============================================================
-        // RENDER LESSON
+        // RENDER LESSON (with video tracking)
         // ============================================================
         function renderLesson(courseId, lesson, moduleId) {
             const container = document.getElementById('lessonContent');
@@ -1160,6 +660,7 @@
 
             let contentHtml = lesson.content || '<p style="color:#666;">No content yet.</p>';
 
+            // Handle URL content
             if (typeof lesson.content === 'string' && lesson.content.trim().startsWith('http')) {
                 const url = lesson.content.trim();
                 if (url.includes('youtube.com') || url.includes('youtu.be')) {
@@ -1195,13 +696,39 @@
                         </div>
                     </div>
                 `;
+
+            // 🔹 After rendering, attach video tracking to any <video> elements
+            setTimeout(() => {
+                const videos = container.querySelectorAll('video');
+                videos.forEach(video => {
+                    const lessonId = lesson.id;
+                    let lastSent = 0;
+                    video.addEventListener('timeupdate', function() {
+                        const current = Math.floor(this.currentTime);
+                        if (current - lastSent >= 5) { // every 5 seconds
+                            lastSent = current;
+                            trackActivity('video-watch', {
+                                lessonId: lessonId,
+                                watchTime: current,
+                                totalDuration: Math.floor(this.duration)
+                            });
+                        }
+                    });
+                    video.addEventListener('ended', function() {
+                        trackActivity('video-complete', {
+                            lessonId: lessonId,
+                            watchTime: Math.floor(this.duration),
+                            totalDuration: Math.floor(this.duration)
+                        });
+                    });
+                });
+            }, 100);
         }
 
         // ============================================================
         // MARK LESSON COMPLETE – with tracking (lesson-complete or practice)
         // ============================================================
         async function markLessonComplete(courseId, lessonId) {
-            // Find the lesson and module
             const course = currentCourseData;
             let lesson = null,
                 moduleId = null;
@@ -1218,10 +745,8 @@
                 return;
             }
 
-            // Mark local progress
             markCompleted(courseId, lessonId);
 
-            // 🔹 TRACK: choose endpoint based on lesson type
             if (lesson.type === 'activity') {
                 await trackActivity('practice', {
                     activityId: lesson.id,
@@ -1336,7 +861,6 @@
             const total = questions.length;
             const passed = score >= total * 0.6;
 
-            // 🔹 TRACK: quiz attempt
             await trackActivity('quiz-attempt', {
                 quizId: quizId,
                 quizTitle: quizData.title,
@@ -1345,12 +869,10 @@
                 passed: passed
             });
 
-            // Save local progress
             const prog = getProgress(courseId);
             prog[quizId] = { completed: true, score: score, total: total };
             saveProgress(courseId, prog);
 
-            // Show result
             if (passed) {
                 resultDiv.className = 'quiz-result pass';
                 resultDiv.innerHTML = `<h3>✅ You scored ${score}/${total}. Well done!</h3>`;
@@ -1570,6 +1092,55 @@
         }
 
         // ============================================================
+        // LINK CLICK TRACKING (global)
+        // ============================================================
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('a');
+            if (link && link.href && link.href.startsWith('http')) {
+                // Exclude internal navigation that might be handled by JS
+                trackActivity('link-click', {
+                    link: link.href,
+                    page: currentPage || 'dashboard',
+                    url: window.location.href
+                });
+            }
+        });
+
+        // ============================================================
+        // CAROUSEL VIEW TRACKING
+        // ============================================================
+        function setupCarouselTracking() {
+            const carousel = document.getElementById('demoCarousel');
+            if (carousel) {
+                carousel.addEventListener('slid.bs.carousel', function() {
+                    trackActivity('carousel-view', {
+                        teacher: 'Demo Teacher',
+                        subject: 'Demo Subject',
+                        page: 'dashboard'
+                    });
+                });
+            }
+        }
+
+        // ============================================================
+        // MESSAGE SENT TRACKING (demo)
+        // ============================================================
+        function sendDemoMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            if (!message) {
+                showToast('Please type a message first.', 'info');
+                return;
+            }
+            trackActivity('message-sent', {
+                recipient: 'Teacher (demo)',
+                message: message
+            });
+            input.value = '';
+            showToast('✅ Message sent (tracked)!', 'success');
+        }
+
+        // ============================================================
         // BACK TO TOP
         // ============================================================
         const topBtn = document.getElementById("topBtn");
@@ -1589,6 +1160,7 @@
         // ============================================================
         window.addEventListener('load', function() {
             document.body.classList.add('loaded');
+            setupCarouselTracking();
         });
 
         // ============================================================
