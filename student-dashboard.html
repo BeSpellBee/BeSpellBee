@@ -14,8 +14,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BeSpellBee - Student Dashboard</title>
     <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560" />
-    <!-- Bootstrap CSS (for carousel) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <style>
         /* ====== GLOBAL ====== */
@@ -56,12 +54,6 @@
         .dashboard-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px; }
         .dashboard-header h2 { color:#00ffff; border-left:6px solid #ffcc00; padding-left:16px; margin:0; font-size:1.4rem; }
         .dashboard-header h2 i { color:#ffcc00; }
-        .dashboard-actions { display:flex; gap:10px; flex-wrap:wrap; }
-        .dashboard-actions button { background:rgba(0,255,255,0.1); color:#00ffff; border:1px solid #1a4a4a; padding:10px 20px; border-radius:40px; cursor:pointer; font-weight:600; transition:all 0.3s; font-size:0.85rem; }
-        .dashboard-actions button:hover { background:#00ffff; color:#000; border-color:#00ffff; box-shadow:0 0 30px rgba(0,255,255,0.1); }
-        .dashboard-actions .send-btn { background:rgba(255,204,0,0.1); color:#ffcc00; border:1px solid rgba(255,204,0,0.3); }
-        .dashboard-actions .send-btn:hover { background:#ffcc00; color:#000; }
-        .dashboard-actions button:disabled { opacity:0.5; cursor:not-allowed; }
         .module-card { background:#121212; border-radius:24px; padding:20px; margin-bottom:20px; border-left:6px solid #ffcc00; border:1px solid #1a4a4a; }
         .module-card h3 { color:#00ffff; margin-top:0; font-size:1.1rem; }
         .module-card h3 i { color:#ffcc00; margin-right:8px; }
@@ -98,7 +90,7 @@
         .quiz-result.pass h3 { color:#00ff88; }
         .quiz-result.fail { background:rgba(255,68,68,0.1); border-left:6px solid #ff4444; display:block; border:1px solid rgba(255,68,68,0.3); }
         .quiz-result.fail h3 { color:#ff4444; }
-        @media (max-width:700px) { .lms-header h2 { font-size:1.2rem; } .lesson-content iframe { height:350px; } .nav-row { flex-direction:column; align-items:stretch; } .nav-row button, .nav-row a { text-align:center; } .dashboard-header { flex-direction:column; align-items:flex-start; } .dashboard-actions { width:100%; } .dashboard-actions button { flex:1; text-align:center; } .course-selector { justify-content:center; } }
+        @media (max-width:700px) { .lms-header h2 { font-size:1.2rem; } .lesson-content iframe { height:350px; } .nav-row { flex-direction:column; align-items:stretch; } .nav-row button, .nav-row a { text-align:center; } .dashboard-header { flex-direction:column; align-items:flex-start; } .course-selector { justify-content:center; } }
         @media (max-width:480px) { .lms-header { flex-direction:column; align-items:flex-start; } .lms-gate input { max-width:100%; } .lesson-content iframe { height:250px; } .module-card { padding:16px; } .lesson-item { flex-direction:column; align-items:flex-start; gap:8px; } .lms-body { padding:16px; } .course-btn { padding:8px 16px; font-size:0.8rem; } }
         #topBtn { display:none; position:fixed; bottom:20px; right:30px; z-index:99; font-size:20px; border:none; outline:none; background-color:#00ffff; color:#000; cursor:pointer; border-radius:50%; width:50px; height:50px; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:50px; padding:0; transition:0.1s; }
         #topBtn:hover { background-color:#66ffff; transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,255,255,0.3); }
@@ -113,9 +105,6 @@
         .toast.info { border-color:#00ffff; }
         .toast.info i { color:#00ffff; }
         .toast i { margin-right:10px; }
-        /* Carousel styling (Bootstrap override) */
-        .carousel-item img { height:300px; object-fit:cover; border-radius:16px; }
-        .carousel-control-prev-icon, .carousel-control-next-icon { background-color:#00ffff; border-radius:50%; padding:20px; }
     </style>
 </head>
 <body>
@@ -185,48 +174,6 @@
 
             </div>
         </div>
-
-        <!-- ====== EXTRA SECTION: MESSAGE & CAROUSEL (for demo tracking) ====== -->
-        <div class="lms-wrapper" style="margin-top:20px; border:1px solid #1a4a4a;">
-            <div class="lms-header">
-                <h2><i class="fas fa-comment"></i> Message & Carousel Demo</h2>
-                <span class="lms-badge"><i class="fas fa-cog"></i> Tracking demo</span>
-            </div>
-            <div class="lms-body" style="padding:20px;">
-                <!-- Message form -->
-                <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:20px;">
-                    <input type="text" id="messageInput" placeholder="Type a message..." style="flex:1; min-width:200px; padding:12px 16px; background:#1a1a1a; border:1px solid #1a4a4a; border-radius:40px; color:#fff;" />
-                    <button onclick="sendDemoMessage()" style="padding:12px 28px; background:#ffcc00; border:none; border-radius:40px; color:#000; font-weight:600; cursor:pointer;">
-                        <i class="fas fa-paper-plane"></i> Send Message (tracked)
-                    </button>
-                </div>
-                <!-- Bootstrap Carousel -->
-                <div id="demoCarousel" class="carousel slide" data-bs-ride="carousel" style="max-width:600px; margin:0 auto;">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="https://picsum.photos/600/300?random=1" class="d-block w-100" alt="Slide 1" />
-                        </div>
-                        <div class="carousel-item">
-                            <img src="https://picsum.photos/600/300?random=2" class="d-block w-100" alt="Slide 2" />
-                        </div>
-                        <div class="carousel-item">
-                            <img src="https://picsum.photos/600/300?random=3" class="d-block w-100" alt="Slide 3" />
-                        </div>
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#demoCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#demoCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-                <p style="color:#555; text-align:center; margin-top:12px; font-size:0.8rem;">
-                    <i class="fas fa-info-circle"></i> Carousel slides and messages are tracked to Aiven.
-                </p>
-            </div>
-        </div>
     </div>
 
     <!-- ====== BACK TO TOP ====== -->
@@ -235,11 +182,8 @@
     <!-- ====== TOAST ====== -->
     <div id="toast" class="toast"><i class="fas fa-info-circle"></i> <span id="toastMsg">Hello</span></div>
 
-    <!-- Bootstrap JS (for carousel) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <!-- ============================================================ -->
-    <!-- ====== JAVASCRIPT WITH ALL 12 TRACKING FIXED ====== -->
+    <!-- ====== JAVASCRIPT ====== -->
     <!-- ============================================================ -->
     <script>
         // ============================================================
@@ -250,7 +194,7 @@
         let currentCourseData = null;
         let courses = [];
         let currentPage = 'dashboard';
-        let pageViewTracked = false;          // 🔹 PREVENT DUPLICATE PAGE VIEWS
+        let pageViewTracked = false;
 
         // ============================================================
         // TOAST SYSTEM
@@ -374,7 +318,7 @@
         // PAGE VIEW TRACKING (single call)
         // ============================================================
         function trackPageView(page) {
-            if (pageViewTracked) return;          // 🔹 Only once per session
+            if (pageViewTracked) return;
             pageViewTracked = true;
             currentPage = page || 'dashboard';
             trackActivity('page-view', {
@@ -408,7 +352,7 @@
         }
 
         // ============================================================
-        // COURSE SELECTION (with single page view)
+        // COURSE SELECTION
         // ============================================================
         async function selectCourse(courseId) {
             currentCourse = courseId;
@@ -425,7 +369,7 @@
                     document.getElementById('lmsGate').style.display = 'none';
                     document.getElementById('lmsViews').style.display = 'block';
                     renderDashboard(courseId);
-                    trackPageView('dashboard');   // 🔹 Only one call
+                    trackPageView('dashboard');
                 } else {
                     document.getElementById('lmsGate').style.display = 'block';
                     document.getElementById('lmsViews').style.display = 'none';
@@ -441,7 +385,7 @@
         }
 
         // ============================================================
-        // UNLOCK COURSE (with single page view)
+        // UNLOCK COURSE
         // ============================================================
         function unlockLMS() {
             const input = document.getElementById('lmsPassword');
@@ -455,7 +399,7 @@
                 document.getElementById('lmsGate').style.display = 'none';
                 document.getElementById('lmsViews').style.display = 'block';
                 renderDashboard(currentCourse);
-                trackPageView('dashboard');      // 🔹 Only one call
+                trackPageView('dashboard');
                 showToast('✅ Course unlocked!', 'success');
             } else {
                 error.innerText = '❌ Incorrect access code. Please try again.';
@@ -469,7 +413,7 @@
         });
 
         // ============================================================
-        // RENDER DASHBOARD (no page view here)
+        // RENDER DASHBOARD
         // ============================================================
         function renderDashboard(courseId) {
             const course = currentCourseData;
@@ -508,61 +452,63 @@
                 }
 
                 let html = `
-                        <div style="background: #121212; border-radius: 16px; padding: 20px 24px; margin-bottom: 20px; border: 1px solid #1a4a4a;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-                                <div>
-                                    <span style="color: #88dddd; font-size: 0.85rem; display: block;">⭐ ${studentName}'s Engagement Score</span>
-                                    <span style="color: #00ffff; font-size: 2.2rem; font-weight: 700;">${Math.round(engagementScore)}%</span>
-                                </div>
-                                <div style="text-align: right;">
-                                    <span style="color: #666; font-size: 0.75rem; display: block;">${totalPageViews} page views • ${totalLinkClicks} link clicks • ${totalQuizzes} quizzes</span>
-                                    <span style="color: #555; font-size: 0.7rem;">${getMotivationalMessage(engagementScore)}</span>
-                                </div>
+                    <!-- ====== ENGAGEMENT SCORE CARD ====== -->
+                    <div style="background: #121212; border-radius: 16px; padding: 20px 24px; margin: 0 auto 20px auto; max-width: 900px; border: 1px solid #1a4a4a;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                            <!-- Left: Score -->
+                            <div>
+                                <span style="color: #88dddd; font-size: 0.85rem; display: block;">⭐ ${studentName}'s Engagement Score</span>
+                                <span style="color: #00ffff; font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 700;">${Math.round(engagementScore)}%</span>
                             </div>
-                            <div style="width: 100%; height: 8px; background: #1a1a1a; border-radius: 4px; margin-top: 12px; overflow: hidden;">
-                                <div style="height: 100%; background: linear-gradient(90deg, #00ffff, #ffcc00); border-radius: 4px; width: ${Math.min(engagementScore, 100)}%; transition: width 0.8s ease;"></div>
-                            </div>
-                            <div style="margin-top: 6px; font-size: 0.7rem; color: #444; text-align: right;">
-                                <i class="fas fa-database"></i> Real-time from server
+                            <!-- Right: Stats -->
+                            <div style="text-align: right;">
+                                <div style="color: #666; font-size: 0.75rem; display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;">
+                                    <span>📄 ${totalPageViews} views</span>
+                                    <span>•</span>
+                                    <span>🔗 ${totalLinkClicks} clicks</span>
+                                    <span>•</span>
+                                    <span>🧠 ${totalQuizzes} quizzes</span>
+                                </div>
+                                <span style="color: #555; font-size: 0.7rem; display: block; margin-top: 4px;">${getMotivationalMessage(engagementScore)}</span>
                             </div>
                         </div>
-                    `;
+                        <!-- Progress Bar -->
+                        <div style="width: 100%; height: 8px; background: #1a1a1a; border-radius: 4px; margin-top: 12px; overflow: hidden;">
+                            <div style="height: 100%; background: linear-gradient(90deg, #00ffff, #ffcc00); border-radius: 4px; width: ${Math.min(engagementScore, 100)}%; transition: width 0.8s ease;"></div>
+                        </div>
+                    </div>
+                `;
 
+                // ====== COURSE CONTENT ======
                 if (course && course.modules && course.modules.length > 0) {
                     html += `
-                            <div class="dashboard-header">
-                                <h2><i class="fas fa-list-ul"></i> ${course.icon || '📚'} ${course.title}</h2>
-                                <div class="dashboard-actions">
-                                    <button onclick="downloadProgress()"><i class="fas fa-download"></i> Download Progress</button>
-                                    <button class="send-btn" onclick="sendProgress()"><i class="fas fa-paper-plane"></i> Send Progress</button>
-                                </div>
+                        <div class="dashboard-header">
+                            <h2><i class="fas fa-list-ul"></i> ${course.icon || '📚'} ${course.title}</h2>
+                        </div>
+                        <div style="background:#121212; border-radius:16px; padding:16px 20px; margin-bottom:20px; border:1px solid #1a4a4a;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                                <span style="color:#88dddd;"><i class="fas fa-chart-line"></i> Overall Progress</span>
+                                <span style="color:#00ffff; font-weight:700;">${overallProgress}% (${completedLessons}/${totalLessons})</span>
                             </div>
-                            <div style="background:#121212; border-radius:16px; padding:16px 20px; margin-bottom:20px; border:1px solid #1a4a4a;">
-                                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                                    <span style="color:#88dddd;"><i class="fas fa-chart-line"></i> Overall Progress</span>
-                                    <span style="color:#00ffff; font-weight:700;">${overallProgress}% (${completedLessons}/${totalLessons})</span>
-                                </div>
-                                <div style="width:100%; height:6px; background:#1a1a1a; border-radius:4px; margin-top:8px; overflow:hidden;">
-                                    <div style="height:100%; background:linear-gradient(90deg, #00ffff, #ffcc00); border-radius:4px; width:${overallProgress}%; transition:width 0.5s;"></div>
-                                </div>
-                                <div style="margin-top:4px; font-size:0.65rem; color:#444; text-align:right;">
-                                    <i class="fas fa-save"></i> Saved locally on your device
-                                </div>
+                            <div style="width:100%; height:6px; background:#1a1a1a; border-radius:4px; margin-top:8px; overflow:hidden;">
+                                <div style="height:100%; background:linear-gradient(90deg, #00ffff, #ffcc00); border-radius:4px; width:${overallProgress}%; transition:width 0.5s;"></div>
                             </div>
-                            <div id="moduleList"></div>
-                        `;
+                        </div>
+                        <div id="moduleList"></div>
+                    `;
                 } else {
                     html += `
-                            <div style="text-align:center; padding:40px 20px; background:#121212; border-radius:16px; border:1px solid #1a4a4a; margin-top:10px;">
-                                <i class="fas fa-info-circle" style="font-size:2.5rem; color:#555; margin-bottom:15px; display:block;"></i>
-                                <h3 style="color:#88dddd;">No content yet</h3>
-                                <p style="color:#666; margin-top:5px;">This course has no modules or lessons yet.</p>
-                            </div>
-                        `;
+                        <div style="text-align:center; padding:40px 20px; background:#121212; border-radius:16px; border:1px solid #1a4a4a; margin-top:10px;">
+                            <i class="fas fa-info-circle" style="font-size:2.5rem; color:#555; margin-bottom:15px; display:block;"></i>
+                            <h3 style="color:#88dddd;">No content yet</h3>
+                            <p style="color:#666; margin-top:5px;">This course has no modules or lessons yet.</p>
+                        </div>
+                    `;
                 }
 
                 container.innerHTML = html;
 
+                // ====== RENDER MODULE LIST ======
                 if (course && course.modules && course.modules.length > 0) {
                     const moduleList = document.getElementById('moduleList');
                     let listHtml = '';
@@ -571,8 +517,7 @@
                         if (mod.Lessons && mod.Lessons.length > 0) {
                             mod.Lessons.forEach(lesson => {
                                 const done = isCompleted(courseId, lesson.id) ? 'done' : '';
-                                let label = isCompleted(courseId, lesson.id) ? '✅ Completed' : (lesson
-                                    .type === 'quiz' ? '🧠 Quiz' : '📖 Lesson');
+                                let label = isCompleted(courseId, lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson');
                                 if (lesson.type === 'quiz') {
                                     const data = prog[lesson.id];
                                     if (data && data.completed) {
@@ -581,11 +526,11 @@
                                 }
                                 const icon = lesson.type === 'quiz' ? '🧠' : '📖';
                                 listHtml += `
-                                        <div class="lesson-item" onclick="openLesson('${courseId}','${mod.id}','${lesson.id}')">
-                                            <span>${icon} ${lesson.title}</span>
-                                            <span class="status ${done}">${label}</span>
-                                        </div>
-                                    `;
+                                    <div class="lesson-item" onclick="openLesson('${courseId}','${mod.id}','${lesson.id}')">
+                                        <span>${icon} ${lesson.title}</span>
+                                        <span class="status ${done}">${label}</span>
+                                    </div>
+                                `;
                             });
                         } else {
                             listHtml += `<p style="color:#555; font-size:0.85rem; padding:8px 0;">No lessons yet.</p>`;
@@ -597,16 +542,16 @@
             }).catch(err => {
                 console.error('Error rendering dashboard:', err);
                 container.innerHTML = `
-                        <div style="color:#ff6666; text-align:center; padding:20px;">
-                            <i class="fas fa-exclamation-triangle" style="font-size:2rem; display:block; margin-bottom:10px;"></i>
-                            Error loading dashboard. Please refresh.
-                        </div>
-                    `;
+                    <div style="color:#ff6666; text-align:center; padding:20px;">
+                        <i class="fas fa-exclamation-triangle" style="font-size:2rem; display:block; margin-bottom:10px;"></i>
+                        Error loading dashboard. Please refresh.
+                    </div>
+                `;
             });
         }
 
         // ============================================================
-        // OPEN LESSON / QUIZ – with tracking
+        // OPEN LESSON / QUIZ
         // ============================================================
         function openLesson(courseId, moduleId, lessonId) {
             if (!currentCourseData) {
@@ -626,7 +571,7 @@
                 return;
             }
 
-            // 🔹 TRACK: lesson view
+            // Track lesson view
             trackActivity('lesson-view', {
                 lessonId: lesson.id,
                 lessonTitle: lesson.title,
@@ -644,7 +589,7 @@
         }
 
         // ============================================================
-        // RENDER LESSON (with video tracking)
+        // RENDER LESSON
         // ============================================================
         function renderLesson(courseId, lesson, moduleId) {
             const container = document.getElementById('lessonContent');
@@ -657,38 +602,38 @@
                 if (url.includes('youtube.com') || url.includes('youtu.be')) {
                     const embedUrl = url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/');
                     contentHtml = `
-                            <div class="video-wrapper">
-                                <iframe src="${embedUrl}" allowfullscreen></iframe>
-                            </div>
-                        `;
+                        <div class="video-wrapper">
+                            <iframe src="${embedUrl}" allowfullscreen></iframe>
+                        </div>
+                    `;
                 } else if (url.match(/\.(mp4|webm|ogg)$/i)) {
                     contentHtml = `
-                            <video controls style="width:100%; border-radius:12px; margin:12px 0;">
-                                <source src="${url}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        `;
+                        <video controls style="width:100%; border-radius:12px; margin:12px 0;">
+                            <source src="${url}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    `;
                 } else {
                     contentHtml = `
-                            <div style="background:#1a1a1a; border-radius:12px; padding:16px; margin:12px 0;">
-                                <a href="${url}" target="_blank" style="color:#00ffff;">🔗 Open resource: ${url}</a>
-                            </div>
-                        `;
+                        <div style="background:#1a1a1a; border-radius:12px; padding:16px; margin:12px 0;">
+                            <a href="${url}" target="_blank" style="color:#00ffff;">🔗 Open resource: ${url}</a>
+                        </div>
+                    `;
                 }
             }
 
             container.innerHTML = `
-                    <h2 style="color: #00ffff;"><i class="fas fa-book"></i> ${lesson.title}</h2>
-                    <div class="lesson-content">${contentHtml}</div>
-                    <div class="nav-row">
-                        <button onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Dashboard</button>
-                        <div>
-                            ${!done ? `<button class="complete-btn" onclick="markLessonComplete('${courseId}','${lesson.id}')"><i class="fas fa-check"></i> Mark as Complete</button>` : '<span class="completed-text"><i class="fas fa-check-circle"></i> Completed</span>'}
-                        </div>
+                <h2 style="color: #00ffff;"><i class="fas fa-book"></i> ${lesson.title}</h2>
+                <div class="lesson-content">${contentHtml}</div>
+                <div class="nav-row">
+                    <button onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Dashboard</button>
+                    <div>
+                        ${!done ? `<button class="complete-btn" onclick="markLessonComplete('${courseId}','${lesson.id}')"><i class="fas fa-check"></i> Mark as Complete</button>` : '<span class="completed-text"><i class="fas fa-check-circle"></i> Completed</span>'}
                     </div>
-                `;
+                </div>
+            `;
 
-            // 🔹 Attach video tracking to any <video> elements
+            // Attach video tracking
             setTimeout(() => {
                 const videos = container.querySelectorAll('video');
                 videos.forEach(video => {
@@ -717,12 +662,11 @@
         }
 
         // ============================================================
-        // MARK LESSON COMPLETE – with tracking
+        // MARK LESSON COMPLETE
         // ============================================================
         async function markLessonComplete(courseId, lessonId) {
             const course = currentCourseData;
-            let lesson = null,
-                moduleId = null;
+            let lesson = null, moduleId = null;
             for (let mod of course.modules) {
                 const found = mod.Lessons.find(l => String(l.id) === String(lessonId));
                 if (found) {
@@ -765,51 +709,51 @@
             const questions = quiz.questions || [];
             if (questions.length === 0) {
                 container.innerHTML = `
-                        <h2 style="color: #00ffff;"><i class="fas fa-brain"></i> ${quiz.title}</h2>
-                        <div style="background:#121212; border-radius:16px; padding:24px; border:1px solid #1a4a4a; text-align:center;">
-                            <p style="color:#888;">This quiz has no questions yet.</p>
-                            <button class="back-btn" onclick="showDashboard()" style="margin-top:16px;"><i class="fas fa-arrow-left"></i> Back</button>
-                        </div>
-                    `;
+                    <h2 style="color: #00ffff;"><i class="fas fa-brain"></i> ${quiz.title}</h2>
+                    <div style="background:#121212; border-radius:16px; padding:24px; border:1px solid #1a4a4a; text-align:center;">
+                        <p style="color:#888;">This quiz has no questions yet.</p>
+                        <button class="back-btn" onclick="showDashboard()" style="margin-top:16px;"><i class="fas fa-arrow-left"></i> Back</button>
+                    </div>
+                `;
                 return;
             }
 
             let html = `
-                    <h2 style="color: #00ffff;"><i class="fas fa-brain"></i> ${quiz.title}</h2>
-                    <form id="quizForm">
-                `;
+                <h2 style="color: #00ffff;"><i class="fas fa-brain"></i> ${quiz.title}</h2>
+                <form id="quizForm">
+            `;
 
             questions.forEach((q, idx) => {
                 const options = q.options || [];
                 html += `
-                        <div class="question-block">
-                            <p><strong>${idx+1}. ${q.question}</strong></p>
-                            ${options.map((opt, oi) => `
-                                <label><input type="radio" name="q${idx}" value="${oi}"> ${opt}</label>
-                            `).join('')}
-                        </div>
-                    `;
+                    <div class="question-block">
+                        <p><strong>${idx+1}. ${q.question}</strong></p>
+                        ${options.map((opt, oi) => `
+                            <label><input type="radio" name="q${idx}" value="${oi}"> ${opt}</label>
+                        `).join('')}
+                    </div>
+                `;
             });
 
             html += `
-                        <button type="button" style="background:rgba(255,204,0,0.1); color:#ffcc00; border:1px solid rgba(255,204,0,0.3); padding:14px 32px; border-radius:60px; font-weight:700; cursor:pointer; transition:all 0.3s; font-size:1rem;" 
-                                onmouseover="this.style.background='#ffcc00'; this.style.color='#000';" 
-                                onmouseout="this.style.background='rgba(255,204,0,0.1)'; this.style.color='#ffcc00';" 
-                                onclick="submitQuiz('${courseId}','${quiz.id}')">
-                            <i class="fas fa-check"></i> Check Answers
-                        </button>
-                    </form>
-                    <div id="quizResult" class="quiz-result"></div>
-                    <div class="nav-row" style="margin-top:20px;">
-                        <button onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Dashboard</button>
-                    </div>
-                `;
+                <button type="button" style="background:rgba(255,204,0,0.1); color:#ffcc00; border:1px solid rgba(255,204,0,0.3); padding:14px 32px; border-radius:60px; font-weight:700; cursor:pointer; transition:all 0.3s; font-size:1rem;" 
+                        onmouseover="this.style.background='#ffcc00'; this.style.color='#000';" 
+                        onmouseout="this.style.background='rgba(255,204,0,0.1)'; this.style.color='#ffcc00';" 
+                        onclick="submitQuiz('${courseId}','${quiz.id}')">
+                    <i class="fas fa-check"></i> Check Answers
+                </button>
+                </form>
+                <div id="quizResult" class="quiz-result"></div>
+                <div class="nav-row" style="margin-top:20px;">
+                    <button onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Dashboard</button>
+                </div>
+            `;
 
             container.innerHTML = html;
         }
 
         // ============================================================
-        // SUBMIT QUIZ – with tracking
+        // SUBMIT QUIZ
         // ============================================================
         async function submitQuiz(courseId, quizId) {
             const course = currentCourseData;
@@ -819,9 +763,14 @@
             }
 
             let quizData = null;
+            let moduleId = null;
             for (let m of course.modules) {
                 const found = m.Lessons.find(l => String(l.id) === String(quizId));
-                if (found) { quizData = found; break; }
+                if (found) {
+                    quizData = found;
+                    moduleId = m.id;
+                    break;
+                }
             }
             if (!quizData) {
                 showToast('❌ Quiz data not found.', 'error');
@@ -852,6 +801,7 @@
             const total = questions.length;
             const passed = score >= total * 0.6;
 
+            // Track quiz attempt
             await trackActivity('quiz-attempt', {
                 quizId: quizId,
                 quizTitle: quizData.title,
@@ -860,6 +810,15 @@
                 passed: passed
             });
 
+            // Also track as lesson complete (for overall progress)
+            await trackActivity('lesson-complete', {
+                lessonId: quizId,
+                lessonTitle: quizData.title,
+                moduleId: moduleId,
+                courseId: courseId
+            });
+
+            // Save local progress
             const prog = getProgress(courseId);
             prog[quizId] = { completed: true, score: score, total: total };
             saveProgress(courseId, prog);
@@ -875,148 +834,6 @@
             }
 
             document.querySelectorAll('#quizForm input[type="radio"]').forEach(el => el.disabled = true);
-        }
-
-        // ============================================================
-        // PROGRESS REPORT
-        // ============================================================
-        function generateReport(courseId) {
-            const course = currentCourseData;
-            const prog = getProgress(courseId);
-            let report = "=== Progress Report ===\n";
-            report += `Course: ${course.title}\n`;
-            report += "Generated: " + new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString() + "\n\n";
-
-            let totalLessons = 0;
-            let completedLessons = 0;
-
-            course.modules.forEach(mod => {
-                report += `📌 ${mod.title}\n`;
-                if (mod.Lessons) {
-                    mod.Lessons.forEach(lesson => {
-                        totalLessons++;
-                        const data = prog[lesson.id];
-                        if (lesson.type === 'quiz') {
-                            if (data && data.completed) {
-                                completedLessons++;
-                                report += `  🧠 ${lesson.title}: ✅ Completed (Score: ${data.score || 0}/${data.total || 0})\n`;
-                            } else {
-                                report += `  🧠 ${lesson.title}: ⬜ Not started\n`;
-                            }
-                        } else {
-                            if (data && data.completed) {
-                                completedLessons++;
-                                report += `  📖 ${lesson.title}: ✅ Completed\n`;
-                            } else {
-                                report += `  📖 ${lesson.title}: ⬜ Not started\n`;
-                            }
-                        }
-                    });
-                }
-                report += "\n";
-            });
-
-            const progress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
-            report += `📊 Overall Progress: ${progress}% (${completedLessons}/${totalLessons} lessons completed)\n`;
-            report += "=== End of Report ===";
-            return report;
-        }
-
-        function downloadProgress() {
-            if (!currentCourseData) {
-                showToast('❌ No course loaded.', 'error');
-                return;
-            }
-            const report = generateReport(currentCourse);
-            const blob = new Blob([report], { type: 'text/plain' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `progress_${currentCourse}_${new Date().toISOString().slice(0,10)}.txt`;
-            a.click();
-            showToast('📥 Progress downloaded!', 'success');
-        }
-
-        // ============================================================
-        // SEND PROGRESS
-        // ============================================================
-        async function sendProgress() {
-            const token = localStorage.getItem('authToken');
-            if (!token) {
-                showToast('❌ Please log in first.', 'error');
-                return;
-            }
-            if (!currentCourseData) {
-                showToast('❌ No course loaded.', 'error');
-                return;
-            }
-
-            const course = currentCourseData;
-            const prog = getProgress(currentCourse);
-            const report = generateReport(currentCourse);
-
-            let totalLessons = 0;
-            let completedLessons = 0;
-            let quizScores = {};
-
-            course.modules.forEach(mod => {
-                if (mod.Lessons) {
-                    mod.Lessons.forEach(lesson => {
-                        totalLessons++;
-                        const data = prog[lesson.id];
-                        if (data && data.completed) {
-                            completedLessons++;
-                            if (lesson.type === 'quiz') {
-                                quizScores[lesson.id] = {
-                                    title: lesson.title,
-                                    score: data.score || 0,
-                                    total: data.total || 0
-                                };
-                            }
-                        }
-                    });
-                }
-            });
-
-            const overallProgress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
-
-            const btn = document.querySelector('.send-btn');
-            if (btn) {
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-                btn.disabled = true;
-            }
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/student/progress-report`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        courseName: course.title,
-                        progress: overallProgress,
-                        completedLessons: completedLessons,
-                        totalLessons: totalLessons,
-                        quizScores: quizScores,
-                        reportText: report
-                    })
-                });
-
-                const data = await response.json();
-                if (data.success) {
-                    showToast('✅ Progress report sent to your teacher!', 'success');
-                } else {
-                    showToast('❌ Failed to send: ' + (data.message || 'Unknown error'), 'error');
-                }
-            } catch (error) {
-                console.error('Error sending progress:', error);
-                showToast('❌ Network error. Please try again.', 'error');
-            } finally {
-                if (btn) {
-                    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Progress';
-                    btn.disabled = false;
-                }
-            }
         }
 
         // ============================================================
@@ -1083,7 +900,7 @@
         }
 
         // ============================================================
-        // LINK CLICK TRACKING (global)
+        // LINK CLICK TRACKING
         // ============================================================
         document.addEventListener('click', function(e) {
             const link = e.target.closest('a');
@@ -1095,38 +912,6 @@
                 });
             }
         });
-
-        // ============================================================
-        // CAROUSEL VIEW TRACKING (global listener)
-        // ============================================================
-        function setupCarouselTracking() {
-            document.addEventListener('slid.bs.carousel', function(e) {
-                console.log('Carousel slide detected', e.target);
-                trackActivity('carousel-view', {
-                    teacher: 'Demo Teacher',
-                    subject: 'Demo Subject',
-                    page: 'dashboard'
-                });
-            });
-        }
-
-        // ============================================================
-        // MESSAGE SENT TRACKING (demo)
-        // ============================================================
-        function sendDemoMessage() {
-            const input = document.getElementById('messageInput');
-            const message = input.value.trim();
-            if (!message) {
-                showToast('Please type a message first.', 'info');
-                return;
-            }
-            trackActivity('message-sent', {
-                recipient: 'Teacher (demo)',
-                message: message
-            });
-            input.value = '';
-            showToast('✅ Message sent (tracked)!', 'success');
-        }
 
         // ============================================================
         // BACK TO TOP
@@ -1148,7 +933,6 @@
         // ============================================================
         window.addEventListener('load', function() {
             document.body.classList.add('loaded');
-            setupCarouselTracking();   // 🔹 Attach carousel listener
         });
 
         // ============================================================
@@ -1168,12 +952,12 @@
                     `<p style="color:#888;">No courses available. Please contact your teacher.</p>`;
                 document.getElementById('courseTitle').textContent = 'No course selected';
                 document.getElementById('dashboardContent').innerHTML = `
-                        <div style="text-align:center; padding:40px 20px; background:#121212; border-radius:16px; border:1px solid #1a4a4a;">
-                            <i class="fas fa-info-circle" style="font-size:2.5rem; color:#555; margin-bottom:15px; display:block;"></i>
-                            <h3 style="color:#88dddd;">No courses available</h3>
-                            <p style="color:#666; margin-top:5px;">Your teacher hasn't assigned any courses to you yet.</p>
-                        </div>
-                    `;
+                    <div style="text-align:center; padding:40px 20px; background:#121212; border-radius:16px; border:1px solid #1a4a4a;">
+                        <i class="fas fa-info-circle" style="font-size:2.5rem; color:#555; margin-bottom:15px; display:block;"></i>
+                        <h3 style="color:#88dddd;">No courses available</h3>
+                        <p style="color:#666; margin-top:5px;">Your teacher hasn't assigned any courses to you yet.</p>
+                    </div>
+                `;
             }
         });
     </script>
