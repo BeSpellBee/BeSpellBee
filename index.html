@@ -1410,7 +1410,6 @@
         // TEACHER DATA - 19 TEACHERS IN 10 CATEGORIES!
         // ------------------------------------------------------------
         const teachers = [
-            // ====== EXISTING 14 TEACHERS (UNCHANGED) ======
             {
                 id: 1,
                 name: "Arij Dhibi",
@@ -1579,8 +1578,6 @@
                 videoUrl: "",
                 hasVideo: false
             },
-
-            // ====== NEW TEACHER 15: YOSRA ABBASSI ======
             {
                 id: 15,
                 name: "Yosra Abbassi",
@@ -1593,8 +1590,6 @@
                 videoUrl: "",
                 hasVideo: false
             },
-
-            // ====== NEW TEACHER 16: TAKWA TORCH ======
             {
                 id: 16,
                 name: "Takwa Torch",
@@ -1607,8 +1602,6 @@
                 videoUrl: "",
                 hasVideo: false
             },
-
-            // ====== NEW TEACHER 17: SANA TRABELSI ======
             {
                 id: 17,
                 name: "Sana Trabelsi",
@@ -1621,8 +1614,6 @@
                 videoUrl: "",
                 hasVideo: false
             },
-
-            // ====== NEW TEACHER 18: SAMEH SMIDA ======
             {
                 id: 18,
                 name: "Sameh Smida",
@@ -1635,8 +1626,6 @@
                 videoUrl: "",
                 hasVideo: false
             },
-
-            // ====== NEW TEACHER 19: REEM AL-MAJRI ======
             {
                 id: 19,
                 name: "Reem Al-Majri",
@@ -2027,418 +2016,301 @@
     </script>
 
     <!-- ============================================================ -->
-    <!-- ====== STUDENT TRACKING SYSTEM ====== -->
+    <!-- ====== STUDENT TRACKING SYSTEM (FIXED) ====== -->
     <!-- ============================================================ -->
     <script>
     // ============================================
     // STUDENT TRACKING CONFIGURATION
     // ============================================
 
- // ============================================
-// STUDENT TRACKING CONFIGURATION
-// ============================================
+    const TRACKING_API = 'https://bespellbee-backend-en6l.onrender.com/api';
+    const authToken = localStorage.getItem('authToken');
+    const sessionId = localStorage.getItem('sessionId') || generateSessionId();
+    let currentPage = 'home';
+    let pageStartTime = Date.now();
+    let isTrackingEnabled = !!authToken;
+    let isNavigatingAway = false;
 
-const TRACKING_API = 'https://bespellbee-backend-en6l.onrender.com/api';
-const authToken = localStorage.getItem('authToken');
-const sessionId = localStorage.getItem('sessionId') || generateSessionId();
-let currentPage = 'home';
-let pageStartTime = Date.now();
-let isTrackingEnabled = !!authToken;
-let isNavigatingAway = false;  // ✅ NEW: Navigation flag
+    function generateSessionId() {
+        const id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('sessionId', id);
+        return id;
+    }
 
-// ============================================
-// TRACKING FUNCTIONS
-// ============================================
+    function getHeaders() {
+        return {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json',
+            'X-Session-Id': sessionId
+        };
+    }
 
-function generateSessionId() {
-    const id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    localStorage.setItem('sessionId', id);
-    return id;
-}
+    // ============================================
+    // CORE TRACKING FUNCTION (FIXED - routes to correct endpoint)
+    // ============================================
+    function trackActivity(type, data = {}) {
+        if (!isTrackingEnabled || !authToken) return;
+        if (isNavigatingAway) return;
 
-function getHeaders() {
-    return {
-        'Authorization': `Bearer ${authToken}`,
-        'Content-Type': 'application/json',
-        'X-Session-Id': sessionId
+        const duration = Math.floor((Date.now() - pageStartTime) / 1000);
+        pageStartTime = Date.now();
+
+        // Map activity type to correct endpoint
+        const endpointMap = {
+            'page_view': 'page-view',
+            'link_click': 'link-click',
+            'carousel_view': 'carousel-view',
+            'search': 'search',
+            'lesson_view': 'lesson-view',
+            'lesson_complete': 'lesson-complete',
+            'quiz_attempt': 'quiz-attempt',
+            'video_watch': 'video-watch',
+            'video_complete': 'video-complete',
+            'practice': 'practice',
+            'message_sent': 'message-sent'
+        };
+        
+        const endpoint = endpointMap[type] || 'page-view';
+        
+        // 🔹 SEND TO CORRECT ENDPOINT
+        fetch(`${TRACKING_API}/track/${endpoint}`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify({
+                page: document.title || 'BeSpellBee',
+                url: window.location.href,
+                duration: duration,
+                ...data
+            })
+        }).catch(() => {});
+    }
+
+    // Expose globally
+    window.trackActivity = trackActivity;
+
+    // ============================================
+    // LINK CLICK TRACKING
+    // ============================================
+    window.trackLink = function(linkName) {
+        if (!isTrackingEnabled || !authToken) {
+            console.log('🔒 Not logged in - link tracking skipped');
+            return;
+        }
+        trackActivity('link_click', { link: linkName, page: 'home' });
     };
-}
 
-function trackActivity(action, data = {}) {
-    if (!isTrackingEnabled || !authToken) return;
-    if (isNavigatingAway) return;  // ✅ NEW: Skip if navigating
+    // ============================================
+    // PREVENT NAVIGATION GLITCH
+    // ============================================
+    document.addEventListener('click', function(e) {
+        const link = e.target.closest('a[href]');
+        if (link && !link.hasAttribute('download')) {
+            isNavigatingAway = true;
+        }
+    });
 
-    const duration = Math.floor((Date.now() - pageStartTime) / 1000);
-    pageStartTime = Date.now();
-
-    fetch(`${TRACKING_API}/track/page-view`, {
-        method: 'POST',
-        headers: getHeaders(),
-        body: JSON.stringify({
-            page: document.title || 'BeSpellBee',
-            url: window.location.href,
-            duration: duration,
-            action: action,
-            ...data
-        })
-    }).catch(() => {});
-}
-
-// ============================================
-// FIX: Prevent "home" glitch when navigating away
-// ============================================
-
-document.addEventListener('click', function(e) {
-    const link = e.target.closest('a[href]');
-    if (link && !link.hasAttribute('download')) {
+    window.addEventListener('beforeunload', function() {
         isNavigatingAway = true;
-    }
-});
-
-window.addEventListener('beforeunload', function() {
-    isNavigatingAway = true;
-});
-
-// ============================================
-// TRACK HOME PAGE VIEW
-// ============================================
-
-setTimeout(function() {
-    if (isTrackingEnabled && !isNavigatingAway) {
-        trackActivity('page_view', {
-            page: 'Home',
-            url: window.location.href
-        });
-        console.log('🚀 Tracking system initialized!');
-    }
-}, 1000);
-
-// ============================================
-// UPDATE UI BASED ON LOGIN STATUS
-// ============================================
-
-function updateAuthUI() {
-    const isLoggedIn = !!localStorage.getItem('authToken');
-    const studentAuthBtns = document.getElementById('studentAuthButtons');
-    const teacherLoginBtn = document.getElementById('teacherLoginBtn');
-
-    if (isLoggedIn) {
-        if (studentAuthBtns) studentAuthBtns.style.display = 'none';
-        if (teacherLoginBtn) teacherLoginBtn.style.display = 'none';
-    } else {
-        if (studentAuthBtns) studentAuthBtns.style.display = 'flex';
-        if (teacherLoginBtn) teacherLoginBtn.style.display = 'inline-block';
-    }
-}
-
-updateAuthUI();
+    });
 
     // ============================================
-    // DASHBOARD (FIXED - Shows for both Student & Teacher)
+    // TRACK HOME PAGE VIEW
     // ============================================
+    setTimeout(function() {
+        if (isTrackingEnabled && !isNavigatingAway) {
+            trackActivity('page_view', { page: 'Home' });
+            console.log('🚀 Tracking system initialized!');
+        }
+    }, 1000);
 
+    // ============================================
+    // UPDATE UI BASED ON LOGIN STATUS
+    // ============================================
+    function updateAuthUI() {
+        const isLoggedIn = !!localStorage.getItem('authToken');
+        const studentAuthBtns = document.getElementById('studentAuthButtons');
+        const teacherLoginBtn = document.getElementById('teacherLoginBtn');
+
+        if (isLoggedIn) {
+            if (studentAuthBtns) studentAuthBtns.style.display = 'none';
+            if (teacherLoginBtn) teacherLoginBtn.style.display = 'none';
+        } else {
+            if (studentAuthBtns) studentAuthBtns.style.display = 'flex';
+            if (teacherLoginBtn) teacherLoginBtn.style.display = 'inline-block';
+        }
+    }
+    updateAuthUI();
+
+    // ============================================
+    // DASHBOARD FUNCTIONS (abbreviated - full version)
+    // ============================================
     window.openDashboard = async function() {
         const modal = document.getElementById('dashboardModal');
         const content = document.getElementById('dashboardContent');
-        
-        if (!modal) {
-            alert('Dashboard modal not found. Please refresh the page.');
-            return;
-        }
-        
+        if (!modal) return;
         modal.classList.add('active');
-        content.innerHTML = `
-            <div style="text-align: center; padding: 2rem;">
-                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #00ffff;"></i>
-                <p style="color: #aaa;">Loading your stats...</p>
-            </div>
-        `;
+        content.innerHTML = `<div style="text-align:center;padding:2rem;"><i class="fas fa-spinner fa-spin" style="font-size:2rem;color:#00ffff;"></i><p>Loading...</p></div>`;
 
-        const authToken = localStorage.getItem('authToken');
         const userRole = localStorage.getItem('userRole');
+        const endpoint = userRole === 'teacher' ? `${TRACKING_API}/teacher/dashboard` : `${TRACKING_API}/track/dashboard`;
 
         try {
-            let endpoint;
-            if (userRole === 'teacher') {
-                endpoint = `${TRACKING_API}/teacher/dashboard`;
-            } else {
-                endpoint = `${TRACKING_API}/track/dashboard`;
-            }
-
-            const response = await fetch(endpoint, {
-                headers: {
-                    'Authorization': `Bearer ${authToken}`,
-                    'Content-Type': 'application/json'
-                }
-            });
+            const response = await fetch(endpoint, { headers: { 'Authorization': `Bearer ${authToken}` } });
             const data = await response.json();
-
             if (data.success) {
+                const d = data.data;
                 if (userRole === 'teacher') {
-                    // Teacher dashboard
-                    const d = data.data;
                     content.innerHTML = `
-                        <div style="color: #fff; margin-bottom: 0.5rem;">
-                            <h3 style="color: #ffcc00;">👨‍🏫 ${d.teacher?.name || 'Teacher'}</h3>
-                            <p style="color: #888; font-size: 0.85rem;">${d.teacher?.email || ''}</p>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1rem 0;">
-                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #ffcc00; text-align: center;">
-                                <div style="font-size: 1.8rem; color: #ffcc00;">${d.stats?.totalBookings || 0}</div>
-                                <div style="font-size: 0.7rem; color: #666;">Total Bookings</div>
+                        <h3 style="color:#ffcc00;">👨‍🏫 ${d.teacher?.name}</h3>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin:1rem 0;">
+                            <div style="background:#1a1a1a;padding:0.8rem;border-radius:8px;border:1px solid #ffcc00;text-align:center;">
+                                <div style="font-size:1.8rem;color:#ffcc00;">${d.stats?.totalBookings || 0}</div>
+                                <div style="font-size:0.7rem;color:#666;">Bookings</div>
                             </div>
-                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #ffcc00; text-align: center;">
-                                <div style="font-size: 1.8rem; color: #ffcc00;">${d.stats?.pendingBookings || 0}</div>
-                                <div style="font-size: 0.7rem; color: #666;">Pending Bookings</div>
-                            </div>
-                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #ffcc00; text-align: center;">
-                                <div style="font-size: 1.8rem; color: #ffcc00;">${d.stats?.totalStudents || 0}</div>
-                                <div style="font-size: 0.7rem; color: #666;">Active Students</div>
-                            </div>
-                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #ffcc00; text-align: center;">
-                                <div style="font-size: 1.8rem; color: #ffcc00;">${d.stats?.recentActivityCount || 0}</div>
-                                <div style="font-size: 0.7rem; color: #666;">Recent Activities</div>
+                            <div style="background:#1a1a1a;padding:0.8rem;border-radius:8px;border:1px solid #ffcc00;text-align:center;">
+                                <div style="font-size:1.8rem;color:#ffcc00;">${d.stats?.totalStudents || 0}</div>
+                                <div style="font-size:0.7rem;color:#666;">Students</div>
                             </div>
                         </div>
-                        ${d.bookings?.length > 0 ? `
-                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; margin-top: 0.5rem;">
-                                <div style="color: #88dddd; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.3rem;">📅 Recent Bookings</div>
-                                ${d.bookings.map(b => `
-                                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #aaa; padding: 0.2rem 0; border-bottom: 1px solid #1a1a1a;">
-                                        <span>${b.studentName}</span>
-                                        <span style="color: ${b.status === 'pending' ? '#ffcc00' : '#00ff88'};">${b.status}</span>
-                                        <span style="color: #555;">${new Date(b.createdAt).toLocaleDateString()}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        ` : ''}
                     `;
                 } else {
-                    // Student dashboard
-                    const d = data.data;
                     content.innerHTML = `
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1rem 0;">
-                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
-                                <div style="font-size: 1.8rem; color: #00ffff;">${d.stats?.completedVideos || 0}</div>
-                                <div style="font-size: 0.7rem; color: #666;">Videos Completed</div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin:1rem 0;">
+                            <div style="background:#1a1a1a;padding:0.8rem;border-radius:8px;border:1px solid #1a4a4a;text-align:center;">
+                                <div style="font-size:1.8rem;color:#00ffff;">${d.stats?.totalPageViews || 0}</div>
+                                <div style="font-size:0.7rem;color:#666;">Page Views</div>
                             </div>
-                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
-                                <div style="font-size: 1.8rem; color: #00ff88;">${d.stats?.totalQuizzes || 0}</div>
-                                <div style="font-size: 0.7rem; color: #666;">Quizzes Taken</div>
+                            <div style="background:#1a1a1a;padding:0.8rem;border-radius:8px;border:1px solid #1a4a4a;text-align:center;">
+                                <div style="font-size:1.8rem;color:#00ff88;">${d.stats?.totalCarouselViews || 0}</div>
+                                <div style="font-size:0.7rem;color:#666;">Teacher Views</div>
                             </div>
-                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
-                                <div style="font-size: 1.8rem; color: #ffcc00;">${Math.round(d.stats?.avgScore || 0)}%</div>
-                                <div style="font-size: 0.7rem; color: #666;">Average Score</div>
+                            <div style="background:#1a1a1a;padding:0.8rem;border-radius:8px;border:1px solid #1a4a4a;text-align:center;">
+                                <div style="font-size:1.8rem;color:#ffcc00;">${Math.round(d.student?.engagementScore || 0)}%</div>
+                                <div style="font-size:0.7rem;color:#666;">Engagement</div>
                             </div>
-                            <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center;">
-                                <div style="font-size: 1.8rem; color: #ff66aa;">${d.stats?.totalMessages || 0}</div>
-                                <div style="font-size: 0.7rem; color: #666;">Messages Sent</div>
+                            <div style="background:#1a1a1a;padding:0.8rem;border-radius:8px;border:1px solid #1a4a4a;text-align:center;">
+                                <div style="font-size:1.8rem;color:#ff66aa;">${d.stats?.totalLinkClicks || 0}</div>
+                                <div style="font-size:0.7rem;color:#666;">Link Clicks</div>
                             </div>
-                        </div>
-                        <div style="background: #1a1a1a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1a4a4a; text-align: center; margin-top: 0.5rem;">
-                            <div style="font-size: 1.2rem; color: #00ffff;">⭐ ${Math.round(d.student?.engagementScore || 0)}%</div>
-                            <div style="font-size: 0.7rem; color: #666;">Engagement Score</div>
-                        </div>
-                        <div style="margin-top: 0.8rem; font-size: 0.7rem; color: #555; text-align: center;">
-                            ⏱️ ${Math.floor((d.stats?.totalTimeSpent || 0) / 60)} minutes spent learning
                         </div>
                     `;
                 }
             } else {
-                content.innerHTML = `<p style="color: #ff6666; text-align: center;">Failed to load dashboard: ${data.message || 'Unknown error'}</p>`;
+                content.innerHTML = `<p style="color:#ff6666;">${data.message}</p>`;
             }
-        } catch (error) {
-            console.error('Dashboard error:', error);
-            content.innerHTML = `<p style="color: #ff6666; text-align: center;">Error loading dashboard. Please try again.</p>`;
+        } catch (e) {
+            content.innerHTML = `<p style="color:#ff6666;">Error loading dashboard</p>`;
         }
     };
 
     window.closeDashboard = function() {
-        const modal = document.getElementById('dashboardModal');
-        if (modal) modal.classList.remove('active');
+        document.getElementById('dashboardModal')?.classList.remove('active');
     };
 
     // ============================================
-    // LOGOUT (FIXED - Just reloads the page)
+    // AUTHENTICATION MODALS (abbreviated)
     // ============================================
-
-    // ============================================
-// LOGOUT (FIXED - Redirects to Root index.html)
-// ============================================
-
-
-
-    // ============================================
-    // STUDENT AUTHENTICATION MODALS
-    // ============================================
-
-    // Signup Modal
     window.openSignupModal = function() {
         document.querySelectorAll('#signupModal, #loginModal').forEach(el => el.remove());
-        
         const modal = document.createElement('div');
         modal.id = 'signupModal';
-        modal.style.cssText = `
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 9999;
-            display: flex; justify-content: center; align-items: center;
-            backdrop-filter: blur(10px);
-        `;
+        modal.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(10px);`;
         modal.innerHTML = `
-            <div style="background: #0d0d0d; border: 2px solid #00ffff; border-radius: 20px;
-                        padding: 2rem; max-width: 400px; width: 90%;">
-                <h2 style="color: #00ffff; text-align: center;">📝 Student Sign Up</h2>
-                <form id="signupForm" style="display: flex; flex-direction: column; gap: 1rem;">
-                    <input type="text" id="signupName" placeholder="Full Name" required
-                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
-                               background: #1a1a1a; color: white;">
-                    <input type="email" id="signupEmail" placeholder="Email" required
-                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
-                               background: #1a1a1a; color: white;">
-                    <input type="password" id="signupPassword" placeholder="Password (min 6 chars)" required
-                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
-                               background: #1a1a1a; color: white;">
-                    <input type="tel" id="signupPhone" placeholder="Phone (optional)"
-                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
-                               background: #1a1a1a; color: white;">
-                    <button type="submit" style="background: #00ffff; color: #000; border: none;
-                        padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                        Create Account
-                    </button>
+            <div style="background:#0d0d0d;border:2px solid #00ffff;border-radius:20px;padding:2rem;max-width:400px;width:90%;">
+                <h2 style="color:#00ffff;text-align:center;">📝 Sign Up</h2>
+                <form id="signupForm" style="display:flex;flex-direction:column;gap:1rem;">
+                    <input type="text" id="signupName" placeholder="Full Name" required style="padding:10px;border:1px solid #1a4a4a;border-radius:8px;background:#1a1a1a;color:white;">
+                    <input type="email" id="signupEmail" placeholder="Email" required style="padding:10px;border:1px solid #1a4a4a;border-radius:8px;background:#1a1a1a;color:white;">
+                    <input type="password" id="signupPassword" placeholder="Password (min 6 chars)" required style="padding:10px;border:1px solid #1a4a4a;border-radius:8px;background:#1a1a1a;color:white;">
+                    <button type="submit" style="background:#00ffff;color:#000;border:none;padding:12px;border-radius:8px;font-weight:bold;cursor:pointer;">Create Account</button>
                 </form>
-                <p style="color: #666; text-align: center; font-size: 0.8rem; margin-top: 0.5rem;">
-                    Already have an account? <a href="#" onclick="closeModalById('signupModal'); openLoginModal(); return false;" style="color: #00ffff;">Login</a>
-                </p>
-                <button onclick="closeModalById('signupModal')"
-                    style="background: transparent; color: #888; border: 1px solid #444;
-                           padding: 8px; border-radius: 8px; width: 100%; margin-top: 0.5rem; cursor: pointer;">
-                    Cancel
-                </button>
-                <div id="signupMessage" style="color: #ff4444; text-align: center; margin-top: 0.5rem;"></div>
+                <p style="color:#666;text-align:center;font-size:0.8rem;margin-top:0.5rem;">Already have an account? <a href="#" onclick="closeModalById('signupModal');openLoginModal();return false;" style="color:#00ffff;">Login</a></p>
+                <button onclick="closeModalById('signupModal')" style="background:transparent;color:#888;border:1px solid #444;padding:8px;border-radius:8px;width:100%;margin-top:0.5rem;cursor:pointer;">Cancel</button>
+                <div id="signupMessage" style="color:#ff4444;text-align:center;margin-top:0.5rem;"></div>
             </div>
         `;
         document.body.appendChild(modal);
-
         document.getElementById('signupForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const name = document.getElementById('signupName').value.trim();
             const email = document.getElementById('signupEmail').value.trim();
             const password = document.getElementById('signupPassword').value;
-            const phone = document.getElementById('signupPhone').value.trim();
-            const messageEl = document.getElementById('signupMessage');
-
-            if (password.length < 6) {
-                messageEl.textContent = 'Password must be at least 6 characters';
-                return;
-            }
-
-            messageEl.textContent = '⏳ Creating account...';
-            messageEl.style.color = '#00ffff';
-
+            const msg = document.getElementById('signupMessage');
+            if (password.length < 6) { msg.textContent = 'Password must be at least 6 characters'; return; }
+            msg.textContent = '⏳ Creating account...';
+            msg.style.color = '#00ffff';
             try {
-                const response = await fetch(`${TRACKING_API}/auth/register-student`, {
+                const res = await fetch(`${TRACKING_API}/auth/register-student`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password, phone })
+                    body: JSON.stringify({ name, email, password })
                 });
-
-                const data = await response.json();
-
+                const data = await res.json();
                 if (data.success) {
                     localStorage.setItem('authToken', data.data.token);
                     localStorage.setItem('studentId', data.data.id);
                     localStorage.setItem('userRole', 'student');
                     isTrackingEnabled = true;
-                    messageEl.style.color = '#00ff88';
-                    messageEl.textContent = '✅ Account created!';
+                    msg.style.color = '#00ff88';
+                    msg.textContent = '✅ Account created!';
                     updateAuthUI();
-                    closeModalById('signupModal');
-                    window.location.href = 'student-dashboard.html';
+                    setTimeout(() => { closeModalById('signupModal'); window.location.href = 'student-dashboard.html'; }, 1000);
                 } else {
-                    messageEl.textContent = '❌ ' + (data.message || 'Signup failed');
+                    msg.textContent = '❌ ' + (data.message || 'Signup failed');
                 }
             } catch (error) {
-                console.error('Signup error:', error);
-                messageEl.textContent = '❌ Connection error. Please try again.';
+                msg.textContent = '❌ Connection error. Please try again.';
             }
         });
     };
 
-    // Student Login Modal
     window.openLoginModal = function() {
         document.querySelectorAll('#signupModal, #loginModal').forEach(el => el.remove());
-        
         const modal = document.createElement('div');
         modal.id = 'loginModal';
-        modal.style.cssText = `
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 9999;
-            display: flex; justify-content: center; align-items: center;
-            backdrop-filter: blur(10px);
-        `;
+        modal.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(10px);`;
         modal.innerHTML = `
-            <div style="background: #0d0d0d; border: 2px solid #00ffff; border-radius: 20px;
-                        padding: 2rem; max-width: 400px; width: 90%;">
-                <h2 style="color: #00ffff; text-align: center;">🔐 Student Login</h2>
-                <form id="loginForm" style="display: flex; flex-direction: column; gap: 1rem;">
-                    <input type="email" id="loginEmail" placeholder="Email" required
-                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
-                               background: #1a1a1a; color: white;">
-                    <input type="password" id="loginPassword" placeholder="Password" required
-                        style="padding: 10px; border: 1px solid #1a4a4a; border-radius: 8px;
-                               background: #1a1a1a; color: white;">
-                    <button type="submit" style="background: #00ffff; color: #000; border: none;
-                        padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                        Login
-                    </button>
+            <div style="background:#0d0d0d;border:2px solid #00ffff;border-radius:20px;padding:2rem;max-width:400px;width:90%;">
+                <h2 style="color:#00ffff;text-align:center;">🔐 Login</h2>
+                <form id="loginForm" style="display:flex;flex-direction:column;gap:1rem;">
+                    <input type="email" id="loginEmail" placeholder="Email" required style="padding:10px;border:1px solid #1a4a4a;border-radius:8px;background:#1a1a1a;color:white;">
+                    <input type="password" id="loginPassword" placeholder="Password" required style="padding:10px;border:1px solid #1a4a4a;border-radius:8px;background:#1a1a1a;color:white;">
+                    <button type="submit" style="background:#00ffff;color:#000;border:none;padding:12px;border-radius:8px;font-weight:bold;cursor:pointer;">Login</button>
                 </form>
-                <p style="color: #666; text-align: center; font-size: 0.8rem; margin-top: 0.5rem;">
-                    Don't have an account? <a href="#" onclick="closeModalById('loginModal'); openSignupModal(); return false;" style="color: #00ffff;">Sign Up</a>
-                </p>
-                <button onclick="closeModalById('loginModal')"
-                    style="background: transparent; color: #888; border: 1px solid #444;
-                           padding: 8px; border-radius: 8px; width: 100%; margin-top: 0.5rem; cursor: pointer;">
-                    Cancel
-                </button>
-                <div id="loginMessage" style="color: #ff4444; text-align: center; margin-top: 0.5rem;"></div>
+                <p style="color:#666;text-align:center;font-size:0.8rem;margin-top:0.5rem;">Don't have an account? <a href="#" onclick="closeModalById('loginModal');openSignupModal();return false;" style="color:#00ffff;">Sign Up</a></p>
+                <button onclick="closeModalById('loginModal')" style="background:transparent;color:#888;border:1px solid #444;padding:8px;border-radius:8px;width:100%;margin-top:0.5rem;cursor:pointer;">Cancel</button>
+                <div id="loginMessage" style="color:#ff4444;text-align:center;margin-top:0.5rem;"></div>
             </div>
         `;
         document.body.appendChild(modal);
-
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
-            const messageEl = document.getElementById('loginMessage');
-
-            messageEl.textContent = '⏳ Logging in...';
-            messageEl.style.color = '#00ffff';
-
+            const msg = document.getElementById('loginMessage');
+            msg.textContent = '⏳ Logging in...';
+            msg.style.color = '#00ffff';
             try {
-                const response = await fetch(`${TRACKING_API}/auth/student-login`, {
+                const res = await fetch(`${TRACKING_API}/auth/student-login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
-
-                const data = await response.json();
-
+                const data = await res.json();
                 if (data.success) {
                     localStorage.setItem('authToken', data.data.token);
                     localStorage.setItem('studentId', data.data.id);
                     localStorage.setItem('userRole', 'student');
                     isTrackingEnabled = true;
-                    messageEl.style.color = '#00ff88';
-                    messageEl.textContent = '✅ Login successful!';
+                    msg.style.color = '#00ff88';
+                    msg.textContent = '✅ Login successful!';
                     updateAuthUI();
-                    closeModalById('loginModal');
-                    window.location.href = 'student-dashboard.html';
+                    setTimeout(() => { closeModalById('loginModal'); window.location.href = 'student-dashboard.html'; }, 1000);
                 } else {
-                    messageEl.textContent = '❌ ' + (data.message || 'Login failed');
+                    msg.textContent = '❌ ' + (data.message || 'Login failed');
                 }
             } catch (error) {
-                console.error('Login error:', error);
-                messageEl.textContent = '❌ Connection error. Please try again.';
+                msg.textContent = '❌ Connection error. Please try again.';
             }
         });
     };
@@ -2448,201 +2320,72 @@ updateAuthUI();
         if (el) el.remove();
     }
 
-    
-   // ============================================
-// TEACHER LOGIN (no signup)
-// ============================================
+    // ============================================
+    // TEACHER LOGIN
+    // ============================================
+    window.openTeacherLoginModal = function() {
+        const modal = document.getElementById('teacherLoginModal');
+        if (modal) { modal.style.display = 'flex'; document.getElementById('teacherLoginMessage').textContent = ''; document.getElementById('teacherLoginForm').reset(); }
+    };
 
-window.openTeacherLoginModal = function() {
-    const modal = document.getElementById('teacherLoginModal');
-    if (modal) {
-        modal.style.display = 'flex';
-        document.getElementById('teacherLoginMessage').textContent = '';
-        document.getElementById('teacherLoginForm').reset();
-    }
-};
+    window.closeTeacherLoginModal = function() {
+        const modal = document.getElementById('teacherLoginModal');
+        if (modal) modal.style.display = 'none';
+    };
 
-window.closeTeacherLoginModal = function() {
-    const modal = document.getElementById('teacherLoginModal');
-    if (modal) modal.style.display = 'none';
-};
-
-// Handle teacher login form submission
-const teacherForm = document.getElementById('teacherLoginForm');
-if (teacherForm) {
-    teacherForm.addEventListener('submit', async function(e) {
+    document.getElementById('teacherLoginForm')?.addEventListener('submit', async function(e) {
         e.preventDefault();
         const email = document.getElementById('teacherEmail').value.trim();
         const password = document.getElementById('teacherPassword').value;
-        const messageEl = document.getElementById('teacherLoginMessage');
-
-        messageEl.textContent = '⏳ Logging in...';
-        messageEl.style.color = '#ffcc00';
-
+        const msg = document.getElementById('teacherLoginMessage');
+        msg.textContent = '⏳ Logging in...';
+        msg.style.color = '#ffcc00';
         try {
-            const response = await fetch(`${TRACKING_API}/auth/teacher-login`, {
+            const res = await fetch(`${TRACKING_API}/auth/teacher-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
             });
-
-            const data = await response.json();
-
+            const data = await res.json();
             if (data.success) {
                 localStorage.setItem('authToken', data.data.token);
                 localStorage.setItem('teacherId', data.data.id);
                 localStorage.setItem('teacherName', data.data.name);
                 localStorage.setItem('userRole', 'teacher');
                 isTrackingEnabled = true;
-                messageEl.style.color = '#00ff88';
-                messageEl.textContent = '✅ Login successful!';
-                
+                msg.style.color = '#00ff88';
+                msg.textContent = '✅ Login successful!';
                 updateAuthUI();
-                
-                setTimeout(() => {
-                    closeTeacherLoginModal();
-                    window.location.href = 'teacher-dashboard.html';
-                }, 1500);
+                setTimeout(() => { closeTeacherLoginModal(); window.location.href = 'teacher-dashboard.html'; }, 1500);
             } else {
-                messageEl.textContent = '❌ ' + (data.message || 'Login failed');
-                messageEl.style.color = '#ff4444';
+                msg.textContent = '❌ ' + (data.message || 'Login failed');
+                msg.style.color = '#ff4444';
             }
         } catch (error) {
-            console.error('Teacher login error:', error);
-            messageEl.textContent = '❌ Connection error. Please try again.';
-            messageEl.style.color = '#ff4444';
+            msg.textContent = '❌ Connection error. Please try again.';
+            msg.style.color = '#ff4444';
         }
     });
-}
 
-// ============================================
-// GLOBAL LOGOUT (OUTSIDE ALL EVENT LISTENERS)
-// ============================================
-
-window.handleLogout = function(e) {
-    if (e && e.preventDefault) e.preventDefault();
-
-    if (confirm('Are you sure you want to logout?')) {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('studentId');
-        localStorage.removeItem('teacherId');
-        localStorage.removeItem('teacherName');
-        localStorage.removeItem('userRole');
-        localStorage.removeItem('sessionId');
-
-        if (typeof isTrackingEnabled !== 'undefined') {
+    // ============================================
+    // LOGOUT
+    // ============================================
+    window.handleLogout = function(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('studentId');
+            localStorage.removeItem('teacherId');
+            localStorage.removeItem('teacherName');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('sessionId');
             isTrackingEnabled = false;
+            window.location.replace('/BeSpellBee/index.html');
         }
-
-        window.location.replace('/BeSpellBee/index.html');
-    }
-};
-	
-
-    // ============================================
-    // AUTO-TRACKING
-    // ============================================
-
-    
-
-    document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-            if (isTrackingEnabled) {
-                fetch(`${TRACKING_API}/track/page-view`, {
-                    method: 'POST',
-                    headers: getHeaders(),
-                    body: JSON.stringify({
-                        page: document.title || 'BeSpellBee',
-                        url: window.location.href,
-                        duration: 0
-                    })
-                }).catch(() => {});
-            }
-        }, 1000);
-        
-        if (isTrackingEnabled) {
-            fetch(`${TRACKING_API}/track/dashboard`, {
-                headers: getHeaders()
-            }).then(r => r.json()).then(data => {
-                if (data.success) {
-                    console.log('📊 Engagement Score:', data.data.student?.engagementScore || 0);
-                }
-            }).catch(() => {});
-        }
-    });
-
-    document.addEventListener('click', (e) => {
-        if (!isTrackingEnabled) return;
-        const target = e.target;
-        const elementType = target.tagName.toLowerCase();
-        if (elementType !== 'a' && elementType !== 'button') return;
-        
-        const elementText = target.textContent?.trim()?.substring(0, 50) || '';
-        
-        fetch(`${TRACKING_API}/track/page-view`, {
-            method: 'POST',
-            headers: getHeaders(),
-            body: JSON.stringify({
-                page: currentPage,
-                url: window.location.href,
-                action: 'click',
-                element: elementType,
-                text: elementText
-            })
-        }).catch(() => {});
-    });
+    };
 
     console.log('🚀 Tracking system initialized!');
     console.log('🔑 Logged in:', !!authToken);
-
-    window.trackActivity = function(type, data) {
-        if (!isTrackingEnabled) return;
-        fetch(`${TRACKING_API}/track/page-view`, {
-            method: 'POST',
-            headers: getHeaders(),
-            body: JSON.stringify({
-                page: currentPage,
-                url: window.location.href,
-                action: type,
-                ...data
-            })
-        }).catch(() => {});
-    };
-
-    // ============================================
-    // TRACK LINK CLICKS (fix)
-    // ============================================
-
-    window.trackLink = function(linkName) {
-        if (!isTrackingEnabled || !authToken) {
-            console.log('🔒 Not logged in - link tracking skipped');
-            return;
-        }
-
-        const duration = Math.floor((Date.now() - pageStartTime) / 1000);
-        pageStartTime = Date.now();
-
-        console.log(`🔗 Tracking link: ${linkName} (${duration}s)`);
-
-        fetch(`${TRACKING_API}/track/link-click`, {
-            method: 'POST',
-            headers: getHeaders(),
-            body: JSON.stringify({
-                page: document.title || 'BeSpellBee',
-                url: window.location.href,
-                duration: duration,
-                action: 'link_click',
-                link: linkName
-            })
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(`✅ Link tracked: ${linkName}`, data);
-        })
-        .catch(err => {
-            console.error('❌ Link tracking error:', err);
-        });
-    };
     </script>
 
     <!-- ============================================================ -->
@@ -2657,117 +2400,138 @@ window.handleLogout = function(e) {
                 return;
             }
 
+            function getCurrentIndex() {
+                if (typeof window.currentIndex !== 'undefined') return window.currentIndex;
+                if (typeof currentIndex !== 'undefined') return currentIndex;
+                const transform = track.style.transform;
+                if (transform) {
+                    const match = transform.match(/translateX\(-([\d.]+)%\)/);
+                    if (match) return Math.round(parseFloat(match[1]) / 100);
+                }
+                return 0;
+            }
+
             function trackCurrentCard() {
-                const authToken = localStorage.getItem('authToken');
-                if (!authToken) return;
+                const token = localStorage.getItem('authToken');
+                if (!token) return;
                 
                 const cards = track.querySelectorAll('.teacher-card');
-                const visibleCard = cards[currentIndex];
+                const index = getCurrentIndex();
+                const visibleCard = cards[index];
                 
                 if (visibleCard) {
                     const teacherName = visibleCard.querySelector('.teacher-name')?.textContent;
                     const teacherSubject = visibleCard.querySelector('.teacher-subject')?.textContent;
                     
-                    if (teacherName) {
-                        trackActivity('carousel_view', {
-                            teacher: teacherName,
-                            subject: teacherSubject || 'Unknown'
-                        });
+                    if (teacherName && teacherName.trim()) {
+                        // Use the global trackActivity function
+                        if (typeof window.trackActivity === 'function') {
+                            window.trackActivity('carousel_view', {
+                                teacher: teacherName.trim(),
+                                subject: teacherSubject ? teacherSubject.trim() : 'Unknown',
+                                page: 'home'
+                            });
+                            console.log(`🎠 Carousel view tracked: ${teacherName.trim()}`);
+                        }
                     }
                 }
             }
 
-            document.getElementById('prevBtn')?.addEventListener('click', function() {
-                setTimeout(trackCurrentCard, 150);
-            });
-            document.getElementById('nextBtn')?.addEventListener('click', function() {
-                setTimeout(trackCurrentCard, 150);
-            });
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const dotsContainer = document.getElementById('dotsContainer');
+            const filterContainer = document.getElementById('filterContainer');
 
-            document.getElementById('filterContainer')?.addEventListener('click', function(e) {
-                if (e.target.closest('.filter-btn')) {
-                    setTimeout(trackCurrentCard, 200);
-                }
-            });
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function() { setTimeout(trackCurrentCard, 350); });
+            }
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function() { setTimeout(trackCurrentCard, 350); });
+            }
+            if (dotsContainer) {
+                dotsContainer.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('dot')) {
+                        setTimeout(trackCurrentCard, 350);
+                    }
+                });
+            }
+            if (filterContainer) {
+                filterContainer.addEventListener('click', function(e) {
+                    if (e.target.closest('.filter-btn')) {
+                        setTimeout(trackCurrentCard, 450);
+                    }
+                });
+            }
 
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('dot')) {
-                    setTimeout(trackCurrentCard, 150);
-                }
-            });
-
-            setTimeout(trackCurrentCard, 800);
-            
-            console.log('✅ Carousel tracking added!');
+            setTimeout(trackCurrentCard, 1800);
+            console.log('✅ Carousel tracking ready on homepage!');
         }
 
         if (document.readyState === 'complete') {
-            setTimeout(setupCarouselTracking, 500);
+            setTimeout(setupCarouselTracking, 600);
         } else {
             document.addEventListener('DOMContentLoaded', function() {
-                setTimeout(setupCarouselTracking, 500);
+                setTimeout(setupCarouselTracking, 600);
             });
         }
     })();
-		// ============================================================
-// INJECT "GO TO DASHBOARD" BUTTON ON HOMEPAGE (SAFE)
-// ============================================================
 
-(function injectDashboardButton() {
-    // Only on homepage
-    const isHome = window.location.pathname.endsWith('index.html') || 
-                   window.location.pathname === '/' || 
-                   window.location.pathname === '';
-    if (!isHome) return;
+    // ============================================================
+    // INJECT "GO TO DASHBOARD" BUTTON ON HOMEPAGE (SAFE)
+    // ============================================================
+    (function injectDashboardButton() {
+        const isHome = window.location.pathname.endsWith('index.html') || 
+                       window.location.pathname === '/' || 
+                       window.location.pathname === '';
+        if (!isHome) return;
 
-    const token = localStorage.getItem('authToken');
-    if (!token) return;
+        const token = localStorage.getItem('authToken');
+        if (!token) return;
 
-    if (document.getElementById('floatingDashboardBtn')) return;
+        if (document.getElementById('floatingDashboardBtn')) return;
 
-    const userRole = localStorage.getItem('userRole') || 'student';
-    const buttonText = userRole === 'teacher' ? '👨‍🏫 Go to Dashboard' : '📚 Go to Dashboard';
-    const buttonLink = userRole === 'teacher' ? 'teacher-dashboard.html' : 'student-dashboard.html';
+        const userRole = localStorage.getItem('userRole') || 'student';
+        const buttonText = userRole === 'teacher' ? '👨‍🏫 Go to Dashboard' : '📚 Go to Dashboard';
+        const buttonLink = userRole === 'teacher' ? 'teacher-dashboard.html' : 'student-dashboard.html';
 
-    const btn = document.createElement('a');
-    btn.id = 'floatingDashboardBtn';
-    btn.href = buttonLink;
-    btn.innerHTML = buttonText;
-    Object.assign(btn.style, {
-        position: 'fixed',
-        bottom: '30px',
-        right: '30px',
-        background: '#00ffff',
-        color: '#000',
-        padding: '14px 24px',
-        borderRadius: '60px',
-        textDecoration: 'none',
-        fontWeight: '700',
-        fontSize: '1rem',
-        boxShadow: '0 8px 32px rgba(0, 255, 255, 0.3)',
-        zIndex: '9999',
-        transition: 'all 0.3s',
-        fontFamily: "'Segoe UI', sans-serif",
-        border: 'none',
-        cursor: 'pointer'
-    });
-    btn.onmouseover = function() {
-        this.style.transform = 'scale(1.05)';
-        this.style.boxShadow = '0 12px 48px rgba(0, 255, 255, 0.5)';
-    };
-    btn.onmouseout = function() {
-        this.style.transform = 'scale(1)';
-        this.style.boxShadow = '0 8px 32px rgba(0, 255, 255, 0.3)';
-    };
-    document.body.appendChild(btn);
-})();
+        const btn = document.createElement('a');
+        btn.id = 'floatingDashboardBtn';
+        btn.href = buttonLink;
+        btn.innerHTML = buttonText;
+        Object.assign(btn.style, {
+            position: 'fixed',
+            bottom: '30px',
+            right: '30px',
+            background: '#00ffff',
+            color: '#000',
+            padding: '14px 24px',
+            borderRadius: '60px',
+            textDecoration: 'none',
+            fontWeight: '700',
+            fontSize: '1rem',
+            boxShadow: '0 8px 32px rgba(0, 255, 255, 0.3)',
+            zIndex: '9999',
+            transition: 'all 0.3s',
+            fontFamily: "'Segoe UI', sans-serif",
+            border: 'none',
+            cursor: 'pointer'
+        });
+        btn.onmouseover = function() {
+            this.style.transform = 'scale(1.05)';
+            this.style.boxShadow = '0 12px 48px rgba(0, 255, 255, 0.5)';
+        };
+        btn.onmouseout = function() {
+            this.style.transform = 'scale(1)';
+            this.style.boxShadow = '0 8px 32px rgba(0, 255, 255, 0.3)';
+        };
+        document.body.appendChild(btn);
+    })();
 
-// Also run after a short delay in case DOM isn't ready
-setTimeout(function() {
-    if (typeof injectDashboardButton === 'function') {
-        injectDashboardButton();
-    }
-}, 200);
+    setTimeout(function() {
+        if (typeof injectDashboardButton === 'function') {
+            injectDashboardButton();
+        }
+    }, 200);
     </script>
 
     <!-- ====== FADE-IN SCRIPT ====== -->
