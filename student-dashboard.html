@@ -233,7 +233,7 @@
                     </div>
                 </div>
 
-                <!-- Legacy views (kept for course lessons) -->
+                <!-- Legacy lesson/quiz views -->
                 <div id="viewLesson" class="lms-view" style="display:none;">
                     <button class="back-btn" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
                     <div id="lessonContent"></div>
@@ -454,7 +454,7 @@ function switchTab(tab) {
 }
 
 // ============================================================
-// FETCH ENGAGEMENT STATS (FIXED – uses /api/track/dashboard)
+// FETCH ENGAGEMENT STATS (uses /api/track/dashboard)
 // ============================================================
 async function fetchEngagementStats() {
     const token = localStorage.getItem('authToken');
@@ -469,7 +469,6 @@ async function fetchEngagementStats() {
             return {
                 name: d.student?.name || 'Student',
                 engagementScore: d.student?.engagementScore || 0,
-                // totalCompleted counts all completions (lessons + practice + quizzes passed)
                 lessonsCompleted: d.stats?.totalCompleted || 0,
                 videosCompleted: d.stats?.totalVideoCompleted || 0,
                 messagesSent: d.stats?.totalMessages || 0,
@@ -503,7 +502,6 @@ function renderDashboard(courseId) {
     }
     const overallProgress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
 
-    // Fetch engagement stats
     fetchEngagementStats().then(stats => {
         let engagementScore = 0, lessonsCompleted = 0, videosCompleted = 0, messagesSent = 0, quizzesPassed = 0;
         let studentName = 'Student';
@@ -596,35 +594,433 @@ function renderDashboard(courseId) {
 }
 
 // ============================================================
-// MESSAGING FUNCTIONS (unchanged from previous version)
+// MESSAGING FUNCTIONS
 // ============================================================
 async function loadContacts() {
-    // ... (keep the same as before)
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/messages/conversations`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+            const contactMap = {};
+            const userId = parseInt(localStorage.getItem('studentId')) || 0;
+            data.data.forEach(msg => {
+                const otherId = msg.senderId === userId ? msg.receiverId : msg.senderId;
+                const otherRole = msg.senderId === userId ? msg.receiverRole : msg.senderRole;
+                const key = `${otherRole}_${otherId}`;
+                if (!contactMap[key]) {
+                    contactMap[key] = { id: otherId, role: otherRole, name: `${otherRole} ${otherId}` };
+                }
+            });
+            contacts = Object.values(contactMap);
+            renderContacts();
+        }
+    } catch(e) { console.error(e); }
 }
-function renderContacts() { /* ... */ }
-function selectContact(role, id, name) { /* ... */ }
-async function loadMessages(role, id) { /* ... */ }
-function renderMessages() { /* ... */ }
-async function sendMessage() { /* ... */ }
+
+function renderContacts() {
+    const container = document.getElementById('contactsList');
+    if (contacts.length === 0) {
+        container.innerHTML = '<p style="color:#555;">No conversations yet.</p>';
+        return;
+    }
+    let html = '';
+    contacts.forEach(c => {
+        const active = currentContact && currentContact.id === c.id && currentContact.role === c.role ? 'active' : '';
+        html += `<div class="msg-contact ${active}" onclick="selectContact('${c.role}', ${c.id}, '${c.name}')">
+            <div class="name">${c.name}</div>
+            <div class="role">${c.role}</div>
+        </div>`;
+    });
+    container.innerHTML = html;
+}
+
+function selectContact(role, id, name) {
+    currentContact = { role, id, name };
+    document.getElementById('msgChatHeader').textContent = `💬 ${name}`;
+    document.getElementById('msgInputArea').style.display = 'flex';
+    document.getElementById('msgMessages').innerHTML = '<p style="color:#555;text-align:center;margin-top:40px;">Loading messages...</p>';
+    loadMessages(role, id);
+    renderContacts();
+}
+
+async function loadMessages(role, id) {
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/messages/conversations`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+            const userId = parseInt(localStorage.getItem('studentId')) || 0;
+            const filtered = data.data.filter(msg =>
+                (msg.senderId === userId && msg.receiverId === id && msg.receiverRole === role) ||
+                (msg.receiverId === userId && msg.senderId === id && msg.senderRole === role)
+            );
+            messages = filtered.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+            renderMessages();
+        }
+    } catch(e) { console.error(e); }
+}
+
+function renderMessages() {
+    const container = document.getElementById('msgMessages');
+    if (messages.length === 0) {
+        container.innerHTML = '<p style="color:#555;text-align:center;margin-top:40px;">No messages yet. Say hello!</p>';
+        return;
+    }
+    const userId = parseInt(localStorage.getItem('studentId')) || 0;
+    let html = '';
+    messages.forEach(msg => {
+        const isSent = msg.senderId === userId;
+        html += `<div class="msg-bubble ${isSent ? 'sent' : 'received'}">
+            ${msg.content}
+            <span class="time">${new Date(msg.createdAt).toLocaleTimeString()}</span>
+        </div>`;
+    });
+    container.innerHTML = html;
+    container.scrollTop = container.scrollHeight;
+}
+
+async function sendMessage() {
+    const input = document.getElementById('msgInput');
+    const content = input.value.trim();
+    if (!content || !currentContact) return;
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/messages/send`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                receiverId: currentContact.id,
+                receiverRole: currentContact.role,
+                content: content
+            })
+        });
+        const data = await res.json();
+        if (data.success) {
+            input.value = '';
+            messages.push(data.data);
+            renderMessages();
+            trackActivity('message-sent', { recipient: `${currentContact.role}_${currentContact.id}`, message: content });
+            showToast('Message sent!', 'success');
+        } else {
+            showToast('Failed to send.', 'error');
+        }
+    } catch(e) { showToast('Error sending.', 'error'); }
+}
 document.getElementById('msgInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 
 // ============================================================
-// DISCUSSION FUNCTIONS (unchanged)
+// DISCUSSION FUNCTIONS
 // ============================================================
-async function loadTopics() { /* ... */ }
-function renderTopics() { /* ... */ }
-async function viewTopic(topicId) { /* ... */ }
-async function postReply(topicId) { /* ... */ }
-async function createTopic() { /* ... */ }
+async function loadTopics() {
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/discussion/topics`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+            topics = data.data;
+            renderTopics();
+        }
+    } catch(e) { console.error(e); }
+}
+
+function renderTopics() {
+    const container = document.getElementById('topicsList');
+    const detail = document.getElementById('topicDetail');
+    detail.style.display = 'none';
+    document.getElementById('newTopicForm').style.display = 'block';
+    if (topics.length === 0) {
+        container.innerHTML = '<p style="color:#555;text-align:center;padding:20px;">No topics yet. Start the first discussion!</p>';
+        return;
+    }
+    let html = '';
+    topics.forEach(t => {
+        const replyCount = t.Replies ? t.Replies.length : 0;
+        html += `<div class="topic-card" onclick="viewTopic(${t.id})">
+            <h4>${t.title}</h4>
+            <div class="meta"><span><i class="fas fa-user"></i> ${t.authorRole} ${t.authorId}</span><span><i class="fas fa-reply"></i> ${replyCount} replies</span><span><i class="fas fa-clock"></i> ${new Date(t.createdAt).toLocaleDateString()}</span></div>
+            <div class="excerpt">${t.content.substring(0,120)}${t.content.length>120?'...':''}</div>
+        </div>`;
+    });
+    container.innerHTML = html;
+}
+
+async function viewTopic(topicId) {
+    currentTopicId = topicId;
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/discussion/topics/${topicId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+            const topic = data.data;
+            document.getElementById('topicsList').innerHTML = `<button class="btn-secondary" onclick="renderTopics()"><i class="fas fa-arrow-left"></i> Back to topics</button>`;
+            document.getElementById('newTopicForm').style.display = 'none';
+            const detail = document.getElementById('topicDetail');
+            detail.style.display = 'block';
+            let html = `<div class="topic-detail">
+                <h3>${topic.title}</h3>
+                <p style="color:#aaa;margin:8px 0;">${topic.content}</p>
+                <div style="font-size:0.8rem;color:#666;margin-bottom:12px;">Posted by ${topic.authorRole} ${topic.authorId} on ${new Date(topic.createdAt).toLocaleString()}</div>
+                <div class="replies">`;
+            if (topic.Replies && topic.Replies.length > 0) {
+                topic.Replies.forEach(r => {
+                    html += `<div class="reply">
+                        <div class="author">${r.authorRole} ${r.authorId}</div>
+                        <div class="text">${r.content}</div>
+                        <div class="time">${new Date(r.createdAt).toLocaleString()}</div>
+                    </div>`;
+                });
+            } else {
+                html += `<p style="color:#555;">No replies yet. Be the first!</p>`;
+            }
+            html += `</div>
+                <textarea id="replyContent" placeholder="Write your reply..."></textarea>
+                <button class="btn-primary" onclick="postReply(${topic.id})"><i class="fas fa-reply"></i> Post Reply</button>
+            </div>`;
+            detail.innerHTML = html;
+        }
+    } catch(e) { console.error(e); }
+}
+
+async function postReply(topicId) {
+    const content = document.getElementById('replyContent').value.trim();
+    if (!content) { showToast('Please write a reply.', 'info'); return; }
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/discussion/topics/${topicId}/replies`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content })
+        });
+        const data = await res.json();
+        if (data.success) {
+            showToast('Reply posted!', 'success');
+            viewTopic(topicId);
+        } else {
+            showToast('Failed to post reply.', 'error');
+        }
+    } catch(e) { showToast('Error posting reply.', 'error'); }
+}
+
+async function createTopic() {
+    const title = document.getElementById('topicTitle').value.trim();
+    const content = document.getElementById('topicContent').value.trim();
+    if (!title || !content) { showToast('Please fill in both fields.', 'info'); return; }
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/discussion/topics`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, content })
+        });
+        const data = await res.json();
+        if (data.success) {
+            document.getElementById('topicTitle').value = '';
+            document.getElementById('topicContent').value = '';
+            showToast('Topic created!', 'success');
+            loadTopics();
+        } else {
+            showToast('Failed to create topic.', 'error');
+        }
+    } catch(e) { showToast('Error creating topic.', 'error'); }
+}
 
 // ============================================================
-// LESSON / QUIZ VIEWS (unchanged)
+// LESSON / QUIZ VIEWS
 // ============================================================
-function openLesson(courseId, moduleId, lessonId) { /* ... */ }
-function renderLesson(courseId, lesson, moduleId) { /* ... */ }
-function renderQuiz(courseId, quiz) { /* ... */ }
-async function submitQuiz(courseId, quizId) { /* ... */ }
-async function markLessonComplete(courseId, lessonId) { /* ... */ }
+function openLesson(courseId, moduleId, lessonId) {
+    if (!currentCourseData) { showToast('Course data not loaded.', 'error'); return; }
+    const module = currentCourseData.modules.find(m => String(m.id) === String(moduleId));
+    if (!module) { showToast('Module not found.', 'error'); return; }
+    const lesson = module.Lessons.find(l => String(l.id) === String(lessonId));
+    if (!lesson) { showToast('Lesson not found.', 'error'); return; }
+
+    trackActivity('lesson-view', { lessonId: lesson.id, lessonTitle: lesson.title, moduleId: module.id, courseId });
+
+    // Hide all tabs and show lesson/quiz view
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+    if (lesson.type === 'quiz') {
+        document.getElementById('viewQuiz').style.display = 'block';
+        document.getElementById('viewLesson').style.display = 'none';
+        renderQuiz(courseId, lesson);
+    } else {
+        document.getElementById('viewLesson').style.display = 'block';
+        document.getElementById('viewQuiz').style.display = 'none';
+        renderLesson(courseId, lesson, module.id);
+    }
+}
+
+function renderLesson(courseId, lesson, moduleId) {
+    const container = document.getElementById('lessonContent');
+    const done = isCompleted(courseId, lesson.id);
+    let contentHtml = lesson.content || '<p style="color:#666;">No content yet.</p>';
+
+    // Handle URL content
+    if (typeof lesson.content === 'string' && lesson.content.trim().startsWith('http')) {
+        const url = lesson.content.trim();
+        if (url.includes('youtube.com') || url.includes('youtu.be')) {
+            const embedUrl = url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/');
+            contentHtml = `<div class="video-wrapper" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:12px 0;"><iframe src="${embedUrl}" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"></iframe></div>`;
+        } else if (url.match(/\.(mp4|webm|ogg)$/i)) {
+            contentHtml = `<video controls style="width:100%;border-radius:12px;margin:12px 0;"><source src="${url}" type="video/mp4"></video>`;
+        } else {
+            contentHtml = `<div style="background:#1a1a1a;border-radius:12px;padding:16px;margin:12px 0;"><a href="${url}" target="_blank" style="color:#00ffff;">🔗 Open resource: ${url}</a></div>`;
+        }
+    }
+
+    container.innerHTML = `
+        <h2 style="color:#00ffff;"><i class="fas fa-book"></i> ${lesson.title}</h2>
+        <div class="lesson-content" style="background:#121212;padding:24px;border-radius:24px;line-height:1.7;border:1px solid #1a4a4a;margin-top:12px;">${contentHtml}</div>
+        <div class="nav-row" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:24px;padding-top:20px;border-top:1px solid #1a4a4a;">
+            <button onclick="showDashboard()" style="background:rgba(0,255,255,0.1);color:#00ffff;padding:12px 28px;border-radius:60px;border:1px solid #1a4a4a;font-weight:600;cursor:pointer;"><i class="fas fa-arrow-left"></i> Dashboard</button>
+            <div>${!done ? `<button class="complete-btn" onclick="markLessonComplete('${courseId}','${lesson.id}')" style="background:rgba(255,204,0,0.1);color:#ffcc00;padding:12px 28px;border-radius:60px;border:1px solid rgba(255,204,0,0.3);font-weight:600;cursor:pointer;"><i class="fas fa-check"></i> Mark as Complete</button>` : '<span class="completed-text" style="color:#00ff88;font-weight:600;"><i class="fas fa-check-circle"></i> Completed</span>'}</div>
+        </div>
+    `;
+
+    // Attach video tracking
+    setTimeout(() => {
+        const videos = container.querySelectorAll('video');
+        videos.forEach(video => {
+            const lessonId = lesson.id;
+            let lastSent = 0;
+            video.addEventListener('timeupdate', function() {
+                const current = Math.floor(this.currentTime);
+                if (current - lastSent >= 5) {
+                    lastSent = current;
+                    trackActivity('video-watch', { lessonId, watchTime: current, totalDuration: Math.floor(this.duration) });
+                }
+            });
+            video.addEventListener('ended', function() {
+                trackActivity('video-complete', { lessonId, watchTime: Math.floor(this.duration), totalDuration: Math.floor(this.duration) });
+            });
+        });
+    }, 100);
+}
+
+function renderQuiz(courseId, quiz) {
+    const container = document.getElementById('quizContent');
+    const questions = quiz.questions || [];
+    if (questions.length === 0) {
+        container.innerHTML = `
+            <h2 style="color:#00ffff;"><i class="fas fa-brain"></i> ${quiz.title}</h2>
+            <div style="background:#121212;border-radius:16px;padding:24px;border:1px solid #1a4a4a;text-align:center;">
+                <p style="color:#888;">No questions yet.</p>
+                <button onclick="showDashboard()" style="background:rgba(0,255,255,0.1);color:#00ffff;padding:12px 28px;border-radius:60px;border:1px solid #1a4a4a;font-weight:600;cursor:pointer;margin-top:16px;"><i class="fas fa-arrow-left"></i> Back</button>
+            </div>
+        `;
+        return;
+    }
+    let html = `
+        <h2 style="color:#00ffff;"><i class="fas fa-brain"></i> ${quiz.title}</h2>
+        <form id="quizForm">
+    `;
+    questions.forEach((q, idx) => {
+        const options = q.options || [];
+        html += `
+            <div class="question-block" style="background:#121212;padding:20px;border-radius:24px;margin-bottom:20px;border-left:6px solid #00ffff;border:1px solid #1a4a4a;">
+                <p style="color:#fff;font-weight:600;"><strong>${idx+1}. ${q.question}</strong></p>
+                ${options.map((opt, oi) => `<label style="display:block;margin:8px 0;padding:10px 16px;background:#1a1a1a;border-radius:40px;cursor:pointer;color:#ccc;transition:all 0.3s;"><input type="radio" name="q${idx}" value="${oi}" style="margin-right:10px;accent-color:#00ffff;"> ${opt}</label>`).join('')}
+            </div>
+        `;
+    });
+    html += `
+        <button type="button" style="background:rgba(255,204,0,0.1);color:#ffcc00;border:1px solid rgba(255,204,0,0.3);padding:14px 32px;border-radius:60px;font-weight:700;cursor:pointer;transition:all 0.3s;font-size:1rem;" onclick="submitQuiz('${courseId}','${quiz.id}')"><i class="fas fa-check"></i> Check Answers</button>
+        </form>
+        <div id="quizResult" class="quiz-result" style="margin-top:20px;padding:20px;border-radius:24px;display:none;"></div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:24px;padding-top:20px;border-top:1px solid #1a4a4a;">
+            <button onclick="showDashboard()" style="background:rgba(0,255,255,0.1);color:#00ffff;padding:12px 28px;border-radius:60px;border:1px solid #1a4a4a;font-weight:600;cursor:pointer;"><i class="fas fa-arrow-left"></i> Dashboard</button>
+        </div>
+    `;
+    container.innerHTML = html;
+}
+
+async function submitQuiz(courseId, quizId) {
+    const course = currentCourseData;
+    if (!course) { showToast('Course data not available.', 'error'); return; }
+    let quizData = null, moduleId = null;
+    for (let m of course.modules) {
+        const found = m.Lessons.find(l => String(l.id) === String(quizId));
+        if (found) { quizData = found; moduleId = m.id; break; }
+    }
+    if (!quizData) { showToast('Quiz not found.', 'error'); return; }
+    const questions = quizData.questions || [];
+    let score = 0, allAnswered = true;
+    for (let i=0; i<questions.length; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!selected) { allAnswered = false; continue; }
+        if (parseInt(selected.value) === questions[i].correct) score++;
+    }
+    const resultDiv = document.getElementById('quizResult');
+    if (!allAnswered) {
+        resultDiv.className = 'quiz-result fail';
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = '<p style="color:#ff4444;">⚠️ Please answer all questions.</p>';
+        return;
+    }
+    const total = questions.length;
+    const passed = score >= total * 0.6;
+    await trackActivity('quiz-attempt', { quizId, quizTitle: quizData.title, score, totalQuestions: total, passed });
+    await trackActivity('lesson-complete', { lessonId: quizId, lessonTitle: quizData.title, moduleId, courseId });
+    const prog = getProgress(courseId);
+    prog[quizId] = { completed: true, score, total };
+    saveProgress(courseId, prog);
+    if (passed) {
+        resultDiv.className = 'quiz-result pass';
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `<h3 style="color:#00ff88;">✅ You scored ${score}/${total}. Well done!</h3>`;
+        showToast(`🎉 Quiz passed! ${score}/${total}`, 'success');
+    } else {
+        resultDiv.className = 'quiz-result fail';
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `<h3 style="color:#ff4444;">❌ You scored ${score}/${total}. Review and try again.</h3>`;
+        showToast(`📝 Quiz score: ${score}/${total}`, 'info');
+    }
+    document.querySelectorAll('#quizForm input[type="radio"]').forEach(el => el.disabled = true);
+}
+
+function showDashboard() {
+    // Hide lesson/quiz views
+    document.getElementById('viewLesson').style.display = 'none';
+    document.getElementById('viewQuiz').style.display = 'none';
+    // Show dashboard tab
+    switchTab('dashboard');
+    renderDashboard(currentCourse);
+}
+
+async function markLessonComplete(courseId, lessonId) {
+    const course = currentCourseData;
+    let lesson = null, moduleId = null;
+    for (let mod of course.modules) {
+        const found = mod.Lessons.find(l => String(l.id) === String(lessonId));
+        if (found) { lesson = found; moduleId = mod.id; break; }
+    }
+    if (!lesson) { showToast('Lesson not found.', 'error'); return; }
+    markCompleted(courseId, lessonId);
+    if (lesson.type === 'activity') {
+        await trackActivity('practice', { activityId: lesson.id, title: lesson.title, type: 'activity' });
+    } else {
+        await trackActivity('lesson-complete', { lessonId: lesson.id, lessonTitle: lesson.title, moduleId, courseId });
+    }
+    showToast('✅ Lesson marked as complete!', 'success');
+    showDashboard();
+}
 
 // ============================================================
 // MOTIVATIONAL MESSAGE
@@ -639,7 +1035,7 @@ function getMotivationalMessage(score) {
 }
 
 // ============================================================
-// LOGOUT, LOAD STUDENT NAME, TRACKING (unchanged)
+// LOGOUT, LOAD STUDENT NAME, TRACKING
 // ============================================================
 document.getElementById('logoutBtn').addEventListener('click', function(e) {
     e.preventDefault();
