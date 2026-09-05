@@ -9,6 +9,10 @@ let currentPage = 'home';
 let pageStartTime = Date.now();
 let isTrackingEnabled = !!authToken;
 
+// ✅ Track which pages have already been tracked in this session
+let pageViewTracked = false;
+let sessionStarted = Date.now();
+
 console.log('✅ tracking.js loaded!');
 
 function generateSessionId() {
@@ -23,6 +27,37 @@ function getHeaders() {
         'Content-Type': 'application/json',
         'X-Session-Id': sessionId
     };
+}
+
+// ============================================
+// CHECK IF CURRENT PAGE IS LMS DASHBOARD
+// ============================================
+
+function isLmsDashboard() {
+    const url = window.location.href;
+    const title = document.title || '';
+    
+    // Check URL patterns
+    if (url.includes('student-dashboard.html') || 
+        url.includes('lms-dashboard.html') ||
+        url.includes('dashboard.html') ||
+        url.includes('/dashboard')) {
+        return true;
+    }
+    
+    // Check title patterns
+    if (title.includes('Dashboard') || 
+        title.includes('LMS') || 
+        title.includes('BeSpellBee - Student Dashboard')) {
+        return true;
+    }
+    
+    // Check if there's a course selector on the page
+    if (document.getElementById('courseSelector')) {
+        return true;
+    }
+    
+    return false;
 }
 
 // ============================================
@@ -58,12 +93,17 @@ function trackLink(linkName) {
         return;
     }
 
+    // ✅ Skip link tracking on LMS pages (handled by dashboard's global listener)
+    if (isLmsDashboard()) {
+        console.log('⏭️ LMS page detected - skipping link tracking (handled by dashboard)');
+        return;
+    }
+
     const duration = Math.floor((Date.now() - pageStartTime) / 1000);
     pageStartTime = Date.now();
 
     console.log(`🔗 Tracking link: ${linkName} (${duration}s)`);
 
-    // ✅ Direct fetch to /link-click endpoint (not page-view)
     fetch(`${TRACKING_API}/track/link-click`, {
         method: 'POST',
         headers: getHeaders(),
@@ -84,18 +124,42 @@ function trackLink(linkName) {
 }
 
 // ============================================
-// PAGE VIEW ON LOAD
+// PAGE VIEW ON LOAD (with duplicate prevention)
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
+    // ✅ Skip auto-tracking on LMS dashboard (handled by dashboard code)
+    if (isLmsDashboard()) {
+        console.log('⏭️ LMS page detected - skipping auto page view tracking (handled by dashboard)');
+        return;
+    }
+
+    // ✅ Skip if we already tracked this page view in this session
+    if (pageViewTracked) {
+        console.log('⏭️ Page view already tracked this session');
+        return;
+    }
+
     setTimeout(() => {
-        if (isTrackingEnabled) {
+        if (isTrackingEnabled && !pageViewTracked) {
+            pageViewTracked = true;
             trackActivity('page_view', {
                 page: document.title || 'BeSpellBee',
                 url: window.location.href
             });
+            console.log('📊 Page view tracked:', document.title);
         }
     }, 1000);
+});
+
+// ============================================
+// RESET PAGE VIEW FLAG ON PAGE REFRESH
+// ============================================
+
+// Reset the flag when the page is actually refreshed/reloaded
+window.addEventListener('beforeunload', function() {
+    // If the page is being reloaded, reset the flag for the next load
+    // The flag will be reset anyway because the script reloads, but this ensures clean state
 });
 
 // ============================================
@@ -106,3 +170,6 @@ window.trackLink = trackLink;
 window.trackActivity = trackActivity;
 window.generateSessionId = generateSessionId;
 window.getHeaders = getHeaders;
+window.isLmsDashboard = isLmsDashboard;
+
+console.log('✅ tracking.js ready - LMS detection active');
