@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BeSpellBee - Admin Dashboard</title>
+    <link rel="icon" href="https://lh3.googleusercontent.com/drive-viewer/AKGpihYranxMDZGIwq2vt9-ECjkRyV0Lg6GJpH9sjhXrAJUVu3dKqBnhz_kETqzLZ5ONyml33ggbUyahKJwJtjg0SAL8IrJ270-9PPM=s2560" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Segoe UI',Roboto,system-ui,sans-serif; background:#0a0a0a; color:#e0e0e0; min-height:100vh; }
+        .nav-bar { background:#0d0d0d; border-bottom:1px solid #1a4a4a; padding:12px 24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+        .nav-bar .logo { font-size:1.3rem; font-weight:700; color:#00ffff; text-shadow:0 0 20px rgba(0,255,255,0.15); }
+        .nav-bar .user-info { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+        .nav-bar .user-info .badge { background:rgba(255,204,0,0.15); color:#ffcc00; padding:4px 14px; border-radius:40px; font-size:0.75rem; border:1px solid rgba(255,204,0,0.2); }
+        .nav-bar .logout-btn { color:#ffcc00; text-decoration:none; font-size:0.85rem; border-left:1px solid #333; padding-left:16px; transition:color 0.3s; }
+        .nav-bar .logout-btn:hover { color:#ffdd44; }
+        .container { max-width:1200px; margin:30px auto; padding:0 20px; }
+        .tabs { display:flex; gap:6px; margin-bottom:30px; flex-wrap:wrap; border-bottom:1px solid #1a4a4a; padding-bottom:4px; }
+        .tab-btn { background:transparent; color:#88dddd; border:none; padding:10px 22px; border-radius:40px 40px 0 0; font-weight:600; font-size:0.9rem; cursor:pointer; transition:all 0.3s; border-bottom:3px solid transparent; }
+        .tab-btn:hover { color:#00ffff; background:rgba(0,255,255,0.04); }
+        .tab-btn.active { color:#00ffff; border-bottom-color:#00ffff; background:rgba(0,255,255,0.06); }
+        .tab-content { display:none; }
+        .tab-content.active { display:block; }
+
+        /* Cards */
+        .stats-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:16px; margin-bottom:30px; }
+        .stat-card { background:#121212; border:1px solid #1a4a4a; border-radius:16px; padding:20px; text-align:center; transition:0.3s; }
+        .stat-card:hover { border-color:#00ffff; }
+        .stat-card .number { font-size:2.2rem; font-weight:700; color:#00ffff; }
+        .stat-card .label { font-size:0.8rem; color:#888; margin-top:4px; }
+        .stat-card.gold .number { color:#ffcc00; }
+
+        /* Tables */
+        .table-wrap { background:#121212; border:1px solid #1a4a4a; border-radius:16px; overflow:hidden; }
+        .table-wrap table { width:100%; border-collapse:collapse; }
+        .table-wrap th { text-align:left; padding:14px 16px; background:#1a1a1a; color:#88dddd; font-weight:600; font-size:0.8rem; border-bottom:1px solid #1a4a4a; }
+        .table-wrap td { padding:12px 16px; border-bottom:1px solid #1a1a1a; color:#ccc; font-size:0.9rem; }
+        .table-wrap tr:hover td { background:#1a1a1a; }
+        .search-box { background:#121212; border:1px solid #1a4a4a; border-radius:40px; padding:6px 16px; color:#fff; outline:none; width:100%; max-width:300px; margin-bottom:16px; }
+        .search-box:focus { border-color:#00ffff; }
+        .badge-status { background:rgba(0,255,255,0.1); color:#00ffff; padding:2px 12px; border-radius:40px; font-size:0.7rem; }
+
+        /* Activity feed */
+        .feed { display:flex; flex-direction:column; gap:8px; }
+        .feed-item { background:#121212; border:1px solid #1a1a1a; border-radius:12px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+        .feed-item .type { font-weight:600; color:#00ffff; }
+        .feed-item .time { font-size:0.7rem; color:#555; }
+
+        .btn-primary { background:#00ffff; color:#000; border:none; padding:8px 20px; border-radius:40px; font-weight:700; cursor:pointer; }
+        .btn-primary:hover { background:#66ffff; }
+
+        @media (max-width:600px) { .stats-grid { grid-template-columns:1fr 1fr; } .table-wrap { overflow-x:auto; } }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav-bar">
+    <div class="logo"><i class="fas fa-crown"></i> BeSpellBee Admin</div>
+    <div class="user-info">
+        <span class="badge"><i class="fas fa-shield-alt"></i> Super Admin</span>
+        <span id="adminName"><i class="fas fa-user"></i> Admin</span>
+        <a href="index.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="overview" onclick="switchTab('overview')"><i class="fas fa-chart-pie"></i> Overview</button>
+        <button class="tab-btn" data-tab="students" onclick="switchTab('students')"><i class="fas fa-user-graduate"></i> Students</button>
+        <button class="tab-btn" data-tab="teachers" onclick="switchTab('teachers')"><i class="fas fa-chalkboard-teacher"></i> Teachers</button>
+        <button class="tab-btn" data-tab="activity" onclick="switchTab('activity')"><i class="fas fa-list-ul"></i> Activity</button>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div id="tab-overview" class="tab-content active">
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card"><div class="number" id="totalStudents">—</div><div class="label">Total Students</div></div>
+            <div class="stat-card"><div class="number" id="totalTeachers">—</div><div class="label">Total Teachers</div></div>
+            <div class="stat-card gold"><div class="number" id="avgEngagement">—</div><div class="label">Avg Engagement</div></div>
+            <div class="stat-card"><div class="number" id="activeToday">—</div><div class="label">Active Today</div></div>
+            <div class="stat-card"><div class="number" id="totalCourses">—</div><div class="label">Total Courses</div></div>
+            <div class="stat-card"><div class="number" id="totalActivities">—</div><div class="label">Total Activities</div></div>
+        </div>
+        <h3 style="color:#88dddd; margin-bottom:12px;"><i class="fas fa-clock"></i> Recent Activity</h3>
+        <div id="recentFeed" class="feed"><p style="color:#555;">Loading...</p></div>
+    </div>
+
+    <!-- STUDENTS -->
+    <div id="tab-students" class="tab-content">
+        <input type="text" class="search-box" id="studentSearch" placeholder="Search students..." onkeyup="filterStudents()" />
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Name</th><th>Email</th><th>Engagement</th><th>Lessons</th><th>Videos</th><th>Messages</th><th>Quizzes</th></tr></thead>
+                <tbody id="studentsTableBody"><tr><td colspan="7" style="text-align:center;color:#555;">Loading...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- TEACHERS -->
+    <div id="tab-teachers" class="tab-content">
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Avg Progress</th><th>Last Login</th></tr></thead>
+                <tbody id="teachersTableBody"><tr><td colspan="5" style="text-align:center;color:#555;">Loading...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ACTIVITY LOG -->
+    <div id="tab-activity" class="tab-content">
+        <div class="feed" id="activityFeed"><p style="color:#555;">Loading...</p></div>
+    </div>
+</div>
+
+<script>
+const API_BASE = 'https://bespellbee-backend-en6l.onrender.com/api';
+let allStudents = [];
+let allTeachers = [];
+
+function switchTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(`tab-${tab}`).classList.add('active');
+    document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
+}
+
+async function fetchDashboard() {
+    const token = localStorage.getItem('authToken');
+    if (!token) { window.location.href = 'index.html'; return; }
+    try {
+        const res = await fetch(`${API_BASE}/admin/dashboard`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        const d = data.data;
+        document.getElementById('totalStudents').textContent = d.totalStudents;
+        document.getElementById('totalTeachers').textContent = d.totalTeachers;
+        document.getElementById('avgEngagement').textContent = d.avgEngagement + '%';
+        document.getElementById('activeToday').textContent = d.activeToday;
+        document.getElementById('totalCourses').textContent = d.totalCourses;
+        document.getElementById('totalActivities').textContent = d.totalActivities;
+
+        // Render feed
+        const feed = document.getElementById('recentFeed');
+        if (d.recentActivity && d.recentActivity.length > 0) {
+            feed.innerHTML = d.recentActivity.map(a => `
+                <div class="feed-item">
+                    <span><span class="type">${a.activityType}</span> by ${a.Student?.name || 'Unknown'}</span>
+                    <span class="time">${new Date(a.createdAt).toLocaleString()}</span>
+                </div>
+            `).join('');
+        } else {
+            feed.innerHTML = '<p style="color:#555;">No recent activity.</p>';
+        }
+    } catch(e) {
+        console.error(e);
+        document.getElementById('recentFeed').innerHTML = `<p style="color:#ff4444;">Failed to load dashboard: ${e.message}</p>`;
+    }
+}
+
+async function fetchStudents() {
+    const token = localStorage.getItem('authToken');
+    try {
+        const res = await fetch(`${API_BASE}/admin/students`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        allStudents = data.data;
+        renderStudents(allStudents);
+    } catch(e) {
+        document.getElementById('studentsTableBody').innerHTML = `<tr><td colspan="7" style="color:#ff4444;">${e.message}</td></tr>`;
+    }
+}
+
+function renderStudents(list) {
+    const tbody = document.getElementById('studentsTableBody');
+    if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="color:#555;">No students found.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = list.map(s => `
+        <tr>
+            <td>${s.name}</td>
+            <td>${s.email}</td>
+            <td><span class="badge-status">${Math.round(s.engagementScore)}%</span></td>
+            <td>${s.totalLessonsCompleted || 0}</td>
+            <td>${s.totalVideoCompleted || 0}</td>
+            <td>${s.totalMessages || 0}</td>
+            <td>${s.totalQuizPasses || 0}</td>
+        </tr>
+    `).join('');
+}
+
+function filterStudents() {
+    const query = document.getElementById('studentSearch').value.toLowerCase();
+    if (!query) { renderStudents(allStudents); return; }
+    const filtered = allStudents.filter(s => 
+        s.name.toLowerCase().includes(query) || s.email.toLowerCase().includes(query)
+    );
+    renderStudents(filtered);
+}
+
+async function fetchTeachers() {
+    const token = localStorage.getItem('authToken');
+    try {
+        const res = await fetch(`${API_BASE}/admin/teachers`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        allTeachers = data.data;
+        const tbody = document.getElementById('teachersTableBody');
+        if (allTeachers.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="color:#555;">No teachers found.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = allTeachers.map(t => `
+            <tr>
+                <td>${t.name}</td>
+                <td>${t.email}</td>
+                <td>${t.subject || 'N/A'}</td>
+                <td>${t.avgStudentProgress || 0}%</td>
+                <td>${t.lastLogin ? new Date(t.lastLogin).toLocaleDateString() : 'Never'}</td>
+            </tr>
+        `).join('');
+    } catch(e) {
+        document.getElementById('teachersTableBody').innerHTML = `<tr><td colspan="5" style="color:#ff4444;">${e.message}</td></tr>`;
+    }
+}
+
+async function fetchActivityLog() {
+    const token = localStorage.getItem('authToken');
+    try {
+        const res = await fetch(`${API_BASE}/admin/activity`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        const feed = document.getElementById('activityFeed');
+        if (data.data.length === 0) {
+            feed.innerHTML = '<p style="color:#555;">No activity logged.</p>';
+            return;
+        }
+        feed.innerHTML = data.data.map(a => `
+            <div class="feed-item">
+                <span><span class="type">${a.activityType}</span> by ${a.Student?.name || 'Unknown'} ${a.activityData ? `→ ${JSON.stringify(a.activityData)}` : ''}</span>
+                <span class="time">${new Date(a.createdAt).toLocaleString()}</span>
+            </div>
+        `).join('');
+    } catch(e) {
+        document.getElementById('activityFeed').innerHTML = `<p style="color:#ff4444;">${e.message}</p>`;
+    }
+}
+
+// Load admin name from token
+function loadAdminName() {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            document.getElementById('adminName').innerHTML = `<i class="fas fa-user"></i> ${payload.name || 'Admin'}`;
+        } catch(e) {}
+    }
+}
+
+// Logout
+document.querySelector('.logout-btn')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('studentId');
+    localStorage.removeItem('teacherId');
+    localStorage.removeItem('teacherName');
+    localStorage.removeItem('userRole');
+    window.location.href = 'index.html';
+});
+
+// Init
+document.addEventListener('DOMContentLoaded', async function() {
+    loadAdminName();
+    await fetchDashboard();
+    await fetchStudents();
+    await fetchTeachers();
+    await fetchActivityLog();
+});
+</script>
+</body>
+</html>
