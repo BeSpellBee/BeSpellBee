@@ -126,6 +126,7 @@
         <div class="student-info">
             <span class="badge"><span class="status-dot"></span> Learning</span>
             <span class="name" id="navStudentName"><i class="fas fa-user-graduate"></i> Loading...</span>
+            <!-- ✅ FIXED: Added onclick to track "Home" -->
             <a href="index.html" class="home-link" onclick="trackLink('Home')"><i class="fas fa-arrow-left"></i> Home</a>
             <a href="#" id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
@@ -900,11 +901,18 @@
         }
 
         // ============================================================
-        // LINK CLICK TRACKING
+        // LINK CLICK TRACKING (global listener)
         // ============================================================
         document.addEventListener('click', function(e) {
             const link = e.target.closest('a');
             if (link && link.href && link.href.startsWith('http')) {
+                // Only track if it's not already handled by an onclick trackLink
+                // The onclick trackLink will call trackActivity directly, so we check if the link has an onclick that calls trackLink
+                const onclickAttr = link.getAttribute('onclick');
+                if (onclickAttr && onclickAttr.includes('trackLink')) {
+                    // Already handled by explicit trackLink call
+                    return;
+                }
                 trackActivity('link-click', {
                     link: link.href,
                     page: currentPage || 'dashboard',
@@ -912,6 +920,19 @@
                 });
             }
         });
+
+        // ============================================================
+        // TRACK LINK (explicit)
+        // ============================================================
+        window.trackLink = function(linkName) {
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+            trackActivity('link-click', {
+                link: linkName,
+                page: currentPage || 'dashboard',
+                url: window.location.href
+            });
+        };
 
         // ============================================================
         // BACK TO TOP
