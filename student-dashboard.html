@@ -40,6 +40,8 @@
         .lms-header h2 i { color:#ffcc00; }
         .lms-badge { background:rgba(255,204,0,0.15); color:#ffcc00; font-size:0.85rem; font-weight:700; padding:6px 16px; border-radius:40px; border:1px solid rgba(255,204,0,0.3); letter-spacing:0.5px; }
         .lms-body { padding:24px; background:#0d0d0d; }
+
+        /* ====== GATE ====== */
         .lms-gate { background:#121212; border-radius:24px; padding:40px 20px; text-align:center; max-width:500px; margin:0 auto; border:1px solid #1a4a4a; }
         .lms-gate h3 { color:#00ffff; font-size:1.5rem; margin-bottom:8px; }
         .lms-gate h3 i { color:#ffcc00; }
@@ -49,53 +51,85 @@
         .lms-gate button { padding:14px 32px; background:#00ffff; border:none; color:#000; font-weight:700; font-size:1.1rem; border-radius:60px; cursor:pointer; transition:all 0.3s; }
         .lms-gate button:hover { background:#66ffff; box-shadow:0 0 30px rgba(0,255,255,0.2); transform:scale(1.02); }
         .lms-gate .error { color:#ff4444; margin-top:10px; }
-        .lms-view { display:none; }
-        .lms-view.active { display:block; }
-        .dashboard-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px; }
-        .dashboard-header h2 { color:#00ffff; border-left:6px solid #ffcc00; padding-left:16px; margin:0; font-size:1.4rem; }
-        .dashboard-header h2 i { color:#ffcc00; }
-        .module-card { background:#121212; border-radius:24px; padding:20px; margin-bottom:20px; border-left:6px solid #ffcc00; border:1px solid #1a4a4a; }
-        .module-card h3 { color:#00ffff; margin-top:0; font-size:1.1rem; }
-        .module-card h3 i { color:#ffcc00; margin-right:8px; }
-        .lesson-item { display:flex; justify-content:space-between; align-items:center; background:#1a1a1a; padding:12px 18px; border-radius:16px; border:1px solid #1a4a4a; margin:8px 0; cursor:pointer; transition:all 0.3s; }
-        .lesson-item:hover { background:#252525; border-color:#00ffff; }
-        .lesson-item .status { font-size:0.8rem; padding:4px 12px; border-radius:40px; background:#1a1a1a; color:#666; border:1px solid #1a4a4a; }
-        .lesson-item .status.done { background:rgba(0,255,136,0.1); color:#00ff88; border-color:rgba(0,255,136,0.3); }
-        .lesson-content { background:#121212; padding:24px; border-radius:24px; line-height:1.7; border:1px solid #1a4a4a; margin-top:12px; }
-        .lesson-content h3 { color:#00ffff; margin-top:20px; margin-bottom:10px; }
-        .lesson-content p { color:#ccc; }
-        .lesson-content ul { color:#ccc; padding-left:20px; }
-        .lesson-content li { margin:8px 0; }
-        .lesson-content iframe { width:100%; height:500px; border:1px solid #1a4a4a; border-radius:16px; background:#0d0d0d; margin-top:15px; }
-        .lesson-content img { max-width:100%; border-radius:12px; margin:12px 0; }
-        .lesson-content .video-wrapper { position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:12px; margin:12px 0; }
-        .lesson-content .video-wrapper iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
-        .lesson-content video { width:100%; border-radius:12px; margin:12px 0; background:#000; }
-        .nav-row { display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; margin-top:24px; padding-top:20px; border-top:1px solid #1a4a4a; }
-        .nav-row button, .nav-row a { background:rgba(0,255,255,0.1); color:#00ffff; padding:12px 28px; border-radius:60px; border:1px solid #1a4a4a; font-weight:600; cursor:pointer; transition:all 0.3s; text-decoration:none; font-size:0.9rem; }
-        .nav-row button:hover, .nav-row a:hover { background:#00ffff; color:#000; border-color:#00ffff; }
-        .nav-row .complete-btn { background:rgba(255,204,0,0.1); color:#ffcc00; border-color:rgba(255,204,0,0.3); }
-        .nav-row .complete-btn:hover { background:#ffcc00; color:#000; border-color:#ffcc00; }
-        .back-btn { background:none !important; border:none !important; color:#888 !important; font-weight:600; cursor:pointer; padding:8px 0 !important; }
-        .back-btn:hover { color:#00ffff !important; background:none !important; }
-        .completed-text { color:#00ff88; font-weight:600; }
-        .completed-text i { margin-right:6px; }
-        .question-block { background:#121212; padding:20px; border-radius:24px; margin-bottom:20px; border-left:6px solid #00ffff; border:1px solid #1a4a4a; }
-        .question-block p { color:#fff; font-weight:600; }
-        .question-block label { display:block; margin:8px 0; padding:10px 16px; background:#1a1a1a; border-radius:40px; cursor:pointer; color:#ccc; transition:all 0.3s; }
-        .question-block label:hover { background:#252525; border-color:#00ffff; }
-        .question-block input[type="radio"] { margin-right:10px; accent-color:#00ffff; }
-        .quiz-result { margin-top:20px; padding:20px; border-radius:24px; display:none; }
-        .quiz-result.pass { background:rgba(0,255,136,0.1); border-left:6px solid #00ff88; display:block; border:1px solid rgba(0,255,136,0.3); }
-        .quiz-result.pass h3 { color:#00ff88; }
-        .quiz-result.fail { background:rgba(255,68,68,0.1); border-left:6px solid #ff4444; display:block; border:1px solid rgba(255,68,68,0.3); }
-        .quiz-result.fail h3 { color:#ff4444; }
-        @media (max-width:700px) { .lms-header h2 { font-size:1.2rem; } .lesson-content iframe { height:350px; } .nav-row { flex-direction:column; align-items:stretch; } .nav-row button, .nav-row a { text-align:center; } .dashboard-header { flex-direction:column; align-items:flex-start; } .course-selector { justify-content:center; } }
-        @media (max-width:480px) { .lms-header { flex-direction:column; align-items:flex-start; } .lms-gate input { max-width:100%; } .lesson-content iframe { height:250px; } .module-card { padding:16px; } .lesson-item { flex-direction:column; align-items:flex-start; gap:8px; } .lms-body { padding:16px; } .course-btn { padding:8px 16px; font-size:0.8rem; } }
-        #topBtn { display:none; position:fixed; bottom:20px; right:30px; z-index:99; font-size:20px; border:none; outline:none; background-color:#00ffff; color:#000; cursor:pointer; border-radius:50%; width:50px; height:50px; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:50px; padding:0; transition:0.1s; }
-        #topBtn:hover { background-color:#66ffff; transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,255,255,0.3); }
-        .status-dot { display:inline-block; width:10px; height:10px; border-radius:50%; background:#00ff88; margin-right:6px; animation:pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity:1; } 50% { opacity:0.4; } 100% { opacity:1; } }
+
+        /* ====== TABS ====== */
+        .dashboard-tabs { display:flex; gap:6px; margin-bottom:24px; flex-wrap:wrap; border-bottom:1px solid #1a4a4a; padding-bottom:4px; }
+        .tab-btn { background:transparent; color:#88dddd; border:none; padding:10px 22px; border-radius:40px 40px 0 0; font-weight:600; font-size:0.9rem; cursor:pointer; transition:all 0.3s; border-bottom:3px solid transparent; }
+        .tab-btn:hover { color:#00ffff; background:rgba(0,255,255,0.04); }
+        .tab-btn.active { color:#00ffff; border-bottom-color:#00ffff; background:rgba(0,255,255,0.06); }
+        .tab-content { display:none; }
+        .tab-content.active { display:block; }
+
+        /* ====== ENGAGEMENT CARD ====== */
+        .engagement-card { background:#121212; border-radius:16px; padding:20px 24px; margin:0 auto 24px auto; max-width:900px; border:1px solid #1a4a4a; }
+        .engagement-card .flex-row { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+        .engagement-card .score { color:#00ffff; font-size:clamp(2rem,5vw,2.8rem); font-weight:700; }
+        .engagement-card .stats { color:#666; font-size:0.75rem; display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+        .engagement-card .stats span { color:#aaa; }
+        .engagement-bar { width:100%; height:8px; background:#1a1a1a; border-radius:4px; margin-top:12px; overflow:hidden; }
+        .engagement-bar .fill { height:100%; background:linear-gradient(90deg,#00ffff,#ffcc00); border-radius:4px; transition:width 0.8s ease; }
+
+        /* ====== MESSAGING ====== */
+        .msg-container { display:flex; gap:20px; flex-wrap:wrap; min-height:400px; }
+        .msg-contacts { flex:1; min-width:200px; max-width:300px; background:#121212; border-radius:16px; border:1px solid #1a4a4a; padding:12px; max-height:500px; overflow-y:auto; }
+        .msg-contacts h4 { color:#88dddd; margin-bottom:10px; font-size:0.85rem; }
+        .msg-contact { padding:10px 12px; border-radius:12px; cursor:pointer; transition:all 0.2s; border-bottom:1px solid #1a1a1a; }
+        .msg-contact:hover { background:#1a1a1a; }
+        .msg-contact.active { background:#1a2a2a; border-left:3px solid #00ffff; }
+        .msg-contact .name { color:#fff; font-weight:600; }
+        .msg-contact .role { font-size:0.7rem; color:#666; }
+        .msg-chat { flex:2; min-width:280px; background:#121212; border-radius:16px; border:1px solid #1a4a4a; display:flex; flex-direction:column; height:500px; }
+        .msg-chat-header { padding:12px 16px; border-bottom:1px solid #1a4a4a; color:#88dddd; font-weight:600; }
+        .msg-messages { flex:1; padding:12px 16px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; }
+        .msg-messages .msg-bubble { max-width:80%; padding:10px 14px; border-radius:16px; font-size:0.9rem; line-height:1.5; }
+        .msg-messages .sent { align-self:flex-end; background:#00ffff; color:#000; border-bottom-right-radius:4px; }
+        .msg-messages .received { align-self:flex-start; background:#1a1a1a; color:#ddd; border-bottom-left-radius:4px; }
+        .msg-messages .time { font-size:0.6rem; color:#666; margin-top:4px; display:block; }
+        .msg-input-area { display:flex; gap:8px; padding:10px 16px; border-top:1px solid #1a4a4a; }
+        .msg-input-area input { flex:1; padding:10px 14px; border-radius:40px; border:1px solid #1a4a4a; background:#1a1a1a; color:#fff; outline:none; }
+        .msg-input-area input:focus { border-color:#00ffff; }
+        .msg-input-area button { background:#00ffff; color:#000; border:none; border-radius:40px; padding:8px 20px; font-weight:700; cursor:pointer; transition:0.3s; }
+        .msg-input-area button:hover { background:#66ffff; }
+
+        /* ====== DISCUSSION ====== */
+        .discuss-topics { display:flex; flex-direction:column; gap:12px; }
+        .topic-card { background:#121212; border:1px solid #1a4a4a; border-radius:16px; padding:16px 20px; cursor:pointer; transition:0.3s; }
+        .topic-card:hover { border-color:#00ffff; box-shadow:0 0 20px rgba(0,255,255,0.05); }
+        .topic-card h4 { color:#00ffff; font-size:1.1rem; margin-bottom:4px; }
+        .topic-card .meta { font-size:0.75rem; color:#666; display:flex; gap:12px; flex-wrap:wrap; }
+        .topic-card .meta i { margin-right:4px; }
+        .topic-card .excerpt { color:#aaa; font-size:0.85rem; margin-top:6px; }
+        .topic-detail { background:#121212; border-radius:16px; border:1px solid #1a4a4a; padding:20px; }
+        .topic-detail h3 { color:#00ffff; }
+        .topic-detail .replies { margin-top:16px; display:flex; flex-direction:column; gap:12px; }
+        .topic-detail .reply { background:#1a1a1a; padding:12px 16px; border-radius:12px; border-left:3px solid #00ffff; }
+        .topic-detail .reply .author { font-weight:600; color:#88dddd; font-size:0.85rem; }
+        .topic-detail .reply .text { color:#ccc; margin-top:4px; }
+        .topic-detail .reply .time { font-size:0.65rem; color:#555; }
+        .topic-detail textarea { width:100%; padding:12px; border-radius:12px; border:1px solid #1a4a4a; background:#1a1a1a; color:#fff; resize:vertical; min-height:70px; margin-top:12px; }
+        .topic-detail textarea:focus { border-color:#00ffff; outline:none; }
+        .btn-primary { background:#00ffff; color:#000; border:none; padding:10px 24px; border-radius:40px; font-weight:700; cursor:pointer; transition:0.3s; margin-top:8px; }
+        .btn-primary:hover { background:#66ffff; }
+        .btn-secondary { background:transparent; color:#88dddd; border:1px solid #1a4a4a; padding:10px 24px; border-radius:40px; font-weight:600; cursor:pointer; transition:0.3s; }
+        .btn-secondary:hover { border-color:#00ffff; color:#00ffff; }
+        .new-topic-form { background:#121212; border:1px solid #1a4a4a; border-radius:16px; padding:20px; margin-bottom:20px; }
+        .new-topic-form input, .new-topic-form textarea { width:100%; padding:10px 14px; border-radius:12px; border:1px solid #1a4a4a; background:#1a1a1a; color:#fff; margin-bottom:10px; }
+        .new-topic-form input:focus, .new-topic-form textarea:focus { border-color:#00ffff; outline:none; }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width:700px) {
+            .msg-container { flex-direction:column; }
+            .msg-contacts { max-width:100%; max-height:250px; }
+            .msg-chat { height:400px; }
+            .engagement-card .flex-row { flex-direction:column; align-items:flex-start; }
+            .engagement-card .stats { justify-content:flex-start; }
+        }
+        @media (max-width:480px) {
+            .lms-body { padding:12px; }
+            .tab-btn { padding:8px 14px; font-size:0.8rem; }
+        }
+
+        /* ====== TOAST ====== */
         .toast { position:fixed; bottom:30px; right:30px; background:#1a1a1a; border:1px solid #1a4a4a; border-radius:16px; padding:16px 24px; color:#e0e0e0; font-size:0.95rem; box-shadow:0 8px 30px rgba(0,0,0,0.5); transform:translateY(120px); opacity:0; transition:all 0.4s ease; z-index:1000; max-width:400px; }
         .toast.show { transform:translateY(0); opacity:1; }
         .toast.success { border-color:#00ff88; }
@@ -105,883 +139,945 @@
         .toast.info { border-color:#00ffff; }
         .toast.info i { color:#00ffff; }
         .toast i { margin-right:10px; }
+
+        #topBtn { display:none; position:fixed; bottom:20px; right:30px; z-index:99; font-size:20px; border:none; outline:none; background-color:#00ffff; color:#000; cursor:pointer; border-radius:50%; width:50px; height:50px; box-shadow:0 4px 12px rgba(0,0,0,0.3); line-height:50px; padding:0; transition:0.1s; }
+        #topBtn:hover { background-color:#66ffff; transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,255,255,0.3); }
+        .status-dot { display:inline-block; width:10px; height:10px; border-radius:50%; background:#00ff88; margin-right:6px; animation:pulse 2s infinite; }
+        @keyframes pulse { 0%{opacity:1} 50%{opacity:0.4} 100%{opacity:1} }
     </style>
 </head>
 <body>
 
-    <!-- ====== TOP NAV ====== -->
-    <nav class="nav-bar">
-        <div class="logo">
-            <svg width="180" height="40" viewBox="0 0 200 50">
-                <defs>
-                    <linearGradient id="lmsGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:aqua;" />
-                        <stop offset="50%" style="stop-color:white;" />
-                        <stop offset="100%" style="stop-color:yellow;" />
-                    </linearGradient>
-                </defs>
-                <text x="0" y="38" fill="url(#lmsGradient)" font-size="36" font-weight="700" font-family="Segoe UI, sans-serif">BeSpellBee</text>
-            </svg>
-        </div>
-        <div class="student-info">
-            <span class="badge"><span class="status-dot"></span> Learning</span>
-            <span class="name" id="navStudentName"><i class="fas fa-user-graduate"></i> Loading...</span>
-            <!-- ✅ FIXED: Added onclick to track "Home" -->
-            <a href="index.html" class="home-link" onclick="trackLink('Home')"><i class="fas fa-arrow-left"></i> Home</a>
-            <a href="#" id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </div>
-    </nav>
+<!-- ====== NAV ====== -->
+<nav class="nav-bar">
+    <div class="logo">
+        <svg width="180" height="40" viewBox="0 0 200 50">
+            <defs><linearGradient id="lmsGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:aqua;"/><stop offset="50%" style="stop-color:white;"/><stop offset="100%" style="stop-color:yellow;"/></linearGradient></defs>
+            <text x="0" y="38" fill="url(#lmsGradient)" font-size="36" font-weight="700" font-family="Segoe UI, sans-serif">BeSpellBee</text>
+        </svg>
+    </div>
+    <div class="student-info">
+        <span class="badge"><span class="status-dot"></span> Learning</span>
+        <span class="name" id="navStudentName"><i class="fas fa-user-graduate"></i> Loading...</span>
+        <a href="index.html" class="home-link" onclick="trackLink('Home')"><i class="fas fa-arrow-left"></i> Home</a>
+        <a href="#" id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+</nav>
 
-    <!-- ====== DASHBOARD CONTAINER ====== -->
-    <div class="dashboard-container">
+<div class="dashboard-container">
 
-        <!-- ====== COURSE SELECTOR ====== -->
-        <div class="course-selector" id="courseSelector">
-            <!-- Injected -->
+    <!-- COURSE SELECTOR -->
+    <div class="course-selector" id="courseSelector"></div>
+
+    <!-- LMS WRAPPER -->
+    <div class="lms-wrapper" id="lmsWrapper">
+        <div class="lms-header">
+            <h2><i class="fas fa-graduation-cap"></i> <span id="courseTitle">Select a course</span></h2>
+            <span class="lms-badge"><i class="fas fa-lock"></i> PREMIUM</span>
         </div>
+        <div class="lms-body">
 
-        <!-- ====== LMS WRAPPER ====== -->
-        <div class="lms-wrapper" id="lmsWrapper">
-            <div class="lms-header">
-                <h2><i class="fas fa-graduation-cap"></i> <span id="courseTitle">Select a course</span></h2>
-                <span class="lms-badge"><i class="fas fa-lock"></i> PREMIUM</span>
+            <!-- GATE -->
+            <div id="lmsGate" class="lms-gate">
+                <h3><i class="fas fa-key"></i> Enter your access code</h3>
+                <p>Purchase access to unlock your course materials.</p>
+                <input type="password" id="lmsPassword" placeholder="Your access code..." />
+                <br />
+                <button onclick="unlockLMS()"><i class="fas fa-unlock-alt"></i> Unlock Course</button>
+                <div id="lmsGateError" class="error"></div>
             </div>
-            <div class="lms-body">
 
-                <!-- ====== ACCESS GATE ====== -->
-                <div id="lmsGate" class="lms-gate">
-                    <h3><i class="fas fa-key"></i> Enter your access code</h3>
-                    <p>Purchase access to unlock your course materials.</p>
-                    <input type="password" id="lmsPassword" placeholder="Your access code..." />
-                    <br />
-                    <button onclick="unlockLMS()"><i class="fas fa-unlock-alt"></i> Unlock Course</button>
-                    <div id="lmsGateError" class="error"></div>
+            <!-- VIEWS -->
+            <div id="lmsViews" style="display: none;">
+                <!-- TABS -->
+                <div class="dashboard-tabs">
+                    <button class="tab-btn active" data-tab="dashboard" onclick="switchTab('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</button>
+                    <button class="tab-btn" data-tab="messages" onclick="switchTab('messages')"><i class="fas fa-envelope"></i> Messages</button>
+                    <button class="tab-btn" data-tab="discussion" onclick="switchTab('discussion')"><i class="fas fa-comments"></i> Discussion</button>
                 </div>
 
-                <!-- ====== LMS VIEWS ====== -->
-                <div id="lmsViews" style="display: none;">
-                    <div id="viewDashboard" class="lms-view active">
-                        <div id="dashboardContent"></div>
-                    </div>
-                    <div id="viewLesson" class="lms-view">
-                        <button class="back-btn" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
-                        <div id="lessonContent"></div>
-                    </div>
-                    <div id="viewQuiz" class="lms-view">
-                        <button class="back-btn" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
-                        <div id="quizContent"></div>
+                <!-- TAB: DASHBOARD -->
+                <div id="tab-dashboard" class="tab-content active">
+                    <div id="dashboardContent"></div>
+                </div>
+
+                <!-- TAB: MESSAGES -->
+                <div id="tab-messages" class="tab-content">
+                    <div class="msg-container" id="msgContainer">
+                        <div class="msg-contacts" id="msgContacts">
+                            <h4><i class="fas fa-users"></i> Contacts</h4>
+                            <div id="contactsList"><p style="color:#555;">Loading contacts...</p></div>
+                        </div>
+                        <div class="msg-chat" id="msgChat">
+                            <div class="msg-chat-header" id="msgChatHeader">Select a contact to start messaging</div>
+                            <div class="msg-messages" id="msgMessages"><p style="color:#555; text-align:center; margin-top:40px;">No conversation selected.</p></div>
+                            <div class="msg-input-area" id="msgInputArea" style="display:none;">
+                                <input type="text" id="msgInput" placeholder="Type a message..." />
+                                <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <!-- TAB: DISCUSSION -->
+                <div id="tab-discussion" class="tab-content">
+                    <div id="discussionContent">
+                        <div class="new-topic-form" id="newTopicForm">
+                            <h4 style="color:#88dddd; margin-bottom:8px;"><i class="fas fa-plus-circle"></i> Start a new discussion</h4>
+                            <input type="text" id="topicTitle" placeholder="Topic title..." />
+                            <textarea id="topicContent" placeholder="Write your discussion post..." rows="3"></textarea>
+                            <button class="btn-primary" onclick="createTopic()"><i class="fas fa-paper-plane"></i> Post Topic</button>
+                        </div>
+                        <div id="topicsList"><p style="color:#555;">Loading topics...</p></div>
+                        <div id="topicDetail" style="display:none;"></div>
+                    </div>
+                </div>
+
+                <!-- Legacy views (kept for course lessons) -->
+                <div id="viewLesson" class="lms-view" style="display:none;">
+                    <button class="back-btn" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+                    <div id="lessonContent"></div>
+                </div>
+                <div id="viewQuiz" class="lms-view" style="display:none;">
+                    <button class="back-btn" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+                    <div id="quizContent"></div>
+                </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- ====== BACK TO TOP ====== -->
-    <button id="topBtn" title="Go to top"><i class="fas fa-arrow-up"></i></button>
+<!-- ====== TOAST ====== -->
+<div id="toast" class="toast"><i class="fas fa-info-circle"></i> <span id="toastMsg">Hello</span></div>
+<button id="topBtn" title="Go to top"><i class="fas fa-arrow-up"></i></button>
 
-    <!-- ====== TOAST ====== -->
-    <div id="toast" class="toast"><i class="fas fa-info-circle"></i> <span id="toastMsg">Hello</span></div>
+<!-- ============================================================ -->
+<!-- ====== JAVASCRIPT ====== -->
+<!-- ============================================================ -->
+<script>
+// ============================================================
+// CONFIGURATION
+// ============================================================
+const API_BASE_URL = 'https://bespellbee-backend-en6l.onrender.com';
+let currentCourse = null;
+let currentCourseData = null;
+let courses = [];
+let currentPage = 'dashboard';
+let pageViewTracked = false;
 
-    <!-- ============================================================ -->
-    <!-- ====== JAVASCRIPT ====== -->
-    <!-- ============================================================ -->
-    <script>
-        // ============================================================
-        // CONFIGURATION
-        // ============================================================
-        const API_BASE_URL = 'https://bespellbee-backend-en6l.onrender.com';
-        let currentCourse = null;
-        let currentCourseData = null;
-        let courses = [];
-        let currentPage = 'dashboard';
-        let pageViewTracked = false;
+// Messaging state
+let currentContact = null;
+let contacts = [];
+let messages = [];
 
-        // ============================================================
-        // TOAST SYSTEM
-        // ============================================================
-        let toastTimer = null;
+// Discussion state
+let topics = [];
+let currentTopicId = null;
 
-        function showToast(message, type = 'info') {
-            const el = document.getElementById('toast');
-            const msg = document.getElementById('toastMsg');
-            msg.textContent = message;
-            el.className = 'toast ' + type;
-            clearTimeout(toastTimer);
-            void el.offsetWidth;
-            el.classList.add('show');
-            toastTimer = setTimeout(() => el.classList.remove('show'), 4000);
-        }
+// ============================================================
+// TOAST SYSTEM
+// ============================================================
+let toastTimer = null;
+function showToast(message, type = 'info') {
+    const el = document.getElementById('toast');
+    const msg = document.getElementById('toastMsg');
+    msg.textContent = message;
+    el.className = 'toast ' + type;
+    clearTimeout(toastTimer);
+    void el.offsetWidth;
+    el.classList.add('show');
+    toastTimer = setTimeout(() => el.classList.remove('show'), 4000);
+}
 
-        // ============================================================
-        // TRACKING HELPER
-        // ============================================================
-        async function trackActivity(endpoint, data) {
-            const token = localStorage.getItem('authToken');
-            if (!token) return;
-            try {
-                await fetch(`${API_BASE_URL}/api/track/${endpoint}`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
-            } catch (e) {
-                console.warn('Tracking failed:', e);
-            }
-        }
-
-        // ============================================================
-        // API CALLS
-        // ============================================================
-        async function fetchAllCourses() {
-            const token = localStorage.getItem('authToken');
-            if (!token) return [];
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/student/courses`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const data = await response.json();
-                if (data.success) return data.data || data.courses || [];
-                return [];
-            } catch (error) {
-                console.error('Error fetching courses:', error);
-                return [];
-            }
-        }
-
-        async function fetchCourse(courseId) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/student/courses/${courseId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                const data = await response.json();
-                if (data.success) {
-                    const course = data.data;
-                    course.modules = course.Modules || course.modules || [];
-                    course.modules.forEach(mod => {
-                        mod.Lessons = mod.Lessons || mod.lessons || [];
-                        mod.Lessons.forEach(lesson => {
-                            lesson.questions = lesson.Questions || lesson.questions || [];
-                            lesson.content = lesson.Content || lesson.content || '';
-                            lesson.title = lesson.Title || lesson.title || 'Untitled';
-                            lesson.type = lesson.type || 'lesson';
-                        });
-                    });
-                    return course;
-                }
-                return null;
-            } catch (error) {
-                console.error('Error fetching course:', error);
-                return null;
-            }
-        }
-
-        // ============================================================
-        // STATE & HELPERS
-        // ============================================================
-        function getProgress(courseId) {
-            const saved = localStorage.getItem(`lmsProgress_${courseId}`);
-            return saved ? JSON.parse(saved) : {};
-        }
-
-        function saveProgress(courseId, prog) {
-            localStorage.setItem(`lmsProgress_${courseId}`, JSON.stringify(prog));
-        }
-
-        function isCompleted(courseId, lessonId) {
-            const prog = getProgress(courseId);
-            return prog[lessonId] && prog[lessonId].completed === true;
-        }
-
-        function markCompleted(courseId, lessonId) {
-            const prog = getProgress(courseId);
-            prog[lessonId] = { completed: true };
-            saveProgress(courseId, prog);
-        }
-
-        function showView(viewId) {
-            document.querySelectorAll('.lms-view').forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-        }
-
-        function showDashboard() {
-            showView('viewDashboard');
-            renderDashboard(currentCourse);
-        }
-
-        // ============================================================
-        // PAGE VIEW TRACKING (single call)
-        // ============================================================
-        function trackPageView(page) {
-            if (pageViewTracked) return;
-            pageViewTracked = true;
-            currentPage = page || 'dashboard';
-            trackActivity('page-view', {
-                page: currentPage,
-                url: window.location.href,
-                duration: 0,
-                action: 'view'
-            });
-        }
-
-        // ============================================================
-        // COURSE SELECTOR
-        // ============================================================
-        function renderCourseSelector() {
-            const container = document.getElementById('courseSelector');
-            if (!courses || courses.length === 0) {
-                container.innerHTML =
-                `<p style="color:#888;">No courses available at the moment.</p>`;
-                return;
-            }
-            let html = '';
-            courses.forEach(course => {
-                const active = course.id === currentCourse ? 'active' : '';
-                html += `
-                        <button class="course-btn ${active}" data-course-id="${course.id}" onclick="selectCourse(${course.id})">
-                            ${course.icon || '📚'} ${course.title}
-                        </button>
-                    `;
-            });
-            container.innerHTML = html;
-        }
-
-        // ============================================================
-        // COURSE SELECTION
-        // ============================================================
-        async function selectCourse(courseId) {
-            currentCourse = courseId;
-            document.querySelectorAll('.course-btn').forEach(btn => {
-                btn.classList.toggle('active', parseInt(btn.dataset.courseId) === courseId);
-            });
-
-            const courseData = await fetchCourse(courseId);
-            if (courseData) {
-                currentCourseData = courseData;
-                document.getElementById('courseTitle').textContent = courseData.title;
-                const isUnlocked = localStorage.getItem(`lmsUnlocked_${courseId}`) === 'true';
-                if (isUnlocked) {
-                    document.getElementById('lmsGate').style.display = 'none';
-                    document.getElementById('lmsViews').style.display = 'block';
-                    renderDashboard(courseId);
-                    trackPageView('dashboard');
-                } else {
-                    document.getElementById('lmsGate').style.display = 'block';
-                    document.getElementById('lmsViews').style.display = 'none';
-                    document.getElementById('lmsPassword').value = '';
-                    document.getElementById('lmsGateError').textContent = '';
-                }
-            } else {
-                currentCourseData = null;
-                document.getElementById('courseTitle').textContent = 'Error loading course';
-                document.getElementById('dashboardContent').innerHTML =
-                    `<p style="color:#ff4444;">Failed to load course data. Please refresh.</p>`;
-            }
-        }
-
-        // ============================================================
-        // UNLOCK COURSE
-        // ============================================================
-        function unlockLMS() {
-            const input = document.getElementById('lmsPassword');
-            const error = document.getElementById('lmsGateError');
-            if (!currentCourseData) {
-                error.innerText = '❌ Please select a course first.';
-                return;
-            }
-            if (input.value.trim() === currentCourseData.accessCode) {
-                localStorage.setItem(`lmsUnlocked_${currentCourse}`, 'true');
-                document.getElementById('lmsGate').style.display = 'none';
-                document.getElementById('lmsViews').style.display = 'block';
-                renderDashboard(currentCourse);
-                trackPageView('dashboard');
-                showToast('✅ Course unlocked!', 'success');
-            } else {
-                error.innerText = '❌ Incorrect access code. Please try again.';
-                input.value = '';
-                input.focus();
-            }
-        }
-
-        document.getElementById('lmsPassword').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') unlockLMS();
+// ============================================================
+// TRACKING HELPER
+// ============================================================
+async function trackActivity(endpoint, data) {
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    try {
+        await fetch(`${API_BASE_URL}/api/track/${endpoint}`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
         });
+    } catch(e) { console.warn('Tracking failed:', e); }
+}
 
-        // ============================================================
-        // RENDER DASHBOARD
-        // ============================================================
-        function renderDashboard(courseId) {
-            const course = currentCourseData;
-            const container = document.getElementById('dashboardContent');
-            const prog = getProgress(courseId);
+// ============================================================
+// API CALLS
+// ============================================================
+async function fetchAllCourses() {
+    const token = localStorage.getItem('authToken');
+    if (!token) return [];
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/student/courses`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        return data.success ? (data.data || data.courses || []) : [];
+    } catch(e) { return []; }
+}
 
-            let totalLessons = 0;
-            let completedLessons = 0;
-            if (course && course.modules) {
-                course.modules.forEach(mod => {
-                    if (mod.Lessons) {
-                        mod.Lessons.forEach(lesson => {
-                            totalLessons++;
-                            if (prog[lesson.id] && prog[lesson.id].completed) {
-                                completedLessons++;
-                            }
-                        });
-                    }
+async function fetchCourse(courseId) {
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/student/courses/${courseId}`, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+            const course = data.data;
+            course.modules = course.Modules || course.modules || [];
+            course.modules.forEach(mod => {
+                mod.Lessons = mod.Lessons || mod.lessons || [];
+                mod.Lessons.forEach(lesson => {
+                    lesson.questions = lesson.Questions || lesson.questions || [];
+                    lesson.content = lesson.Content || lesson.content || '';
+                    lesson.title = lesson.Title || lesson.title || 'Untitled';
+                    lesson.type = lesson.type || 'lesson';
+                });
+            });
+            return course;
+        }
+        return null;
+    } catch(e) { return null; }
+}
+
+// ============================================================
+// STATE HELPERS
+// ============================================================
+function getProgress(courseId) {
+    const saved = localStorage.getItem(`lmsProgress_${courseId}`);
+    return saved ? JSON.parse(saved) : {};
+}
+function saveProgress(courseId, prog) {
+    localStorage.setItem(`lmsProgress_${courseId}`, JSON.stringify(prog));
+}
+function isCompleted(courseId, lessonId) {
+    const prog = getProgress(courseId);
+    return prog[lessonId] && prog[lessonId].completed === true;
+}
+function markCompleted(courseId, lessonId) {
+    const prog = getProgress(courseId);
+    prog[lessonId] = { completed: true };
+    saveProgress(courseId, prog);
+}
+
+// ============================================================
+// PAGE VIEW TRACKING
+// ============================================================
+function trackPageView(page) {
+    if (pageViewTracked) return;
+    pageViewTracked = true;
+    currentPage = page || 'dashboard';
+    trackActivity('page-view', { page: currentPage, url: window.location.href, duration: 0, action: 'view' });
+}
+
+// ============================================================
+// COURSE SELECTOR
+// ============================================================
+function renderCourseSelector() {
+    const container = document.getElementById('courseSelector');
+    if (!courses || courses.length === 0) {
+        container.innerHTML = `<p style="color:#888;">No courses available.</p>`;
+        return;
+    }
+    let html = '';
+    courses.forEach(course => {
+        const active = course.id === currentCourse ? 'active' : '';
+        html += `<button class="course-btn ${active}" data-course-id="${course.id}" onclick="selectCourse(${course.id})">${course.icon || '📚'} ${course.title}</button>`;
+    });
+    container.innerHTML = html;
+}
+
+async function selectCourse(courseId) {
+    currentCourse = courseId;
+    document.querySelectorAll('.course-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.courseId) === courseId);
+    });
+    const courseData = await fetchCourse(courseId);
+    if (courseData) {
+        currentCourseData = courseData;
+        document.getElementById('courseTitle').textContent = courseData.title;
+        const isUnlocked = localStorage.getItem(`lmsUnlocked_${courseId}`) === 'true';
+        if (isUnlocked) {
+            document.getElementById('lmsGate').style.display = 'none';
+            document.getElementById('lmsViews').style.display = 'block';
+            renderDashboard(courseId);
+            trackPageView('dashboard');
+            loadContacts(); // load messaging contacts
+            loadTopics();   // load discussion topics
+        } else {
+            document.getElementById('lmsGate').style.display = 'block';
+            document.getElementById('lmsViews').style.display = 'none';
+            document.getElementById('lmsPassword').value = '';
+            document.getElementById('lmsGateError').textContent = '';
+        }
+    } else {
+        currentCourseData = null;
+        document.getElementById('courseTitle').textContent = 'Error loading course';
+        document.getElementById('dashboardContent').innerHTML = `<p style="color:#ff4444;">Failed to load course.</p>`;
+    }
+}
+
+function unlockLMS() {
+    const input = document.getElementById('lmsPassword');
+    const error = document.getElementById('lmsGateError');
+    if (!currentCourseData) { error.innerText = 'Select a course first.'; return; }
+    if (input.value.trim() === currentCourseData.accessCode) {
+        localStorage.setItem(`lmsUnlocked_${currentCourse}`, 'true');
+        document.getElementById('lmsGate').style.display = 'none';
+        document.getElementById('lmsViews').style.display = 'block';
+        renderDashboard(currentCourse);
+        trackPageView('dashboard');
+        loadContacts();
+        loadTopics();
+        showToast('Course unlocked!', 'success');
+    } else {
+        error.innerText = 'Incorrect access code.';
+        input.value = '';
+        input.focus();
+    }
+}
+document.getElementById('lmsPassword').addEventListener('keypress', (e) => { if (e.key === 'Enter') unlockLMS(); });
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+function switchTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(`tab-${tab}`).classList.add('active');
+    document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
+    if (tab === 'messages') loadContacts();
+    if (tab === 'discussion') loadTopics();
+}
+
+// ============================================================
+// RENDER DASHBOARD (Engagement stats + lessons)
+// ============================================================
+function renderDashboard(courseId) {
+    const course = currentCourseData;
+    const container = document.getElementById('dashboardContent');
+    const prog = getProgress(courseId);
+    let totalLessons = 0, completedLessons = 0;
+    if (course && course.modules) {
+        course.modules.forEach(mod => {
+            if (mod.Lessons) {
+                mod.Lessons.forEach(lesson => {
+                    totalLessons++;
+                    if (prog[lesson.id] && prog[lesson.id].completed) completedLessons++;
                 });
             }
-            const overallProgress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+        });
+    }
+    const overallProgress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
 
-            fetchStudentStats().then(statsData => {
-                let engagementScore = 0;
-                let totalPageViews = 0;
-                let totalLinkClicks = 0;
-                let totalQuizzes = 0;
-                let studentName = 'Student';
-
-                if (statsData) {
-                    studentName = statsData.student?.name || 'Student';
-                    engagementScore = statsData.student?.engagementScore || 0;
-                    totalPageViews = statsData.stats?.totalPageViews || 0;
-                    totalLinkClicks = statsData.stats?.totalLinkClicks || 0;
-                    totalQuizzes = statsData.stats?.totalQuizAttempts || 0;
-                }
-
-                let html = `
-                    <!-- ====== ENGAGEMENT SCORE CARD ====== -->
-                    <div style="background: #121212; border-radius: 16px; padding: 20px 24px; margin: 0 auto 20px auto; max-width: 900px; border: 1px solid #1a4a4a;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-                            <!-- Left: Score -->
-                            <div>
-                                <span style="color: #88dddd; font-size: 0.85rem; display: block;">⭐ ${studentName}'s Engagement Score</span>
-                                <span style="color: #00ffff; font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 700;">${Math.round(engagementScore)}%</span>
-                            </div>
-                            <!-- Right: Stats -->
-                            <div style="text-align: right;">
-                                <div style="color: #666; font-size: 0.75rem; display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;">
-                                    <span>📄 ${totalPageViews} views</span>
-                                    <span>•</span>
-                                    <span>🔗 ${totalLinkClicks} clicks</span>
-                                    <span>•</span>
-                                    <span>🧠 ${totalQuizzes} quizzes</span>
-                                </div>
-                                <span style="color: #555; font-size: 0.7rem; display: block; margin-top: 4px;">${getMotivationalMessage(engagementScore)}</span>
-                            </div>
-                        </div>
-                        <!-- Progress Bar -->
-                        <div style="width: 100%; height: 8px; background: #1a1a1a; border-radius: 4px; margin-top: 12px; overflow: hidden;">
-                            <div style="height: 100%; background: linear-gradient(90deg, #00ffff, #ffcc00); border-radius: 4px; width: ${Math.min(engagementScore, 100)}%; transition: width 0.8s ease;"></div>
-                        </div>
-                    </div>
-                `;
-
-                // ====== COURSE CONTENT ======
-                if (course && course.modules && course.modules.length > 0) {
-                    html += `
-                        <div class="dashboard-header">
-                            <h2><i class="fas fa-list-ul"></i> ${course.icon || '📚'} ${course.title}</h2>
-                        </div>
-                        <div style="background:#121212; border-radius:16px; padding:16px 20px; margin-bottom:20px; border:1px solid #1a4a4a;">
-                            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                                <span style="color:#88dddd;"><i class="fas fa-chart-line"></i> Overall Progress</span>
-                                <span style="color:#00ffff; font-weight:700;">${overallProgress}% (${completedLessons}/${totalLessons})</span>
-                            </div>
-                            <div style="width:100%; height:6px; background:#1a1a1a; border-radius:4px; margin-top:8px; overflow:hidden;">
-                                <div style="height:100%; background:linear-gradient(90deg, #00ffff, #ffcc00); border-radius:4px; width:${overallProgress}%; transition:width 0.5s;"></div>
-                            </div>
-                        </div>
-                        <div id="moduleList"></div>
-                    `;
-                } else {
-                    html += `
-                        <div style="text-align:center; padding:40px 20px; background:#121212; border-radius:16px; border:1px solid #1a4a4a; margin-top:10px;">
-                            <i class="fas fa-info-circle" style="font-size:2.5rem; color:#555; margin-bottom:15px; display:block;"></i>
-                            <h3 style="color:#88dddd;">No content yet</h3>
-                            <p style="color:#666; margin-top:5px;">This course has no modules or lessons yet.</p>
-                        </div>
-                    `;
-                }
-
-                container.innerHTML = html;
-
-                // ====== RENDER MODULE LIST ======
-                if (course && course.modules && course.modules.length > 0) {
-                    const moduleList = document.getElementById('moduleList');
-                    let listHtml = '';
-                    course.modules.forEach(mod => {
-                        listHtml += `<div class="module-card"><h3><i class="fas fa-folder-open"></i> ${mod.title}</h3>`;
-                        if (mod.Lessons && mod.Lessons.length > 0) {
-                            mod.Lessons.forEach(lesson => {
-                                const done = isCompleted(courseId, lesson.id) ? 'done' : '';
-                                let label = isCompleted(courseId, lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson');
-                                if (lesson.type === 'quiz') {
-                                    const data = prog[lesson.id];
-                                    if (data && data.completed) {
-                                        label = `✅ Completed (${data.score || 0}/${data.total || 0})`;
-                                    }
-                                }
-                                const icon = lesson.type === 'quiz' ? '🧠' : '📖';
-                                listHtml += `
-                                    <div class="lesson-item" onclick="openLesson('${courseId}','${mod.id}','${lesson.id}')">
-                                        <span>${icon} ${lesson.title}</span>
-                                        <span class="status ${done}">${label}</span>
-                                    </div>
-                                `;
-                            });
-                        } else {
-                            listHtml += `<p style="color:#555; font-size:0.85rem; padding:8px 0;">No lessons yet.</p>`;
-                        }
-                        listHtml += `</div>`;
-                    });
-                    moduleList.innerHTML = listHtml;
-                }
-            }).catch(err => {
-                console.error('Error rendering dashboard:', err);
-                container.innerHTML = `
-                    <div style="color:#ff6666; text-align:center; padding:20px;">
-                        <i class="fas fa-exclamation-triangle" style="font-size:2rem; display:block; margin-bottom:10px;"></i>
-                        Error loading dashboard. Please refresh.
-                    </div>
-                `;
-            });
+    // Fetch engagement stats (lessons, videos, messages, quizzes)
+    fetchEngagementStats().then(stats => {
+        let engagementScore = 0, lessonsCompleted = 0, videosCompleted = 0, messagesSent = 0, quizzesPassed = 0;
+        let studentName = 'Student';
+        if (stats) {
+            studentName = stats.name || 'Student';
+            engagementScore = stats.engagementScore || 0;
+            lessonsCompleted = stats.lessonsCompleted || 0;
+            videosCompleted = stats.videosCompleted || 0;
+            messagesSent = stats.messagesSent || 0;
+            quizzesPassed = stats.quizzesPassed || 0;
         }
 
-        // ============================================================
-        // OPEN LESSON / QUIZ
-        // ============================================================
-        function openLesson(courseId, moduleId, lessonId) {
-            if (!currentCourseData) {
-                showToast('❌ Course data not loaded. Please refresh.', 'error');
-                return;
-            }
-
-            const module = currentCourseData.modules.find(m => String(m.id) === String(moduleId));
-            if (!module) {
-                showToast('❌ Module not found.', 'error');
-                return;
-            }
-
-            const lesson = module.Lessons.find(l => String(l.id) === String(lessonId));
-            if (!lesson) {
-                showToast('❌ Lesson not found.', 'error');
-                return;
-            }
-
-            // Track lesson view
-            trackActivity('lesson-view', {
-                lessonId: lesson.id,
-                lessonTitle: lesson.title,
-                moduleId: module.id,
-                courseId: courseId
-            });
-
-            if (lesson.type === 'quiz') {
-                showView('viewQuiz');
-                renderQuiz(courseId, lesson);
-            } else {
-                showView('viewLesson');
-                renderLesson(courseId, lesson, module.id);
-            }
-        }
-
-        // ============================================================
-        // RENDER LESSON
-        // ============================================================
-        function renderLesson(courseId, lesson, moduleId) {
-            const container = document.getElementById('lessonContent');
-            const done = isCompleted(courseId, lesson.id);
-
-            let contentHtml = lesson.content || '<p style="color:#666;">No content yet.</p>';
-
-            if (typeof lesson.content === 'string' && lesson.content.trim().startsWith('http')) {
-                const url = lesson.content.trim();
-                if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                    const embedUrl = url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/');
-                    contentHtml = `
-                        <div class="video-wrapper">
-                            <iframe src="${embedUrl}" allowfullscreen></iframe>
-                        </div>
-                    `;
-                } else if (url.match(/\.(mp4|webm|ogg)$/i)) {
-                    contentHtml = `
-                        <video controls style="width:100%; border-radius:12px; margin:12px 0;">
-                            <source src="${url}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    `;
-                } else {
-                    contentHtml = `
-                        <div style="background:#1a1a1a; border-radius:12px; padding:16px; margin:12px 0;">
-                            <a href="${url}" target="_blank" style="color:#00ffff;">🔗 Open resource: ${url}</a>
-                        </div>
-                    `;
-                }
-            }
-
-            container.innerHTML = `
-                <h2 style="color: #00ffff;"><i class="fas fa-book"></i> ${lesson.title}</h2>
-                <div class="lesson-content">${contentHtml}</div>
-                <div class="nav-row">
-                    <button onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Dashboard</button>
+        let html = `
+            <div class="engagement-card">
+                <div class="flex-row">
                     <div>
-                        ${!done ? `<button class="complete-btn" onclick="markLessonComplete('${courseId}','${lesson.id}')"><i class="fas fa-check"></i> Mark as Complete</button>` : '<span class="completed-text"><i class="fas fa-check-circle"></i> Completed</span>'}
+                        <span style="color:#88dddd; font-size:0.85rem; display:block;">⭐ ${studentName}'s Engagement Score</span>
+                        <span class="score">${Math.round(engagementScore)}%</span>
+                    </div>
+                    <div>
+                        <div class="stats">
+                            <span>📘 ${lessonsCompleted} lessons</span>
+                            <span>•</span>
+                            <span>🎬 ${videosCompleted} videos</span>
+                            <span>•</span>
+                            <span>💬 ${messagesSent} messages</span>
+                            <span>•</span>
+                            <span>🏆 ${quizzesPassed} quizzes passed</span>
+                        </div>
+                        <span style="color:#555; font-size:0.7rem; display:block; margin-top:4px;">${getMotivationalMessage(engagementScore)}</span>
                     </div>
                 </div>
-            `;
+                <div class="engagement-bar">
+                    <div class="fill" style="width:${Math.min(engagementScore,100)}%;"></div>
+                </div>
+            </div>
+        `;
 
-            // Attach video tracking
-            setTimeout(() => {
-                const videos = container.querySelectorAll('video');
-                videos.forEach(video => {
-                    const lessonId = lesson.id;
-                    let lastSent = 0;
-                    video.addEventListener('timeupdate', function() {
-                        const current = Math.floor(this.currentTime);
-                        if (current - lastSent >= 5) {
-                            lastSent = current;
-                            trackActivity('video-watch', {
-                                lessonId: lessonId,
-                                watchTime: current,
-                                totalDuration: Math.floor(this.duration)
-                            });
-                        }
-                    });
-                    video.addEventListener('ended', function() {
-                        trackActivity('video-complete', {
-                            lessonId: lessonId,
-                            watchTime: Math.floor(this.duration),
-                            totalDuration: Math.floor(this.duration)
-                        });
-                    });
-                });
-            }, 100);
-        }
-
-        // ============================================================
-        // MARK LESSON COMPLETE
-        // ============================================================
-        async function markLessonComplete(courseId, lessonId) {
-            const course = currentCourseData;
-            let lesson = null, moduleId = null;
-            for (let mod of course.modules) {
-                const found = mod.Lessons.find(l => String(l.id) === String(lessonId));
-                if (found) {
-                    lesson = found;
-                    moduleId = mod.id;
-                    break;
-                }
-            }
-            if (!lesson) {
-                showToast('❌ Lesson not found.', 'error');
-                return;
-            }
-
-            markCompleted(courseId, lessonId);
-
-            if (lesson.type === 'activity') {
-                await trackActivity('practice', {
-                    activityId: lesson.id,
-                    title: lesson.title,
-                    type: 'activity'
-                });
-            } else {
-                await trackActivity('lesson-complete', {
-                    lessonId: lesson.id,
-                    lessonTitle: lesson.title,
-                    moduleId: moduleId,
-                    courseId: courseId
-                });
-            }
-
-            showToast('✅ Lesson marked as complete!', 'success');
-            showDashboard();
-        }
-
-        // ============================================================
-        // RENDER QUIZ
-        // ============================================================
-        function renderQuiz(courseId, quiz) {
-            const container = document.getElementById('quizContent');
-            const questions = quiz.questions || [];
-            if (questions.length === 0) {
-                container.innerHTML = `
-                    <h2 style="color: #00ffff;"><i class="fas fa-brain"></i> ${quiz.title}</h2>
-                    <div style="background:#121212; border-radius:16px; padding:24px; border:1px solid #1a4a4a; text-align:center;">
-                        <p style="color:#888;">This quiz has no questions yet.</p>
-                        <button class="back-btn" onclick="showDashboard()" style="margin-top:16px;"><i class="fas fa-arrow-left"></i> Back</button>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = `
-                <h2 style="color: #00ffff;"><i class="fas fa-brain"></i> ${quiz.title}</h2>
-                <form id="quizForm">
-            `;
-
-            questions.forEach((q, idx) => {
-                const options = q.options || [];
-                html += `
-                    <div class="question-block">
-                        <p><strong>${idx+1}. ${q.question}</strong></p>
-                        ${options.map((opt, oi) => `
-                            <label><input type="radio" name="q${idx}" value="${oi}"> ${opt}</label>
-                        `).join('')}
-                    </div>
-                `;
-            });
-
+        if (course && course.modules && course.modules.length > 0) {
             html += `
-                <button type="button" style="background:rgba(255,204,0,0.1); color:#ffcc00; border:1px solid rgba(255,204,0,0.3); padding:14px 32px; border-radius:60px; font-weight:700; cursor:pointer; transition:all 0.3s; font-size:1rem;" 
-                        onmouseover="this.style.background='#ffcc00'; this.style.color='#000';" 
-                        onmouseout="this.style.background='rgba(255,204,0,0.1)'; this.style.color='#ffcc00';" 
-                        onclick="submitQuiz('${courseId}','${quiz.id}')">
-                    <i class="fas fa-check"></i> Check Answers
-                </button>
-                </form>
-                <div id="quizResult" class="quiz-result"></div>
-                <div class="nav-row" style="margin-top:20px;">
-                    <button onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Dashboard</button>
+                <div class="dashboard-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+                    <h2 style="color:#00ffff; border-left:6px solid #ffcc00; padding-left:16px; margin:0; font-size:1.4rem;"><i class="fas fa-list-ul"></i> ${course.icon || '📚'} ${course.title}</h2>
                 </div>
-            `;
-
-            container.innerHTML = html;
-        }
-
-        // ============================================================
-        // SUBMIT QUIZ
-        // ============================================================
-        async function submitQuiz(courseId, quizId) {
-            const course = currentCourseData;
-            if (!course) {
-                showToast('❌ Course data not available.', 'error');
-                return;
-            }
-
-            let quizData = null;
-            let moduleId = null;
-            for (let m of course.modules) {
-                const found = m.Lessons.find(l => String(l.id) === String(quizId));
-                if (found) {
-                    quizData = found;
-                    moduleId = m.id;
-                    break;
-                }
-            }
-            if (!quizData) {
-                showToast('❌ Quiz data not found.', 'error');
-                return;
-            }
-
-            const questions = quizData.questions || [];
-            if (questions.length === 0) {
-                showToast('⚠️ This quiz has no questions.', 'info');
-                return;
-            }
-
-            let score = 0;
-            let allAnswered = true;
-            for (let i = 0; i < questions.length; i++) {
-                const selected = document.querySelector(`input[name="q${i}"]:checked`);
-                if (!selected) { allAnswered = false; continue; }
-                if (parseInt(selected.value) === questions[i].correct) score++;
-            }
-
-            const resultDiv = document.getElementById('quizResult');
-            if (!allAnswered) {
-                resultDiv.className = 'quiz-result fail';
-                resultDiv.innerHTML = '<p style="color:#ff4444;">⚠️ Please answer all questions before submitting.</p>';
-                return;
-            }
-
-            const total = questions.length;
-            const passed = score >= total * 0.6;
-
-            // Track quiz attempt
-            await trackActivity('quiz-attempt', {
-                quizId: quizId,
-                quizTitle: quizData.title,
-                score: score,
-                totalQuestions: total,
-                passed: passed
-            });
-
-            // Also track as lesson complete (for overall progress)
-            await trackActivity('lesson-complete', {
-                lessonId: quizId,
-                lessonTitle: quizData.title,
-                moduleId: moduleId,
-                courseId: courseId
-            });
-
-            // Save local progress
-            const prog = getProgress(courseId);
-            prog[quizId] = { completed: true, score: score, total: total };
-            saveProgress(courseId, prog);
-
-            if (passed) {
-                resultDiv.className = 'quiz-result pass';
-                resultDiv.innerHTML = `<h3>✅ You scored ${score}/${total}. Well done!</h3>`;
-                showToast(`🎉 Quiz passed! ${score}/${total}`, 'success');
-            } else {
-                resultDiv.className = 'quiz-result fail';
-                resultDiv.innerHTML = `<h3>❌ You scored ${score}/${total}. Review the lessons and try again.</h3>`;
-                showToast(`📝 Quiz score: ${score}/${total}. Keep learning!`, 'info');
-            }
-
-            document.querySelectorAll('#quizForm input[type="radio"]').forEach(el => el.disabled = true);
-        }
-
-        // ============================================================
-        // FETCH STUDENT STATS
-        // ============================================================
-        async function fetchStudentStats() {
-            const token = localStorage.getItem('authToken');
-            if (!token) return null;
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/track/dashboard`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const data = await response.json();
-                if (data.success) return data.data;
-                return null;
-            } catch (e) {
-                console.error('Failed to fetch student stats:', e);
-                return null;
-            }
-        }
-
-        // ============================================================
-        // MOTIVATIONAL MESSAGE
-        // ============================================================
-        function getMotivationalMessage(score) {
-            const s = Math.round(score);
-            if (s >= 80) return '🌟 Outstanding! You\'re a learning superstar!';
-            if (s >= 60) return '🔥 Great progress! Keep up the momentum!';
-            if (s >= 40) return '📈 You\'re on the right track! Keep exploring!';
-            if (s >= 20) return '💪 Every click counts! Continue learning!';
-            return '🌱 Start your learning journey today!';
-        }
-
-        // ============================================================
-        // LOGOUT
-        // ============================================================
-        document.getElementById('logoutBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('studentId');
-            localStorage.removeItem('studentName');
-            localStorage.removeItem('userRole');
-            window.location.href = 'index.html';
-        });
-
-        // ============================================================
-        // LOAD STUDENT NAME
-        // ============================================================
-        function loadStudentName() {
-            const token = localStorage.getItem('authToken');
-            if (token) {
-                try {
-                    const payload = JSON.parse(atob(token.split('.')[1]));
-                    const name = payload.name || 'Student';
-                    document.getElementById('navStudentName').innerHTML =
-                        `<i class="fas fa-user-graduate"></i> ${name}`;
-                } catch (e) {
-                    document.getElementById('navStudentName').innerHTML =
-                    `<i class="fas fa-user-graduate"></i> Student`;
-                }
-            } else {
-                document.getElementById('navStudentName').innerHTML = `<i class="fas fa-user-graduate"></i> Guest`;
-            }
-        }
-
-        // ============================================================
-        // LINK CLICK TRACKING (global listener)
-        // ============================================================
-        document.addEventListener('click', function(e) {
-            const link = e.target.closest('a');
-            if (link && link.href && link.href.startsWith('http')) {
-                // Only track if it's not already handled by an onclick trackLink
-                // The onclick trackLink will call trackActivity directly, so we check if the link has an onclick that calls trackLink
-                const onclickAttr = link.getAttribute('onclick');
-                if (onclickAttr && onclickAttr.includes('trackLink')) {
-                    // Already handled by explicit trackLink call
-                    return;
-                }
-                trackActivity('link-click', {
-                    link: link.href,
-                    page: currentPage || 'dashboard',
-                    url: window.location.href
-                });
-            }
-        });
-
-        // ============================================================
-        // TRACK LINK (explicit)
-        // ============================================================
-        window.trackLink = function(linkName) {
-            const token = localStorage.getItem('authToken');
-            if (!token) return;
-            trackActivity('link-click', {
-                link: linkName,
-                page: currentPage || 'dashboard',
-                url: window.location.href
-            });
-        };
-
-        // ============================================================
-        // BACK TO TOP
-        // ============================================================
-        const topBtn = document.getElementById("topBtn");
-        window.onscroll = function() {
-            if (window.scrollY > 400) {
-                topBtn.style.display = "block";
-            } else {
-                topBtn.style.display = "none";
-            }
-        };
-        topBtn.onclick = function() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-
-        // ============================================================
-        // FADE-IN ON LOAD
-        // ============================================================
-        window.addEventListener('load', function() {
-            document.body.classList.add('loaded');
-        });
-
-        // ============================================================
-        // INIT
-        // ============================================================
-        document.addEventListener('DOMContentLoaded', async function() {
-            loadStudentName();
-
-            const fetchedCourses = await fetchAllCourses();
-
-            if (fetchedCourses && fetchedCourses.length > 0) {
-                courses = fetchedCourses;
-                renderCourseSelector();
-                await selectCourse(courses[0].id);
-            } else {
-                document.getElementById('courseSelector').innerHTML =
-                    `<p style="color:#888;">No courses available. Please contact your teacher.</p>`;
-                document.getElementById('courseTitle').textContent = 'No course selected';
-                document.getElementById('dashboardContent').innerHTML = `
-                    <div style="text-align:center; padding:40px 20px; background:#121212; border-radius:16px; border:1px solid #1a4a4a;">
-                        <i class="fas fa-info-circle" style="font-size:2.5rem; color:#555; margin-bottom:15px; display:block;"></i>
-                        <h3 style="color:#88dddd;">No courses available</h3>
-                        <p style="color:#666; margin-top:5px;">Your teacher hasn't assigned any courses to you yet.</p>
+                <div style="background:#121212; border-radius:16px; padding:16px 20px; margin-bottom:20px; border:1px solid #1a4a4a;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                        <span style="color:#88dddd;"><i class="fas fa-chart-line"></i> Overall Progress</span>
+                        <span style="color:#00ffff; font-weight:700;">${overallProgress}% (${completedLessons}/${totalLessons})</span>
                     </div>
-                `;
-            }
-        });
-    </script>
+                    <div style="width:100%; height:6px; background:#1a1a1a; border-radius:4px; margin-top:8px; overflow:hidden;">
+                        <div style="height:100%; background:linear-gradient(90deg, #00ffff, #ffcc00); border-radius:4px; width:${overallProgress}%; transition:width 0.5s;"></div>
+                    </div>
+                </div>
+                <div id="moduleList"></div>
+            `;
+        } else {
+            html += `<div style="text-align:center;padding:40px 20px;background:#121212;border-radius:16px;border:1px solid #1a4a4a;margin-top:10px;"><i class="fas fa-info-circle" style="font-size:2.5rem;color:#555;display:block;margin-bottom:15px;"></i><h3 style="color:#88dddd;">No content yet</h3><p style="color:#666;">This course has no modules or lessons.</p></div>`;
+        }
+        container.innerHTML = html;
 
+        if (course && course.modules && course.modules.length > 0) {
+            const moduleList = document.getElementById('moduleList');
+            let listHtml = '';
+            course.modules.forEach(mod => {
+                listHtml += `<div class="module-card" style="background:#121212;border-radius:24px;padding:20px;margin-bottom:20px;border-left:6px solid #ffcc00;border:1px solid #1a4a4a;"><h3 style="color:#00ffff;margin-top:0;font-size:1.1rem;"><i class="fas fa-folder-open"></i> ${mod.title}</h3>`;
+                if (mod.Lessons && mod.Lessons.length > 0) {
+                    mod.Lessons.forEach(lesson => {
+                        const done = isCompleted(courseId, lesson.id) ? 'done' : '';
+                        let label = isCompleted(courseId, lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson');
+                        if (lesson.type === 'quiz') {
+                            const data = prog[lesson.id];
+                            if (data && data.completed) label = `✅ Completed (${data.score||0}/${data.total||0})`;
+                        }
+                        const icon = lesson.type === 'quiz' ? '🧠' : '📖';
+                        listHtml += `<div class="lesson-item" style="display:flex;justify-content:space-between;align-items:center;background:#1a1a1a;padding:12px 18px;border-radius:16px;border:1px solid #1a4a4a;margin:8px 0;cursor:pointer;transition:all 0.3s;" onclick="openLesson('${courseId}','${mod.id}','${lesson.id}')">
+                            <span>${icon} ${lesson.title}</span>
+                            <span class="status ${done}" style="font-size:0.8rem;padding:4px 12px;border-radius:40px;background:#1a1a1a;color:#666;border:1px solid #1a4a4a;">${label}</span>
+                        </div>`;
+                    });
+                } else {
+                    listHtml += `<p style="color:#555;font-size:0.85rem;padding:8px 0;">No lessons yet.</p>`;
+                }
+                listHtml += `</div>`;
+            });
+            moduleList.innerHTML = listHtml;
+        }
+    }).catch(err => {
+        console.error(err);
+        container.innerHTML = `<div style="color:#ff6666;text-align:center;padding:20px;"><i class="fas fa-exclamation-triangle" style="font-size:2rem;display:block;margin-bottom:10px;"></i>Error loading dashboard.</div>`;
+    });
+}
+
+// ============================================================
+// FETCH ENGAGEMENT STATS
+// ============================================================
+async function fetchEngagementStats() {
+    const token = localStorage.getItem('authToken');
+    if (!token) return null;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/student/engagement-stats`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        return data.success ? data.data : null;
+    } catch(e) { return null; }
+}
+
+// ============================================================
+// MESSAGING FUNCTIONS
+// ============================================================
+async function loadContacts() {
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/messages/conversations`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+            // Build unique contacts from messages
+            const contactMap = {};
+            data.data.forEach(msg => {
+                const otherId = msg.senderId === parseInt(localStorage.getItem('studentId')) ? msg.receiverId : msg.senderId;
+                const otherRole = msg.senderId === parseInt(localStorage.getItem('studentId')) ? msg.receiverRole : msg.senderRole;
+                const key = `${otherRole}_${otherId}`;
+                if (!contactMap[key]) {
+                    contactMap[key] = { id: otherId, role: otherRole, name: `User ${otherId}` };
+                }
+            });
+            // In a real app, fetch names from /api/users/{role}/{id}
+            // For demo, we'll use placeholder names
+            contacts = Object.values(contactMap).map((c, i) => ({ ...c, name: c.role === 'teacher' ? `Teacher ${c.id}` : `Student ${c.id}` }));
+            renderContacts();
+        }
+    } catch(e) { console.error(e); }
+}
+
+function renderContacts() {
+    const container = document.getElementById('contactsList');
+    if (contacts.length === 0) {
+        container.innerHTML = '<p style="color:#555;">No conversations yet.</p>';
+        return;
+    }
+    let html = '';
+    contacts.forEach(c => {
+        const active = currentContact && currentContact.id === c.id && currentContact.role === c.role ? 'active' : '';
+        html += `<div class="msg-contact ${active}" onclick="selectContact('${c.role}', ${c.id}, '${c.name}')">
+            <div class="name">${c.name}</div>
+            <div class="role">${c.role}</div>
+        </div>`;
+    });
+    container.innerHTML = html;
+}
+
+function selectContact(role, id, name) {
+    currentContact = { role, id, name };
+    document.getElementById('msgChatHeader').textContent = `💬 ${name}`;
+    document.getElementById('msgInputArea').style.display = 'flex';
+    document.getElementById('msgMessages').innerHTML = '<p style="color:#555;text-align:center;margin-top:40px;">Loading messages...</p>';
+    loadMessages(role, id);
+    renderContacts();
+}
+
+async function loadMessages(role, id) {
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/messages/conversations`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+            const userId = parseInt(localStorage.getItem('studentId'));
+            const filtered = data.data.filter(msg => 
+                (msg.senderId === userId && msg.receiverId === id && msg.receiverRole === role) ||
+                (msg.receiverId === userId && msg.senderId === id && msg.senderRole === role)
+            );
+            messages = filtered.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+            renderMessages();
+        }
+    } catch(e) { console.error(e); }
+}
+
+function renderMessages() {
+    const container = document.getElementById('msgMessages');
+    if (messages.length === 0) {
+        container.innerHTML = '<p style="color:#555;text-align:center;margin-top:40px;">No messages yet. Say hello!</p>';
+        return;
+    }
+    const userId = parseInt(localStorage.getItem('studentId'));
+    let html = '';
+    messages.forEach(msg => {
+        const isSent = msg.senderId === userId;
+        html += `<div class="msg-bubble ${isSent ? 'sent' : 'received'}">
+            ${msg.content}
+            <span class="time">${new Date(msg.createdAt).toLocaleTimeString()}</span>
+        </div>`;
+    });
+    container.innerHTML = html;
+    container.scrollTop = container.scrollHeight;
+}
+
+async function sendMessage() {
+    const input = document.getElementById('msgInput');
+    const content = input.value.trim();
+    if (!content || !currentContact) return;
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/messages/send`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                receiverId: currentContact.id,
+                receiverRole: currentContact.role,
+                content: content
+            })
+        });
+        const data = await res.json();
+        if (data.success) {
+            input.value = '';
+            messages.push(data.data);
+            renderMessages();
+            // Track message sent
+            trackActivity('message-sent', { recipient: `${currentContact.role}_${currentContact.id}`, message: content });
+            showToast('Message sent!', 'success');
+        } else {
+            showToast('Failed to send.', 'error');
+        }
+    } catch(e) { showToast('Error sending.', 'error'); }
+}
+document.getElementById('msgInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+
+// ============================================================
+// DISCUSSION FUNCTIONS
+// ============================================================
+async function loadTopics() {
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/discussion/topics`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+            topics = data.data;
+            renderTopics();
+        }
+    } catch(e) { console.error(e); }
+}
+
+function renderTopics() {
+    const container = document.getElementById('topicsList');
+    const detail = document.getElementById('topicDetail');
+    detail.style.display = 'none';
+    document.getElementById('newTopicForm').style.display = 'block';
+    if (topics.length === 0) {
+        container.innerHTML = '<p style="color:#555;text-align:center;padding:20px;">No topics yet. Start the first discussion!</p>';
+        return;
+    }
+    let html = '';
+    topics.forEach(t => {
+        const replyCount = t.Replies ? t.Replies.length : 0;
+        html += `<div class="topic-card" onclick="viewTopic(${t.id})">
+            <h4>${t.title}</h4>
+            <div class="meta"><span><i class="fas fa-user"></i> ${t.authorRole} ${t.authorId}</span><span><i class="fas fa-reply"></i> ${replyCount} replies</span><span><i class="fas fa-clock"></i> ${new Date(t.createdAt).toLocaleDateString()}</span></div>
+            <div class="excerpt">${t.content.substring(0,120)}${t.content.length>120?'...':''}</div>
+        </div>`;
+    });
+    container.innerHTML = html;
+}
+
+async function viewTopic(topicId) {
+    currentTopicId = topicId;
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/discussion/topics/${topicId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+            const topic = data.data;
+            document.getElementById('topicsList').innerHTML = `<button class="btn-secondary" onclick="renderTopics()"><i class="fas fa-arrow-left"></i> Back to topics</button>`;
+            document.getElementById('newTopicForm').style.display = 'none';
+            const detail = document.getElementById('topicDetail');
+            detail.style.display = 'block';
+            let html = `<div class="topic-detail">
+                <h3>${topic.title}</h3>
+                <p style="color:#aaa;margin:8px 0;">${topic.content}</p>
+                <div style="font-size:0.8rem;color:#666;margin-bottom:12px;">Posted by ${topic.authorRole} ${topic.authorId} on ${new Date(topic.createdAt).toLocaleString()}</div>
+                <div class="replies">`;
+            if (topic.Replies && topic.Replies.length > 0) {
+                topic.Replies.forEach(r => {
+                    html += `<div class="reply">
+                        <div class="author">${r.authorRole} ${r.authorId}</div>
+                        <div class="text">${r.content}</div>
+                        <div class="time">${new Date(r.createdAt).toLocaleString()}</div>
+                    </div>`;
+                });
+            } else {
+                html += `<p style="color:#555;">No replies yet. Be the first!</p>`;
+            }
+            html += `</div>
+                <textarea id="replyContent" placeholder="Write your reply..."></textarea>
+                <button class="btn-primary" onclick="postReply(${topic.id})"><i class="fas fa-reply"></i> Post Reply</button>
+            </div>`;
+            detail.innerHTML = html;
+        }
+    } catch(e) { console.error(e); }
+}
+
+async function postReply(topicId) {
+    const content = document.getElementById('replyContent').value.trim();
+    if (!content) { showToast('Please write a reply.', 'info'); return; }
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/discussion/topics/${topicId}/replies`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content })
+        });
+        const data = await res.json();
+        if (data.success) {
+            showToast('Reply posted!', 'success');
+            viewTopic(topicId); // refresh
+        } else {
+            showToast('Failed to post reply.', 'error');
+        }
+    } catch(e) { showToast('Error posting reply.', 'error'); }
+}
+
+async function createTopic() {
+    const title = document.getElementById('topicTitle').value.trim();
+    const content = document.getElementById('topicContent').value.trim();
+    if (!title || !content) { showToast('Please fill in both fields.', 'info'); return; }
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/discussion/topics`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, content })
+        });
+        const data = await res.json();
+        if (data.success) {
+            document.getElementById('topicTitle').value = '';
+            document.getElementById('topicContent').value = '';
+            showToast('Topic created!', 'success');
+            loadTopics();
+        } else {
+            showToast('Failed to create topic.', 'error');
+        }
+    } catch(e) { showToast('Error creating topic.', 'error'); }
+}
+
+// ============================================================
+// LESSON / QUIZ VIEWS
+// ============================================================
+function openLesson(courseId, moduleId, lessonId) {
+    if (!currentCourseData) { showToast('Course data not loaded.', 'error'); return; }
+    const module = currentCourseData.modules.find(m => String(m.id) === String(moduleId));
+    if (!module) { showToast('Module not found.', 'error'); return; }
+    const lesson = module.Lessons.find(l => String(l.id) === String(lessonId));
+    if (!lesson) { showToast('Lesson not found.', 'error'); return; }
+    trackActivity('lesson-view', { lessonId: lesson.id, lessonTitle: lesson.title, moduleId: module.id, courseId });
+    if (lesson.type === 'quiz') {
+        document.getElementById('viewQuiz').style.display = 'block';
+        document.getElementById('viewLesson').style.display = 'none';
+        renderQuiz(courseId, lesson);
+    } else {
+        document.getElementById('viewLesson').style.display = 'block';
+        document.getElementById('viewQuiz').style.display = 'none';
+        renderLesson(courseId, lesson, module.id);
+    }
+    document.querySelectorAll('.lms-view').forEach(v => v.classList.remove('active'));
+    document.getElementById('tab-dashboard').classList.remove('active');
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+}
+
+function renderLesson(courseId, lesson, moduleId) {
+    const container = document.getElementById('lessonContent');
+    const done = isCompleted(courseId, lesson.id);
+    let contentHtml = lesson.content || '<p style="color:#666;">No content yet.</p>';
+    if (typeof lesson.content === 'string' && lesson.content.trim().startsWith('http')) {
+        const url = lesson.content.trim();
+        if (url.includes('youtube.com') || url.includes('youtu.be')) {
+            const embedUrl = url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/');
+            contentHtml = `<div class="video-wrapper" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:12px 0;"><iframe src="${embedUrl}" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"></iframe></div>`;
+        } else if (url.match(/\.(mp4|webm|ogg)$/i)) {
+            contentHtml = `<video controls style="width:100%;border-radius:12px;margin:12px 0;"><source src="${url}" type="video/mp4"></video>`;
+        } else {
+            contentHtml = `<div style="background:#1a1a1a;border-radius:12px;padding:16px;margin:12px 0;"><a href="${url}" target="_blank" style="color:#00ffff;">🔗 Open resource: ${url}</a></div>`;
+        }
+    }
+    container.innerHTML = `
+        <h2 style="color:#00ffff;"><i class="fas fa-book"></i> ${lesson.title}</h2>
+        <div class="lesson-content" style="background:#121212;padding:24px;border-radius:24px;line-height:1.7;border:1px solid #1a4a4a;margin-top:12px;">${contentHtml}</div>
+        <div class="nav-row" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:24px;padding-top:20px;border-top:1px solid #1a4a4a;">
+            <button onclick="switchTab('dashboard')" style="background:rgba(0,255,255,0.1);color:#00ffff;padding:12px 28px;border-radius:60px;border:1px solid #1a4a4a;font-weight:600;cursor:pointer;"><i class="fas fa-arrow-left"></i> Dashboard</button>
+            <div>${!done ? `<button class="complete-btn" onclick="markLessonComplete('${courseId}','${lesson.id}')" style="background:rgba(255,204,0,0.1);color:#ffcc00;padding:12px 28px;border-radius:60px;border:1px solid rgba(255,204,0,0.3);font-weight:600;cursor:pointer;"><i class="fas fa-check"></i> Mark as Complete</button>` : '<span class="completed-text" style="color:#00ff88;font-weight:600;"><i class="fas fa-check-circle"></i> Completed</span>'}</div>
+        </div>
+    `;
+    setTimeout(() => {
+        const videos = container.querySelectorAll('video');
+        videos.forEach(video => {
+            const lessonId = lesson.id;
+            let lastSent = 0;
+            video.addEventListener('timeupdate', function() {
+                const current = Math.floor(this.currentTime);
+                if (current - lastSent >= 5) { lastSent = current; trackActivity('video-watch', { lessonId, watchTime: current, totalDuration: Math.floor(this.duration) }); }
+            });
+            video.addEventListener('ended', function() {
+                trackActivity('video-complete', { lessonId, watchTime: Math.floor(this.duration), totalDuration: Math.floor(this.duration) });
+            });
+        });
+    }, 100);
+}
+
+function renderQuiz(courseId, quiz) {
+    const container = document.getElementById('quizContent');
+    const questions = quiz.questions || [];
+    if (questions.length === 0) {
+        container.innerHTML = `<h2 style="color:#00ffff;"><i class="fas fa-brain"></i> ${quiz.title}</h2><div style="background:#121212;border-radius:16px;padding:24px;border:1px solid #1a4a4a;text-align:center;"><p style="color:#888;">No questions yet.</p><button onclick="switchTab('dashboard')" style="background:rgba(0,255,255,0.1);color:#00ffff;padding:12px 28px;border-radius:60px;border:1px solid #1a4a4a;font-weight:600;cursor:pointer;margin-top:16px;"><i class="fas fa-arrow-left"></i> Back</button></div>`;
+        return;
+    }
+    let html = `<h2 style="color:#00ffff;"><i class="fas fa-brain"></i> ${quiz.title}</h2><form id="quizForm">`;
+    questions.forEach((q, idx) => {
+        const options = q.options || [];
+        html += `<div class="question-block" style="background:#121212;padding:20px;border-radius:24px;margin-bottom:20px;border-left:6px solid #00ffff;border:1px solid #1a4a4a;">
+            <p style="color:#fff;font-weight:600;"><strong>${idx+1}. ${q.question}</strong></p>
+            ${options.map((opt, oi) => `<label style="display:block;margin:8px 0;padding:10px 16px;background:#1a1a1a;border-radius:40px;cursor:pointer;color:#ccc;transition:all 0.3s;"><input type="radio" name="q${idx}" value="${oi}" style="margin-right:10px;accent-color:#00ffff;"> ${opt}</label>`).join('')}
+        </div>`;
+    });
+    html += `<button type="button" style="background:rgba(255,204,0,0.1);color:#ffcc00;border:1px solid rgba(255,204,0,0.3);padding:14px 32px;border-radius:60px;font-weight:700;cursor:pointer;transition:all 0.3s;font-size:1rem;" onclick="submitQuiz('${courseId}','${quiz.id}')"><i class="fas fa-check"></i> Check Answers</button></form>
+        <div id="quizResult" class="quiz-result" style="margin-top:20px;padding:20px;border-radius:24px;display:none;"></div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:24px;padding-top:20px;border-top:1px solid #1a4a4a;">
+            <button onclick="switchTab('dashboard')" style="background:rgba(0,255,255,0.1);color:#00ffff;padding:12px 28px;border-radius:60px;border:1px solid #1a4a4a;font-weight:600;cursor:pointer;"><i class="fas fa-arrow-left"></i> Dashboard</button>
+        </div>`;
+    container.innerHTML = html;
+}
+
+async function submitQuiz(courseId, quizId) {
+    const course = currentCourseData;
+    if (!course) { showToast('Course data not available.', 'error'); return; }
+    let quizData = null, moduleId = null;
+    for (let m of course.modules) {
+        const found = m.Lessons.find(l => String(l.id) === String(quizId));
+        if (found) { quizData = found; moduleId = m.id; break; }
+    }
+    if (!quizData) { showToast('Quiz not found.', 'error'); return; }
+    const questions = quizData.questions || [];
+    let score = 0, allAnswered = true;
+    for (let i=0; i<questions.length; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!selected) { allAnswered = false; continue; }
+        if (parseInt(selected.value) === questions[i].correct) score++;
+    }
+    const resultDiv = document.getElementById('quizResult');
+    if (!allAnswered) {
+        resultDiv.className = 'quiz-result fail';
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = '<p style="color:#ff4444;">⚠️ Please answer all questions.</p>';
+        return;
+    }
+    const total = questions.length;
+    const passed = score >= total * 0.6;
+    await trackActivity('quiz-attempt', { quizId, quizTitle: quizData.title, score, totalQuestions: total, passed });
+    await trackActivity('lesson-complete', { lessonId: quizId, lessonTitle: quizData.title, moduleId, courseId });
+    const prog = getProgress(courseId);
+    prog[quizId] = { completed: true, score, total };
+    saveProgress(courseId, prog);
+    if (passed) {
+        resultDiv.className = 'quiz-result pass';
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `<h3 style="color:#00ff88;">✅ You scored ${score}/${total}. Well done!</h3>`;
+        showToast(`🎉 Quiz passed! ${score}/${total}`, 'success');
+    } else {
+        resultDiv.className = 'quiz-result fail';
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `<h3 style="color:#ff4444;">❌ You scored ${score}/${total}. Review and try again.</h3>`;
+        showToast(`📝 Quiz score: ${score}/${total}`, 'info');
+    }
+    document.querySelectorAll('#quizForm input[type="radio"]').forEach(el => el.disabled = true);
+}
+
+async function markLessonComplete(courseId, lessonId) {
+    const course = currentCourseData;
+    let lesson = null, moduleId = null;
+    for (let mod of course.modules) {
+        const found = mod.Lessons.find(l => String(l.id) === String(lessonId));
+        if (found) { lesson = found; moduleId = mod.id; break; }
+    }
+    if (!lesson) { showToast('Lesson not found.', 'error'); return; }
+    markCompleted(courseId, lessonId);
+    if (lesson.type === 'activity') {
+        await trackActivity('practice', { activityId: lesson.id, title: lesson.title, type: 'activity' });
+    } else {
+        await trackActivity('lesson-complete', { lessonId: lesson.id, lessonTitle: lesson.title, moduleId, courseId });
+    }
+    showToast('✅ Lesson marked as complete!', 'success');
+    switchTab('dashboard');
+    renderDashboard(courseId);
+}
+
+// ============================================================
+// MOTIVATIONAL MESSAGE
+// ============================================================
+function getMotivationalMessage(score) {
+    const s = Math.round(score);
+    if (s >= 80) return '🌟 Outstanding! You\'re a learning superstar!';
+    if (s >= 60) return '🔥 Great progress! Keep up the momentum!';
+    if (s >= 40) return '📈 You\'re on the right track! Keep exploring!';
+    if (s >= 20) return '💪 Every click counts! Continue learning!';
+    return '🌱 Start your learning journey today!';
+}
+
+// ============================================================
+// LOGOUT
+// ============================================================
+document.getElementById('logoutBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('studentId');
+    localStorage.removeItem('studentName');
+    localStorage.removeItem('userRole');
+    window.location.href = 'index.html';
+});
+
+// ============================================================
+// LOAD STUDENT NAME
+// ============================================================
+function loadStudentName() {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const name = payload.name || 'Student';
+            document.getElementById('navStudentName').innerHTML = `<i class="fas fa-user-graduate"></i> ${name}`;
+        } catch(e) {
+            document.getElementById('navStudentName').innerHTML = `<i class="fas fa-user-graduate"></i> Student`;
+        }
+    } else {
+        document.getElementById('navStudentName').innerHTML = `<i class="fas fa-user-graduate"></i> Guest`;
+    }
+}
+
+// ============================================================
+// LINK CLICK TRACKING (global)
+// ============================================================
+document.addEventListener('click', function(e) {
+    const link = e.target.closest('a');
+    if (link && link.href && link.href.startsWith('http')) {
+        const onclickAttr = link.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes('trackLink')) return;
+        trackActivity('link-click', { link: link.href, page: currentPage || 'dashboard', url: window.location.href });
+    }
+});
+
+window.trackLink = function(linkName) {
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    trackActivity('link-click', { link: linkName, page: currentPage || 'dashboard', url: window.location.href });
+};
+
+// ============================================================
+// BACK TO TOP
+// ============================================================
+const topBtn = document.getElementById("topBtn");
+window.onscroll = function() {
+    if (window.scrollY > 400) topBtn.style.display = "block";
+    else topBtn.style.display = "none";
+};
+topBtn.onclick = function() { window.scrollTo({ top: 0, behavior: 'smooth' }); };
+
+// ============================================================
+// FADE-IN ON LOAD
+// ============================================================
+window.addEventListener('load', function() {
+    document.body.classList.add('loaded');
+});
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', async function() {
+    loadStudentName();
+    const fetchedCourses = await fetchAllCourses();
+    if (fetchedCourses && fetchedCourses.length > 0) {
+        courses = fetchedCourses;
+        renderCourseSelector();
+        await selectCourse(courses[0].id);
+    } else {
+        document.getElementById('courseSelector').innerHTML = `<p style="color:#888;">No courses available.</p>`;
+        document.getElementById('courseTitle').textContent = 'No course selected';
+        document.getElementById('dashboardContent').innerHTML = `
+            <div style="text-align:center;padding:40px 20px;background:#121212;border-radius:16px;border:1px solid #1a4a4a;">
+                <i class="fas fa-info-circle" style="font-size:2.5rem;color:#555;display:block;margin-bottom:15px;"></i>
+                <h3 style="color:#88dddd;">No courses available</h3>
+                <p style="color:#666;">Your teacher hasn't assigned any courses yet.</p>
+            </div>
+        `;
+    }
+});
+</script>
 </body>
 </html>
