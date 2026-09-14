@@ -24,6 +24,45 @@
             text-align: center;
         }
         h2 { color: #1a73e8; margin-top: 0; }
+        
+        /* Interactive Step Controls */
+        .step-controls {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            gap: 10px;
+        }
+        .btn-step {
+            flex: 1;
+            background: #e8eaed;
+            color: #3c4043;
+            border: 2px solid #dadce0;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        .btn-step.active {
+            background: #1a73e8;
+            color: white;
+            border-color: #1a73e8;
+        }
+        .btn-step:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .instruction-box {
+            background: #e8f0fe;
+            color: #1967d2;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
         .circuit-board {
             position: relative;
             height: 300px;
@@ -41,6 +80,7 @@
             font-weight: bold;
             font-size: 14px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            z-index: 10;
         }
         .battery {
             bottom: 20px;
@@ -94,11 +134,12 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
+            z-index: 5;
         }
         .wire {
             fill: none;
             stroke-width: 4;
-            transition: stroke-dashoffset 0.1s linear;
+            display: none; /* Hidden by default for progression */
         }
         .wire-step1 { stroke: #e74c3c; } /* Red */
         .wire-step2 { stroke: #3498db; } /* Blue */
@@ -113,7 +154,7 @@
             to { stroke-dashoffset: -20; }
         }
         .btn-toggle {
-            background: #1a73e8;
+            background: #27ae60;
             color: white;
             border: none;
             padding: 12px 24px;
@@ -121,8 +162,12 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
+            width: 100%;
         }
-        .btn-toggle:hover { background: #1557b0; }
+        .btn-toggle:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
         .legend {
             display: flex;
             justify-content: space-around;
@@ -136,20 +181,30 @@
 
 <div class="circuit-container">
     <h2>دارة كهربائية بسيطة (4.5V)</h2>
-    <p>Cliquez sur l'interrupteur ou le bouton pour tester le circuit !</p>
+    
+    <!-- Assembly Progress Nav buttons -->
+    <div class="step-controls">
+        <button class="btn-step active" id="btn-1" onclick="triggerStep(1)">Étape 1 🔴</button>
+        <button class="btn-step" id="btn-2" onclick="triggerStep(2)" disabled>Étape 2 🔵</button>
+        <button class="btn-step" id="btn-3" onclick="triggerStep(3)" disabled>Étape 3 ⚫</button>
+    </div>
+
+    <div class="instruction-box" id="info-msg">
+        🔴 Étape 1 : Reliez la borne (+) de la pile à l'interrupteur.
+    </div>
     
     <div class="circuit-board">
         <svg id="circuit-svg">
             <!-- Step 1 Wire: Pos Terminal (195, 215) to Switch (95, 80) -->
-            <path class="wire wire-step1" d="M 195 215 L 195 140 L 95 140 L 95 80" />
+            <path id="wire1" class="wire wire-step1" d="M 195 215 L 195 140 L 95 140 L 95 80" />
             <path id="flow1" class="wire wire-step1 flow" d="M 195 215 L 195 140 L 95 140 L 95 80" />
             
             <!-- Step 2 Wire: Switch (145, 80) to Bulb (445, 80) -->
-            <path class="wire wire-step2" d="M 145 80 L 290 80 L 445 80" />
+            <path id="wire2" class="wire wire-step2" d="M 145 80 L 290 80 L 445 80" />
             <path id="flow2" class="wire wire-step2 flow" d="M 145 80 L 290 80 L 445 80" />
             
             <!-- Step 3 Wire: Bulb (475, 80) to Neg Terminal (395, 225) -->
-            <path class="wire wire-step3" d="M 475 80 L 475 140 L 395 140 L 395 225" />
+            <path id="wire3" class="wire wire-step3" d="M 475 80 L 475 140 L 395 140 L 395 225" />
             <path id="flow3" class="wire wire-step3 flow" d="M 475 80 L 475 140 L 395 140 L 395 225" />
         </svg>
 
@@ -171,7 +226,7 @@
         </div>
     </div>
 
-    <button class="btn-toggle" onclick="toggleCircuit()">Actionner l'interrupteur</button>
+    <button class="btn-toggle" id="main-switch-btn" onclick="toggleCircuit()" disabled>Actionner l'interrupteur</button>
 
     <div class="legend">
         <div>🔴 <span style="color:#e74c3c;font-weight:bold">Fil Rouge</span> : Étape 1 (+)</div>
@@ -182,22 +237,69 @@
 
 <script>
     let isClosed = false;
+    let currentStep = 1;
+    let s1Done = false, s2Done = false, s3Done = false;
+
+    const notes = {
+        1: "🔴 Étape 1 : Reliez la grande lamelle (+) de la pile à l'interrupteur.",
+        2: "🔵 Étape 2 : Connectez l'autre vis de l'interrupteur au support de l'ampoule.",
+        3: "⚫ Étape 3 : Fermez la boucle en reliant la douille à la petite lamelle (-) de la pile."
+    };
+
+    function triggerStep(step) {
+        if (step === 1) {
+            document.getElementById('wire1').style.display = 'block';
+            s1Done = true;
+            document.getElementById('btn-2').disabled = false;
+            moveUi(2);
+        } else if (step === 2 && s1Done) {
+            document.getElementById('wire2').style.display = 'block';
+            s2Done = true;
+            document.getElementById('btn-3').disabled = false;
+            moveUi(3);
+        } else if (step === 3 && s2Done) {
+            document.getElementById('wire3').style.display = 'block';
+            s3Done = true;
+            document.getElementById('main-switch-btn').disabled = false;
+            document.getElementById('info-msg').innerHTML = "🎉 Montage terminé ! Vous pouvez maintenant actionner l'interrupteur.";
+            document.getElementById('btn-1').classList.remove('active');
+            document.getElementById('btn-2').classList.remove('active');
+            document.getElementById('btn-3').classList.add('active');
+        }
+    }
+
+    function moveUi(next) {
+        document.getElementById('info-msg').innerText = notes[next];
+        document.getElementById('btn-1').classList.remove('active');
+        document.getElementById('btn-2').classList.remove('active');
+        document.getElementById('btn-3').classList.remove('active');
+        document.getElementById('btn-' + (next - 1)).classList.add('active');
+    }
+
     function toggleCircuit() {
+        if (!s3Done) return; // Switch locked until full assembly is complete
+        
         isClosed = !isClosed;
         const bulb = document.getElementById('bulbDevice');
         const statusText = document.getElementById('switch-status');
-        const flows = [document.getElementById('flow1'), document.getElementById('flow2'), document.getElementById('flow3')];
+        const flows = [
+            document.getElementById('flow1'), 
+            document.getElementById('flow2'), 
+            document.getElementById('flow3')
+        ];
         
-        if(isClosed) {
+        if (isClosed) {
             bulb.classList.add('lit');
             statusText.innerText = "FERMÉ (ON)";
             statusText.style.color = "#27ae60";
             flows.forEach(f => f.style.display = 'block');
+            document.getElementById('info-msg').innerText = "💡 Circuit FERMÉ (دارة مغلقة) : L'ampoule brille !";
         } else {
             bulb.classList.remove('lit');
             statusText.innerText = "OUVERT (OFF)";
             statusText.style.color = "#2c3e50";
             flows.forEach(f => f.style.display = 'none');
+            document.getElementById('info-msg').innerText = "🛑 Circuit OUVERT (دارة مفتوحة) : Le courant ne passe plus.";
         }
     }
 </script>
