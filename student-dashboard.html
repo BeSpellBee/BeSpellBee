@@ -987,7 +987,7 @@ async function submitQuiz(courseId, quizId) {
     const total = questions.length;
     const passed = score >= total * 0.6;
 
-    // ✅ Only send quiz-attempt (NO extra lesson-complete to avoid point inflation)
+    // ✅ Only send quiz-attempt (no extra lesson-complete)
     await trackActivity('quiz-attempt', {
         quizId,
         quizTitle: quizData.title,
@@ -1001,6 +1001,7 @@ async function submitQuiz(courseId, quizId) {
     prog[quizId] = { completed: true, score, total };
     saveProgress(courseId, prog);
 
+    // Show result quickly
     if (passed) {
         resultDiv.className = 'quiz-result pass';
         resultDiv.style.display = 'block';
@@ -1015,17 +1016,15 @@ async function submitQuiz(courseId, quizId) {
 
     document.querySelectorAll('#quizForm input[type="radio"]').forEach(el => el.disabled = true);
 
-    // ✅ Auto-return to dashboard after 1.5 seconds with refreshed stats
+    // ✅ Instantly switch to dashboard + refresh stats (same as lesson complete)
     setTimeout(() => {
         fetchEngagementStats().then(() => {
-            // Hide lesson/quiz views
             document.getElementById('viewLesson').style.display = 'none';
             document.getElementById('viewQuiz').style.display = 'none';
-            // Switch to dashboard tab
-            switchTab('dashboard');
-            renderDashboard(courseId);
+            switchTab('dashboard');   // highlights the Dashboard tab
+            renderDashboard(courseId); // re-renders with fresh stats
         });
-    }, 1500);
+    }, 800); // small delay so the student sees their result
 }
 
 function showDashboard() {
