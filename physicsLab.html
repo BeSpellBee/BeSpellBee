@@ -65,7 +65,7 @@
 
         .circuit-board {
             position: relative;
-            height: 300px;
+            height: 320px;
             background: #fafafa;
             border: 2px dashed #ccc;
             border-radius: 8px;
@@ -102,26 +102,27 @@
             line-height: 15px;
             border-radius: 3px 3px 0 0;
         }
-        /* + terminal now green, longer and taller */
+        /* + terminal: green, longer, label ABOVE the icon */
         .term-pos {
-            left: 30px;
-            background: #27ae60;        /* green */
+            left: 25px;
+            background: #27ae60;
             color: white;
-            height: 28px;
-            top: -28px;
+            height: 26px;
+            top: -26px;
             font-weight: bold;
-            font-size: 11px;
+            font-size: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 36px;
+            width: 50px;
             border-radius: 4px 4px 0 0;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
+            border: 1px solid #1e8449;
         }
-        /* - terminal now red, shorter */
+        /* - terminal: red, shorter, label ABOVE the icon */
         .term-neg {
-            right: 30px;
-            background: #e74c3c;        /* red */
+            right: 25px;
+            background: #e74c3c;
             color: white;
             height: 18px;
             top: -18px;
@@ -130,16 +131,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 30px;
+            width: 50px;
             border-radius: 3px 3px 0 0;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
+            border: 1px solid #b03a2e;
         }
         
         /* Sombre (dark) interrupter */
         .switch-comp {
             top: 40px;
             left: 40px;
-            background: #2c3e50;        /* dark somber */
+            background: #2c3e50;
             color: #ecf0f1;
             cursor: pointer;
             user-select: none;
@@ -183,11 +185,11 @@
         .wire {
             fill: none;
             stroke-width: 4;
-            display: none; /* Hidden by default for progression */
+            display: none;
         }
-        .wire-step1 { stroke: #e74c3c; } /* Red */
-        .wire-step2 { stroke: #3498db; } /* Blue */
-        .wire-step3 { stroke: #2c3e50; } /* Black */
+        .wire-step1 { stroke: #e74c3c; }
+        .wire-step2 { stroke: #3498db; }
+        .wire-step3 { stroke: #2c3e50; }
         
         .flow {
             stroke-dasharray: 8, 8;
@@ -262,10 +264,10 @@
             Douille & Ampoule<br>(حامل المصباح)
         </div>
 
-        <!-- Battery: + (green) and - (red) corrected -->
+        <!-- Battery: + (green) and - (red) labels ABOVE the icons -->
         <div class="component battery">
-            <div class="terminal term-pos" title="Borne positive (longue)">+ (Longue)</div>
-            <div class="terminal term-neg" title="Borne négative (courte)">- (Courte)</div>
+            <div class="terminal term-pos" title="Borne positive (longue)">+ Longue</div>
+            <div class="terminal term-neg" title="Borne négative (courte)">– Courte</div>
             Pile Plate / البطارية (4.5V)
         </div>
     </div>
@@ -321,7 +323,7 @@
     }
 
     function toggleCircuit() {
-        if (!s3Done) return; // Switch locked until full assembly is complete
+        if (!s3Done) return;
         
         isClosed = !isClosed;
         const bulb = document.getElementById('bulbDevice');
