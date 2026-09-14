@@ -405,8 +405,8 @@ async function selectCourse(courseId) {
             document.getElementById('lmsViews').style.display = 'block';
             renderDashboard(courseId);
             trackPageView('dashboard');
-            loadContacts(); // load messaging contacts
-            loadTopics();   // load discussion topics
+            loadContacts();
+            loadTopics();
         } else {
             document.getElementById('lmsGate').style.display = 'block';
             document.getElementById('lmsViews').style.display = 'none';
@@ -451,6 +451,7 @@ function switchTab(tab) {
     document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
     if (tab === 'messages') loadContacts();
     if (tab === 'discussion') loadTopics();
+    if (tab === 'dashboard') renderDashboard(currentCourse);
 }
 
 // ============================================================
@@ -523,7 +524,7 @@ function renderDashboard(courseId) {
                     </div>
                     <div>
                         <div class="stats">
-                            <span>📘 ${lessonsCompleted} completions</span>
+                            <span>📘 ${lessonsCompleted} lesson completions</span>
                             <span>•</span>
                             <span>🎬 ${videosCompleted} videos</span>
                             <span>•</span>
@@ -569,12 +570,20 @@ function renderDashboard(courseId) {
                 if (mod.Lessons && mod.Lessons.length > 0) {
                     mod.Lessons.forEach(lesson => {
                         const done = isCompleted(courseId, lesson.id) ? 'done' : '';
-                        let label = isCompleted(courseId, lesson.id) ? '✅ Completed' : (lesson.type === 'quiz' ? '🧠 Quiz' : '📖 Lesson');
+                        let icon = '📖';
+                        let typeLabel = 'Lesson';
+                        if (lesson.type === 'quiz') {
+                            icon = '🧠';
+                            typeLabel = 'Quiz';
+                        } else if (lesson.type === 'activity') {
+                            icon = '✏️';
+                            typeLabel = 'Activity';
+                        }
+                        let label = isCompleted(courseId, lesson.id) ? '✅ Completed' : typeLabel;
                         if (lesson.type === 'quiz') {
                             const data = prog[lesson.id];
                             if (data && data.completed) label = `✅ Completed (${data.score||0}/${data.total||0})`;
                         }
-                        const icon = lesson.type === 'quiz' ? '🧠' : '📖';
                         listHtml += `<div class="lesson-item" style="display:flex;justify-content:space-between;align-items:center;background:#1a1a1a;padding:12px 18px;border-radius:16px;border:1px solid #1a4a4a;margin:8px 0;cursor:pointer;transition:all 0.3s;" onclick="openLesson('${courseId}','${mod.id}','${lesson.id}')">
                             <span>${icon} ${lesson.title}</span>
                             <span class="status ${done}" style="font-size:0.8rem;padding:4px 12px;border-radius:40px;background:#1a1a1a;color:#666;border:1px solid #1a4a4a;">${label}</span>
@@ -852,7 +861,6 @@ function openLesson(courseId, moduleId, lessonId) {
 
     trackActivity('lesson-view', { lessonId: lesson.id, lessonTitle: lesson.title, moduleId: module.id, courseId });
 
-    // Hide all tabs and show lesson/quiz view
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
 
@@ -872,7 +880,6 @@ function renderLesson(courseId, lesson, moduleId) {
     const done = isCompleted(courseId, lesson.id);
     let contentHtml = lesson.content || '<p style="color:#666;">No content yet.</p>';
 
-    // Handle URL content
     if (typeof lesson.content === 'string' && lesson.content.trim().startsWith('http')) {
         const url = lesson.content.trim();
         if (url.includes('youtube.com') || url.includes('youtu.be')) {
@@ -894,7 +901,6 @@ function renderLesson(courseId, lesson, moduleId) {
         </div>
     `;
 
-    // Attach video tracking
     setTimeout(() => {
         const videos = container.querySelectorAll('video');
         videos.forEach(video => {
@@ -954,19 +960,22 @@ function renderQuiz(courseId, quiz) {
 async function submitQuiz(courseId, quizId) {
     const course = currentCourseData;
     if (!course) { showToast('Course data not available.', 'error'); return; }
+
     let quizData = null, moduleId = null;
     for (let m of course.modules) {
         const found = m.Lessons.find(l => String(l.id) === String(quizId));
         if (found) { quizData = found; moduleId = m.id; break; }
     }
     if (!quizData) { showToast('Quiz not found.', 'error'); return; }
+
     const questions = quizData.questions || [];
     let score = 0, allAnswered = true;
-    for (let i=0; i<questions.length; i++) {
+    for (let i = 0; i < questions.length; i++) {
         const selected = document.querySelector(`input[name="q${i}"]:checked`);
         if (!selected) { allAnswered = false; continue; }
         if (parseInt(selected.value) === questions[i].correct) score++;
     }
+
     const resultDiv = document.getElementById('quizResult');
     if (!allAnswered) {
         resultDiv.className = 'quiz-result fail';
@@ -974,13 +983,24 @@ async function submitQuiz(courseId, quizId) {
         resultDiv.innerHTML = '<p style="color:#ff4444;">⚠️ Please answer all questions.</p>';
         return;
     }
+
     const total = questions.length;
     const passed = score >= total * 0.6;
-    await trackActivity('quiz-attempt', { quizId, quizTitle: quizData.title, score, totalQuestions: total, passed });
-    await trackActivity('lesson-complete', { lessonId: quizId, lessonTitle: quizData.title, moduleId, courseId });
+
+    // ✅ Only send quiz-attempt (NO extra lesson-complete to avoid point inflation)
+    await trackActivity('quiz-attempt', {
+        quizId,
+        quizTitle: quizData.title,
+        score,
+        totalQuestions: total,
+        passed
+    });
+
+    // Save local progress
     const prog = getProgress(courseId);
     prog[quizId] = { completed: true, score, total };
     saveProgress(courseId, prog);
+
     if (passed) {
         resultDiv.className = 'quiz-result pass';
         resultDiv.style.display = 'block';
@@ -992,14 +1012,23 @@ async function submitQuiz(courseId, quizId) {
         resultDiv.innerHTML = `<h3 style="color:#ff4444;">❌ You scored ${score}/${total}. Review and try again.</h3>`;
         showToast(`📝 Quiz score: ${score}/${total}`, 'info');
     }
+
     document.querySelectorAll('#quizForm input[type="radio"]').forEach(el => el.disabled = true);
+
+    // ✅ Refresh dashboard stats instantly after quiz submission
+    setTimeout(() => {
+        fetchEngagementStats().then(() => {
+            const dashboardTab = document.getElementById('tab-dashboard');
+            if (dashboardTab && dashboardTab.classList.contains('active')) {
+                renderDashboard(courseId);
+            }
+        });
+    }, 500);
 }
 
 function showDashboard() {
-    // Hide lesson/quiz views
     document.getElementById('viewLesson').style.display = 'none';
     document.getElementById('viewQuiz').style.display = 'none';
-    // Show dashboard tab
     switchTab('dashboard');
     renderDashboard(currentCourse);
 }
@@ -1019,7 +1048,13 @@ async function markLessonComplete(courseId, lessonId) {
         await trackActivity('lesson-complete', { lessonId: lesson.id, lessonTitle: lesson.title, moduleId, courseId });
     }
     showToast('✅ Lesson marked as complete!', 'success');
-    showDashboard();
+
+    // ✅ Refresh dashboard stats instantly
+    setTimeout(() => {
+        fetchEngagementStats().then(() => {
+            showDashboard();
+        });
+    }, 500);
 }
 
 // ============================================================
