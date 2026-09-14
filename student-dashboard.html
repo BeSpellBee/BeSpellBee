@@ -1015,15 +1015,17 @@ async function submitQuiz(courseId, quizId) {
 
     document.querySelectorAll('#quizForm input[type="radio"]').forEach(el => el.disabled = true);
 
-    // ✅ Refresh dashboard stats instantly after quiz submission
+    // ✅ Auto-return to dashboard after 1.5 seconds with refreshed stats
     setTimeout(() => {
         fetchEngagementStats().then(() => {
-            const dashboardTab = document.getElementById('tab-dashboard');
-            if (dashboardTab && dashboardTab.classList.contains('active')) {
-                renderDashboard(courseId);
-            }
+            // Hide lesson/quiz views
+            document.getElementById('viewLesson').style.display = 'none';
+            document.getElementById('viewQuiz').style.display = 'none';
+            // Switch to dashboard tab
+            switchTab('dashboard');
+            renderDashboard(courseId);
         });
-    }, 500);
+    }, 1500);
 }
 
 function showDashboard() {
