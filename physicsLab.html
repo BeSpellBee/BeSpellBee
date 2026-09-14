@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schéma Interactif : Dara Kahrabayia (4.5V)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .circuit-container {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h2 { color: #1a73e8; margin-top: 0; }
+        .circuit-board {
+            position: relative;
+            height: 300px;
+            background: #fafafa;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        /* Components styling */
+        .component {
+            position: absolute;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+        .battery {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #34495e;
+            color: white;
+            width: 240px;
+            height: 60px;
+        }
+        .terminal {
+            position: absolute;
+            top: -15px;
+            width: 30px;
+            height: 15px;
+            background: #e67e22;
+            color: black;
+            font-size: 11px;
+            line-height: 15px;
+            border-radius: 3px 3px 0 0;
+        }
+        .term-pos { left: 30px; background: #e74c3c; color: white; height: 25px; top: -25px;} /* Long strip */
+        .term-neg { right: 30px; background: #7f8c8d; color: white; } /* Short strip */
+        
+        .switch-comp {
+            top: 40px;
+            left: 40px;
+            background: #f1c40f;
+            color: #2c3e50;
+            cursor: pointer;
+            user-select: none;
+        }
+        .bulb-comp {
+            top: 40px;
+            right: 40px;
+            background: #ecf0f1;
+            color: #2c3e50;
+            border: 2px solid #bdc3c7;
+            transition: all 0.3s ease;
+        }
+        .bulb-comp.lit {
+            background: #f1c40f;
+            box-shadow: 0 0 20px #f1c40f;
+            border-color: #f39c12;
+        }
+        /* SVG Wires */
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .wire {
+            fill: none;
+            stroke-width: 4;
+            transition: stroke-dashoffset 0.1s linear;
+        }
+        .wire-step1 { stroke: #e74c3c; } /* Red */
+        .wire-step2 { stroke: #3498db; } /* Blue */
+        .wire-step3 { stroke: #2c3e50; } /* Black */
+        
+        .flow {
+            stroke-dasharray: 8, 8;
+            animation: dash 1s linear infinite;
+            display: none;
+        }
+        @keyframes dash {
+            to { stroke-dashoffset: -20; }
+        }
+        .btn-toggle {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-toggle:hover { background: #1557b0; }
+        .legend {
+            display: flex;
+            justify-content: space-around;
+            font-size: 12px;
+            margin-top: 15px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="circuit-container">
+    <h2>دارة كهربائية بسيطة (4.5V)</h2>
+    <p>Cliquez sur l'interrupteur ou le bouton pour tester le circuit !</p>
+    
+    <div class="circuit-board">
+        <svg id="circuit-svg">
+            <!-- Step 1 Wire: Pos Terminal (195, 215) to Switch (95, 80) -->
+            <path class="wire wire-step1" d="M 195 215 L 195 140 L 95 140 L 95 80" />
+            <path id="flow1" class="wire wire-step1 flow" d="M 195 215 L 195 140 L 95 140 L 95 80" />
+            
+            <!-- Step 2 Wire: Switch (145, 80) to Bulb (445, 80) -->
+            <path class="wire wire-step2" d="M 145 80 L 290 80 L 445 80" />
+            <path id="flow2" class="wire wire-step2 flow" d="M 145 80 L 290 80 L 445 80" />
+            
+            <!-- Step 3 Wire: Bulb (475, 80) to Neg Terminal (395, 225) -->
+            <path class="wire wire-step3" d="M 475 80 L 475 140 L 395 140 L 395 225" />
+            <path id="flow3" class="wire wire-step3 flow" d="M 475 80 L 475 140 L 395 140 L 395 225" />
+        </svg>
+
+        <!-- Interrupter -->
+        <div class="component switch-comp" id="switchDevice" onclick="toggleCircuit()">
+            Interrupteur (القاطع)<br><span id="switch-status">OUVERT (OFF)</span>
+        </div>
+
+        <!-- Bulb/Socket -->
+        <div class="component bulb-comp" id="bulbDevice">
+            Douille & Ampoule<br>(حامل المصباح)
+        </div>
+
+        <!-- Battery -->
+        <div class="component battery">
+            <div class="terminal term-pos">💡 + (Longue)</div>
+            <div class="terminal term-neg"> - (Courte)</div>
+            Pile Plate / البطارية (4.5V)
+        </div>
+    </div>
+
+    <button class="btn-toggle" onclick="toggleCircuit()">Actionner l'interrupteur</button>
+
+    <div class="legend">
+        <div>🔴 <span style="color:#e74c3c;font-weight:bold">Fil Rouge</span> : Étape 1 (+)</div>
+        <div>🔵 <span style="color:#3498db;font-weight:bold">Fil Bleu</span> : Étape 2</div>
+        <div>⚫ <span style="color:#2c3e50;font-weight:bold">Fil Noir</span> : Étape 3 (-)</div>
+    </div>
+</div>
+
+<script>
+    let isClosed = false;
+    function toggleCircuit() {
+        isClosed = !isClosed;
+        const bulb = document.getElementById('bulbDevice');
+        const statusText = document.getElementById('switch-status');
+        const flows = [document.getElementById('flow1'), document.getElementById('flow2'), document.getElementById('flow3')];
+        
+        if(isClosed) {
+            bulb.classList.add('lit');
+            statusText.innerText = "FERMÉ (ON)";
+            statusText.style.color = "#27ae60";
+            flows.forEach(f => f.style.display = 'block');
+        } else {
+            bulb.classList.remove('lit');
+            statusText.innerText = "OUVERT (OFF)";
+            statusText.style.color = "#2c3e50";
+            flows.forEach(f => f.style.display = 'none');
+        }
+    }
+</script>
+
+</body>
+</html>
