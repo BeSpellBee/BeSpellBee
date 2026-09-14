@@ -189,10 +189,10 @@
         }
         /* Step 1: GREEN wire — from + terminal to interrupter */
         .wire-step1 { stroke: #27ae60; }
-        /* Step 2: RED wire — from interrupter to bulb */
-        .wire-step2 { stroke: #e74c3c; }
-        /* Step 3: BLUE wire — from bulb to - terminal */
-        .wire-step3 { stroke: #3498db; }
+        /* Step 2: BLUE wire — from interrupter to bulb (neutral) */
+        .wire-step2 { stroke: #3498db; }
+        /* Step 3: RED wire — from bulb to - terminal */
+        .wire-step3 { stroke: #e74c3c; }
         
         .flow {
             stroke-dasharray: 8, 8;
@@ -234,8 +234,8 @@
     <!-- Assembly Progress Nav buttons -->
     <div class="step-controls">
         <button class="btn-step active" id="btn-1" onclick="triggerStep(1)">Étape 1 🟢</button>
-        <button class="btn-step" id="btn-2" onclick="triggerStep(2)" disabled>Étape 2 🔴</button>
-        <button class="btn-step" id="btn-3" onclick="triggerStep(3)" disabled>Étape 3 🔵</button>
+        <button class="btn-step" id="btn-2" onclick="triggerStep(2)" disabled>Étape 2 🔵</button>
+        <button class="btn-step" id="btn-3" onclick="triggerStep(3)" disabled>Étape 3 🔴</button>
     </div>
 
     <div class="instruction-box" id="info-msg">
@@ -248,11 +248,11 @@
             <path id="wire1" class="wire wire-step1" d="M 195 215 L 195 140 L 95 140 L 95 80" />
             <path id="flow1" class="wire wire-step1 flow" d="M 195 215 L 195 140 L 95 140 L 95 80" />
             
-            <!-- Step 2 Wire: Switch (145, 80) to Bulb (445, 80) — RED wire -->
+            <!-- Step 2 Wire: Switch (145, 80) to Bulb (445, 80) — BLUE wire (neutral) -->
             <path id="wire2" class="wire wire-step2" d="M 145 80 L 290 80 L 445 80" />
             <path id="flow2" class="wire wire-step2 flow" d="M 145 80 L 290 80 L 445 80" />
             
-            <!-- Step 3 Wire: Bulb (475, 80) to Neg Terminal (395, 225) — BLUE wire to RED terminal -->
+            <!-- Step 3 Wire: Bulb (475, 80) to Neg Terminal (395, 225) — RED wire to RED terminal -->
             <path id="wire3" class="wire wire-step3" d="M 475 80 L 475 140 L 395 140 L 395 225" />
             <path id="flow3" class="wire wire-step3 flow" d="M 475 80 L 475 140 L 395 140 L 395 225" />
         </svg>
@@ -279,8 +279,8 @@
 
     <div class="legend">
         <div>🟢 <span style="color:#27ae60;font-weight:bold">Fil Vert</span> : Étape 1 (+)</div>
-        <div>🔴 <span style="color:#e74c3c;font-weight:bold">Fil Rouge</span> : Étape 2</div>
-        <div>🔵 <span style="color:#3498db;font-weight:bold">Fil Bleu</span> : Étape 3 (-)</div>
+        <div>🔵 <span style="color:#3498db;font-weight:bold">Fil Bleu</span> : Étape 2 (neutre)</div>
+        <div>🔴 <span style="color:#e74c3c;font-weight:bold">Fil Rouge</span> : Étape 3 (–)</div>
     </div>
 </div>
 
@@ -291,8 +291,8 @@
 
     const notes = {
         1: "🟢 Étape 1 : Reliez la grande lamelle (+) de la pile à l'interrupteur (fil vert).",
-        2: "🔴 Étape 2 : Connectez l'autre vis de l'interrupteur au support de l'ampoule (fil rouge).",
-        3: "🔵 Étape 3 : Fermez la boucle en reliant la douille à la petite lamelle (-) de la pile (fil bleu)."
+        2: "🔵 Étape 2 : Connectez l'autre vis de l'interrupteur au support de l'ampoule (fil bleu, neutre).",
+        3: "🔴 Étape 3 : Fermez la boucle en reliant la douille à la petite lamelle (-) de la pile (fil rouge)."
     };
 
     function triggerStep(step) {
