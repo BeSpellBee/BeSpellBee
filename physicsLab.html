@@ -202,6 +202,13 @@
         @keyframes dash {
             to { stroke-dashoffset: -20; }
         }
+
+        /* Button row for toggle + reset */
+        .action-row {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+        }
         .btn-toggle {
             background: #27ae60;
             color: white;
@@ -211,12 +218,30 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            width: 100%;
+            flex: 3;
+            transition: all 0.2s ease;
         }
         .btn-toggle:disabled {
             background: #95a5a6;
             cursor: not-allowed;
         }
+        .btn-reset {
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            flex: 1;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .btn-reset:hover {
+            background: #e67e22;
+        }
+
         .legend {
             display: flex;
             justify-content: space-around;
@@ -244,15 +269,15 @@
     
     <div class="circuit-board">
         <svg id="circuit-svg">
-            <!-- Step 1 Wire: Pos Terminal (195, 215) to Switch (95, 80) — GREEN wire from GREEN terminal -->
+            <!-- Step 1 Wire: Pos Terminal (195, 215) to Switch (95, 80) — GREEN wire -->
             <path id="wire1" class="wire wire-step1" d="M 195 215 L 195 140 L 95 140 L 95 80" />
             <path id="flow1" class="wire wire-step1 flow" d="M 195 215 L 195 140 L 95 140 L 95 80" />
             
-            <!-- Step 2 Wire: Switch (145, 80) to Bulb (445, 80) — BLUE wire (neutral) -->
+            <!-- Step 2 Wire: Switch (145, 80) to Bulb (445, 80) — BLUE wire -->
             <path id="wire2" class="wire wire-step2" d="M 145 80 L 290 80 L 445 80" />
             <path id="flow2" class="wire wire-step2 flow" d="M 145 80 L 290 80 L 445 80" />
             
-            <!-- Step 3 Wire: Bulb (475, 80) to Neg Terminal (395, 225) — RED wire to RED terminal -->
+            <!-- Step 3 Wire: Bulb (475, 80) to Neg Terminal (395, 225) — RED wire -->
             <path id="wire3" class="wire wire-step3" d="M 475 80 L 475 140 L 395 140 L 395 225" />
             <path id="flow3" class="wire wire-step3 flow" d="M 475 80 L 475 140 L 395 140 L 395 225" />
         </svg>
@@ -275,7 +300,10 @@
         </div>
     </div>
 
-    <button class="btn-toggle" id="main-switch-btn" onclick="toggleCircuit()" disabled>Actionner l'interrupteur</button>
+    <div class="action-row">
+        <button class="btn-toggle" id="main-switch-btn" onclick="toggleCircuit()" disabled>Actionner l'interrupteur</button>
+        <button class="btn-reset" id="reset-btn" onclick="resetCircuit()">🔄 Recommencer</button>
+    </div>
 
     <div class="legend">
         <div>🟢 <span style="color:#27ae60;font-weight:bold">Fil Vert</span> : Étape 1 (+)</div>
@@ -286,7 +314,6 @@
 
 <script>
     let isClosed = false;
-    let currentStep = 1;
     let s1Done = false, s2Done = false, s3Done = false;
 
     const notes = {
@@ -296,33 +323,55 @@
     };
 
     function triggerStep(step) {
+        // If the step is already completed, just re-show its description
+        // (do NOT advance the sequence again)
+        if (step === 1 && s1Done) {
+            showNote(1);
+            highlightBtn(1);
+            return;
+        }
+        if (step === 2 && s2Done) {
+            showNote(2);
+            highlightBtn(2);
+            return;
+        }
+        if (step === 3 && s3Done) {
+            showNote(3);
+            highlightBtn(3);
+            return;
+        }
+
+        // Otherwise, perform the step (advance the build)
         if (step === 1) {
             document.getElementById('wire1').style.display = 'block';
             s1Done = true;
             document.getElementById('btn-2').disabled = false;
-            moveUi(2);
+            showNote(2);
+            highlightBtn(1);
         } else if (step === 2 && s1Done) {
             document.getElementById('wire2').style.display = 'block';
             s2Done = true;
             document.getElementById('btn-3').disabled = false;
-            moveUi(3);
+            showNote(3);
+            highlightBtn(2);
         } else if (step === 3 && s2Done) {
             document.getElementById('wire3').style.display = 'block';
             s3Done = true;
             document.getElementById('main-switch-btn').disabled = false;
             document.getElementById('info-msg').innerHTML = "🎉 Montage terminé ! Vous pouvez maintenant actionner l'interrupteur.";
-            document.getElementById('btn-1').classList.remove('active');
-            document.getElementById('btn-2').classList.remove('active');
-            document.getElementById('btn-3').classList.add('active');
+            highlightBtn(3);
         }
     }
 
-    function moveUi(next) {
-        document.getElementById('info-msg').innerText = notes[next];
+    function showNote(n) {
+        document.getElementById('info-msg').innerText = notes[n];
+    }
+
+    function highlightBtn(n) {
         document.getElementById('btn-1').classList.remove('active');
         document.getElementById('btn-2').classList.remove('active');
         document.getElementById('btn-3').classList.remove('active');
-        document.getElementById('btn-' + (next - 1)).classList.add('active');
+        document.getElementById('btn-' + n).classList.add('active');
     }
 
     function toggleCircuit() {
@@ -346,10 +395,44 @@
         } else {
             bulb.classList.remove('lit');
             statusText.innerText = "OUVERT (OFF)";
-            statusText.style.color = "#2c3e50";
+            statusText.style.color = "#ecf0f1";
             flows.forEach(f => f.style.display = 'none');
             document.getElementById('info-msg').innerText = "🛑 Circuit OUVERT (دارة مفتوحة) : Le courant ne passe plus.";
         }
+    }
+
+    function resetCircuit() {
+        // Reset all state
+        isClosed = false;
+        s1Done = false;
+        s2Done = false;
+        s3Done = false;
+
+        // Hide all wires & flows
+        ['wire1', 'wire2', 'wire3', 'flow1', 'flow2', 'flow3'].forEach(id => {
+            document.getElementById(id).style.display = 'none';
+        });
+
+        // Turn off the bulb
+        document.getElementById('bulbDevice').classList.remove('lit');
+
+        // Reset switch status
+        const statusText = document.getElementById('switch-status');
+        statusText.innerText = "OUVERT (OFF)";
+        statusText.style.color = "#ecf0f1";
+
+        // Disable the toggle button
+        document.getElementById('main-switch-btn').disabled = true;
+
+        // Reset step buttons
+        document.getElementById('btn-2').disabled = true;
+        document.getElementById('btn-3').disabled = true;
+        document.getElementById('btn-1').classList.add('active');
+        document.getElementById('btn-2').classList.remove('active');
+        document.getElementById('btn-3').classList.remove('active');
+
+        // Reset instruction message
+        document.getElementById('info-msg').innerText = notes[1];
     }
 </script>
 
