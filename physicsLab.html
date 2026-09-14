@@ -102,17 +102,54 @@
             line-height: 15px;
             border-radius: 3px 3px 0 0;
         }
-        .term-pos { left: 30px; background: #e74c3c; color: white; height: 25px; top: -25px;} /* Long strip */
-        .term-neg { right: 30px; background: #7f8c8d; color: white; } /* Short strip */
+        /* + terminal now green, longer and taller */
+        .term-pos {
+            left: 30px;
+            background: #27ae60;        /* green */
+            color: white;
+            height: 28px;
+            top: -28px;
+            font-weight: bold;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            border-radius: 4px 4px 0 0;
+            letter-spacing: 0.5px;
+        }
+        /* - terminal now red, shorter */
+        .term-neg {
+            right: 30px;
+            background: #e74c3c;        /* red */
+            color: white;
+            height: 18px;
+            top: -18px;
+            font-weight: bold;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            border-radius: 3px 3px 0 0;
+            letter-spacing: 0.5px;
+        }
         
+        /* Sombre (dark) interrupter */
         .switch-comp {
             top: 40px;
             left: 40px;
-            background: #f1c40f;
-            color: #2c3e50;
+            background: #2c3e50;        /* dark somber */
+            color: #ecf0f1;
             cursor: pointer;
             user-select: none;
+            border: 2px solid #1a252f;
+            transition: all 0.3s ease;
         }
+        .switch-comp:hover {
+            background: #3d566e;
+        }
+        
         .bulb-comp {
             top: 40px;
             right: 40px;
@@ -121,10 +158,17 @@
             border: 2px solid #bdc3c7;
             transition: all 0.3s ease;
         }
+        /* Enhanced glowing bulb */
         .bulb-comp.lit {
-            background: #f1c40f;
-            box-shadow: 0 0 20px #f1c40f;
+            background: radial-gradient(circle, #fff9c4 0%, #f1c40f 40%, #f39c12 80%, #e67e22 100%);
+            box-shadow: 
+                0 0 15px #f1c40f,
+                0 0 35px #f39c12,
+                0 0 60px rgba(243, 156, 18, 0.6),
+                inset 0 0 12px rgba(255, 255, 200, 0.9);
             border-color: #f39c12;
+            color: #7d6608;
+            text-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
         }
         /* SVG Wires */
         svg {
@@ -208,7 +252,7 @@
             <path id="flow3" class="wire wire-step3 flow" d="M 475 80 L 475 140 L 395 140 L 395 225" />
         </svg>
 
-        <!-- Interrupter -->
+        <!-- Interrupter (somber / dark) -->
         <div class="component switch-comp" id="switchDevice" onclick="toggleCircuit()">
             Interrupteur (القاطع)<br><span id="switch-status">OUVERT (OFF)</span>
         </div>
@@ -218,10 +262,10 @@
             Douille & Ampoule<br>(حامل المصباح)
         </div>
 
-        <!-- Battery -->
+        <!-- Battery: + (green) and - (red) corrected -->
         <div class="component battery">
-            <div class="terminal term-pos">💡 + (Longue)</div>
-            <div class="terminal term-neg"> - (Courte)</div>
+            <div class="terminal term-pos" title="Borne positive (longue)">+ (Longue)</div>
+            <div class="terminal term-neg" title="Borne négative (courte)">- (Courte)</div>
             Pile Plate / البطارية (4.5V)
         </div>
     </div>
