@@ -1285,25 +1285,869 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- ====== PHYSICS LAB SECTION (paste here) ====== -->
+<!-- ====== PHYSICS LAB SECTION ====== -->
 <!-- ============================================================ -->
 <section class="physics-lab-section" id="physicsLab">
-    ...
+    <h2>🔬 Physics Lab</h2>
+    <p class="subhead">Interactive lessons, videos, and exercises for the Tunisian curriculum</p>
+
+    <!-- ====== 5TH GRADE FEATURE BANNER ====== -->
+    <a href="physicsLab.html" target="_blank" class="pl-feature-banner" onclick="trackLink('Physics Lab 5th Grade')">
+        <div class="pl-feature-icon">🎉</div>
+        <div class="pl-feature-text">
+            <h3>5<sup>ème</sup> année — Interactive Physics Lab</h3>
+            <p>Play with real simulations, experiment with forces, light, and electricity — designed for primary students.</p>
+        </div>
+        <div class="pl-feature-cta">
+            Open Lab <i class="fas fa-arrow-right"></i>
+        </div>
+    </a>
+
+    <!-- GRADE TABS -->
+    <div class="grade-tabs" id="gradeTabs">
+        <button class="grade-btn active" data-grade="7" onclick="switchGrade('7')">
+            📘 7<sup>ème</sup> année
+        </button>
+        <button class="grade-btn" data-grade="8" onclick="switchGrade('8')">
+            📗 8<sup>ème</sup> année
+        </button>
+        <button class="grade-btn" data-grade="9" onclick="switchGrade('9')">
+            📕 9<sup>ème</sup> année
+        </button>
+    </div>
+
+    <!-- CATEGORY FILTERS -->
+    <div class="pl-filter-container" id="plFilterContainer">
+        <button class="pl-filter-btn active" data-filter="all" onclick="filterActivities('all')">🔵 All</button>
+        <button class="pl-filter-btn" data-filter="interactive" onclick="filterActivities('interactive')">🎮 Interactive</button>
+        <button class="pl-filter-btn" data-filter="video" onclick="filterActivities('video')">🎬 Videos</button>
+        <button class="pl-filter-btn" data-filter="exercise" onclick="filterActivities('exercise')">✏️ Exercises</button>
+    </div>
+
+    <!-- ACTIVITY GRID -->
+    <div class="pl-grid" id="plGrid"></div>
+
+    <!-- NO RESULTS -->
+    <div class="pl-no-results" id="plNoResults">
+        <i class="fas fa-flask"></i>
+        <p>No activities found in this category yet.</p>
+        <span>Check back soon!</span>
+    </div>
 </section>
 
 <!-- ====== PHYSICS ACTIVITY MODAL ====== -->
 <div class="pl-modal" id="plModal">
-    ...
+    <div class="pl-modal-content">
+        <button class="pl-modal-close" onclick="closePhysicsModal()"><i class="fas fa-times"></i></button>
+        <div id="plModalBody"></div>
+    </div>
 </div>
 
+<!-- ============================================================ -->
 <!-- ====== PHYSICS LAB STYLES ====== -->
+<!-- ============================================================ -->
 <style>
-    ...
+    /* ====== PHYSICS LAB SECTION ====== */
+    .physics-lab-section {
+        max-width: 1100px;
+        margin: 30px auto 40px auto;
+        padding: 0 20px;
+    }
+
+    .physics-lab-section h2 {
+        color: #00ffff;
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.2rem;
+        text-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+    }
+
+    .physics-lab-section .subhead {
+        color: #aaa;
+        text-align: center;
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid #1a3a3a;
+        padding-bottom: 0.8rem;
+    }
+
+    /* ====== 5TH GRADE FEATURE BANNER ====== */
+    .pl-feature-banner {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        background: linear-gradient(135deg, rgba(0, 255, 255, 0.08), rgba(255, 204, 0, 0.05));
+        border: 2px solid #00ffff;
+        border-radius: 20px;
+        padding: 20px 24px;
+        margin-bottom: 2rem;
+        text-decoration: none;
+        transition: all 0.3s;
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+        flex-wrap: wrap;
+    }
+
+    .pl-feature-banner:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 50px rgba(0, 255, 255, 0.25);
+        background: linear-gradient(135deg, rgba(0, 255, 255, 0.15), rgba(255, 204, 0, 0.1));
+    }
+
+    .pl-feature-icon {
+        font-size: 2.8rem;
+        flex-shrink: 0;
+        animation: plBounce 2s infinite;
+    }
+
+    @keyframes plBounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+    }
+
+    .pl-feature-text {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .pl-feature-text h3 {
+        color: #00ffff;
+        font-size: 1.25rem;
+        margin-bottom: 0.3rem;
+        font-weight: 700;
+    }
+
+    .pl-feature-text h3 sup {
+        font-size: 0.7em;
+    }
+
+    .pl-feature-text p {
+        color: #ccc;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .pl-feature-cta {
+        color: #000;
+        background: #00ffff;
+        padding: 12px 24px;
+        border-radius: 40px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        flex-shrink: 0;
+        transition: all 0.3s;
+        white-space: nowrap;
+    }
+
+    .pl-feature-banner:hover .pl-feature-cta {
+        background: #ffcc00;
+        box-shadow: 0 0 30px rgba(255, 204, 0, 0.4);
+    }
+
+    /* Grade tabs */
+    .grade-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .grade-btn {
+        background: transparent;
+        color: #88dddd;
+        border: 2px solid #1a4a4a;
+        padding: 0.7rem 2rem;
+        border-radius: 40px;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-family: inherit;
+    }
+
+    .grade-btn sup {
+        font-size: 0.65em;
+    }
+
+    .grade-btn:hover {
+        border-color: #00ffff;
+        color: #00ffff;
+        transform: translateY(-2px);
+    }
+
+    .grade-btn.active {
+        background: linear-gradient(135deg, #00ffff, #00ccff);
+        color: #000;
+        border-color: #00ffff;
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+    }
+
+    /* Category filter buttons */
+    .pl-filter-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .pl-filter-btn {
+        background: transparent;
+        color: #88dddd;
+        border: 1px solid #1a4a4a;
+        padding: 0.5rem 1.3rem;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-family: inherit;
+    }
+
+    .pl-filter-btn:hover {
+        border-color: #00ffff;
+        color: #00ffff;
+    }
+
+    .pl-filter-btn.active {
+        background: #00ffff;
+        color: #000;
+        border-color: #00ffff;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+    }
+
+    /* Activity grid */
+    .pl-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        min-height: 200px;
+    }
+
+    .pl-card {
+        background: #0d0d0d;
+        border: 1px solid #1a4a4a;
+        border-radius: 20px;
+        padding: 22px 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .pl-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #00ffff, #ffcc00);
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .pl-card:hover {
+        border-color: #00ffff;
+        box-shadow: 0 12px 48px rgba(0, 255, 255, 0.1);
+        transform: translateY(-3px);
+    }
+
+    .pl-card:hover::before {
+        opacity: 1;
+    }
+
+    .pl-card-icon {
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .pl-card h4 {
+        color: #fff;
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin-bottom: 0.4rem;
+        line-height: 1.3;
+    }
+
+    .pl-card p {
+        color: #999;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+        flex: 1;
+    }
+
+    .pl-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .pl-badge {
+        display: inline-block;
+        font-size: 0.65rem;
+        font-weight: 700;
+        padding: 0.25rem 0.7rem;
+        border-radius: 40px;
+        letter-spacing: 0.3px;
+    }
+
+    .pl-badge.interactive {
+        background: rgba(0, 255, 255, 0.12);
+        color: #00ffff;
+        border: 1px solid rgba(0, 255, 255, 0.25);
+    }
+
+    .pl-badge.video {
+        background: rgba(255, 68, 68, 0.12);
+        color: #ff6666;
+        border: 1px solid rgba(255, 68, 68, 0.25);
+    }
+
+    .pl-badge.exercise {
+        background: rgba(255, 204, 0, 0.12);
+        color: #ffcc00;
+        border: 1px solid rgba(255, 204, 0, 0.25);
+    }
+
+    .pl-open-hint {
+        color: #555;
+        font-size: 0.7rem;
+    }
+
+    /* No results */
+    .pl-no-results {
+        display: none;
+        text-align: center;
+        color: #666;
+        padding: 3rem 1rem;
+    }
+
+    .pl-no-results.active {
+        display: block;
+    }
+
+    .pl-no-results i {
+        font-size: 2.5rem;
+        color: #333;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .pl-no-results span {
+        font-size: 0.85rem;
+        color: #444;
+    }
+
+    /* Physics Modal */
+    .pl-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.92);
+        z-index: 2500;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        overflow-y: auto;
+    }
+
+    .pl-modal.active {
+        display: flex;
+    }
+
+    .pl-modal-content {
+        background: #0d0d0d;
+        border: 2px solid #00ffff;
+        border-radius: 24px;
+        padding: 2rem;
+        max-width: 780px;
+        width: 100%;
+        box-shadow: 0 0 80px rgba(0, 255, 255, 0.15);
+        position: relative;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .pl-modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: transparent;
+        border: 1px solid #333;
+        color: #888;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 1rem;
+    }
+
+    .pl-modal-close:hover {
+        border-color: #ff4444;
+        color: #ff4444;
+    }
+
+    .pl-modal-content h3 {
+        color: #00ffff;
+        font-size: 1.4rem;
+        margin-bottom: 0.3rem;
+        padding-right: 40px;
+    }
+
+    .pl-modal-content .pl-modal-sub {
+        color: #88dddd;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .pl-modal-content p {
+        color: #ccc;
+        line-height: 1.7;
+        margin-bottom: 1rem;
+    }
+
+    .pl-modal-content ul {
+        color: #ccc;
+        padding-left: 20px;
+        margin-bottom: 1rem;
+    }
+
+    .pl-modal-content li {
+        margin: 6px 0;
+        line-height: 1.6;
+    }
+
+    .pl-modal-content .video-wrapper {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        border-radius: 12px;
+        background: #000;
+        border: 1px solid #1a4a4a;
+        margin: 1rem 0;
+    }
+
+    .pl-modal-content .video-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    .pl-placeholder {
+        background: linear-gradient(135deg, #0a2a2a, #1a4a4a);
+        border-radius: 12px;
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+        color: #88dddd;
+        border: 1px solid #1a4a4a;
+    }
+
+    .pl-placeholder i {
+        font-size: 2.5rem;
+        color: #00ffff;
+        display: block;
+        margin-bottom: 0.8rem;
+    }
+
+    .pl-placeholder strong {
+        color: #fff;
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+        .physics-lab-section h2 { font-size: 1.5rem; }
+        .grade-btn { padding: 0.5rem 1.2rem; font-size: 0.85rem; }
+        .pl-grid { grid-template-columns: 1fr; }
+        .pl-modal-content { padding: 1.5rem; }
+        .pl-feature-banner { flex-direction: column; text-align: center; }
+        .pl-feature-cta { width: 100%; text-align: center; }
+    }
 </style>
 
+<!-- ============================================================ -->
 <!-- ====== PHYSICS LAB JAVASCRIPT ====== -->
+<!-- ============================================================ -->
 <script>
-    ...
+// ============================================================
+// PHYSICS LAB DATA
+// ============================================================
+const physicsActivities = {
+    7: [
+        {
+            id: '7_measure',
+            icon: '📏',
+            title: 'Mesures et instruments',
+            desc: 'Découvre les instruments de mesure : longueur, masse, volume et température.',
+            type: 'interactive',
+            duration: '15 min',
+            content: `
+                <h3>📏 Mesures et instruments</h3>
+                <p class="pl-modal-sub">7ème année • Introduction aux mesures</p>
+                <p>Dans cette activité, tu vas apprendre à utiliser correctement les instruments de mesure :</p>
+                <ul>
+                    <li><strong>Règle graduée</strong> — mesurer une longueur (en cm ou mm)</li>
+                    <li><strong>Balance</strong> — mesurer une masse (en g ou kg)</li>
+                    <li><strong>Éprouvette graduée</strong> — mesurer un volume (en mL)</li>
+                    <li><strong>Thermomètre</strong> — mesurer une température (en °C)</li>
+                </ul>
+                <div class="pl-placeholder">
+                    <i class="fas fa-ruler-combined"></i>
+                    <strong>Interactive simulation coming soon</strong>
+                    Une simulation interactive pour pratiquer la lecture des instruments sera ajoutée ici.
+                </div>
+            `
+        },
+        {
+            id: '7_states',
+            icon: '🧊',
+            title: 'Les états de la matière',
+            desc: 'Solide, liquide, gaz : découvre les trois états et leurs transformations.',
+            type: 'video',
+            duration: '8 min',
+            content: `
+                <h3>🧊 Les états de la matière</h3>
+                <p class="pl-modal-sub">7ème année • Physique • Les états de la matière</p>
+                <p>La matière existe sous trois états principaux :</p>
+                <ul>
+                    <li><strong>Solide</strong> — forme propre, volume propre (ex: glace)</li>
+                    <li><strong>Liquide</strong> — pas de forme propre, volume propre (ex: eau)</li>
+                    <li><strong>Gaz</strong> — pas de forme propre, pas de volume propre (ex: vapeur d'eau)</li>
+                </ul>
+                <!-- ✅ REPLACE THE VIDEO_ID BELOW WITH YOUR YOUTUBE ID -->
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/VIDEO_ID_7EME" 
+                            allow="autoplay; encrypted-media" 
+                            allowfullscreen></iframe>
+                </div>
+                <p style="color:#555; font-size:0.8rem; text-align:center;">
+                    <i class="fas fa-info-circle"></i> Video placeholder — replace <code>VIDEO_ID_7EME</code> with your YouTube ID.
+                </p>
+            `
+        },
+        {
+            id: '7_mixtures',
+            icon: '🥤',
+            title: 'Mélanges et corps purs',
+            desc: 'Distingue les mélanges homogènes, hétérogènes et les corps purs.',
+            type: 'exercise',
+            duration: '10 min',
+            content: `
+                <h3>🥤 Mélanges et corps purs</h3>
+                <p class="pl-modal-sub">7ème année • Physique • Mélanges et corps purs</p>
+                <p><strong>Mélange hétérogène :</strong> on distingue les différents constituants à l'œil nu (ex: eau + sable).</p>
+                <p><strong>Mélange homogène :</strong> on ne distingue qu'une seule phase (ex: eau + sucre).</p>
+                <p><strong>Corps pur :</strong> une seule substance (ex: eau distillée).</p>
+                <div class="pl-placeholder">
+                    <i class="fas fa-pencil-alt"></i>
+                    <strong>Exercices interactifs à venir</strong>
+                    Un quiz avec correction automatique sera ajouté ici.
+                </div>
+            `
+        },
+        {
+            id: '7_light',
+            icon: '💡',
+            title: 'La lumière et les ombres',
+            desc: 'Comprends la propagation de la lumière et la formation des ombres.',
+            type: 'interactive',
+            duration: '12 min',
+            content: `
+                <h3>💡 La lumière et les ombres</h3>
+                <p class="pl-modal-sub">7ème année • Physique • La lumière</p>
+                <p>La lumière se propage en ligne droite. Cela explique :</p>
+                <ul>
+                    <li>La formation des ombres</li>
+                    <li>Les éclipses</li>
+                    <li>Les chambres noires</li>
+                </ul>
+                <div class="pl-placeholder">
+                    <i class="fas fa-sun"></i>
+                    <strong>Simulation interactive à venir</strong>
+                    Une simulation pour visualiser la propagation de la lumière sera ajoutée ici.
+                </div>
+            `
+        }
+    ],
+    8: [
+        {
+            id: '8_density',
+            icon: '⚖️',
+            title: 'Masse volumique et densité',
+            desc: 'Calcule la masse volumique et compare la densité des liquides.',
+            type: 'interactive',
+            duration: '15 min',
+            content: `
+                <h3>⚖️ Masse volumique et densité</h3>
+                <p class="pl-modal-sub">8ème année • Physique • Masse volumique</p>
+                <p>La masse volumique ρ (rho) se calcule :</p>
+                <p style="text-align:center; font-size:1.2rem; color:#00ffff; font-weight:700;">ρ = m / V</p>
+                <p>Où <strong>m</strong> est la masse (en g) et <strong>V</strong> le volume (en cm³).</p>
+                <div class="pl-placeholder">
+                    <i class="fas fa-flask"></i>
+                    <strong>Simulation interactive à venir</strong>
+                    Un calculateur interactif de masse volumique sera ajouté ici.
+                </div>
+            `
+        },
+        {
+            id: '8_pressure',
+            icon: '💧',
+            title: 'Pression et force pressante',
+            desc: 'Découvre la notion de pression et son application dans les liquides.',
+            type: 'video',
+            duration: '10 min',
+            content: `
+                <h3>💧 Pression et force pressante</h3>
+                <p class="pl-modal-sub">8ème année • Physique • Pression</p>
+                <p>La pression P est le rapport entre la force pressante F et la surface S :</p>
+                <p style="text-align:center; font-size:1.2rem; color:#00ffff; font-weight:700;">P = F / S</p>
+                <p>Applications : pression atmosphérique, pression hydrostatique.</p>
+                <!-- ✅ REPLACE THE VIDEO_ID BELOW WITH YOUR YOUTUBE ID -->
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/VIDEO_ID_8EME" 
+                            allow="autoplay; encrypted-media" 
+                            allowfullscreen></iframe>
+                </div>
+                <p style="color:#555; font-size:0.8rem; text-align:center;">
+                    <i class="fas fa-info-circle"></i> Video placeholder — replace <code>VIDEO_ID_8EME</code> with your YouTube ID.
+                </p>
+            `
+        },
+        {
+            id: '8_heat',
+            icon: '🔥',
+            title: 'Chaleur et température',
+            desc: 'Distingue chaleur et température et étudie les transferts thermiques.',
+            type: 'exercise',
+            duration: '12 min',
+            content: `
+                <h3>🔥 Chaleur et température</h3>
+                <p class="pl-modal-sub">8ème année • Physique • Chaleur</p>
+                <ul>
+                    <li><strong>Température</strong> — mesurée en °C (thermomètre)</li>
+                    <li><strong>Chaleur</strong> — énergie transférée, en Joules (J)</li>
+                    <li><strong>Transfert thermique</strong> — du chaud vers le froid</li>
+                </ul>
+                <div class="pl-placeholder">
+                    <i class="fas fa-pencil-alt"></i>
+                    <strong>Exercices interactifs à venir</strong>
+                </div>
+            `
+        },
+        {
+            id: '8_circuits',
+            icon: '⚡',
+            title: 'Circuits électriques simples',
+            desc: 'Construis un circuit simple : lampe, pile, interrupteur.',
+            type: 'interactive',
+            duration: '18 min',
+            content: `
+                <h3>⚡ Circuits électriques simples</h3>
+                <p class="pl-modal-sub">8ème année • Physique • Électricité</p>
+                <p>Un circuit électrique simple comporte :</p>
+                <ul>
+                    <li>Un générateur (pile)</li>
+                    <li>Un récepteur (lampe, moteur)</li>
+                    <li>Un interrupteur</li>
+                    <li>Des fils de connexion</li>
+                </ul>
+                <div class="pl-placeholder">
+                    <i class="fas fa-bolt"></i>
+                    <strong>Simulateur de circuit à venir</strong>
+                    Un simulateur interactif de circuit sera ajouté ici.
+                </div>
+            `
+        }
+    ],
+    9: [
+        {
+            id: '9_motion',
+            icon: '🏃',
+            title: 'Mouvement rectiligne',
+            desc: 'Étudie la vitesse, la trajectoire et le mouvement uniforme.',
+            type: 'interactive',
+            duration: '20 min',
+            content: `
+                <h3>🏃 Mouvement rectiligne</h3>
+                <p class="pl-modal-sub">9ème année • Physique • Mouvement</p>
+                <p>La vitesse moyenne se calcule :</p>
+                <p style="text-align:center; font-size:1.2rem; color:#00ffff; font-weight:700;">v = d / t</p>
+                <p>Où <strong>d</strong> est la distance (m) et <strong>t</strong> le temps (s).</p>
+                <div class="pl-placeholder">
+                    <i class="fas fa-chart-line"></i>
+                    <strong>Simulation interactive à venir</strong>
+                    Un chronomètre avec graphique de mouvement sera ajouté ici.
+                </div>
+            `
+        },
+        {
+            id: '9_forces',
+            icon: '🧲',
+            title: 'Forces et équilibre',
+            desc: 'Représente une force et étudie les conditions d\'équilibre.',
+            type: 'video',
+            duration: '14 min',
+            content: `
+                <h3>🧲 Forces et équilibre</h3>
+                <p class="pl-modal-sub">9ème année • Physique • Forces</p>
+                <p>Une force est caractérisée par :</p>
+                <ul>
+                    <li>Son point d'application</li>
+                    <li>Sa direction</li>
+                    <li>Son sens</li>
+                    <li>Son intensité (en Newtons, N)</li>
+                </ul>
+                <!-- ✅ REPLACE THE VIDEO_ID BELOW WITH YOUR YOUTUBE ID (if you add one for 9ème) -->
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/VIDEO_ID_9EME" 
+                            allow="autoplay; encrypted-media" 
+                            allowfullscreen></iframe>
+                </div>
+                <p style="color:#555; font-size:0.8rem; text-align:center;">
+                    <i class="fas fa-info-circle"></i> Video placeholder — replace <code>VIDEO_ID_9EME</code> with your YouTube ID.
+                </p>
+            `
+        },
+        {
+            id: '9_optics',
+            icon: '🔍',
+            title: 'Lentilles et images',
+            desc: 'Étudie les lentilles convergentes et la formation d\'images.',
+            type: 'interactive',
+            duration: '22 min',
+            content: `
+                <h3>🔍 Lentilles et images</h3>
+                <p class="pl-modal-sub">9ème année • Physique • Optique</p>
+                <p>Une lentille convergente forme une image réelle ou virtuelle selon la position de l'objet par rapport au foyer.</p>
+                <div class="pl-placeholder">
+                    <i class="fas fa-search"></i>
+                    <strong>Simulation d'optique à venir</strong>
+                </div>
+            `
+        },
+        {
+            id: '9_concours',
+            icon: '🎓',
+            title: 'Préparation Concours 9ème',
+            desc: 'Révisions complètes et annales pour réussir le concours.',
+            type: 'exercise',
+            duration: '30 min',
+            content: `
+                <h3>🎓 Préparation Concours 9ème</h3>
+                <p class="pl-modal-sub">9ème année • Révision générale</p>
+                <p>Prépare-toi efficacement avec :</p>
+                <ul>
+                    <li>Des annales corrigées</li>
+                    <li>Des quiz de révision par chapitre</li>
+                    <li>Des fiches de synthèse</li>
+                </ul>
+                <div class="pl-placeholder">
+                    <i class="fas fa-graduation-cap"></i>
+                    <strong>Espace de révision à venir</strong>
+                </div>
+            `
+        }
+    ]
+};
+
+// ============================================================
+// PHYSICS LAB STATE
+// ============================================================
+let currentGrade = '7';
+let currentPhysicsFilter = 'all';
+
+function switchGrade(grade) {
+    currentGrade = grade;
+    document.querySelectorAll('.grade-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.grade === grade);
+    });
+    filterActivities(currentPhysicsFilter);
+}
+
+function filterActivities(filter) {
+    currentPhysicsFilter = filter;
+    document.querySelectorAll('.pl-filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === filter);
+    });
+    renderPhysicsCards();
+}
+
+function renderPhysicsCards() {
+    const grid = document.getElementById('plGrid');
+    const noResults = document.getElementById('plNoResults');
+    const activities = physicsActivities[currentGrade] || [];
+    
+    const filtered = currentPhysicsFilter === 'all'
+        ? activities
+        : activities.filter(a => a.type === currentPhysicsFilter);
+
+    if (filtered.length === 0) {
+        grid.innerHTML = '';
+        noResults.classList.add('active');
+        return;
+    }
+    noResults.classList.remove('active');
+
+    grid.innerHTML = filtered.map(a => {
+        const badgeLabel = a.type === 'interactive' ? '🎮 Interactive'
+                        : a.type === 'video' ? '🎬 Video'
+                        : '✏️ Exercise';
+        return `
+            <div class="pl-card" onclick="openPhysicsActivity('${a.id}')">
+                <span class="pl-card-icon">${a.icon}</span>
+                <h4>${a.title}</h4>
+                <p>${a.desc}</p>
+                <div class="pl-card-footer">
+                    <span class="pl-badge ${a.type}">${badgeLabel}</span>
+                    <span class="pl-open-hint">${a.duration} →</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function openPhysicsActivity(activityId) {
+    const activity = (physicsActivities[currentGrade] || []).find(a => a.id === activityId);
+    if (!activity) return;
+    document.getElementById('plModalBody').innerHTML = activity.content;
+    document.getElementById('plModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePhysicsModal() {
+    document.getElementById('plModal').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+document.getElementById('plModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closePhysicsModal();
+});
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closePhysicsModal();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    renderPhysicsCards();
+});
 </script>
 
 <!-- ====== NEXT EXISTING SECTION (whatever comes after) ====== -->
