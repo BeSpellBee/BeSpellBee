@@ -1223,7 +1223,9 @@
 }
     </script>
 
-    <!-- ====== YOUR EXISTING LOGO (ORIGINAL - UNCHANGED) ====== -->
+    <!-- ====== LOGO ROW (logo left, physics lab shortcut right) ====== -->
+<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; padding:0 20px; gap:10px;">
+
     <h1>
         <svg>
             <defs> 
@@ -1236,6 +1238,17 @@
             <text x="0" y="50" fill="url(#gradient)" font-size="45">BeSpellBee</text> 
         </svg>BeSpellBee
     </h1>
+
+    <a href="#physicsLab" 
+       style="display:inline-block; padding:10px 22px; background:#00ffff; color:#000;
+              text-decoration:none; border-radius:40px; font-weight:700; font-size:0.9rem;
+              white-space:nowrap; box-shadow:0 8px 32px rgba(0,255,255,0.3); transition: all 0.3s;"
+       onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 12px 48px rgba(0,255,255,0.5)';"
+       onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 32px rgba(0,255,255,0.3)';">
+        🔬 Physics Lab
+    </a>
+
+</div>
 
     <!-- ====== SOCIAL MEDIA BUTTONS (Placed after the logo) ====== -->
     <div class="social-buttons">
