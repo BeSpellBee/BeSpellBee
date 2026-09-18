@@ -186,6 +186,7 @@
             transition: all 0.3s;
             position: relative;
             flex-shrink: 0;
+            overflow: hidden;
         }
 
         .profile-pic:hover {
@@ -208,6 +209,7 @@
             font-size: 0.75rem;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
             border: 2px solid #0d0d0d;
+            z-index: 2;
         }
 
         .teacher-name {
@@ -368,6 +370,37 @@
 
         .btn-video i {
             margin-right: 6px;
+        }
+
+        /* ====== LESSON VIDEO BOX (NEW) ====== */
+        .lesson-video-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(0, 255, 255, 0.08);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 0.6rem 0.8rem;
+            margin: 0.3rem 0 0.5rem 0;
+            color: #00ffff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex-shrink: 0;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .lesson-video-box:hover {
+            background: rgba(0, 255, 255, 0.18);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+        }
+
+        .lesson-video-box i {
+            font-size: 1.1rem;
+            flex-shrink: 0;
         }
 
         .no-results {
@@ -887,6 +920,11 @@
                 min-width: 80px;
             }
 
+            .lesson-video-box {
+                font-size: 0.7rem;
+                padding: 0.5rem 0.7rem;
+            }
+
             .filter-btn {
                 font-size: 0.7rem;
                 padding: 0.3rem 1rem;
@@ -976,6 +1014,16 @@
                 font-size: 0.6rem;
                 padding: 0.3rem 0.8rem;
                 min-width: 60px;
+            }
+
+            .lesson-video-box {
+                font-size: 0.6rem;
+                padding: 0.4rem 0.6rem;
+                gap: 5px;
+            }
+
+            .lesson-video-box i {
+                font-size: 0.9rem;
             }
 
             .filter-btn {
@@ -2293,236 +2341,23 @@ document.addEventListener('DOMContentLoaded', function() {
     <!-- ============================================================ -->
     <script>
         // ------------------------------------------------------------
-        // TEACHER DATA - 19 TEACHERS IN 10 CATEGORIES!
+        // TEACHER DATA - ONLY NOUR BOUCHAALA
         // ------------------------------------------------------------
         const teachers = [
-            {
-                id: 1,
-                name: "Arij Dhibi",
-                city: "Hassi El Frid, Kasserine, Tunisia",
-                subject: "Visual Arts & Ceramics",
-                bio: "A dedicated Visual Arts Educator with a Research Master's in Ceramics and Art Therapy. I design inclusive, creative projects that help students explore self-expression through <strong>ceramics, drawing, and calligraphy</strong>. I believe art is a universal language that builds confidence and emotional growth.",
-                credentials: ["🎓 Master's in Visual Arts", "🏺 Ceramics Specialist", "🧠 Art Therapy Trained"],
-                emoji: "🎨",
-                coverLetterExcerpt: "Passionate about teaching and holding a Master's degree from ISAMS, I bring classroom experience from 'Borj El Ilm' private school and have led over 15 creative workshops.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 2,
-                name: "Chaima Douiri",
-                city: "Tunis, Tunisia",
-                subject: "History & Geography",
-                bio: "A dedicated and experienced educator with a <strong>Bachelor's in History</strong> from the Faculty of Humanities and Social Sciences of Tunis. With over 8 years of teaching experience across primary and middle school levels, I bring history and geography to life through engaging storytelling and interactive discussions.",
-                credentials: ["📜 Bachelor's in History", "🏫 8+ Years Experience", "🌍 Social Sciences Specialist"],
-                emoji: "📚",
-                coverLetterExcerpt: "I have taught History and Geography to students in grades 5 through 9, and I believe that understanding our past is the key to building a better future.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 3,
-                name: "Safa Chihi",
-                city: "Tunis, Tunisia",
-                subject: "Engineering & Mechanics",
-                bio: "A passionate engineer with a <strong>Licence in Mechanical Engineering (Mechatronics)</strong> from ISET Béja. I specialize in <strong>3D modeling, SolidWorks, and robotics</strong>. I love helping students understand how things work and inspiring the next generation of innovators.",
-                credentials: ["⚙️ Mechanical Engineer", "🔧 SolidWorks Expert", "🤖 Robotics Club Member"],
-                emoji: "🔬",
-                coverLetterExcerpt: "I bring real-world engineering experience to the classroom. From designing complex 3D models to building robots, I make technology exciting and accessible for all students.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 4,
-                name: "Belkis Shimi",
-                city: "Sousse, Tunisia",
-                subject: "Physical Education & Sports",
-                bio: "A dedicated <strong>Physical Education teacher</strong> with a Licence in Sports Science from ISSEP Gafsa. I specialize in <strong>fitness, bodybuilding, and adaptive physical activities</strong>. I believe sport builds character, discipline, and confidence.",
-                credentials: ["🏋️ Fitness Trainer", "🥇 Bodybuilding Coach (2nd Degree)", "📋 TRM Certified"],
-                emoji: "🏃‍♀️",
-                coverLetterExcerpt: "I create engaging, inclusive PE programs that help every student discover their potential. Whether it's team sports or individual fitness, I make movement fun and rewarding.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 5,
-                name: "Emna Fadhlaoui",
-                city: "Tunisia",
-                subject: "Physical Education & Sports",
-                bio: "An experienced <strong>Physical Education teacher</strong> with a Diploma in PE from the Higher Institute of Physical Education and Sports. I am also a <strong>certified Judo Coach (2nd Dan)</strong> with 5+ years of experience teaching in private and international schools.",
-                credentials: ["🎓 Diploma in PE", "🥋 Judo Coach (2nd Dan)", "🏫 5+ Years Experience"],
-                emoji: "🤸‍♀️",
-                coverLetterExcerpt: "I believe in using sport to teach teamwork, discipline, and resilience. My goal is to help every student develop a lifelong love for physical activity.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 6,
-                name: "Chadia Charfi",
-                city: "Bizerte, Tunisia",
-                subject: "Arabic Language & Literature",
-                bio: "A dedicated Arabic Language teacher with a <strong>Master's in Arabic Literature</strong> from ISLT Tunis. I specialize in creating interactive, engaging lessons using modern educational technology (Canva, PowerPoint, AI tools). I believe in making grammar simple and learning dynamic.",
-                credentials: ["🎓 Master's in Arabic Literature", "💻 EdTech Specialist", "📝 Linguistic Corrector"],
-                emoji: "📖",
-                coverLetterExcerpt: "I design innovative educational materials that simplify Arabic grammar and make learning enjoyable. My goal is to help students master the language with confidence.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 7,
-                name: "Salim Anoun",
-                city: "Tunis, Tunisia",
-                subject: "Arabic Language & Literature",
-                bio: "A passionate Arabic teacher with a <strong>Licence in Arabic Literature</strong> from the Faculty of Humanities. I have deep expertise in Arabic grammar, morphology, and prosody. I strive to create a stimulating learning environment where students develop both linguistic and cultural appreciation.",
-                credentials: ["📜 Licence in Arabic Literature", "📚 Grammar & Morphology Expert", "🎓 Poetry Specialist"],
-                emoji: "✍️",
-                coverLetterExcerpt: "I am passionate about transmitting the beauty of the Arabic language. My approach combines traditional methods with creative activities to keep students engaged and motivated.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 8,
-                name: "Sarra Chaabi",
-                city: "Ghardimaou, Jendouba, Tunisia",
-                subject: "Law & Civics",
-                bio: "A dedicated legal professional with a <strong>Master's in Public Law</strong>. I have experience in legal research, court proceedings, and administrative processes. I am passionate about teaching law and civics to help students understand their rights and responsibilities.",
-                credentials: ["⚖️ Master's in Public Law", "📋 Legal Research Specialist", "🏛️ Court Experience"],
-                emoji: "⚖️",
-                coverLetterExcerpt: "I believe that understanding the law is essential for every citizen. I aim to make legal concepts accessible and engaging for students at all levels.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 9,
-                name: "Oumaima Allani",
-                city: "Tunis, Tunisia",
-                subject: "Law & Civics",
-                bio: "A dynamic and self-taught legal professional with a <strong>Master's in Public Law</strong> and professional training in Private Law. I have experience in banking, fiscal consultancy, and arbitration. I bring real-world legal expertise to the classroom, making law accessible and engaging for students.",
-                credentials: ["⚖️ Master's in Public Law", "📋 Private Law Training", "🏛️ Arbitration & Mediation Experience"],
-                emoji: "📜",
-                coverLetterExcerpt: "I believe law is the foundation of a just society. My goal is to help students understand their rights and responsibilities while developing critical thinking skills through real-world legal cases.",
-                videoUrl: "",
-                hasVideo: false
-            },
             {
                 id: 10,
                 name: "Nour Bouchaala",
                 city: "Tunis, Tunisia",
                 subject: "English Language",
-                bio: "A passionate English teacher with an <strong>Undergraduate Degree in English Civilization and Literature</strong>. I am certified by the British Council in Teaching English to Refugees and Displaced Learners. I believe in using language as a tool for intercultural communication and personal growth.",
-                credentials: ["🎓 English Civilization & Literature", "🇬🇧 British Council Certified", "🌍 Cultural Mediator"],
+                bio: "A passionate English teacher with an <strong>Undergraduate Degree in English Civilization and Literature</strong>. I believe in using language as a tool for intercultural communication and personal growth.",
+                credentials: ["🎓 English Civilization & Literature", "🌍 Cultural Mediator"],
                 emoji: "🌍",
                 coverLetterExcerpt: "I am deeply committed to helping students master English through engaging, culturally sensitive teaching. I believe language learning opens doors to new opportunities.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 11,
-                name: "Oumayma Medfai",
-                city: "Ariana, Tunis, Tunisia",
-                subject: "English Language",
-                bio: "A dedicated English graduate with <strong>2+ years of experience in customer service and order processing</strong>. I specialize in professional English communication, problem-solving, and cross-cultural interaction. I bring real-world business English expertise to the classroom.",
-                credentials: ["🎓 English National Degree", "💼 2+ Years Customer Service", "📞 Communication Specialist"],
-                emoji: "💬",
-                coverLetterExcerpt: "I combine my English language expertise with professional communication experience to prepare students for the global workplace. I believe in practical, real-world learning.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 12,
-                name: "Abdurrahmen Neji",
-                city: "Halfaouin, Tunis, Tunisia",
-                subject: "Computer Science & IT",
-                bio: "A creative and hardworking <strong>Computer Science graduate</strong> currently pursuing a Master's in Information Systems Security. I have strong expertise in web development, cybersecurity, and automation testing. I am passionate about using technology to solve problems and educate the next generation.",
-                credentials: ["🖥️ Licence in Business Computing", "🔐 Master's in Info Systems Security", "🌐 CCNA Certified"],
-                emoji: "💻",
-                coverLetterExcerpt: "I bring real-world technical expertise to the classroom. From building secure networks to developing applications, I make technology exciting and accessible for all students.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 13,
-                name: "Yassine Braiek",
-                city: "Ben Arous, Tunisia",
-                subject: "Computer Science & IT",
-                bio: "A passionate web developer with a <strong>Licence in Computer Science</strong> from ISIM Gabès. I have strong expertise in Angular, Spring Boot, Java, and modern web frameworks. I love teaching coding and web development through hands-on projects.",
-                credentials: ["🎓 Licence in Computer Science", "🌐 Angular & Spring Boot Expert", "💻 Full-Stack Developer"],
-                emoji: "⚡",
-                coverLetterExcerpt: "I believe that coding is a superpower. My teaching focuses on practical projects that help students build real-world applications while learning the fundamentals.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 14,
-                name: "Ibtissem Hajji",
-                city: "Tunis, Tunisia",
-                subject: "Engineering & Mechanics",
-                bio: "A dedicated <strong>Mechanical Engineering technician</strong> with a Higher Technical Diploma from ISET Le Kef. I have extensive experience in quality control, inventory management, and supply chain logistics. I am also a certified trainer in educational technology.",
-                credentials: ["🔧 Higher Tech Diploma in Mechanical Engineering", "📊 Quality Control Specialist", "🎓 Certified Trainer"],
-                emoji: "⚙️",
-                coverLetterExcerpt: "I combine my engineering expertise with a passion for education. I believe in making technical subjects accessible and inspiring students to pursue careers in science and technology.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 15,
-                name: "Yosra Abbassi",
-                city: "Tunis, Tunisia",
-                subject: "Law & Civics",
-                bio: "A dedicated Civic Education teacher with a <strong>Master's in Comparative Law</strong> from the Faculty of Law and Political Science of Tunis. I am passionate about teaching civic values, law, and social responsibility. I believe in creating a supportive learning environment where students develop critical thinking and active citizenship.",
-                credentials: ["⚖️ Master's in Comparative Law", "📜 Licence in Private Law", "🏫 Civic Education Specialist"],
-                emoji: "⚖️",
-                coverLetterExcerpt: "Passionate about teaching, I consider this profession a noble mission that involves transmitting knowledge, civic values, and a sense of responsibility to students. My goal is to help form responsible citizens who respect laws and engage in society.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 16,
-                name: "Takwa Torch",
-                city: "Gabès, Tunisia",
-                subject: "Economics & Accounting",
-                bio: "A dedicated graduate with a <strong>Licence in Accounting and Finance</strong> from ISET Gabès. I have practical experience in banking, postal services, and administrative roles. I am passionate about teaching accounting and economics with a practical, real-world approach.",
-                credentials: ["📊 Licence in Accounting & Finance", "🏦 Banking Experience", "📋 Administration Specialist"],
-                emoji: "💰",
-                coverLetterExcerpt: "Passionate about transmitting knowledge, I am motivated to support students in their learning with seriousness, pedagogy, and kindness. I am an organized, dynamic person eager to contribute to the success of your institution.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 17,
-                name: "Sana Trabelsi",
-                city: "Sfax, Tunisia",
-                subject: "Engineering & Mechanics",
-                bio: "A dedicated mechanical engineer with a <strong>Master's in Mechanical Engineering</strong> (Management and Industrial Maintenance Engineering) and a <strong>Licence in Mechanical Engineering</strong> (Metal Construction). I have extensive experience in heat treatment, mold design, quality control, and administrative management. I am also certified in Neuro-Linguistic Programming (NLP) to enhance communication and teaching.",
-                credentials: ["🔧 Master's in Mechanical Engineering", "⚙️ SolidWorks Expert", "🧠 NLP Certified"],
-                emoji: "⚙️",
-                coverLetterExcerpt: "Rigorous, motivated, and versatile, I am convinced that my profile can be a valuable asset to your institution. My experience has allowed me to develop both technical and administrative skills, while strengthening my human qualities such as communication, pedagogy, and organization.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 18,
-                name: "Sameh Smida",
-                city: "Manouba, Tunis, Tunisia",
-                subject: "Philosophy & Primary Education",
-                bio: "A dedicated primary school teacher with a <strong>Licence in Philosophy</strong> from the University of Humanities and Social Sciences of Tunis. I have over 8 years of experience teaching multiple primary school levels in sciences and Arabic language. I am committed to providing a stimulating and caring learning environment.",
-                credentials: ["🎓 Licence in Philosophy", "🏫 8+ Years Primary Teaching", "📚 Sciences & Arabic Specialist"],
-                emoji: "🧠",
-                coverLetterExcerpt: "Serious, organized, and pedagogical, I am committed to providing a stimulating and caring learning environment, and contributing to the overall development of students. I believe in creating a classroom where every child feels valued and motivated to learn.",
-                videoUrl: "",
-                hasVideo: false
-            },
-            {
-                id: 19,
-                name: "Reem Al-Majri",
-                city: "Tunis, Tunisia",
-                subject: "Arabic Language & Literature",
-                bio: "A distinguished Arabic Language educator with a <strong>Master's in Arabic Language and Literature</strong> from the University of Tunis. I am currently a PhD researcher specializing in linguistic discourse analysis and Arabic literary studies. I have extensive experience in teaching Arabic language, literature, and cultural content.",
-                credentials: ["🎓 Master's in Arabic Literature", "📖 PhD Researcher", "✍️ Linguistic Editor"],
-                emoji: "📜",
-                coverLetterExcerpt: "I am passionate about teaching Arabic language and literature, and I believe in using innovative pedagogical approaches to help students master the language while appreciating its rich cultural heritage. I am committed to fostering critical thinking and linguistic excellence.",
-                videoUrl: "",
-                hasVideo: false
+                profileImage: "images4/EnglishTeacher.png",
+                videoUrl: "https://youtu.be/---c4jygNA?si=6kpUNa7oY1MgDTHi",
+                hasVideo: true,
+                lessonVideoUrl: "https://youtu.be/WAmxeqAlsA4?si=CLfaNGM4-dE7OzAP",
+                lessonVideoTitle: "8émé année: how to write an informal letter"
             }
         ];
 
@@ -2634,8 +2469,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // ------------------------------------------------------------
-        // VIDEO FUNCTIONS
+        // YOUTUBE ID PARSER + VIDEO FUNCTIONS
         // ------------------------------------------------------------
+        function extractYouTubeId(url) {
+            let id = '';
+            if (url.includes('youtu.be/')) {
+                id = url.split('youtu.be/')[1];
+            } else if (url.includes('v=')) {
+                id = url.split('v=')[1];
+            } else {
+                id = url.split('/').pop();
+            }
+            return id.split('?')[0].split('&')[0];
+        }
+
+        window.openLessonVideo = function(teacherName) {
+            const teacher = teachers.find(t => t.name === teacherName);
+            if (!teacher || !teacher.lessonVideoUrl) return;
+
+            const wrapper = document.getElementById('videoWrapper');
+            const title = document.getElementById('videoModalTitle');
+            const sub = document.getElementById('videoModalSub');
+
+            title.textContent = `🎬 ${teacher.lessonVideoTitle}`;
+            sub.textContent = `${teacher.name} • Demo Lesson`;
+
+            const videoId = extractYouTubeId(teacher.lessonVideoUrl);
+            wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+
+            document.getElementById('videoModal').classList.add('active');
+        };
+
         window.openVideo = function(teacherName) {
             const teacher = teachers.find(t => t.name === teacherName);
             if (!teacher) return;
@@ -2650,7 +2514,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (teacher.hasVideo && teacher.videoUrl) {
                 let videoHtml = '';
                 if (teacher.videoUrl.includes('youtube') || teacher.videoUrl.includes('youtu.be')) {
-                    const videoId = teacher.videoUrl.split('v=')[1] || teacher.videoUrl.split('/').pop();
+                    const videoId = extractYouTubeId(teacher.videoUrl);
                     videoHtml = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
                 } else if (teacher.videoUrl.includes('vimeo')) {
                     const videoId = teacher.videoUrl.split('/').pop();
@@ -2795,24 +2659,34 @@ document.addEventListener('DOMContentLoaded', function() {
             let cardsHTML = '';
             filteredTeachers.forEach((teacher, index) => {
                 const fullBio = teacher.bio + `<br><br><em style="color:#88dddd; font-size:0.8rem;">"${teacher.coverLetterExcerpt}"</em>`;
-                
-                const videoBadge = teacher.hasVideo ? 
-                    `<span class="video-badge"><i class="fas fa-video"></i> Video Available</span>` : 
+
+                const videoBadge = teacher.hasVideo ?
+                    `<span class="video-badge"><i class="fas fa-video"></i> Video Available</span>` :
                     `<span class="video-badge" style="color:#666; border-color:#333;"><i class="fas fa-clock"></i> Video Coming Soon</span>`;
 
-                const videoButton = teacher.hasVideo ? 
+                const videoButton = teacher.hasVideo ?
                     `<button class="btn-video" onclick="openVideo('${teacher.name}')">
                         <i class="fas fa-play"></i> Watch Intro
-                    </button>` : 
+                    </button>` :
                     `<button class="btn-video" onclick="openVideo('${teacher.name}')" style="color:#666; border-color:#333;">
                         <i class="fas fa-clock"></i> Coming Soon
                     </button>`;
-                
+
+                const profilePicContent = teacher.profileImage
+                    ? `<img src="${teacher.profileImage}" alt="${teacher.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+                    : teacher.emoji;
+
+                const lessonVideoBox = teacher.lessonVideoUrl
+                    ? `<div class="lesson-video-box" onclick="openLessonVideo('${teacher.name}')">
+                           <i class="fas fa-play-circle"></i> ${teacher.lessonVideoTitle}
+                       </div>`
+                    : '';
+
                 cardsHTML += `
                     <div class="teacher-card" data-index="${index}">
                         <div class="card-inner">
                             <div class="profile-pic" onclick="openVideo('${teacher.name}')" title="Click to watch introduction">
-                                ${teacher.emoji}
+                                ${profilePicContent}
                                 <div class="play-overlay"><i class="fas fa-play"></i></div>
                             </div>
                             <h3 class="teacher-name">${teacher.name}</h3>
@@ -2825,6 +2699,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 ${teacher.credentials.map(c => `<span>${c}</span>`).join('')}
                             </div>
                             <p class="teacher-bio">${fullBio}</p>
+                            ${lessonVideoBox}
                             <div class="btn-group">
                                 ${videoButton}
                                 <button class="btn-book" onclick="bookTeacher('${teacher.name}')">
