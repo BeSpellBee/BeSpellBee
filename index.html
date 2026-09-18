@@ -169,6 +169,7 @@
             border-color: #00ffff;
         }
 
+        /* ====== PROFILE PICTURE (CENTERED PLAY OVERLAY) ====== */
         .profile-pic {
             width: 100px;
             height: 100px;
@@ -194,22 +195,34 @@
             box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
         }
 
+        /* Centered play icon over the profile picture */
         .profile-pic .play-overlay {
             position: absolute;
-            bottom: -6px;
-            right: -6px;
-            background: #00ffff;
-            color: #000;
-            width: 30px;
-            height: 30px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
+            background: rgba(0, 0, 0, 0.55);
+            border: 2px solid #00ffff;
+            color: #00ffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-            border: 2px solid #0d0d0d;
+            font-size: 0.95rem;
+            padding-left: 3px;
             z-index: 2;
+            transition: all 0.3s;
+            backdrop-filter: blur(2px);
+            pointer-events: none;
+        }
+
+        .profile-pic:hover .play-overlay {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+            transform: translate(-50%, -50%) scale(1.1);
         }
 
         .teacher-name {
@@ -372,7 +385,7 @@
             margin-right: 6px;
         }
 
-        /* ====== LESSON VIDEO BOX (NEW) ====== */
+        /* ====== LESSON VIDEO BOX ====== */
         .lesson-video-box {
             display: flex;
             align-items: center;
@@ -881,11 +894,9 @@
             }
 
             .profile-pic .play-overlay {
-                width: 26px;
-                height: 26px;
-                font-size: 0.65rem;
-                bottom: -4px;
-                right: -4px;
+                width: 34px;
+                height: 34px;
+                font-size: 0.8rem;
             }
 
             .teacher-name {
@@ -961,11 +972,9 @@
             }
 
             .profile-pic .play-overlay {
-                width: 22px;
-                height: 22px;
-                font-size: 0.55rem;
-                bottom: -3px;
-                right: -3px;
+                width: 28px;
+                height: 28px;
+                font-size: 0.7rem;
             }
 
             .teacher-name {
@@ -1180,10 +1189,6 @@
            onmouseout="this.style.background='rgba(255,204,0,0.05)'; this.style.color='#ffcc00';">
             👨‍🏫 Teacher
         </a>
-
-        <!-- ====== DASHBOARD & LOGOUT (REMOVED – no more green/red buttons) ====== -->
-        <!-- The old authenticatedButtons div has been removed entirely -->
-
     </div>
 </div>
 
@@ -1271,8 +1276,7 @@
 }
     </script>
 
-    <!-- ====== LOGO ROW (logo left, physics lab shortcut right) ====== -->
-<!-- ====== YOUR EXISTING LOGO (ORIGINAL - UNCHANGED) ====== -->
+    <!-- ====== LOGO ROW ====== -->
     <h1>
         <svg>
             <defs> 
@@ -1286,7 +1290,7 @@
         </svg>BeSpellBee
     </h1>
 
-    <!-- ====== SOCIAL MEDIA BUTTONS (Placed after the logo) ====== -->
+    <!-- ====== SOCIAL MEDIA BUTTONS ====== -->
     <div class="social-buttons">
         <a href="https://www.instagram.com/bespellbee/" target="_blank" rel="noopener" class="social-btn instagram">
             <i class="fab fa-instagram"></i> @bespellbee
@@ -1406,7 +1410,6 @@
 <!-- ====== PHYSICS LAB STYLES ====== -->
 <!-- ============================================================ -->
 <style>
-    /* ====== PHYSICS LAB SECTION ====== */
     .physics-lab-section {
         max-width: 1100px;
         margin: 30px auto 40px auto;
@@ -1431,7 +1434,6 @@
         padding-bottom: 0.8rem;
     }
 
-    /* ====== 5TH GRADE FEATURE BANNER ====== */
     .pl-feature-banner {
         display: flex;
         align-items: center;
@@ -1504,7 +1506,6 @@
         box-shadow: 0 0 30px rgba(255, 204, 0, 0.4);
     }
 
-    /* Grade tabs */
     .grade-tabs {
         display: flex;
         justify-content: center;
@@ -1543,7 +1544,6 @@
         box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
     }
 
-    /* Category filter buttons */
     .pl-filter-container {
         display: flex;
         justify-content: center;
@@ -1577,7 +1577,6 @@
         box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
     }
 
-    /* Activity grid */
     .pl-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -1681,7 +1680,6 @@
         font-size: 0.7rem;
     }
 
-    /* No results */
     .pl-no-results {
         display: none;
         text-align: center;
@@ -1705,7 +1703,6 @@
         color: #444;
     }
 
-    /* Physics Modal */
     .pl-modal {
         display: none;
         position: fixed;
@@ -1831,7 +1828,6 @@
         margin-bottom: 0.4rem;
     }
 
-    /* Responsive */
     @media (max-width: 700px) {
         .physics-lab-section h2 { font-size: 1.5rem; }
         .grade-btn { padding: 0.5rem 1.2rem; font-size: 0.85rem; }
@@ -1846,9 +1842,6 @@
 <!-- ====== PHYSICS LAB JAVASCRIPT ====== -->
 <!-- ============================================================ -->
 <script>
-// ============================================================
-// PHYSICS LAB DATA
-// ============================================================
 const physicsActivities = {
     7: [
         {
@@ -1891,7 +1884,6 @@ const physicsActivities = {
                     <li><strong>Liquide</strong> — pas de forme propre, volume propre (ex: eau)</li>
                     <li><strong>Gaz</strong> — pas de forme propre, pas de volume propre (ex: vapeur d'eau)</li>
                 </ul>
-                <!-- ✅ REPLACE THE VIDEO_ID BELOW WITH YOUR YOUTUBE ID -->
                 <div class="video-wrapper">
                     <iframe src="https://www.youtube.com/embed/VIDEO_ID_7EME" 
                             allow="autoplay; encrypted-media" 
@@ -1980,7 +1972,6 @@ const physicsActivities = {
                 <p>La pression P est le rapport entre la force pressante F et la surface S :</p>
                 <p style="text-align:center; font-size:1.2rem; color:#00ffff; font-weight:700;">P = F / S</p>
                 <p>Applications : pression atmosphérique, pression hydrostatique.</p>
-                <!-- ✅ REPLACE THE VIDEO_ID BELOW WITH YOUR YOUTUBE ID -->
                 <div class="video-wrapper">
                     <iframe src="https://www.youtube.com/embed/VIDEO_ID_8EME" 
                             allow="autoplay; encrypted-media" 
@@ -2075,7 +2066,6 @@ const physicsActivities = {
                     <li>Son sens</li>
                     <li>Son intensité (en Newtons, N)</li>
                 </ul>
-                <!-- ✅ REPLACE THE VIDEO_ID BELOW WITH YOUR YOUTUBE ID (if you add one for 9ème) -->
                 <div class="video-wrapper">
                     <iframe src="https://www.youtube.com/embed/VIDEO_ID_9EME" 
                             allow="autoplay; encrypted-media" 
@@ -2128,9 +2118,6 @@ const physicsActivities = {
     ]
 };
 
-// ============================================================
-// PHYSICS LAB STATE
-// ============================================================
 let currentGrade = '7';
 let currentPhysicsFilter = 'all';
 
@@ -2209,8 +2196,6 @@ document.addEventListener('DOMContentLoaded', function() {
     renderPhysicsCards();
 });
 </script>
-
-<!-- ====== NEXT EXISTING SECTION (whatever comes after) ====== -->
 
     <!-- ====== VIDEO MODAL ====== -->
     <div class="video-modal" id="videoModal">
@@ -2337,11 +2322,13 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 
     <!-- ============================================================ -->
-    <!-- ====== CAROUSEL JAVASCRIPT (with tracking fix) ====== -->
+    <!-- ====== CAROUSEL JAVASCRIPT ====== -->
     <!-- ============================================================ -->
     <script>
         // ------------------------------------------------------------
-        // TEACHER DATA - ONLY NOUR BOUCHAALA
+        // TEACHER DATA
+        // ------------------------------------------------------------
+        // ✏️ TO CHANGE THE DEMO LESSON TITLE, EDIT "lessonVideoTitle" BELOW
         // ------------------------------------------------------------
         const teachers = [
             {
@@ -2410,7 +2397,6 @@ document.addEventListener('DOMContentLoaded', function() {
             container.innerHTML = html;
         }
 
-        // Helper: track the currently visible carousel card
         function trackCarouselView() {
             const track = document.getElementById('carouselTrack');
             const cards = track.querySelectorAll('.teacher-card');
@@ -2448,7 +2434,6 @@ document.addEventListener('DOMContentLoaded', function() {
             buildDots();
             updateCarousel(0);
 
-            // Only track if NOT skipping (i.e., user-initiated)
             if (!skipTracking) {
                 trackCarouselView();
             }
@@ -2583,9 +2568,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // ------------------------------------------------------------
-        // SEND BOOKING - RENDER BACKEND
-        // ------------------------------------------------------------
         window.sendBooking = async function() {
             const submitBtn = document.getElementById('submitBookingBtn');
             
@@ -2745,7 +2727,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // ------------------------------------------------------------
-        // EVENT LISTENERS (with tracking)
+        // EVENT LISTENERS
         // ------------------------------------------------------------
         document.getElementById('prevBtn').addEventListener('click', () => {
             updateCarousel(currentIndex - 1);
@@ -2797,24 +2779,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // ------------------------------------------------------------
-        // INIT (skip tracking on initial load)
+        // INIT
         // ------------------------------------------------------------
         function init() {
             buildFilters();
-            filterTeachers('All', true); // skip tracking on load
+            filterTeachers('All', true);
         }
 
         init();
     </script>
 
     <!-- ============================================================ -->
-    <!-- ====== STUDENT TRACKING SYSTEM (FIXED) ====== -->
+    <!-- ====== STUDENT TRACKING SYSTEM ====== -->
     <!-- ============================================================ -->
     <script>
-    // ============================================
-    // STUDENT TRACKING CONFIGURATION
-    // ============================================
-
     const TRACKING_API = 'https://bespellbee-backend-en6l.onrender.com/api';
     const authToken = localStorage.getItem('authToken');
     const sessionId = localStorage.getItem('sessionId') || generateSessionId();
@@ -2837,9 +2815,6 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // ============================================
-    // CORE TRACKING FUNCTION (routes to correct endpoint)
-    // ============================================
     function trackActivity(type, data = {}) {
         if (!isTrackingEnabled || !authToken) return;
         if (isNavigatingAway) return;
@@ -2877,17 +2852,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.trackActivity = trackActivity;
 
-    // ============================================
-    // LINK CLICK TRACKING
-    // ============================================
     window.trackLink = function(linkName) {
         if (!isTrackingEnabled || !authToken) return;
         trackActivity('link_click', { link: linkName, page: 'home' });
     };
 
-    // ============================================
-    // PREVENT NAVIGATION GLITCH
-    // ============================================
     document.addEventListener('click', function(e) {
         const link = e.target.closest('a[href]');
         if (link && !link.hasAttribute('download')) {
@@ -2899,9 +2868,6 @@ document.addEventListener('DOMContentLoaded', function() {
         isNavigatingAway = true;
     });
 
-    // ============================================
-    // TRACK HOME PAGE VIEW (only once)
-    // ============================================
     setTimeout(function() {
         if (isTrackingEnabled && !isNavigatingAway) {
             trackActivity('page_view', { page: 'Home' });
@@ -2909,9 +2875,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 1000);
 
-    // ============================================
-    // UPDATE UI BASED ON LOGIN STATUS
-    // ============================================
     function updateAuthUI() {
         const isLoggedIn = !!localStorage.getItem('authToken');
         const studentAuthBtns = document.getElementById('studentAuthButtons');
@@ -2927,9 +2890,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     updateAuthUI();
 
-    // ============================================
-    // DASHBOARD FUNCTIONS (abbreviated)
-    // ============================================
     window.openDashboard = async function() {
         const modal = document.getElementById('dashboardModal');
         const content = document.getElementById('dashboardContent');
@@ -2993,9 +2953,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('dashboardModal')?.classList.remove('active');
     };
 
-    // ============================================
-    // AUTHENTICATION MODALS (abbreviated)
-    // ============================================
     window.openSignupModal = function() {
         document.querySelectorAll('#signupModal, #loginModal').forEach(el => el.remove());
         const modal = document.createElement('div');
@@ -3106,9 +3063,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (el) el.remove();
     }
 
-    // ============================================
-    // TEACHER LOGIN
-    // ============================================
     window.openTeacherLoginModal = function() {
         const modal = document.getElementById('teacherLoginModal');
         if (modal) { modal.style.display = 'flex'; document.getElementById('teacherLoginMessage').textContent = ''; document.getElementById('teacherLoginForm').reset(); }
@@ -3153,9 +3107,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // ============================================
-    // LOGOUT
-    // ============================================
     window.handleLogout = function(e) {
         if (e && e.preventDefault) e.preventDefault();
         if (confirm('Are you sure you want to logout?')) {
@@ -3175,7 +3126,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
 
     <!-- ============================================================ -->
-    <!-- ====== INJECT "GO TO DASHBOARD" BUTTON ON HOMEPAGE (SAFE) ====== -->
+    <!-- ====== INJECT "GO TO DASHBOARD" BUTTON ON HOMEPAGE ====== -->
     <!-- ============================================================ -->
     <script>
     (function injectDashboardButton() {
