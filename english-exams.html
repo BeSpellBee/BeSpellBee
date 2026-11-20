@@ -203,7 +203,7 @@
             <span class="s-emoji">📘</span>
             <div>
                 <h2>Academic IELTS Practice</h2>
-                <p>Watch the session, read the transcript, then practise four question types interactively.</p>
+                <p>Watch the session, read the corrected transcript, then practise four question types interactively.</p>
             </div>
         </div>
 
@@ -237,11 +237,11 @@
 
             <div class="transcript">
                 <div class="transcript-head">
-                    <span>Transcript — follow along while you watch</span>
+                    <span>Transcript (corrected) — follow along while you watch</span>
                     <span class="t-note">Gold = corrected word · [brackets] = unclear audio</span>
                 </div>
                 <div class="transcript-body" id="transcript-body">
-                    <p class="note">This is a written version of the lecture. Places where the audio was unclear are marked <span class="corr">[in brackets]</span>. Timestamps match the video.</p>
+                    <p class="note">This is a corrected version of the spoken session. Places where the audio was unclear are marked <span class="corr">[in brackets]</span>. Timestamps match the video.</p>
 
                     <p><span class="ts">(0:02)</span>Hello everyone. In this session I’m going to share with candidates sitting the IELTS exam some practical strategies they could use to pass the <span class="corr">reading</span> exam.</p>
                     <p><span class="ts">(0:20)</span>Although my broader interest lies in the differences and similarities between listening strategies and <span class="corr">reading</span> strategies, <span class="ts">(0:35)</span>what I’m going to do in this session is start off with some general remarks about the differences between these two skills before sharing with you the strategies with regard to some specific question types—not all types, because in the <span class="corr">reading</span> exam we have 11 types.</p>
@@ -275,7 +275,7 @@
             <div class="callout">
                 <strong>The golden rule.</strong> In option-based tasks, never start with the options.
                 The options are full of distractors and misleading wording. Start with the text.
-                This applies to Matching Headings and Matching Features. This rule is deliberately
+                This applies to Matching Headings and Matching Features. It is deliberately
                 <em>broken</em> for True/False and Yes/No, where the answers are ordered.
             </div>
 
@@ -465,7 +465,7 @@
         <!-- ============ PASSAGE ============ -->
         <section class="task" id="passage">
             <h2>Reading Passage: The Unexpected Benefits of Boredom</h2>
-            
+            <p class="hint">Read once for the general idea before attempting the tasks below.</p>
             <div class="passage">
                 <p><span class="plabel">A</span>Boredom is one of the most disliked emotions. We avoid it with smartphones, streaming services and constant activity. Yet a growing body of research suggests that boredom may not be the enemy we assume. Psychologists are beginning to argue that boredom can serve a purpose, and that our attempts to eliminate it may be counterproductive. This does not mean that all boredom is good, but it does mean that the emotion deserves a more careful look.</p>
                 <p><span class="plabel">B</span>In one well-known experiment, Dr. Elena Marsh and her colleagues asked participants to spend fifteen minutes copying numbers from a telephone directory. A second group was given a more interesting task. Afterwards, both groups were asked to suggest as many uses as possible for a pair of plastic cups. The participants who had completed the boring task produced significantly more ideas, and their ideas were rated as more creative by independent judges. Marsh concluded that boredom can create a mental “empty space” that encourages the mind to wander and generate novel connections.</p>
@@ -478,7 +478,7 @@
         <!-- ============ MATCHING HEADINGS ============ -->
         <section class="task" id="headings">
             <h2>Task 1: Matching Headings</h2>
-            
+            <p class="hint">Unordered. Start with the text, not the headings. Click a heading, then click a paragraph. Click a placed heading to send it back.</p>
             <div class="chip-pool" id="headings-pool"></div>
             <div id="headings-slots"></div>
             <div class="actions">
@@ -492,7 +492,7 @@
         <!-- ============ MATCHING FEATURES ============ -->
         <section class="task" id="features">
             <h2>Task 2: Matching Features</h2>
-            
+            <p class="hint">Unordered. Start with the text. Letters may be used more than once. Click a researcher, then click a statement.</p>
             <div class="chip-pool" id="features-pool"></div>
             <div id="features-slots"></div>
             <div class="actions">
@@ -506,7 +506,7 @@
         <!-- ============ TRUE / FALSE / NOT GIVEN ============ -->
         <section class="task" id="tf">
             <h2>Task 3: True / False / Not Given</h2>
-            
+            <p class="hint">Ordered. Start with the statements. Do they agree with the <strong>information</strong> in the passage?</p>
             <div id="tf-questions"></div>
             <div class="actions">
                 <button class="btn" type="button" id="check-tf">Check answers</button>
@@ -519,7 +519,7 @@
         <!-- ============ YES / NO / NOT GIVEN ============ -->
         <section class="task" id="yn">
             <h2>Task 4: Yes / No / Not Given</h2>
-            
+            <p class="hint">Ordered. Start with the statements. Do they agree with the <strong>views of the writer</strong>?</p>
             <div id="yn-questions"></div>
             <div class="actions">
                 <button class="btn" type="button" id="check-yn">Check answers</button>
@@ -527,6 +527,18 @@
             </div>
             <p class="result" id="yn-result"></p>
             <div class="feedback" id="yn-feedback"></div>
+        </section>
+
+        <!-- ============ PERSONALISED PLAN ============ -->
+        <section class="task" id="plan" style="display:none;">
+            <h2>🎯 Personalised plan</h2>
+            <p class="hint" id="plan-tier"></p>
+            <div id="plan-body"></div>
+            <div class="actions">
+                <button class="btn" type="button" id="gen-plan">Generate my plan</button>
+                <button class="btn ghost" type="button" id="reset-plan">Clear profile</button>
+            </div>
+            <p class="result" id="plan-result"></p>
         </section>
     </section>
 
@@ -648,7 +660,6 @@ document.getElementById('check-strategy').addEventListener('click', function () 
     document.querySelectorAll('.strategy-row').forEach(function (row) {
         var rowOk = true, chosen = [], right = [];
 
-        /* --- single-select dimensions --- */
         SINGLE_DIMENSIONS.forEach(function (key) {
             var group = row.querySelector('.strategy-group[data-key="' + key + '"]');
             if (!group) return;
@@ -674,7 +685,6 @@ document.getElementById('check-strategy').addEventListener('click', function () 
             right.push(VALUE_LABEL[key][answer]);
         });
 
-        /* --- multi-select skill dimension --- */
         var skillGroup = row.querySelector('.strategy-group[data-key="skill"]');
         if (skillGroup) {
             total++;
@@ -1126,7 +1136,7 @@ var YN = [
     { n: 3, text: 'The writer claims that Professor Chen’s warning about risk-taking is exaggerated.', answer: 'NOT GIVEN',
       explain: 'The writer reports Chen’s warning in paragraph C but gives no opinion on whether it is exaggerated. Reporting a view is not agreeing or disagreeing with it. This is the key Y/N trap.' },
     { n: 4, text: 'The writer suggests that schools should eliminate structured activities.', answer: 'NOT GIVEN',
-  explain: 'Paragraph D reports Nair’s view: she “does not suggest that schools should abandon structured learning”. But this is Nair’s view, not the writer’s. The writer reports it without expressing his own opinion. Reporting a view is not the same as holding it — exactly the trap the session warns about. The writer’s view on this question is Not Given.' },
+      explain: 'Paragraph D reports Nair’s view that she “does not suggest that schools should abandon structured learning”. But this is Nair’s view, not the writer’s. The writer reports it without expressing his own opinion — exactly the trap the session warns about.' },
     { n: 5, text: 'The writer believes that how people respond to boredom is more important than boredom itself.', answer: 'YES',
       explain: 'Paragraph E: “What matters most is not boredom itself but how we respond to it.” That is the writer’s own concluding claim.' }
 ];
@@ -1229,6 +1239,249 @@ document.getElementById('reset-yn').addEventListener('click', function () {
 renderHeadings();
 renderFeatures();
 </script>
+
+<!-- ============================================================ -->
+<!-- ====== PERSONALISED PLAN — FRONTEND TRACKING LAYER ====== -->
+<!-- ============================================================ -->
+<script>
+(function () {
+    'use strict';
+
+    /* ---------- profile store ---------- */
+    const PROFILE_KEY = 'bespellbee_ielts_profile';
+    const API_URL = 'https://bespellbee-backend-en6l.onrender.com/api/ielts/diagnose';
+
+    const EMPTY_PROFILE = {
+        strategy: { correct: 0, total: 0, missed: { order: 0, start: 0, focus: 0, skill: 0 } },
+        items: {
+            headings: { correct: 0, total: 0 },
+            features: { correct: 0, total: 0 },
+            tf:       { correct: 0, total: 0 },
+            yn:       { correct: 0, total: 0 }
+        },
+        multi: { correct: 0, total: 0 }
+    };
+
+    let Profile;
+    try {
+        Profile = JSON.parse(localStorage.getItem(PROFILE_KEY)) || JSON.parse(JSON.stringify(EMPTY_PROFILE));
+    } catch (e) {
+        Profile = JSON.parse(JSON.stringify(EMPTY_PROFILE));
+    }
+
+    const saveProfile = () => localStorage.setItem(PROFILE_KEY, JSON.stringify(Profile));
+
+    /* ---------- helpers ---------- */
+    function pct(c, t) { return t ? Math.round((c / t) * 100) : 0; }
+
+    function parseScore(text) {
+        if (!text) return 0;
+        const n = parseInt(String(text).split('/')[0], 10);
+        return isNaN(n) ? 0 : n;
+    }
+
+    /* ---------- capture: strategy check (uses DOM .incorrect markers) ---------- */
+    const strategyBtn = document.getElementById('check-strategy');
+    if (strategyBtn) {
+        strategyBtn.addEventListener('click', function () {
+            const got = parseScore(document.getElementById('strategy-result').textContent);
+            Profile.strategy.correct = got;
+            Profile.strategy.total = 16;
+            Profile.strategy.missed = { order: 0, start: 0, focus: 0, skill: 0 };
+
+            // Any dimension group that contains an .incorrect option was missed
+            document.querySelectorAll('.strategy-group').forEach(function (group) {
+                const key = group.dataset.key;
+                if (!key || !Profile.strategy.missed.hasOwnProperty(key)) return;
+                if (group.querySelector('.opt.incorrect')) {
+                    Profile.strategy.missed[key]++;
+                }
+            });
+
+            saveProfile();
+            refreshTier();
+        });
+    }
+
+    /* ---------- capture: per-task items ---------- */
+    function captureItems(buttonId, resultId, key, total) {
+        const btn = document.getElementById(buttonId);
+        const res = document.getElementById(resultId);
+        if (!btn || !res) return;
+        btn.addEventListener('click', function () {
+            Profile.items[key].correct = parseScore(res.textContent);
+            Profile.items[key].total = total;
+            saveProfile();
+            refreshTier();
+        });
+    }
+    captureItems('check-headings', 'headings-result', 'headings', 5);
+    captureItems('check-features', 'features-result', 'features', 5);
+    captureItems('check-tf',       'tf-result',       'tf',       4);
+    captureItems('check-yn',       'yn-result',       'yn',       5);
+
+    /* ---------- capture: multi-answer strategy questions ---------- */
+    const multiBtn = document.getElementById('check-multi');
+    const multiRes = document.getElementById('multi-result');
+    if (multiBtn && multiRes) {
+        multiBtn.addEventListener('click', function () {
+            Profile.multi.correct = parseScore(multiRes.textContent);
+            Profile.multi.total = 6;
+            saveProfile();
+            refreshTier();
+        });
+    }
+
+    /* ---------- deterministic routing ---------- */
+    function computeTier() {
+        const strategyPct = pct(Profile.strategy.correct, Profile.strategy.total);
+
+        // If strategy was attempted and is weak, route straight to Tier 1
+        if (Profile.strategy.total > 0 && strategyPct < 70) {
+            return { tier: 1, strategyPct, taskPcts: null, weakestKey: null, weakestPct: null };
+        }
+
+        // Otherwise need at least one task attempted
+        const attempted = Object.values(Profile.items).some(v => v.total > 0);
+        if (!attempted) return null;
+
+        const taskPcts = {};
+        Object.keys(Profile.items).forEach(k => {
+            taskPcts[k] = pct(Profile.items[k].correct, Profile.items[k].total);
+        });
+        const weakestKey = Object.keys(taskPcts).reduce(
+            (a, b) => taskPcts[a] < taskPcts[b] ? a : b
+        );
+        const weakestPct = taskPcts[weakestKey];
+
+        if (weakestPct < 50) return { tier: 2,   strategyPct, taskPcts, weakestKey, weakestPct };
+        if (weakestPct < 80) return { tier: 2.5, strategyPct, taskPcts, weakestKey, weakestPct };
+        if (strategyPct < 90 || weakestPct < 90)
+                             return { tier: 3,   strategyPct, taskPcts, weakestKey, weakestPct };
+        return                    { tier: 3.5, strategyPct, taskPcts, weakestKey, weakestPct };
+    }
+
+    const TIER_LABEL = {
+        1:   'Tier 1 — Strategy remediation',
+        2:   'Tier 2 — Skill remediation',
+        2.5: 'Tier 2.5 — Consolidation',
+        3:   'Tier 3 — Advanced',
+        3.5: 'Tier 3+ — Band 8'
+    };
+    const TIER_COPY = {
+        1:   'Your strategy procedure is not yet solid. Fix which tasks are ordered and where to start before attempting another passage.',
+        2:   'Your strategy is sound, but one task type is holding you back. Target that task only.',
+        2.5: 'You are ready for the same level again — this time, timed.',
+        3:   'You are ready for Band 7.5+ prose: hedging, embedded attribution, competing interpretations.',
+        3.5: 'You are ready for the hardest tier: rival readings of the same study inside one paragraph.'
+    };
+    const TASK_NAMES = {
+        headings: 'Matching Headings',
+        features: 'Matching Features',
+        tf:       'True / False / Not Given',
+        yn:       'Yes / No / Not Given'
+    };
+
+    /* ---------- render plan card ---------- */
+    function refreshTier() {
+        const t = computeTier();
+        const card = document.getElementById('plan');
+        const tierEl = document.getElementById('plan-tier');
+        if (!card || !tierEl) return;
+
+        if (!t) {
+            card.style.display = 'none';
+            return;
+        }
+        card.style.display = 'block';
+        tierEl.textContent = TIER_LABEL[t.tier] + ' — ' + TIER_COPY[t.tier];
+    }
+
+    /* ---------- fetch a plan from the backend (with fallback) ---------- */
+    const genBtn = document.getElementById('gen-plan');
+    if (genBtn) {
+        genBtn.addEventListener('click', async function () {
+            const t = computeTier();
+            if (!t) return;
+
+            const resultEl = document.getElementById('plan-result');
+            const bodyEl = document.getElementById('plan-body');
+            genBtn.disabled = true;
+            resultEl.textContent = 'Analysing your profile…';
+            resultEl.className = 'result';
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ profile: Profile, routing: t })
+                });
+                if (!res.ok) throw new Error('API responded ' + res.status);
+                const data = await res.json();
+
+                const drills = Array.isArray(data.drills) ? data.drills : [];
+                bodyEl.innerHTML =
+                    '<div class="callout"><strong>Diagnosis.</strong> ' +
+                        (data.diagnosis || 'No diagnosis returned.') +
+                    '</div>' +
+                    (drills.length
+                        ? '<h4 style="color:var(--accent);margin-top:18px;">Prescribed drills</h4><ol>' +
+                          drills.map(d =>
+                              '<li style="margin-bottom:.6rem;"><strong>' +
+                              (d.title || 'Drill') + '</strong> — ' +
+                              (d.task || '') + '</li>'
+                          ).join('') +
+                          '</ol>'
+                        : '');
+
+                resultEl.textContent = data.recommendation === 'advance'
+                    ? '✅ Recommendation: advance to the next level.'
+                    : '📚 Recommendation: remediate before advancing.';
+                resultEl.className = 'result ' +
+                    (data.recommendation === 'advance' ? 'good' : 'bad');
+            } catch (err) {
+                // Deterministic fallback so the page still works without the API
+                const fallback = {
+                    1:   'Re-run the Strategy Check until you score at least 14/16. Focus first on the <em>Ordered?</em> and <em>Start with</em> rows — if you cannot say which tasks are ordered, harder passages will not help.',
+                    2:   'Do the ' + TASK_NAMES[t.weakestKey || 'features'] + ' task again. Before scanning, write a synonym for each statement. Then close read the relevant paragraph rather than matching on one keyword.',
+                    2.5: 'Repeat this passage under timed conditions (20 minutes for all four tasks). No dictionary, no replaying the video.',
+                    3:   'Advance to the Band 7.5+ passage. Pay attention to hedging verbs (may, appears to, suggests) and to the difference between a view being reported and a view being held.',
+                    3.5: 'You are ready for the hardest tier — two rival readings of the same study inside one paragraph. Ask your coach for Tier 3+ material.'
+                };
+                bodyEl.innerHTML = '<div class="callout">' +
+                    (fallback[t.tier] || 'Profile saved. Connect the API for a personalised diagnosis.') +
+                    '</div>';
+                resultEl.textContent =
+                    'Offline plan shown — the AI diagnostic endpoint is not reachable. Your profile has been saved locally.';
+                resultEl.className = 'result';
+            } finally {
+                genBtn.disabled = false;
+            }
+        });
+    }
+
+    /* ---------- clear profile ---------- */
+    const resetBtn = document.getElementById('reset-plan');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function () {
+            localStorage.removeItem(PROFILE_KEY);
+            Profile = JSON.parse(JSON.stringify(EMPTY_PROFILE));
+            const card = document.getElementById('plan');
+            if (card) card.style.display = 'none';
+            const bodyEl = document.getElementById('plan-body');
+            const tierEl = document.getElementById('plan-tier');
+            const resultEl = document.getElementById('plan-result');
+            if (bodyEl) bodyEl.innerHTML = '';
+            if (tierEl) tierEl.textContent = '';
+            if (resultEl) { resultEl.textContent = ''; resultEl.className = 'result'; }
+        });
+    }
+
+    /* ---------- show the plan card on load if the profile is non-empty ---------- */
+    refreshTier();
+})();
+</script>
+
 <script src="tracking.js"></script>
 </body>
 </html>
