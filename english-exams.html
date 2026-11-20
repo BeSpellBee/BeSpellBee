@@ -17,13 +17,11 @@
     h1{color:var(--accent);font-size:2.4rem;margin:0 0 .4rem;}
     .subhead{color:var(--sub);margin:0 0 2rem;font-size:1.05rem;}
 
-    /* top-level section nav */
     .topnav{display:flex;gap:10px;margin-bottom:40px;flex-wrap:wrap;}
     .topnav a{color:var(--muted);text-decoration:none;font-size:.85rem;
         border:1px solid #222;border-radius:30px;padding:6px 18px;transition:.25s;}
     .topnav a:hover{color:var(--accent);border-color:var(--accent);}
 
-    /* section blocks */
     .exam-section{margin-bottom:56px;padding-top:12px;}
     .exam-section-header{display:flex;align-items:center;gap:14px;
         margin:0 0 1.2rem;padding-bottom:12px;border-bottom:2px solid var(--line);}
@@ -31,7 +29,6 @@
     .exam-section-header h2{color:#fff;font-size:1.6rem;margin:0;}
     .exam-section-header p{color:var(--muted);font-size:.88rem;margin:4px 0 0;}
 
-    /* cards */
     .card-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
         gap:20px;margin-bottom:20px;}
     .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;
@@ -47,7 +44,6 @@
     .card .btn.alt{border-color:#3a5555;color:#aebebe;}
     .card .btn.alt:hover{background:#3a5555;color:#fff;}
 
-    /* inner anchor nav for the IELTS lesson */
     .subnav{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;}
     .subnav a{color:var(--muted);text-decoration:none;font-size:.8rem;
         border:1px solid #222;border-radius:30px;padding:4px 14px;transition:.25s;}
@@ -329,9 +325,143 @@
         </section>
 
         <!-- ============ STRATEGY CHECK ============ -->
-<section class="task" id="warmup">
-    ...
-</section>
+        <section class="task" id="warmup">
+            <h2>Strategy check</h2>
+            <p class="hint">Two steps. First, the four dimensions for each question type — including the <strong>skills</strong> the task requires (select all that apply). Then a harder part: multi-answer questions on what the four types share and where they differ.</p>
+
+            <h3 class="step">Step 1 · The four dimensions</h3>
+
+            <div class="strategy-row" data-task="headings"
+                 data-order="unordered" data-start="text" data-focus="main"
+                 data-skill="skim,scan">
+                <span class="name">Matching Headings</span>
+                <div class="strategy-groups">
+                    <div class="strategy-group" data-key="order" data-label="Ordered?">
+                        <button class="opt" type="button" data-val="unordered">Unordered</button>
+                        <button class="opt" type="button" data-val="ordered">Ordered</button>
+                    </div>
+                    <div class="strategy-group" data-key="start" data-label="Start with">
+                        <button class="opt" type="button" data-val="text">Text first</button>
+                        <button class="opt" type="button" data-val="statements">Statements first</button>
+                    </div>
+                    <div class="strategy-group" data-key="focus" data-label="Look for">
+                        <button class="opt" type="button" data-val="main">Main idea</button>
+                        <button class="opt" type="button" data-val="specific">Specific information</button>
+                        <button class="opt" type="button" data-val="connections">Connections between facts &amp; opinions</button>
+                        <button class="opt" type="button" data-val="views">Writer's views or claims</button>
+                    </div>
+                    <div class="strategy-group" data-key="skill" data-label="Skills (select all)">
+                        <button class="opt" type="button" data-val="skim">Skim</button>
+                        <button class="opt" type="button" data-val="synonyms">Look for synonyms</button>
+                        <button class="opt" type="button" data-val="scan">Scan</button>
+                        <button class="opt" type="button" data-val="close">Close read</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="strategy-row" data-task="features"
+                 data-order="unordered" data-start="text" data-focus="connections"
+                 data-skill="skim,synonyms,scan,close">
+                <span class="name">Matching Features</span>
+                <div class="strategy-groups">
+                    <div class="strategy-group" data-key="order" data-label="Ordered?">
+                        <button class="opt" type="button" data-val="unordered">Unordered</button>
+                        <button class="opt" type="button" data-val="ordered">Ordered</button>
+                    </div>
+                    <div class="strategy-group" data-key="start" data-label="Start with">
+                        <button class="opt" type="button" data-val="text">Text first</button>
+                        <button class="opt" type="button" data-val="statements">Statements first</button>
+                    </div>
+                    <div class="strategy-group" data-key="focus" data-label="Look for">
+                        <button class="opt" type="button" data-val="main">Main idea</button>
+                        <button class="opt" type="button" data-val="specific">Specific information</button>
+                        <button class="opt" type="button" data-val="connections">Connections between facts &amp; opinions</button>
+                        <button class="opt" type="button" data-val="views">Writer's views or claims</button>
+                    </div>
+                    <div class="strategy-group" data-key="skill" data-label="Skills (select all)">
+                        <button class="opt" type="button" data-val="skim">Skim</button>
+                        <button class="opt" type="button" data-val="synonyms">Look for synonyms</button>
+                        <button class="opt" type="button" data-val="scan">Scan</button>
+                        <button class="opt" type="button" data-val="close">Close read</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="strategy-row" data-task="tf"
+                 data-order="ordered" data-start="statements" data-focus="specific"
+                 data-skill="skim,synonyms,scan,close">
+                <span class="name">True / False / Not Given</span>
+                <div class="strategy-groups">
+                    <div class="strategy-group" data-key="order" data-label="Ordered?">
+                        <button class="opt" type="button" data-val="unordered">Unordered</button>
+                        <button class="opt" type="button" data-val="ordered">Ordered</button>
+                    </div>
+                    <div class="strategy-group" data-key="start" data-label="Start with">
+                        <button class="opt" type="button" data-val="text">Text first</button>
+                        <button class="opt" type="button" data-val="statements">Statements first</button>
+                    </div>
+                    <div class="strategy-group" data-key="focus" data-label="Look for">
+                        <button class="opt" type="button" data-val="main">Main idea</button>
+                        <button class="opt" type="button" data-val="specific">Specific information</button>
+                        <button class="opt" type="button" data-val="connections">Connections between facts &amp; opinions</button>
+                        <button class="opt" type="button" data-val="views">Writer's views or claims</button>
+                    </div>
+                    <div class="strategy-group" data-key="skill" data-label="Skills (select all)">
+                        <button class="opt" type="button" data-val="skim">Skim</button>
+                        <button class="opt" type="button" data-val="synonyms">Look for synonyms</button>
+                        <button class="opt" type="button" data-val="scan">Scan</button>
+                        <button class="opt" type="button" data-val="close">Close read</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="strategy-row" data-task="yn"
+                 data-order="ordered" data-start="statements" data-focus="views"
+                 data-skill="skim,synonyms,scan,close">
+                <span class="name">Yes / No / Not Given</span>
+                <div class="strategy-groups">
+                    <div class="strategy-group" data-key="order" data-label="Ordered?">
+                        <button class="opt" type="button" data-val="unordered">Unordered</button>
+                        <button class="opt" type="button" data-val="ordered">Ordered</button>
+                    </div>
+                    <div class="strategy-group" data-key="start" data-label="Start with">
+                        <button class="opt" type="button" data-val="text">Text first</button>
+                        <button class="opt" type="button" data-val="statements">Statements first</button>
+                    </div>
+                    <div class="strategy-group" data-key="focus" data-label="Look for">
+                        <button class="opt" type="button" data-val="main">Main idea</button>
+                        <button class="opt" type="button" data-val="specific">Specific information</button>
+                        <button class="opt" type="button" data-val="connections">Connections between facts &amp; opinions</button>
+                        <button class="opt" type="button" data-val="views">Writer's views or claims</button>
+                    </div>
+                    <div class="strategy-group" data-key="skill" data-label="Skills (select all)">
+                        <button class="opt" type="button" data-val="skim">Skim</button>
+                        <button class="opt" type="button" data-val="synonyms">Look for synonyms</button>
+                        <button class="opt" type="button" data-val="scan">Scan</button>
+                        <button class="opt" type="button" data-val="close">Close read</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn" type="button" id="check-strategy">Check answers</button>
+                <button class="btn ghost" type="button" id="reset-strategy">Reset</button>
+            </div>
+            <p class="result" id="strategy-result"></p>
+            <div class="feedback" id="strategy-feedback"></div>
+
+            <h3 class="step">Step 2 · What the four types share, and where they differ</h3>
+            <p class="hint">More than one answer is correct each time. Select every option that applies, then check.</p>
+
+            <div id="multi-wrap"></div>
+
+            <div class="actions">
+                <button class="btn" type="button" id="check-multi">Check answers</button>
+                <button class="btn ghost" type="button" id="reset-multi">Reset</button>
+            </div>
+            <p class="result" id="multi-result"></p>
+        </section>
+
         <!-- ============ PASSAGE ============ -->
         <section class="task" id="passage">
             <h2>Reading Passage: The Unexpected Benefits of Boredom</h2>
@@ -474,7 +604,7 @@
 
 <script>
 /* =========================================================
-   STRATEGY CHECK — THREE DIMENSIONS
+   STRATEGY CHECK — FOUR DIMENSIONS (skill is multi-select)
    ========================================================= */
 var VALUE_LABEL = {
     order: { unordered: 'Unordered', ordered: 'Ordered' },
@@ -484,18 +614,31 @@ var VALUE_LABEL = {
         specific: 'Specific information',
         connections: 'Connections between facts & opinions',
         views: "Writer's views or claims"
+    },
+    skill: {
+        skim: 'Skim',
+        synonyms: 'Look for synonyms',
+        scan: 'Scan',
+        close: 'Close read'
     }
 };
-var DIMENSIONS = ['order', 'start', 'focus'];
+var SINGLE_DIMENSIONS = ['order', 'start', 'focus'];
 
 document.querySelectorAll('.strategy-group').forEach(function (group) {
+    var isMulti = group.dataset.key === 'skill';
     group.addEventListener('click', function (e) {
         var btn = e.target.closest('.opt');
         if (!btn) return;
-        group.querySelectorAll('.opt').forEach(function (o) {
-            o.classList.remove('sel', 'correct', 'incorrect');
-        });
-        btn.classList.add('sel');
+
+        if (isMulti) {
+            btn.classList.toggle('sel');
+            btn.classList.remove('correct', 'incorrect');
+        } else {
+            group.querySelectorAll('.opt').forEach(function (o) {
+                o.classList.remove('sel', 'correct', 'incorrect');
+            });
+            btn.classList.add('sel');
+        }
     });
 });
 
@@ -505,7 +648,8 @@ document.getElementById('check-strategy').addEventListener('click', function () 
     document.querySelectorAll('.strategy-row').forEach(function (row) {
         var rowOk = true, chosen = [], right = [];
 
-        DIMENSIONS.forEach(function (key) {
+        /* --- single-select dimensions --- */
+        SINGLE_DIMENSIONS.forEach(function (key) {
             var group = row.querySelector('.strategy-group[data-key="' + key + '"]');
             if (!group) return;
             total++;
@@ -530,6 +674,44 @@ document.getElementById('check-strategy').addEventListener('click', function () 
             right.push(VALUE_LABEL[key][answer]);
         });
 
+        /* --- multi-select skill dimension --- */
+        var skillGroup = row.querySelector('.strategy-group[data-key="skill"]');
+        if (skillGroup) {
+            total++;
+            var correctSkills = (row.dataset.skill || '').split(',').filter(Boolean);
+            var selectedSkills = [];
+            skillGroup.querySelectorAll('.opt').forEach(function (o) {
+                o.classList.remove('correct', 'incorrect');
+                if (o.classList.contains('sel')) selectedSkills.push(o.dataset.val);
+            });
+
+            skillGroup.querySelectorAll('.opt').forEach(function (o) {
+                var v = o.dataset.val;
+                if (correctSkills.indexOf(v) !== -1) {
+                    o.classList.add('correct');
+                } else if (selectedSkills.indexOf(v) !== -1) {
+                    o.classList.add('incorrect');
+                }
+            });
+
+            var exactMatch =
+                correctSkills.length === selectedSkills.length &&
+                correctSkills.every(function (s) { return selectedSkills.indexOf(s) !== -1; });
+
+            if (exactMatch) {
+                correct++;
+            } else {
+                rowOk = false;
+            }
+
+            chosen.push('Skills: ' + (selectedSkills.map(function (s) {
+                return VALUE_LABEL.skill[s];
+            }).join(', ') || '—'));
+            right.push('Skills: ' + correctSkills.map(function (s) {
+                return VALUE_LABEL.skill[s];
+            }).join(', '));
+        }
+
         var name = row.querySelector('.name').textContent;
         html += '<div class="' + (rowOk ? 'ok' : 'no') + '"><strong>' + name + '</strong> — ' +
                 right.join(' · ') +
@@ -552,7 +734,7 @@ document.getElementById('reset-strategy').addEventListener('click', function () 
 });
 
 /* =========================================================
-   STRATEGY CHECK — MULTI-ANSWER
+   STRATEGY CHECK — MULTI-ANSWER (6 questions)
    ========================================================= */
 var MULTI = [
     {
@@ -593,15 +775,16 @@ var MULTI = [
     },
     {
         id: 'm4',
-        q: 'In which question types should you start by reading the statements rather than the text?',
+        q: 'Which statements are true of BOTH True/False and Yes/No questions?',
         options: [
-            { v: 'headings', label: 'Matching Headings' },
-            { v: 'features', label: 'Matching Features' },
-            { v: 'tf',       label: 'True / False / Not Given' },
-            { v: 'yn',       label: 'Yes / No / Not Given' }
+            { v: 'a', label: 'You begin by reading the statements, not the passage.' },
+            { v: 'b', label: 'The answers follow the order of the information in the passage.' },
+            { v: 'c', label: 'Both require you to look for synonyms or paraphrase.' },
+            { v: 'd', label: 'Both test factual information in the passage.' },
+            { v: 'e', label: 'Both test the writer’s views or claims.' }
         ],
-        answer: ['tf', 'yn'],
-        explain: 'Only True/False and Yes/No. The ordering makes this safe: “the information is right there in front of you, in the same chronological structure as the text”. With Headings and Features the answers can be anywhere, so starting with the options is exactly the trap the golden rule warns about.'
+        answer: ['a', 'b', 'c'],
+        explain: 'Same mechanics, different target. T/F and Y/N are both ordered, both start with the statements, and both require synonyms. But only True/False tests factual information; only Yes/No tests the writer’s views or claims. Confusing these two — picking (d) or (e) as “both” — is the most common error the session warns against.'
     },
     {
         id: 'm5',
@@ -617,27 +800,15 @@ var MULTI = [
     },
     {
         id: 'm6',
-        q: 'Which statements are true of Matching Headings, True/False and Yes/No?',
+        q: 'Which statements are true of Matching Features, True/False AND Yes/No?',
         options: [
-            { v: 'a', label: 'You must keep reading beyond the first and last sentence until the idea is complete.' },
-            { v: 'b', label: 'A single keyword match is not enough — the heading or answer must fit the whole paragraph or the whole statement.' },
-            { v: 'c', label: 'The answers follow the order of the text.' },
-            { v: 'd', label: 'You start with the options.' }
+            { v: 'a', label: 'You need to look for synonyms or paraphrase before matching.' },
+            { v: 'b', label: 'You need to close read around the keywords, not just skim and scan.' },
+            { v: 'c', label: 'Skimming and scanning alone are enough to find the answers.' },
+            { v: 'd', label: 'The answers always follow the order of the passage.' }
         ],
         answer: ['a', 'b'],
-        explain: 'This is the shared ground. For Headings, the topic sentence is not always first and “the heading must cover the whole paragraph”. For True/False and Yes/No you close read around the keywords rather than trusting one word — which is why the word “always” in a statement can make it false. (c) and (d) are true of the T/F and Y/N pair only, never of Headings.'
-    },
-    {
-        id: 'm7',
-        q: 'Which statements about True/False and Yes/No are correct?',
-        options: [
-            { v: 'a', label: 'Both follow the order of the text.' },
-            { v: 'b', label: 'Both require you to look for synonyms.' },
-            { v: 'c', label: 'Both test factual information in the passage.' },
-            { v: 'd', label: 'Both test the writer’s views or claims.' }
-        ],
-        answer: ['a', 'b'],
-        explain: 'Same mechanics, different target: both are ordered and both need synonyms. But only True/False tests factual information, and only Yes/No tests the writer’s views or claims. That is the distinction to hold on to — and the reason a reported opinion with no writer comment is Not Given, not Yes or No.'
+        explain: 'These three share the same core skills: you must look for synonyms (the text will paraphrase, not repeat your keywords) and you must close read around the keywords (skimming and scanning alone will miss the paraphrase or the trap). What separates them is ordering: Features is unordered, while True/False and Yes/No follow the passage. That is why option (d) cannot be a shared feature.'
     }
 ];
 
