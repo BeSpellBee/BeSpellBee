@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IELTS Academic Practice – BeSpellBee</title>
+<title>IELTS & Cambridge Exams – BeSpellBee</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
     :root{
@@ -14,44 +14,94 @@
     body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;
          margin:0;padding:40px 20px;line-height:1.65;}
     .container{max-width:900px;margin:0 auto;}
-    h1{color:var(--accent);font-size:2.2rem;margin:0 0 .4rem;}
-    .subhead{color:var(--sub);margin:0 0 1.5rem;}
+    h1{color:var(--accent);font-size:2.4rem;margin:0 0 .4rem;}
+    .subhead{color:var(--sub);margin:0 0 2rem;font-size:1.05rem;}
 
-    /* anchor nav */
-    .subnav{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap;}
-    .subnav a{color:var(--muted);text-decoration:none;font-size:.85rem;
-        border:1px solid #222;border-radius:30px;padding:5px 16px;transition:.25s;}
+    /* top-level section nav */
+    .topnav{display:flex;gap:10px;margin-bottom:40px;flex-wrap:wrap;}
+    .topnav a{color:var(--muted);text-decoration:none;font-size:.85rem;
+        border:1px solid #222;border-radius:30px;padding:6px 18px;transition:.25s;}
+    .topnav a:hover{color:var(--accent);border-color:var(--accent);}
+
+    /* section blocks */
+    .exam-section{margin-bottom:56px;padding-top:12px;}
+    .exam-section-header{display:flex;align-items:center;gap:14px;
+        margin:0 0 1.2rem;padding-bottom:12px;border-bottom:2px solid var(--line);}
+    .exam-section-header .s-emoji{font-size:1.8rem;line-height:1;}
+    .exam-section-header h2{color:#fff;font-size:1.6rem;margin:0;}
+    .exam-section-header p{color:var(--muted);font-size:.88rem;margin:4px 0 0;}
+
+    /* cards */
+    .card-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+        gap:20px;margin-bottom:20px;}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+        padding:24px;transition:border-color .3s;text-align:center;}
+    .card:hover{border-color:var(--accent);}
+    .card .emoji{font-size:2.4rem;margin-bottom:.4rem;}
+    .card h3{color:#fff;font-size:1.15rem;margin:0 0 .3rem;}
+    .card p{color:var(--muted);font-size:.88rem;line-height:1.55;margin:0 0 .9rem;}
+    .card .btn{display:inline-block;padding:8px 22px;border:1px solid var(--accent);
+        border-radius:30px;color:var(--accent);text-decoration:none;font-weight:600;
+        font-size:.9rem;transition:all .3s;margin:0 4px 6px;}
+    .card .btn:hover{background:var(--accent);color:#000;}
+    .card .btn.alt{border-color:#3a5555;color:#aebebe;}
+    .card .btn.alt:hover{background:#3a5555;color:#fff;}
+
+    /* inner anchor nav for the IELTS lesson */
+    .subnav{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;}
+    .subnav a{color:var(--muted);text-decoration:none;font-size:.8rem;
+        border:1px solid #222;border-radius:30px;padding:4px 14px;transition:.25s;}
     .subnav a:hover{color:var(--accent);border-color:var(--accent);}
 
     section.task{background:var(--panel);border:1px solid var(--line);
         border-radius:16px;padding:24px;margin-bottom:24px;}
-    section.task h2{color:#fff;font-size:1.35rem;margin:0 0 .3rem;}
+    section.task h2{color:#fff;font-size:1.3rem;margin:0 0 .3rem;}
     section.task .hint{color:var(--muted);font-size:.9rem;margin:0 0 1.2rem;}
+    .step{color:var(--sub);font-size:.82rem;text-transform:uppercase;
+        letter-spacing:.07em;font-weight:700;margin:24px 0 10px;
+        padding-top:18px;border-top:1px solid #141414;}
+    .step:first-of-type{border-top:none;padding-top:0;margin-top:6px;}
 
-    /* ---------- LESSON ---------- */
-    .video-block{text-align:center;margin-bottom:24px;}
-    .video-btn{display:inline-flex;align-items:center;gap:10px;
-        border:1px solid var(--accent);border-radius:30px;padding:12px 30px;
-        color:var(--accent);text-decoration:none;font-weight:600;transition:.25s;}
-    .video-btn:hover{background:var(--accent);color:#000;}
-    .video-meta{color:var(--muted);font-size:.8rem;margin-top:8px;}
+    .video-block{margin-bottom:20px;}
+    .video-frame{position:relative;width:100%;padding-top:56.25%;
+        border-radius:12px;overflow:hidden;border:1px solid var(--line);margin-bottom:10px;}
+    .video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+    .video-meta{color:var(--muted);font-size:.8rem;margin:0;text-align:center;}
+    .video-meta a{color:var(--accent);text-decoration:none;}
+    .video-meta a:hover{text-decoration:underline;}
+
+    .transcript{margin:0 0 22px;border:1px solid #1f2a2a;border-radius:12px;
+        background:#0b1010;overflow:hidden;}
+    .transcript-head{padding:14px 18px;font-weight:600;color:var(--sub);
+        font-size:.92rem;border-bottom:1px solid #142020;
+        display:flex;justify-content:space-between;align-items:baseline;
+        gap:12px;flex-wrap:wrap;}
+    .transcript-head .t-note{color:var(--muted);font-weight:400;font-size:.78rem;}
+    .transcript-body{padding:16px 18px 20px;font-size:.88rem;color:#c5cccc;
+        max-height:480px;overflow-y:auto;}
+    .transcript-body p{margin:0 0 .9rem;}
+    .transcript-body .ts{color:var(--accent);font-family:monospace;
+        font-size:.78rem;margin-right:6px;}
+    .transcript-body .note{color:var(--muted);font-style:italic;font-size:.8rem;}
+    .transcript-body .corr{color:#ffd166;font-weight:600;}
 
     .callout{border-left:3px solid var(--accent);background:rgba(0,255,255,.05);
         padding:14px 18px;border-radius:0 12px 12px 0;margin:0 0 22px;}
     .callout strong{color:var(--accent);}
 
-    .conclusion{margin-bottom:22px;}
+    .conclusion{margin-bottom:26px;}
     .conclusion:last-child{margin-bottom:0;}
-    .conclusion h3{color:var(--sub);font-size:1rem;margin:0 0 .5rem;
+    .conclusion h3{color:var(--sub);font-size:1rem;margin:0 0 .6rem;
         text-transform:uppercase;letter-spacing:.06em;font-weight:700;}
+    .conclusion h4{color:var(--accent);font-size:.85rem;margin:14px 0 .4rem;
+        text-transform:uppercase;letter-spacing:.05em;font-weight:700;}
     .conclusion ul{margin:0;padding-left:20px;}
-    .conclusion li{margin-bottom:.45rem;font-size:.93rem;}
+    .conclusion li{margin-bottom:.5rem;font-size:.93rem;}
     .conclusion li strong{color:#fff;}
 
     .passage p{margin:0 0 .9rem;font-size:.95rem;}
     .passage .plabel{color:var(--accent);font-weight:700;margin-right:.4rem;}
 
-    /* ---------- STRATEGY WARM-UP ---------- */
     .strategy-row{display:grid;grid-template-columns:180px 1fr;gap:10px 16px;
         align-items:start;border-bottom:1px solid #141414;padding:16px 0;}
     .strategy-row:last-of-type{border-bottom:none;}
@@ -62,7 +112,17 @@
         color:var(--muted);text-transform:uppercase;letter-spacing:.06em;
         margin-right:2px;width:100%;}
 
-    /* ---------- CHIPS + SLOTS ---------- */
+    .multi{border-bottom:1px solid #141414;padding:18px 0;}
+    .multi:last-of-type{border-bottom:none;}
+    .multi .mq{font-size:.95rem;margin:0 0 .8rem;color:#fff;}
+    .multi .mq .qnum{color:var(--accent);font-weight:700;margin-right:5px;}
+    .multi .mq .pick{color:var(--muted);font-size:.8rem;font-style:italic;
+        display:block;margin-top:3px;font-weight:400;}
+    .mfeedback{display:none;margin-top:12px;font-size:.88rem;}
+    .mfeedback div{padding:9px 13px;border-left:3px solid var(--line);color:var(--muted);}
+    .mfeedback div.ok{border-color:var(--ok);}
+    .mfeedback div.no{border-color:var(--bad);}
+
     .chip-pool{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;}
     .chip{background:#111;border:1px solid var(--line);color:var(--text);
         border-radius:30px;padding:8px 16px;font:inherit;font-size:.88rem;
@@ -85,7 +145,6 @@
     .feature-slot .fanswer{margin-top:8px;color:var(--accent);font-weight:700;font-size:.9rem;}
     .feature-slot .fanswer.empty{color:var(--muted);font-weight:400;font-style:italic;}
 
-    /* ---------- OPTIONS + BUTTONS ---------- */
     .q{border-bottom:1px solid #141414;padding:14px 0;}
     .q:last-of-type{border-bottom:none;}
     .q p{margin:0 0 .7rem;font-size:.95rem;}
@@ -113,269 +172,415 @@
         margin-bottom:8px;color:var(--muted);}
     .feedback div.ok{border-color:var(--ok);}
     .feedback div.no{border-color:var(--bad);}
-    .back-link{display:inline-block;margin-top:8px;color:#666;text-decoration:none;}
+    .back-link{display:inline-block;margin-top:20px;color:#666;text-decoration:none;}
     .back-link:hover{color:var(--accent);}
 
     @media(max-width:640px){
         body{padding:24px 14px;}
+        h1{font-size:1.8rem;}
         section.task{padding:18px;}
         .strategy-row{grid-template-columns:1fr;}
         .strategy-row .name{padding-top:0;}
         .slot .slot-label{min-width:76px;}
+        .transcript-body{max-height:360px;}
+        .exam-section-header h2{font-size:1.3rem;}
     }
 </style>
 </head>
 <body>
 <div class="container">
 
-    <h1>📘 IELTS Academic Practice</h1>
-    <p class="subhead">Four question types, one rule: know whether to start with the text or the statements.</p>
+    <h1>🎓 IELTS &amp; Cambridge Exams</h1>
+    <p class="subhead">Prepare for IELTS and Cambridge English Qualifications with BeSpellBee. Choose your track below.</p>
 
-    <nav class="subnav">
-        <a href="#lesson">1. Lesson</a>
-        <a href="#warmup">2. Strategy check</a>
-        <a href="#passage">3. Passage</a>
-        <a href="#headings">4. Matching Headings</a>
-        <a href="#features">5. Matching Features</a>
-        <a href="#tf">6. True/False/NG</a>
-        <a href="#yn">7. Yes/No/NG</a>
+    <nav class="topnav">
+        <a href="#ielts-academic">Academic IELTS Practice</a>
+        <a href="#cambridge">Advanced Cambridge English</a>
+        <a href="#general-english">General English</a>
     </nav>
 
-    <!-- ================= LESSON ================= -->
-    <section class="task" id="lesson">
-        <h2>Lesson: The four conclusions</h2>
-        <p class="hint">Watch the session first. The conclusions below are drawn from it and they drive every activity on this page.</p>
-
-        <div class="video-block">
-            <!-- Replace the href below with your video link -->
-            <a class="video-btn" href="PASTE_YOUR_VIDEO_URL_HERE" target="_blank" rel="noopener">
-                <i class="fas fa-play"></i> Watch Session 1
-            </a>
-            <p class="video-meta">Reading strategies for Matching Headings, Matching Features, True/False and Yes/No</p>
-        </div>
-
-        <div class="callout">
-            <strong>The golden rule.</strong> In option-based tasks, never start with the options.
-            The options are full of distractors and misleading wording. Start with the text.
-            This applies to Matching Headings and Matching Features. It is deliberately
-            <em>broken</em> for True/False and Yes/No, where the answers are ordered.
-        </div>
-
-        <div class="conclusion">
-            <h3>1. Reading is not Listening</h3>
-            <ul>
-                <li>In <strong>Reading</strong> the text is in front of you. In <strong>Listening</strong> it is not.</li>
-                <li>Because of this, in Listening you are more dependent on the questions; in Reading the <strong>text is your starting point</strong>.</li>
-                <li>But the two skills are not opposites. Most question types give you options, and in all of them the options are a trap if you read them first.</li>
-            </ul>
-        </div>
-
-        <div class="conclusion">
-            <h3>2. Matching Headings and Matching Features are unordered</h3>
-            <ul>
-                <li>The answers can be <strong>anywhere in the text</strong>, so you cannot work through them in sequence.</li>
-                <li>Both start with the <strong>text</strong>: skim the layout, skim the first and last sentence of each paragraph, decide which paragraphs are relevant.</li>
-                <li>For headings: skim, then go to the headings, underline keywords and <strong>eliminate</strong> what cannot fit. There are more headings than you need.</li>
-                <li>The topic sentence is <strong>not always first</strong>. Do not stop at the first and last sentence if the main idea is not there — keep reading.</li>
-                <li>For features: after skimming, think of <strong>synonyms</strong> before you go back to the text, because the text will paraphrase, not repeat your keywords.</li>
-                <li>There are fewer features than paragraphs, and <strong>one feature may match more than one paragraph</strong>. This is why the instruction says you may use a letter more than once.</li>
-            </ul>
-        </div>
-
-        <div class="conclusion">
-            <h3>3. Matching Headings and Matching Features ask different questions</h3>
-            <ul>
-                <li><strong>Headings ask for the main idea.</strong> One word in the paragraph is not enough; the heading must cover the whole paragraph.</li>
-                <li><strong>Features ask for connections between facts and opinions</strong> — who said or found what. That is why you need to close read around the keywords, not just scan.</li>
-            </ul>
-        </div>
-
-        <div class="conclusion">
-            <h3>4. True/False and Yes/No break the rule — on purpose</h3>
-            <ul>
-                <li>The answers are in the <strong>same order</strong> as the information in the text. You are on safe ground reading the statements first.</li>
-                <li>Read the statement, underline keywords, think of synonyms, turn it into a question, find the paragraph, scan for the keywords, then <strong>close read</strong> around them.</li>
-                <li>Looking for specific information does not mean you can skip close reading. It is where the traps live.</li>
-                <li><strong>True/False tests factual information in the text. Yes/No tests the writer's views or claims.</strong> Same mechanics, different target.</li>
-                <li>Reporting a view is not the same as agreeing with it. If the writer reports someone else's claim and gives no opinion, the answer is <strong>Not Given</strong>, not Yes or No.</li>
-            </ul>
-        </div>
-    </section>
-
-    <!-- ================= STRATEGY WARM-UP ================= -->
-    <section class="task" id="warmup">
-        <h2>Strategy check</h2>
-        <p class="hint">For each task type, decide three things: is it ordered or unordered, do you start with the text or the statements, and <strong>what is the question actually asking you to look for?</strong></p>
-
-        <!-- Matching Headings -->
-        <div class="strategy-row" data-task="headings"
-             data-order="unordered" data-start="text" data-focus="main">
-            <span class="name">Matching Headings</span>
-            <div class="strategy-groups">
-                <div class="strategy-group" data-key="order" data-label="Ordered?">
-                    <button class="opt" type="button" data-val="unordered">Unordered</button>
-                    <button class="opt" type="button" data-val="ordered">Ordered</button>
-                </div>
-                <div class="strategy-group" data-key="start" data-label="Start with">
-                    <button class="opt" type="button" data-val="text">Text first</button>
-                    <button class="opt" type="button" data-val="statements">Statements first</button>
-                </div>
-                <div class="strategy-group" data-key="focus" data-label="Look for">
-                    <button class="opt" type="button" data-val="main">Main idea</button>
-                    <button class="opt" type="button" data-val="specific">Specific information</button>
-                    <button class="opt" type="button" data-val="connections">Connections between facts &amp; opinions</button>
-                    <button class="opt" type="button" data-val="views">Writer's views or claims</button>
-                </div>
+    <!-- ============================================================ -->
+    <!-- SECTION 1 · ACADEMIC IELTS PRACTICE                          -->
+    <!-- ============================================================ -->
+    <section class="exam-section" id="ielts-academic">
+        <div class="exam-section-header">
+            <span class="s-emoji">📘</span>
+            <div>
+                <h2>Academic IELTS Practice</h2>
+                <p>Watch the session, read the corrected transcript, then practise four question types interactively.</p>
             </div>
         </div>
 
-        <!-- Matching Features -->
-        <div class="strategy-row" data-task="features"
-             data-order="unordered" data-start="text" data-focus="connections">
-            <span class="name">Matching Features</span>
-            <div class="strategy-groups">
-                <div class="strategy-group" data-key="order" data-label="Ordered?">
-                    <button class="opt" type="button" data-val="unordered">Unordered</button>
-                    <button class="opt" type="button" data-val="ordered">Ordered</button>
+        <nav class="subnav">
+            <a href="#lesson">Lesson</a>
+            <a href="#warmup">Strategy check</a>
+            <a href="#passage">Passage</a>
+            <a href="#headings">Matching Headings</a>
+            <a href="#features">Matching Features</a>
+            <a href="#tf">True/False/NG</a>
+            <a href="#yn">Yes/No/NG</a>
+        </nav>
+
+        <!-- ============ LESSON ============ -->
+        <section class="task" id="lesson">
+            <h2>Lesson: The three conclusions</h2>
+            <p class="hint">Watch the session and follow the corrected transcript below. The conclusions at the bottom of this section drive every activity on the page.</p>
+
+            <div class="video-block">
+                <div class="video-frame">
+                    <iframe src="https://www.youtube-nocookie.com/embed/w6fkOBZ5g4M"
+                            title="IELTS Reading Strategies — Session 1"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen loading="lazy"></iframe>
                 </div>
-                <div class="strategy-group" data-key="start" data-label="Start with">
-                    <button class="opt" type="button" data-val="text">Text first</button>
-                    <button class="opt" type="button" data-val="statements">Statements first</button>
+                <p class="video-meta">
+                    Reading strategies for Matching Headings, Matching Features, True/False and Yes/No ·
+                    <a href="https://www.youtube.com/watch?v=w6fkOBZ5g4M" target="_blank" rel="noopener">Open on YouTube</a>
+                </p>
+            </div>
+
+            <div class="transcript">
+                <div class="transcript-head">
+                    <span>Transcript (corrected) — follow along while you watch</span>
+                    <span class="t-note">Gold = corrected word · [brackets] = unclear audio</span>
                 </div>
-                <div class="strategy-group" data-key="focus" data-label="Look for">
-                    <button class="opt" type="button" data-val="main">Main idea</button>
-                    <button class="opt" type="button" data-val="specific">Specific information</button>
-                    <button class="opt" type="button" data-val="connections">Connections between facts &amp; opinions</button>
-                    <button class="opt" type="button" data-val="views">Writer's views or claims</button>
+                <div class="transcript-body" id="transcript-body">
+                    <p class="note">This is a corrected version of the spoken session. Places where the audio was unclear are marked <span class="corr">[in brackets]</span>. Timestamps match the video.</p>
+
+                    <p><span class="ts">(0:02)</span>Hello everyone. In this session I’m going to share with candidates sitting the IELTS exam some practical strategies they could use to pass the <span class="corr">reading</span> exam.</p>
+                    <p><span class="ts">(0:20)</span>Although my broader interest lies in the differences and similarities between listening strategies and <span class="corr">reading</span> strategies, <span class="ts">(0:35)</span>what I’m going to do in this session is start off with some general remarks about the differences between these two skills before sharing with you the strategies with regard to some specific question types—not all types, because in the <span class="corr">reading</span> exam we have 11 types.</p>
+                    <p><span class="ts">(1:02)</span>So I’m not going to go through all of them; I’m just going to focus on matching headings, matching features, and their relation to these two <span class="corr">true/false-type</span> exam questions. <span class="ts">(1:19)</span>So overall we’ll take a look at four types, and see if my preliminary remarks regarding the differences between listening and reading hold true.</p>
+                    <p><span class="ts">(1:38)</span>So how are reading and <span class="corr">listening</span> different? Well, for obvious reasons, in reading you have the text in front of you, right at your fingertips, for you to handle and <span class="corr">extract</span> the information from, <span class="ts">(2:02)</span>whereas with listening you have to make more effort to get the information, especially with IELTS, as you will only listen to the text <span class="corr">once — unlike the Cambridge exams, where you can afford to listen to the text more than once</span>.</p>
+                    <p><span class="ts">(2:24)</span>So this is a major difference that any layperson—not having to be an academic researcher or an IELTS coach—will be able to figure out. <span class="ts">(2:48)</span>However, how about the similarities? Does this mean that they are diametrically different?</p>
+                    <p><span class="ts">(2:58)</span>Well, in addition to the fact that the text is not available in the listening section, another difference is that in listening you are more dependent on the questions, as a concomitant result of the fact that you don’t have the text in front of you. <span class="ts">(3:27)</span>So you are more dependent on the questions. <span class="ts">(3:29)</span>However, with the reading part, you have the text, so the starting point should always be the text, and this is the claim I’m making today. <span class="ts">(3:48)</span>And we’ll see if it’s really true. If it’s really always the case, then we should always start with the text, depending on the question type. <span class="ts">(4:06)</span>So this is what you have to answer today. So these are the differences.</p>
+                    <p><span class="ts">(4:16)</span>So what about the similarities? As I asked earlier, does this mean that listening and reading are diametrically opposite to one another? <span class="ts">(4:36)</span>Well, not really. If you think about the options for reading and listening, most of the time—except for completion of <span class="corr">gap fills</span>, short answers or <span class="corr">multiple-choice</span> questions—<span class="ts">(4:53)</span>when you have many questions, you will have to choose from many options. You are given options; you have to choose from these options.</p>
+                    <p><span class="ts">(5:16)</span>So what does this mean? What does this imply? For listening and reading, this implies that you should not start with the options. <span class="ts">(5:26)</span>This is a guardrail that you have to keep in mind, because there are many structures in these options. <span class="ts">(5:40)</span>So if you start with the options, if you look straight at the options without starting with the text, this means that you will be tricked. <span class="ts">(5:54)</span>You will trip over these structures, these misleading words, and you will give the wrong answer as a result. <span class="ts">(6:12)</span>So don’t trip up, or don’t be tricked by these options; never start with these options. This is the golden rule for both reading and listening.</p>
+                    <p><span class="ts">(6:34)</span>So this implies that you should always start with the text. So let’s start by examining two question types for the reading, then we’ll see if this is really the case. <span class="ts">(6:50)</span><span class="corr">Matching headings</span>, for example. I’m not sure if you took IELTS or if you practised one of the reading sections, but there is one question where you have headings. <span class="ts">(7:04)</span>And in this type of question, you should never—even if you have more headings than you need—you should never start with the headings. With this type of question, you should always start with skimming.</p>
+                    <p><span class="ts">(7:19)</span>So you skim the text, and today I’m not going to spell out what the strategies are. You know, there are basically—here we have to make use of surveying (surveying for the layout), skimming for the general idea, <span class="corr">scanning</span> for specific information, and reading for details—<span class="ts">(7:46)</span>or reading for detailed understanding. I’m not going to go through each step; maybe I’ll do it in another lecture. But in this type of question, matching headings, you have to start with the text. You start with skimming.</p>
+                    <p><span class="ts">(8:06)</span>And what do we skim? We skim the first sentence, which we call the topic sentence, and the last sentence of each paragraph—okay?—to get the general idea and the organisation of the text. <span class="ts">(8:23)</span>So with this type of question, matching headings, you start with the first—you skim the first and the last sentence of each paragraph. And then you go back to the headings. So you start with the text and repeat, and you never start with the headings—okay?—<span class="ts">(8:43)</span>so that you don’t get misled by the <span class="corr">distractors</span>. And then you read the headings. And then you underline the keywords—okay?—and once you do that, you go back then to the text.</p>
+                    <p><span class="ts">(9:05)</span>And you look, and what happens is that you should go—you have these keywords, and you try to match them with the ones in the first sentence. If you don’t find the keywords in the first sentence, you go to the last sentence, and so forth. <span class="ts">(9:20)</span>However, you should be careful, because sometimes the topic sentence is not in the first sentence. So sometimes you have to keep reading to be careful. So you read the first sentence and the last sentence and try to match the keywords. If you don’t find these, you keep reading.</p>
+                    <p><span class="ts">(9:41)</span>The tip that I would give you here is that you should keep reading. Even though you are supposed to be skimming, this should not mislead you into thinking that the first and last sentences are enough. You should keep reading sometimes, because the topic sentence could be anywhere. <span class="ts">(10:07)</span>So you keep doing that until you find the heading. And of course, you should eliminate the heading—that is, after you underline the keywords, before you look for the keywords in the text, you should eliminate the heading. <span class="ts">(10:28)</span>This goes without saying, I guess.</p>
+                    <p><span class="ts">(11:02)</span>Sometimes you have to match more than one paragraph with the features, whereas the headings are often more than necessary—more than you need. <span class="ts">(11:17)</span>Of course, there are other differences. I will explain what matching features are, so that you know what these are. <span class="ts">(11:28)</span>First of all, in a similar fashion to matching headings, you also need to start with skimming the text. You don’t start with the features. <span class="ts">(11:47)</span>With both of these question types—matching headings and matching features—we never start with the questions themselves. <span class="ts">(12:05)</span>We never start with the options. We always start with the text. You start with skimming the text, you decide which paragraphs are relevant, and then you go back to the features. <span class="ts">(12:25)</span>And you underline the keywords.</p>
+                    <p><span class="ts">(12:27)</span>However, the difference between matching features and matching headings is that with the latter—which is matching features—you have to look for synonyms, <span class="ts">(12:41)</span>because you’re going to have fewer features than you need and more paragraphs, and you may have more than one paragraph related to one single feature. <span class="ts">(12:58)</span>So you have to be careful and look for synonyms, because more likely than not you’re not going to find the same keywords. <span class="ts">(13:11)</span>It will be paraphrased, or it will have different synonyms. <span class="ts">(13:15)</span>So with matching features, you should start with the synonyms before you scan the text. <span class="ts">(13:25)</span>So I’ll go over the steps.</p>
+                    <p><span class="ts">(13:30)</span>First of all, you scan the text, you decide which paragraphs are relevant, and you go back to the features. <span class="ts">(13:38)</span>You go back to the features and you underline them. <span class="ts">(13:41)</span>However, you don’t go straight back to the text; you have to think individually of any synonyms for certain features. <span class="ts">(13:49)</span>And then you go back to the text and you try to match the keywords or the synonyms to the ones in the text.</p>
+                    <p><span class="ts">(14:01)</span>And finally, another difference is that, in addition to looking for synonyms to the keywords, you should also close read, <span class="ts">(14:14)</span>because one main difference—the purpose of matching features—is that you should look for relationships between facts or opinions. <span class="ts">(14:28)</span>So you’re not only going to scan; you also need to read for detail or read for detailed understanding.</p>
+                    <p><span class="ts">(14:40)</span>However, with the former questions that we looked at—which is finding the matching headings—<span class="ts">(14:56)</span>the main goal of the question is for you to find the main idea. <span class="ts">(15:03)</span>So the main skills you’re going to practise are really <span class="corr">skimming and skimming and skimming</span>. <span class="ts">(15:12)</span>However, as I said, you should be careful not to stop at the first sentence or the last sentence because it could be anywhere. <span class="ts">(15:19)</span>So keep further reading.</p>
+                    <p><span class="ts">(15:22)</span>So we have seen that with matching headings and features—to wrap up with matching headings and features—we never start with the features or the headings. <span class="ts">(15:37)</span>So we never start with the questions. <span class="ts">(15:40)</span>And by the way, by “questions” I mean the options, not the instructions. <span class="ts">(15:49)</span>For example, you may need only one word or two words, so read these instructions carefully. <span class="ts">(15:55)</span>So the instructions are not the same thing as what I mean by the questions. <span class="ts">(16:01)</span>By the questions I mean the features and the headings.</p>
+                    <p><span class="ts">(16:08)</span>So does this mean that my first remark—the preliminary generalisation I made—is true? <span class="ts">(16:17)</span>Yes, true as far as these two questions are concerned, which are matching features and matching headings. <span class="ts">(16:25)</span>Now, what about the other question types? <span class="ts">(16:30)</span>For example, yes/no questions and true/false. <span class="ts">(16:36)</span>Are we expected to apply the same strategy? <span class="ts">(16:41)</span>Well, if you apply the same strategy that you implemented with matching features and matching headings, you will run into major issues.</p>
+                    <p><span class="ts">(16:54)</span>Because true/false questions are really—first of all, they are different in the sense that the answers that you are looking for will be in the same order as the information in the text. <span class="ts">(17:16)</span>However, with matching features and matching headings, the questions could be anywhere. <span class="ts">(17:26)</span>So this is the first major difference. <span class="ts">(17:28)</span>In true/false and yes/no questions, the answers are really in the same order as the text.</p>
+                    <p><span class="ts">(17:41)</span>This is the first major difference, which means that you could be on the safe side when you read the questions themselves at this time. <span class="ts">(17:54)</span>And it’s really the most optimal and the most effective strategy to follow, <span class="ts">(18:06)</span>because the information is right there in front of you, in the same chronological structure as the text. <span class="ts">(18:28)</span>So you should not have your attention spread across the text looking for answers as you would be when answering matching features and matching headings. <span class="ts">(18:43)</span>So you start with the questions this time.</p>
+                    <p><span class="ts">(18:47)</span>You will be answering yes/no and true/false questions. <span class="ts">(18:52)</span>So what you should do: you read the questions this time, and you don’t have to make much effort. <span class="ts">(19:07)</span>So you just start with reading the statements, and you underline the keywords, and then you think of <span class="corr">synonyms</span>. <span class="ts">(19:19)</span>So this is similar to matching headings. <span class="ts">(19:25)</span>Because also in this type of question, the true/false questions are <span class="corr">ordered</span> now <span class="corr">[unclear]</span>.</p>
+                    <p><span class="ts">(19:31)</span>So in the true/false question, you go on to think of synonyms or keywords. <span class="ts">(19:36)</span>And then, after you read the statements, you underline the keywords, you think of synonyms, you go on to turn the statements into yes/no questions. <span class="ts">(19:48)</span>And then, based on your <span class="corr">skimming</span>, you identify which paragraphs are relevant to the question. <span class="ts">(19:55)</span>Then you scan the relevant paragraphs and identify the keywords. <span class="ts">(20:00)</span>And also this is similar to matching headings. <span class="ts">(20:08)</span>You go to close read around those words.</p>
+                    <p><span class="ts">(20:11)</span>So just because you’re looking for true/false information—just because you are tested on your <span class="corr">scanning</span> for specific information—should not mislead you <span class="ts">(20:26)</span>into thinking that you’re not going to close read. <span class="ts">(20:29)</span>So be careful with the true/false questions. <span class="ts">(20:32)</span>You <span class="corr">do</span> want to close read around those words. <span class="ts">(20:35)</span>And finally, you give the answer.</p>
+                    <p><span class="ts">(20:41)</span>So I hope that was clear. <span class="ts">(20:44)</span>These are just brief remarks. <span class="ts">(20:47)</span>I have not put together any slides. <span class="ts">(20:51)</span>Maybe I will write some blogs or some articles on my website so that you can read those. <span class="ts">(21:05)</span>But I hope these were practical tips for any candidates in <span class="corr">IELTS</span>. <span class="ts">(21:12)</span>So I will make sure to put together more practical sessions like this in the future, where I give you the strategies to work around these questions. <span class="ts">(21:49)</span>Thank you so much for listening.</p>
                 </div>
+            </div>
+
+            <div class="callout">
+                <strong>The golden rule.</strong> In option-based tasks, never start with the options.
+                The options are full of distractors and misleading wording. Start with the text.
+                This applies to Matching Headings and Matching Features. It is deliberately
+                <em>broken</em> for True/False and Yes/No, where the answers are ordered.
+            </div>
+
+            <div class="conclusion">
+                <h3>1. Reading is not Listening</h3>
+                <ul>
+                    <li>In <strong>Reading</strong> the text is in front of you. In <strong>Listening</strong> it is not.</li>
+                    <li>In Listening you hear the recording <strong>once</strong>. In the Cambridge exams you can listen to the text <strong>more than once</strong>, so the pressure is different.</li>
+                    <li>Because of this, in Listening you are more dependent on the questions; in Reading the <strong>text is your starting point</strong>.</li>
+                    <li>But the two skills are not opposites. Most question types give you options, and in all of them the options are a trap if you read them first.</li>
+                </ul>
+            </div>
+
+            <div class="conclusion">
+                <h3>2. Matching Headings and Matching Features are unordered</h3>
+                <ul>
+                    <li>The answers can be <strong>anywhere in the text</strong>, so you cannot work through them in sequence.</li>
+                    <li>Both start with the <strong>text</strong>: survey the layout, skim the first and last sentence of each paragraph, decide which paragraphs are relevant.</li>
+                </ul>
+
+                <h4>Matching Headings</h4>
+                <ul>
+                    <li>Skim, then go to the headings, underline keywords and <strong>eliminate the headings done for you</strong>. There are more headings than you need.</li>
+                    <li>The topic sentence is <strong>not always first</strong>. Do not stop at the first and last sentence if the main idea is not there — keep reading.</li>
+                    <li>Just because Matching Headings asks you mainly to skim, that does <strong>not</strong> mean you should stop reading the rest of the paragraph if necessary. Keep reading, because the heading must cover the <strong>whole paragraph</strong> — one word or one sentence is not enough.</li>
+                </ul>
+
+                <h4>Matching Features</h4>
+                <ul>
+                    <li>After skimming, think of <strong>synonyms</strong> before you go back to the text, because the text will paraphrase, not repeat your keywords.</li>
+                    <li>There are fewer features than paragraphs, and <strong>one feature may match more than one paragraph</strong>. This is why the instruction says you may use a letter more than once.</li>
+                    <li>Features ask for <strong>connections between facts and opinions — who said or found what</strong>. That is why you need to close read around the keywords, not just scan.</li>
+                </ul>
+            </div>
+
+            <div class="conclusion">
+                <h3>3. True/False and Yes/No break the rule — on purpose</h3>
+                <ul>
+                    <li>The answers are in the <strong>same order</strong> as the information in the text. You are on safe ground reading the statements first.</li>
+                    <li>Read the statement, underline keywords, think of synonyms, turn it into a question, <strong>skim the paragraph</strong>, scan for the keywords, then <strong>close read</strong> around them.</li>
+                    <li>Both True/False and Yes/No ask you to look for <strong>synonyms</strong>, just as Matching Features does. The text will paraphrase, not repeat your keywords.</li>
+                    <li>Looking for specific information does not mean you can skip close reading. It is where the traps live.</li>
+                    <li><strong>True/False tests factual information in the text. Yes/No tests the writer's views or claims.</strong> Same mechanics, different target.</li>
+                    <li>Reporting a view is not the same as agreeing with it. If the writer reports someone else's claim and gives no opinion, the answer is <strong>Not Given</strong>, not Yes or No.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ============ STRATEGY CHECK ============ -->
+        <section class="task" id="warmup">
+            <h2>Strategy check</h2>
+            <p class="hint">Two steps. First, the three dimensions for each question type. Then a harder part: multi-answer questions on what the four types share and where they differ.</p>
+
+            <h3 class="step">Step 1 · The three dimensions</h3>
+
+            <div class="strategy-row" data-task="headings"
+                 data-order="unordered" data-start="text" data-focus="main">
+                <span class="name">Matching Headings</span>
+                <div class="strategy-groups">
+                    <div class="strategy-group" data-key="order" data-label="Ordered?">
+                        <button class="opt" type="button" data-val="unordered">Unordered</button>
+                        <button class="opt" type="button" data-val="ordered">Ordered</button>
+                    </div>
+                    <div class="strategy-group" data-key="start" data-label="Start with">
+                        <button class="opt" type="button" data-val="text">Text first</button>
+                        <button class="opt" type="button" data-val="statements">Statements first</button>
+                    </div>
+                    <div class="strategy-group" data-key="focus" data-label="Look for">
+                        <button class="opt" type="button" data-val="main">Main idea</button>
+                        <button class="opt" type="button" data-val="specific">Specific information</button>
+                        <button class="opt" type="button" data-val="connections">Connections between facts &amp; opinions</button>
+                        <button class="opt" type="button" data-val="views">Writer's views or claims</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="strategy-row" data-task="features"
+                 data-order="unordered" data-start="text" data-focus="connections">
+                <span class="name">Matching Features</span>
+                <div class="strategy-groups">
+                    <div class="strategy-group" data-key="order" data-label="Ordered?">
+                        <button class="opt" type="button" data-val="unordered">Unordered</button>
+                        <button class="opt" type="button" data-val="ordered">Ordered</button>
+                    </div>
+                    <div class="strategy-group" data-key="start" data-label="Start with">
+                        <button class="opt" type="button" data-val="text">Text first</button>
+                        <button class="opt" type="button" data-val="statements">Statements first</button>
+                    </div>
+                    <div class="strategy-group" data-key="focus" data-label="Look for">
+                        <button class="opt" type="button" data-val="main">Main idea</button>
+                        <button class="opt" type="button" data-val="specific">Specific information</button>
+                        <button class="opt" type="button" data-val="connections">Connections between facts &amp; opinions</button>
+                        <button class="opt" type="button" data-val="views">Writer's views or claims</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="strategy-row" data-task="tf"
+                 data-order="ordered" data-start="statements" data-focus="specific">
+                <span class="name">True / False / Not Given</span>
+                <div class="strategy-groups">
+                    <div class="strategy-group" data-key="order" data-label="Ordered?">
+                        <button class="opt" type="button" data-val="unordered">Unordered</button>
+                        <button class="opt" type="button" data-val="ordered">Ordered</button>
+                    </div>
+                    <div class="strategy-group" data-key="start" data-label="Start with">
+                        <button class="opt" type="button" data-val="text">Text first</button>
+                        <button class="opt" type="button" data-val="statements">Statements first</button>
+                    </div>
+                    <div class="strategy-group" data-key="focus" data-label="Look for">
+                        <button class="opt" type="button" data-val="main">Main idea</button>
+                        <button class="opt" type="button" data-val="specific">Specific information</button>
+                        <button class="opt" type="button" data-val="connections">Connections between facts &amp; opinions</button>
+                        <button class="opt" type="button" data-val="views">Writer's views or claims</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="strategy-row" data-task="yn"
+                 data-order="ordered" data-start="statements" data-focus="views">
+                <span class="name">Yes / No / Not Given</span>
+                <div class="strategy-groups">
+                    <div class="strategy-group" data-key="order" data-label="Ordered?">
+                        <button class="opt" type="button" data-val="unordered">Unordered</button>
+                        <button class="opt" type="button" data-val="ordered">Ordered</button>
+                    </div>
+                    <div class="strategy-group" data-key="start" data-label="Start with">
+                        <button class="opt" type="button" data-val="text">Text first</button>
+                        <button class="opt" type="button" data-val="statements">Statements first</button>
+                    </div>
+                    <div class="strategy-group" data-key="focus" data-label="Look for">
+                        <button class="opt" type="button" data-val="main">Main idea</button>
+                        <button class="opt" type="button" data-val="specific">Specific information</button>
+                        <button class="opt" type="button" data-val="connections">Connections between facts &amp; opinions</button>
+                        <button class="opt" type="button" data-val="views">Writer's views or claims</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn" type="button" id="check-strategy">Check answers</button>
+                <button class="btn ghost" type="button" id="reset-strategy">Reset</button>
+            </div>
+            <p class="result" id="strategy-result"></p>
+            <div class="feedback" id="strategy-feedback"></div>
+
+            <h3 class="step">Step 2 · What the four types share, and where they differ</h3>
+            <p class="hint">More than one answer is correct each time. Select every option that applies, then check.</p>
+
+            <div id="multi-wrap"></div>
+
+            <div class="actions">
+                <button class="btn" type="button" id="check-multi">Check answers</button>
+                <button class="btn ghost" type="button" id="reset-multi">Reset</button>
+            </div>
+            <p class="result" id="multi-result"></p>
+        </section>
+
+        <!-- ============ PASSAGE ============ -->
+        <section class="task" id="passage">
+            <h2>Reading Passage: The Unexpected Benefits of Boredom</h2>
+            <p class="hint">Read once for the general idea before attempting the tasks below.</p>
+            <div class="passage">
+                <p><span class="plabel">A</span>Boredom is one of the most disliked emotions. We avoid it with smartphones, streaming services and constant activity. Yet a growing body of research suggests that boredom may not be the enemy we assume. Psychologists are beginning to argue that boredom can serve a purpose, and that our attempts to eliminate it may be counterproductive. This does not mean that all boredom is good, but it does mean that the emotion deserves a more careful look.</p>
+                <p><span class="plabel">B</span>In one well-known experiment, Dr. Elena Marsh and her colleagues asked participants to spend fifteen minutes copying numbers from a telephone directory. A second group was given a more interesting task. Afterwards, both groups were asked to suggest as many uses as possible for a pair of plastic cups. The participants who had completed the boring task produced significantly more ideas, and their ideas were rated as more creative by independent judges. Marsh concluded that boredom can create a mental “empty space” that encourages the mind to wander and generate novel connections.</p>
+                <p><span class="plabel">C</span>Professor David Chen takes a different angle. He argues that boredom is a signal, like hunger or thirst, that something is missing. When we feel bored, we are motivated to seek new goals and experiences. This can be productive, but Chen warns that it can also lead to risk-taking. People who are bored may seek stimulation through gambling, unsafe driving or other dangerous behaviours. For Chen, boredom is neither good nor bad in itself; its effects depend on how people respond to it.</p>
+                <p><span class="plabel">D</span>Dr. Priya Nair has studied boredom in schools. She argues that modern education has over-filled students’ days with structured activities, leaving little room for the kind of unstructured time that allows creativity to develop. Nair does not suggest that schools should abandon structured learning. Rather, she believes that students should be given more freedom to manage their own time, including periods when they are allowed to be bored. In her view, the outcome of boredom depends heavily on the context in which it occurs.</p>
+                <p><span class="plabel">E</span>Taken together, these findings suggest that boredom is a more complex emotion than we usually assume. It can spark creativity, motivate change and, in some circumstances, lead to harm. The writer’s view is that society has been too quick to dismiss boredom as a purely negative experience. What matters most is not boredom itself but how we respond to it: whether we use it as a prompt to reflect and explore, or simply as a discomfort to be eliminated as quickly as possible.</p>
+            </div>
+        </section>
+
+        <!-- ============ MATCHING HEADINGS ============ -->
+        <section class="task" id="headings">
+            <h2>Task 1: Matching Headings</h2>
+            <p class="hint">Unordered. Start with the text, not the headings. Click a heading, then click a paragraph. Click a placed heading to send it back.</p>
+            <div class="chip-pool" id="headings-pool"></div>
+            <div id="headings-slots"></div>
+            <div class="actions">
+                <button class="btn" type="button" id="check-headings">Check answers</button>
+                <button class="btn ghost" type="button" id="reset-headings">Reset</button>
+            </div>
+            <p class="result" id="headings-result"></p>
+            <div class="feedback" id="headings-feedback"></div>
+        </section>
+
+        <!-- ============ MATCHING FEATURES ============ -->
+        <section class="task" id="features">
+            <h2>Task 2: Matching Features</h2>
+            <p class="hint">Unordered. Start with the text. Letters may be used more than once. Click a researcher, then click a statement.</p>
+            <div class="chip-pool" id="features-pool"></div>
+            <div id="features-slots"></div>
+            <div class="actions">
+                <button class="btn" type="button" id="check-features">Check answers</button>
+                <button class="btn ghost" type="button" id="reset-features">Reset</button>
+            </div>
+            <p class="result" id="features-result"></p>
+            <div class="feedback" id="features-feedback"></div>
+        </section>
+
+        <!-- ============ TRUE / FALSE / NOT GIVEN ============ -->
+        <section class="task" id="tf">
+            <h2>Task 3: True / False / Not Given</h2>
+            <p class="hint">Ordered. Start with the statements. Do they agree with the <strong>information</strong> in the passage?</p>
+            <div id="tf-questions"></div>
+            <div class="actions">
+                <button class="btn" type="button" id="check-tf">Check answers</button>
+                <button class="btn ghost" type="button" id="reset-tf">Reset</button>
+            </div>
+            <p class="result" id="tf-result"></p>
+            <div class="feedback" id="tf-feedback"></div>
+        </section>
+
+        <!-- ============ YES / NO / NOT GIVEN ============ -->
+        <section class="task" id="yn">
+            <h2>Task 4: Yes / No / Not Given</h2>
+            <p class="hint">Ordered. Start with the statements. Do they agree with the <strong>views of the writer</strong>?</p>
+            <div id="yn-questions"></div>
+            <div class="actions">
+                <button class="btn" type="button" id="check-yn">Check answers</button>
+                <button class="btn ghost" type="button" id="reset-yn">Reset</button>
+            </div>
+            <p class="result" id="yn-result"></p>
+            <div class="feedback" id="yn-feedback"></div>
+        </section>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 2 · ADVANCED CAMBRIDGE ENGLISH                       -->
+    <!-- ============================================================ -->
+    <section class="exam-section" id="cambridge">
+        <div class="exam-section-header">
+            <span class="s-emoji">🏛️</span>
+            <div>
+                <h2>Advanced Cambridge English Qualifications</h2>
+                <p>B2 First and C1 Advanced preparation with authentic-style tasks and official sample papers.</p>
             </div>
         </div>
 
-        <!-- True / False / Not Given -->
-        <div class="strategy-row" data-task="tf"
-             data-order="ordered" data-start="statements" data-focus="specific">
-            <span class="name">True / False / Not Given</span>
-            <div class="strategy-groups">
-                <div class="strategy-group" data-key="order" data-label="Ordered?">
-                    <button class="opt" type="button" data-val="unordered">Unordered</button>
-                    <button class="opt" type="button" data-val="ordered">Ordered</button>
-                </div>
-                <div class="strategy-group" data-key="start" data-label="Start with">
-                    <button class="opt" type="button" data-val="text">Text first</button>
-                    <button class="opt" type="button" data-val="statements">Statements first</button>
-                </div>
-                <div class="strategy-group" data-key="focus" data-label="Look for">
-                    <button class="opt" type="button" data-val="main">Main idea</button>
-                    <button class="opt" type="button" data-val="specific">Specific information</button>
-                    <button class="opt" type="button" data-val="connections">Connections between facts &amp; opinions</button>
-                    <button class="opt" type="button" data-val="views">Writer's views or claims</button>
-                </div>
+        <div class="card-grid">
+            <div class="card">
+                <div class="emoji">🎯</div>
+                <h3>B2 First (FCE)</h3>
+                <p>Reading and Use of English, Writing, Listening and Speaking at upper-intermediate level.</p>
+                <a href="https://www.cambridgeenglish.org/exams-and-tests/first/preparation/"
+                   class="btn" target="_blank" rel="noopener">Official prep</a>
+                <a href="cambridge-practice.html" class="btn alt">Practice</a>
+            </div>
+            <div class="card">
+                <div class="emoji">🏆</div>
+                <h3>C1 Advanced (CAE)</h3>
+                <p>Advanced-level English for academic and professional contexts. Four papers, four skills.</p>
+                <a href="https://www.cambridgeenglish.org/exams-and-tests/advanced/preparation/"
+                   class="btn" target="_blank" rel="noopener">Official prep</a>
+                <a href="cambridge-practice.html" class="btn alt">Practice</a>
+            </div>
+            <div class="card">
+                <div class="emoji">📄</div>
+                <h3>Sample Papers</h3>
+                <p>Free official sample tests, answer keys and examiner comments for B2 First and C1 Advanced.</p>
+                <a href="https://www.cambridgeenglish.org/exams-and-tests/first/exam-format/"
+                   class="btn" target="_blank" rel="noopener">B2 samples</a>
+                <a href="https://www.cambridgeenglish.org/exams-and-tests/advanced/exam-format/"
+                   class="btn" target="_blank" rel="noopener">C1 samples</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 3 · GENERAL ENGLISH                                  -->
+    <!-- ============================================================ -->
+    <section class="exam-section" id="general-english">
+        <div class="exam-section-header">
+            <span class="s-emoji">🗣️</span>
+            <div>
+                <h2>General English</h2>
+                <p>Everyday vocabulary, grammar and speaking practice.</p>
             </div>
         </div>
 
-        <!-- Yes / No / Not Given -->
-        <div class="strategy-row" data-task="yn"
-             data-order="ordered" data-start="statements" data-focus="views">
-            <span class="name">Yes / No / Not Given</span>
-            <div class="strategy-groups">
-                <div class="strategy-group" data-key="order" data-label="Ordered?">
-                    <button class="opt" type="button" data-val="unordered">Unordered</button>
-                    <button class="opt" type="button" data-val="ordered">Ordered</button>
-                </div>
-                <div class="strategy-group" data-key="start" data-label="Start with">
-                    <button class="opt" type="button" data-val="text">Text first</button>
-                    <button class="opt" type="button" data-val="statements">Statements first</button>
-                </div>
-                <div class="strategy-group" data-key="focus" data-label="Look for">
-                    <button class="opt" type="button" data-val="main">Main idea</button>
-                    <button class="opt" type="button" data-val="specific">Specific information</button>
-                    <button class="opt" type="button" data-val="connections">Connections between facts &amp; opinions</button>
-                    <button class="opt" type="button" data-val="views">Writer's views or claims</button>
-                </div>
+        <div class="card-grid">
+            <div class="card">
+                <div class="emoji">📖</div>
+                <h3>A1 Beginner</h3>
+                <p>Start your English journey with foundational vocabulary, grammar, and speaking practice.</p>
+                <a href="Activities-for-adults.html" class="btn">View A1</a>
+            </div>
+            <div class="card">
+                <div class="emoji">🎯</div>
+                <h3>B2 Upper-Intermediate</h3>
+                <p>Take your English to the next level. Prepare for exams, improve fluency, and build confidence.</p>
+                <a href="B2-exam-preparation.html" class="btn">View B2</a>
             </div>
         </div>
-
-        <div class="actions">
-            <button class="btn" type="button" id="check-strategy">Check answers</button>
-            <button class="btn ghost" type="button" id="reset-strategy">Reset</button>
-        </div>
-        <p class="result" id="strategy-result"></p>
-        <div class="feedback" id="strategy-feedback"></div>
     </section>
 
-    <!-- ================= PASSAGE ================= -->
-    <section class="task" id="passage">
-        <h2>Reading Passage: The Unexpected Benefits of Boredom</h2>
-        <p class="hint">Read once for the general idea before attempting the tasks below.</p>
-        <div class="passage">
-            <p><span class="plabel">A</span>Boredom is one of the most disliked emotions. We avoid it with smartphones, streaming services and constant activity. Yet a growing body of research suggests that boredom may not be the enemy we assume. Psychologists are beginning to argue that boredom can serve a purpose, and that our attempts to eliminate it may be counterproductive. This does not mean that all boredom is good, but it does mean that the emotion deserves a more careful look.</p>
-            <p><span class="plabel">B</span>In one well-known experiment, Dr. Elena Marsh and her colleagues asked participants to spend fifteen minutes copying numbers from a telephone directory. A second group was given a more interesting task. Afterwards, both groups were asked to suggest as many uses as possible for a pair of plastic cups. The participants who had completed the boring task produced significantly more ideas, and their ideas were rated as more creative by independent judges. Marsh concluded that boredom can create a mental “empty space” that encourages the mind to wander and generate novel connections.</p>
-            <p><span class="plabel">C</span>Professor David Chen takes a different angle. He argues that boredom is a signal, like hunger or thirst, that something is missing. When we feel bored, we are motivated to seek new goals and experiences. This can be productive, but Chen warns that it can also lead to risk-taking. People who are bored may seek stimulation through gambling, unsafe driving or other dangerous behaviours. For Chen, boredom is neither good nor bad in itself; its effects depend on how people respond to it.</p>
-            <p><span class="plabel">D</span>Dr. Priya Nair has studied boredom in schools. She argues that modern education has over-filled students’ days with structured activities, leaving little room for the kind of unstructured time that allows creativity to develop. Nair does not suggest that schools should abandon structured learning. Rather, she believes that students should be given more freedom to manage their own time, including periods when they are allowed to be bored. In her view, the outcome of boredom depends heavily on the context in which it occurs.</p>
-            <p><span class="plabel">E</span>Taken together, these findings suggest that boredom is a more complex emotion than we usually assume. It can spark creativity, motivate change and, in some circumstances, lead to harm. The writer’s view is that society has been too quick to dismiss boredom as a purely negative experience. What matters most is not boredom itself but how we respond to it: whether we use it as a prompt to reflect and explore, or simply as a discomfort to be eliminated as quickly as possible.</p>
-        </div>
-    </section>
-
-    <!-- ================= MATCHING HEADINGS ================= -->
-    <section class="task" id="headings">
-        <h2>Task 1: Matching Headings</h2>
-        <p class="hint">Unordered. Start with the text, not the headings. Click a heading, then click a paragraph. Click a placed heading to send it back.</p>
-        <div class="chip-pool" id="headings-pool"></div>
-        <div id="headings-slots"></div>
-        <div class="actions">
-            <button class="btn" type="button" id="check-headings">Check answers</button>
-            <button class="btn ghost" type="button" id="reset-headings">Reset</button>
-        </div>
-        <p class="result" id="headings-result"></p>
-        <div class="feedback" id="headings-feedback"></div>
-    </section>
-
-    <!-- ================= MATCHING FEATURES ================= -->
-    <section class="task" id="features">
-        <h2>Task 2: Matching Features</h2>
-        <p class="hint">Unordered. Start with the text. Letters may be used more than once. Click a researcher, then click a statement.</p>
-        <div class="chip-pool" id="features-pool"></div>
-        <div id="features-slots"></div>
-        <div class="actions">
-            <button class="btn" type="button" id="check-features">Check answers</button>
-            <button class="btn ghost" type="button" id="reset-features">Reset</button>
-        </div>
-        <p class="result" id="features-result"></p>
-        <div class="feedback" id="features-feedback"></div>
-    </section>
-
-    <!-- ================= TRUE / FALSE / NOT GIVEN ================= -->
-    <section class="task" id="tf">
-        <h2>Task 3: True / False / Not Given</h2>
-        <p class="hint">Ordered. Start with the statements. Do they agree with the <strong>information</strong> in the passage?</p>
-        <div id="tf-questions"></div>
-        <div class="actions">
-            <button class="btn" type="button" id="check-tf">Check answers</button>
-            <button class="btn ghost" type="button" id="reset-tf">Reset</button>
-        </div>
-        <p class="result" id="tf-result"></p>
-        <div class="feedback" id="tf-feedback"></div>
-    </section>
-
-    <!-- ================= YES / NO / NOT GIVEN ================= -->
-    <section class="task" id="yn">
-        <h2>Task 4: Yes / No / Not Given</h2>
-        <p class="hint">Ordered. Start with the statements. Do they agree with the <strong>views of the writer</strong>?</p>
-        <div id="yn-questions"></div>
-        <div class="actions">
-            <button class="btn" type="button" id="check-yn">Check answers</button>
-            <button class="btn ghost" type="button" id="reset-yn">Reset</button>
-        </div>
-        <p class="result" id="yn-result"></p>
-        <div class="feedback" id="yn-feedback"></div>
-    </section>
-
-    <a href="exams.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Exams</a>
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
 </div>
 
 <script>
 /* =========================================================
-   1. STRATEGY WARM-UP  (3 dimensions)
+   STRATEGY CHECK — THREE DIMENSIONS
    ========================================================= */
 var VALUE_LABEL = {
     order: { unordered: 'Unordered', ordered: 'Ordered' },
@@ -453,7 +658,183 @@ document.getElementById('reset-strategy').addEventListener('click', function () 
 });
 
 /* =========================================================
-   2. MATCHING HEADINGS
+   STRATEGY CHECK — MULTI-ANSWER
+   ========================================================= */
+var MULTI = [
+    {
+        id: 'm1',
+        q: 'Which question types ask you to think of synonyms or paraphrase before you look back at the text?',
+        options: [
+            { v: 'headings', label: 'Matching Headings' },
+            { v: 'features', label: 'Matching Features' },
+            { v: 'tf',       label: 'True / False / Not Given' },
+            { v: 'yn',       label: 'Yes / No / Not Given' }
+        ],
+        answer: ['features', 'tf', 'yn'],
+        explain: 'The session flags synonyms explicitly twice: for Matching Features (“you have to look for synonyms … it will be paraphrased”) and for True/False and Yes/No (“you underline the keywords, and then you think of synonyms”). Matching Headings also involves paraphrase in practice, but the session frames it as matching keywords against the first and last sentence, so the three it stresses are Features, T/F and Y/N.'
+    },
+    {
+        id: 'm2',
+        q: 'Which question types require you to close read around the keywords, and not just scan and match?',
+        options: [
+            { v: 'headings', label: 'Matching Headings' },
+            { v: 'features', label: 'Matching Features' },
+            { v: 'tf',       label: 'True / False / Not Given' },
+            { v: 'yn',       label: 'Yes / No / Not Given' }
+        ],
+        answer: ['headings', 'features', 'tf', 'yn'],
+        explain: 'All four. The session is clearest on Features (“you should also close read … relationships between facts or opinions”). For Headings you must keep reading until the heading covers the whole paragraph. And for True/False and Yes/No — even though “you are tested on your scanning for specific information” — the session warns this “should not mislead you into thinking that you’re not going to close read”. Only the target of the close reading differs.'
+    },
+    {
+        id: 'm3',
+        q: 'In which question types can the answer appear anywhere in the passage, so you cannot work through them in order?',
+        options: [
+            { v: 'headings', label: 'Matching Headings' },
+            { v: 'features', label: 'Matching Features' },
+            { v: 'tf',       label: 'True / False / Not Given' },
+            { v: 'yn',       label: 'Yes / No / Not Given' }
+        ],
+        answer: ['headings', 'features'],
+        explain: 'Only the two matching types. The session says it directly: “with matching features and matching headings, the questions could be anywhere”, while in True/False and Yes/No “the answers … will be in the same order as the information in the text”.'
+    },
+    {
+        id: 'm4',
+        q: 'In which question types should you start by reading the statements rather than the text?',
+        options: [
+            { v: 'headings', label: 'Matching Headings' },
+            { v: 'features', label: 'Matching Features' },
+            { v: 'tf',       label: 'True / False / Not Given' },
+            { v: 'yn',       label: 'Yes / No / Not Given' }
+        ],
+        answer: ['tf', 'yn'],
+        explain: 'Only True/False and Yes/No. The ordering makes this safe: “the information is right there in front of you, in the same chronological structure as the text”. With Headings and Features the answers can be anywhere, so starting with the options is exactly the trap the golden rule warns about.'
+    },
+    {
+        id: 'm5',
+        q: 'Which statements are true of Matching Headings AND Matching Features?',
+        options: [
+            { v: 'a', label: 'You start with the text, not with the options.' },
+            { v: 'b', label: 'The answers are not in text order.' },
+            { v: 'c', label: 'There are always more options than you need.' },
+            { v: 'd', label: 'A single option may be used more than once.' }
+        ],
+        answer: ['a', 'b'],
+        explain: 'Both start with the text and both are unordered. (c) is only half true: Headings has “more headings than you need”, but with Features “you’re going to have fewer features than you need, and more paragraphs”. (d) is true of Features only — you may use a letter more than once — not of Headings.'
+    },
+    {
+        id: 'm6',
+        q: 'Which statements are true of Matching Headings, True/False and Yes/No?',
+        options: [
+            { v: 'a', label: 'You must keep reading beyond the first and last sentence until the idea is complete.' },
+            { v: 'b', label: 'A single keyword match is not enough — the heading or answer must fit the whole paragraph or the whole statement.' },
+            { v: 'c', label: 'The answers follow the order of the text.' },
+            { v: 'd', label: 'You start with the options.' }
+        ],
+        answer: ['a', 'b'],
+        explain: 'This is the shared ground. For Headings, the topic sentence is not always first and “the heading must cover the whole paragraph”. For True/False and Yes/No you close read around the keywords rather than trusting one word — which is why the word “always” in a statement can make it false. (c) and (d) are true of the T/F and Y/N pair only, never of Headings.'
+    },
+    {
+        id: 'm7',
+        q: 'Which statements about True/False and Yes/No are correct?',
+        options: [
+            { v: 'a', label: 'Both follow the order of the text.' },
+            { v: 'b', label: 'Both require you to look for synonyms.' },
+            { v: 'c', label: 'Both test factual information in the passage.' },
+            { v: 'd', label: 'Both test the writer’s views or claims.' }
+        ],
+        answer: ['a', 'b'],
+        explain: 'Same mechanics, different target: both are ordered and both need synonyms. But only True/False tests factual information, and only Yes/No tests the writer’s views or claims. That is the distinction to hold on to — and the reason a reported opinion with no writer comment is Not Given, not Yes or No.'
+    }
+];
+
+var multiWrap = document.getElementById('multi-wrap');
+
+MULTI.forEach(function (item, i) {
+    var box = document.createElement('div');
+    box.className = 'multi';
+    box.dataset.id = item.id;
+
+    var head = document.createElement('p');
+    head.className = 'mq';
+    head.innerHTML = '<span class="qnum">' + (i + 1) + '.</span>' + item.q +
+                     '<span class="pick">Select all that apply — more than one answer is correct.</span>';
+    box.appendChild(head);
+
+    var opts = document.createElement('div');
+    opts.className = 'opts';
+    item.options.forEach(function (o) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'opt';
+        b.dataset.val = o.v;
+        b.textContent = o.label;
+        b.addEventListener('click', function () {
+            b.classList.toggle('sel');
+            b.classList.remove('correct', 'incorrect');
+        });
+        opts.appendChild(b);
+    });
+    box.appendChild(opts);
+
+    var fb = document.createElement('div');
+    fb.className = 'mfeedback';
+    box.appendChild(fb);
+
+    multiWrap.appendChild(box);
+});
+
+document.getElementById('check-multi').addEventListener('click', function () {
+    var full = 0;
+
+    MULTI.forEach(function (item) {
+        var box = document.querySelector('.multi[data-id="' + item.id + '"]');
+        var picked = [];
+        box.querySelectorAll('.opt.sel').forEach(function (b) { picked.push(b.dataset.val); });
+
+        var missing = item.answer.filter(function (a) { return picked.indexOf(a) === -1; });
+        var extra = picked.filter(function (p) { return item.answer.indexOf(p) === -1; });
+        var ok = missing.length === 0 && extra.length === 0;
+        if (ok) full++;
+
+        box.querySelectorAll('.opt').forEach(function (b) {
+            var v = b.dataset.val;
+            b.classList.remove('correct', 'incorrect');
+            if (item.answer.indexOf(v) !== -1) {
+                b.classList.add('correct');
+            } else if (picked.indexOf(v) !== -1) {
+                b.classList.add('incorrect');
+            }
+        });
+
+        var verdict = ok ? 'Correct.' :
+            'Not quite — ' +
+            (missing.length ? 'you missed ' + missing.length + '. ' : '') +
+            (extra.length ? 'you picked ' + extra.length + ' that ' + (extra.length === 1 ? 'does not' : 'do not') + ' apply.' : '');
+
+        var fb = box.querySelector('.mfeedback');
+        fb.innerHTML = '<div class="' + (ok ? 'ok' : 'no') + '"><strong>' + verdict + '</strong> ' +
+                       item.explain + '</div>';
+        fb.style.display = 'block';
+    });
+
+    var r = document.getElementById('multi-result');
+    r.textContent = full + ' / ' + MULTI.length + ' questions fully correct';
+    r.className = 'result ' + (full === MULTI.length ? 'good' : 'bad');
+});
+
+document.getElementById('reset-multi').addEventListener('click', function () {
+    document.querySelectorAll('#multi-wrap .opt').forEach(function (b) {
+        b.classList.remove('sel', 'correct', 'incorrect');
+    });
+    document.querySelectorAll('#multi-wrap .mfeedback').forEach(function (f) {
+        f.innerHTML = '';
+        f.style.display = 'none';
+    });
+    document.getElementById('multi-result').textContent = '';
+});
+
+/* =========================================================
+   MATCHING HEADINGS
    ========================================================= */
 var HEADINGS = [
     { id: 'i',   text: 'A signal that prompts a search for meaning' },
@@ -468,7 +849,7 @@ var HEADING_ANSWERS = { A: 'iv', B: 'ii', C: 'i', D: 'v', E: 'vii' };
 var HEADING_EXPLAIN = {
     A: 'The paragraph is about rethinking boredom: it is disliked, but it may serve a purpose. “iv” captures the whole paragraph; the background about phones and streaming is supporting detail.',
     B: 'Marsh’s experiment shows that boredom generates novel connections — that is creativity. “vi” (risk-taking) is a distractor: risk-taking is never mentioned in paragraph B.',
-    C: 'Chen’s central claim is that boredom is a signal that something is missing, which pushes us to seek new goals. “vi” is tempting because risk-taking is mentioned, but risk-taking is a supporting detail, not the main idea. This is the classic trap: do not match a heading to one word.',
+    C: 'Chen’s central claim is that boredom is a signal that something is missing, which pushes us to seek new goals. “vi” is tempting because risk-taking is mentioned, but risk-taking is a supporting detail, not the main idea. This is the classic trap: do not match a heading to one word — the heading must cover the whole paragraph.',
     D: 'Nair’s research is about boredom in schools. “iii” is wrong because Nair argues for MORE unstructured time, not less.',
     E: 'A balanced conclusion: boredom can spark creativity, motivate change or lead to harm, and what matters is how we respond. “vii” captures that balance across all the findings.'
 };
@@ -559,7 +940,7 @@ document.getElementById('reset-headings').addEventListener('click', function () 
 });
 
 /* =========================================================
-   3. MATCHING FEATURES
+   MATCHING FEATURES
    ========================================================= */
 var FEATURES = [
     { id: 'A', name: 'Dr. Elena Marsh' },
@@ -660,7 +1041,7 @@ document.getElementById('reset-features').addEventListener('click', function () 
 });
 
 /* =========================================================
-   4 & 5. CHOICE-BASED TASKS (T/F/NG and Y/N/NG)
+   T/F/NG and Y/N/NG
    ========================================================= */
 var TF = [
     { n: 1, text: 'Dr. Marsh’s study involved participants who first completed a boring task.', answer: 'TRUE',
@@ -780,9 +1161,6 @@ document.getElementById('reset-yn').addEventListener('click', function () {
                   result: 'yn-result', feedback: 'yn-feedback' });
 });
 
-/* =========================================================
-   INITIAL RENDER
-   ========================================================= */
 renderHeadings();
 renderFeatures();
 </script>
