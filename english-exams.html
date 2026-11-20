@@ -1,115 +1,636 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Exams – BeSpellBee</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <style>
-        body {
-            background: #0a0a0a;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 40px 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        h1 {
-            color: #00ffff;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .subhead {
-            color: #88dddd;
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-        }
-        .card-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        .card {
-            background: #0d0d0d;
-            border: 1px solid #1a4a4a;
-            border-radius: 16px;
-            padding: 24px;
-            transition: border-color 0.3s;
-            text-align: center;
-        }
-        .card:hover {
-            border-color: #00ffff;
-        }
-        .card .emoji {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .card h2 {
-            color: #fff;
-            font-size: 1.4rem;
-            margin-bottom: 0.3rem;
-        }
-        .card p {
-            color: #888;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-        .card .btn {
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 8px 24px;
-            border: 1px solid #00ffff;
-            border-radius: 30px;
-            color: #00ffff;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        .card .btn:hover {
-            background: #00ffff;
-            color: #000;
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 2rem;
-            color: #666;
-            text-decoration: none;
-        }
-        .back-link:hover {
-            color: #00ffff;
-        }
-        @media (max-width: 600px) {
-            .card-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Academic Practice – BeSpellBee</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+    :root{
+        --bg:#0a0a0a; --panel:#0d0d0d; --line:#1a4a4a; --accent:#00ffff;
+        --sub:#88dddd; --text:#e0e0e0; --muted:#888; --ok:#2ecc71; --bad:#ff5c5c;
+    }
+    *{box-sizing:border-box;}
+    body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;
+         margin:0;padding:40px 20px;line-height:1.6;}
+    .container{max-width:900px;margin:0 auto;}
+    h1{color:var(--accent);font-size:2.2rem;margin:0 0 .4rem;}
+    .subhead{color:var(--sub);margin:0 0 2rem;}
+    section.task{background:var(--panel);border:1px solid var(--line);
+        border-radius:16px;padding:24px;margin-bottom:24px;}
+    section.task h2{color:#fff;font-size:1.35rem;margin:0 0 .3rem;}
+    section.task .hint{color:var(--muted);font-size:.9rem;margin:0 0 1.2rem;}
+    .passage p{margin:0 0 .9rem;font-size:.95rem;}
+    .passage .plabel{color:var(--accent);font-weight:700;margin-right:.4rem;}
+
+    /* strategy warm-up */
+    .strategy-row{display:flex;justify-content:space-between;gap:12px;
+        flex-wrap:wrap;border-bottom:1px solid #141414;padding:12px 0;align-items:center;}
+    .strategy-row:last-of-type{border-bottom:none;}
+    .strategy-row .name{font-size:.95rem;color:#fff;min-width:190px;}
+    .strategy-group{display:flex;gap:8px;flex-wrap:wrap;}
+
+    /* chips + slots */
+    .chip-pool{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;}
+    .chip{background:#111;border:1px solid var(--line);color:var(--text);
+        border-radius:30px;padding:8px 16px;font:inherit;font-size:.88rem;
+        cursor:pointer;transition:.2s;}
+    .chip:hover{border-color:var(--accent);color:var(--accent);}
+    .chip.selected{border-color:var(--accent);background:rgba(0,255,255,.12);color:var(--accent);}
+    .chip.used{opacity:.3;cursor:not-allowed;}
+    .slot{display:flex;align-items:center;gap:12px;border:1px dashed var(--line);
+        border-radius:12px;padding:12px 14px;margin-bottom:10px;cursor:pointer;
+        transition:.2s;min-height:56px;}
+    .slot:hover{border-color:var(--accent);}
+    .slot .slot-label{color:var(--sub);font-weight:700;min-width:96px;font-size:.9rem;}
+    .slot .slot-value{color:var(--muted);font-size:.9rem;font-style:italic;}
+    .slot.filled{border-style:solid;background:#101616;}
+    .slot.filled .slot-value{color:var(--text);font-style:normal;}
+    .slot.correct{border-color:var(--ok);}
+    .slot.incorrect{border-color:var(--bad);}
+    .feature-slot{display:block;}
+    .feature-slot .fstatement{font-size:.93rem;}
+    .feature-slot .fanswer{margin-top:8px;color:var(--accent);font-weight:700;font-size:.9rem;}
+    .feature-slot .fanswer.empty{color:var(--muted);font-weight:400;font-style:italic;}
+
+    /* options */
+    .q{border-bottom:1px solid #141414;padding:14px 0;}
+    .q:last-of-type{border-bottom:none;}
+    .q p{margin:0 0 .7rem;font-size:.95rem;}
+    .opts{display:flex;flex-wrap:wrap;gap:8px;}
+    .opt{background:#111;border:1px solid var(--line);color:var(--text);
+        border-radius:8px;padding:6px 14px;font:inherit;font-size:.85rem;
+        cursor:pointer;transition:.2s;}
+    .opt:hover{border-color:var(--accent);}
+    .opt.sel{border-color:var(--accent);background:rgba(0,255,255,.12);color:var(--accent);}
+    .opt.correct{border-color:var(--ok);color:var(--ok);}
+    .opt.incorrect{border-color:var(--bad);color:var(--bad);}
+
+    /* buttons + feedback */
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;}
+    .btn{border:1px solid var(--accent);background:transparent;color:var(--accent);
+        border-radius:30px;padding:9px 26px;font:inherit;font-weight:600;
+        cursor:pointer;transition:.25s;}
+    .btn:hover{background:var(--accent);color:#000;}
+    .btn.ghost{border-color:#444;color:#aaa;}
+    .btn.ghost:hover{background:#222;color:#fff;}
+    .result{margin-top:16px;font-weight:600;}
+    .result.good{color:var(--ok);}
+    .result.bad{color:var(--bad);}
+    .feedback{margin-top:14px;font-size:.9rem;}
+    .feedback div{padding:8px 12px;border-left:3px solid var(--line);
+        margin-bottom:8px;color:var(--muted);}
+    .feedback div.ok{border-color:var(--ok);}
+    .feedback div.no{border-color:var(--bad);}
+    .back-link{display:inline-block;margin-top:8px;color:#666;text-decoration:none;}
+    .back-link:hover{color:var(--accent);}
+    @media(max-width:600px){
+        body{padding:24px 14px;}
+        section.task{padding:18px;}
+        .slot .slot-label{min-width:76px;}
+        .strategy-row .name{min-width:100%;}
+    }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>📘 English Exams</h1>
-        <p class="subhead">Prepare for your English certification with BeSpellBee. Choose your level below.</p>
+<div class="container">
 
-        <div class="card-grid">
-            <div class="card">
-                <div class="emoji">📖</div>
-                <h2>A1 Beginner</h2>
-                <p>Start your English journey with foundational vocabulary, grammar, and speaking practice.</p>
-                <a href="Activities-for-adults.html" class="btn">View A1</a>
+    <h1>📘 IELTS Academic Practice</h1>
+    <p class="subhead">Four question types, one rule: know whether to start with the text or the statements.</p>
+
+    <!-- ============ WARM-UP ============ -->
+    <section class="task">
+        <h2>1. Strategy warm-up</h2>
+        <p class="hint">For each task type, choose whether the answers are <strong>ordered</strong> or <strong>unordered</strong>, and whether you start with the <strong>text</strong> or the <strong>options/statements</strong>.</p>
+
+        <div class="strategy-row" data-task="headings" data-order="unordered" data-start="text">
+            <span class="name">Matching Headings</span>
+            <div class="strategy-group" data-key="order">
+                <button class="opt" type="button" data-val="unordered">Unordered</button>
+                <button class="opt" type="button" data-val="ordered">Ordered</button>
             </div>
-            <div class="card">
-                <div class="emoji">🎯</div>
-                <h2>B2 Upper-Intermediate</h2>
-                <p>Take your English to the next level. Prepare for exams, improve fluency, and build confidence.</p>
-                <a href="B2-exam-preparation.html" class="btn">View B2</a>
+            <div class="strategy-group" data-key="start">
+                <button class="opt" type="button" data-val="text">Text first</button>
+                <button class="opt" type="button" data-val="options">Options first</button>
             </div>
         </div>
 
-        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
-    </div>
-    <script src="tracking.js"></script>
+        <div class="strategy-row" data-task="features" data-order="unordered" data-start="text">
+            <span class="name">Matching Features</span>
+            <div class="strategy-group" data-key="order">
+                <button class="opt" type="button" data-val="unordered">Unordered</button>
+                <button class="opt" type="button" data-val="ordered">Ordered</button>
+            </div>
+            <div class="strategy-group" data-key="start">
+                <button class="opt" type="button" data-val="text">Text first</button>
+                <button class="opt" type="button" data-val="options">Options first</button>
+            </div>
+        </div>
+
+        <div class="strategy-row" data-task="tf" data-order="ordered" data-start="options">
+            <span class="name">True / False / Not Given</span>
+            <div class="strategy-group" data-key="order">
+                <button class="opt" type="button" data-val="unordered">Unordered</button>
+                <button class="opt" type="button" data-val="ordered">Ordered</button>
+            </div>
+            <div class="strategy-group" data-key="start">
+                <button class="opt" type="button" data-val="text">Text first</button>
+                <button class="opt" type="button" data-val="options">Statements first</button>
+            </div>
+        </div>
+
+        <div class="strategy-row" data-task="yn" data-order="ordered" data-start="options">
+            <span class="name">Yes / No / Not Given</span>
+            <div class="strategy-group" data-key="order">
+                <button class="opt" type="button" data-val="unordered">Unordered</button>
+                <button class="opt" type="button" data-val="ordered">Ordered</button>
+            </div>
+            <div class="strategy-group" data-key="start">
+                <button class="opt" type="button" data-val="text">Text first</button>
+                <button class="opt" type="button" data-val="options">Statements first</button>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn" type="button" id="check-strategy">Check answers</button>
+            <button class="btn ghost" type="button" id="reset-strategy">Reset</button>
+        </div>
+        <p class="result" id="strategy-result"></p>
+        <div class="feedback" id="strategy-feedback"></div>
+    </section>
+
+    <!-- ============ READING PASSAGE ============ -->
+    <section class="task">
+        <h2>Reading Passage</h2>
+        <p class="hint">Read once for the general idea before attempting the tasks below.</p>
+        <div class="passage">
+            <p><span class="plabel">A</span>Boredom is one of the most disliked emotions. We avoid it with smartphones, streaming services and constant activity. Yet a growing body of research suggests that boredom may not be the enemy we assume. Psychologists are beginning to argue that boredom can serve a purpose, and that our attempts to eliminate it may be counterproductive. This does not mean that all boredom is good, but it does mean that the emotion deserves a more careful look.</p>
+            <p><span class="plabel">B</span>In one well-known experiment, Dr. Elena Marsh and her colleagues asked participants to spend fifteen minutes copying numbers from a telephone directory. A second group was given a more interesting task. Afterwards, both groups were asked to suggest as many uses as possible for a pair of plastic cups. The participants who had completed the boring task produced significantly more ideas, and their ideas were rated as more creative by independent judges. Marsh concluded that boredom can create a mental “empty space” that encourages the mind to wander and generate novel connections.</p>
+            <p><span class="plabel">C</span>Professor David Chen takes a different angle. He argues that boredom is a signal, like hunger or thirst, that something is missing. When we feel bored, we are motivated to seek new goals and experiences. This can be productive, but Chen warns that it can also lead to risk-taking. People who are bored may seek stimulation through gambling, unsafe driving or other dangerous behaviours. For Chen, boredom is neither good nor bad in itself; its effects depend on how people respond to it.</p>
+            <p><span class="plabel">D</span>Dr. Priya Nair has studied boredom in schools. She argues that modern education has over-filled students’ days with structured activities, leaving little room for the kind of unstructured time that allows creativity to develop. Nair does not suggest that schools should abandon structured learning. Rather, she believes that students should be given more freedom to manage their own time, including periods when they are allowed to be bored. In her view, the outcome of boredom depends heavily on the context in which it occurs.</p>
+            <p><span class="plabel">E</span>Taken together, these findings suggest that boredom is a more complex emotion than we usually assume. It can spark creativity, motivate change and, in some circumstances, lead to harm. The writer’s view is that society has been too quick to dismiss boredom as a purely negative experience. What matters most is not boredom itself but how we respond to it: whether we use it as a prompt to reflect and explore, or simply as a discomfort to be eliminated as quickly as possible.</p>
+        </div>
+    </section>
+
+    <!-- ============ MATCHING HEADINGS ============ -->
+    <section class="task">
+        <h2>2. Matching Headings</h2>
+        <p class="hint">Click a heading, then click a paragraph to place it. Click a placed heading to send it back.</p>
+        <div class="chip-pool" id="headings-pool"></div>
+        <div id="headings-slots"></div>
+        <div class="actions">
+            <button class="btn" type="button" id="check-headings">Check answers</button>
+            <button class="btn ghost" type="button" id="reset-headings">Reset</button>
+        </div>
+        <p class="result" id="headings-result"></p>
+        <div class="feedback" id="headings-feedback"></div>
+    </section>
+
+    <!-- ============ MATCHING FEATURES ============ -->
+    <section class="task">
+        <h2>3. Matching Features</h2>
+        <p class="hint">Letters may be used more than once. Click a researcher, then click a statement.</p>
+        <div class="chip-pool" id="features-pool"></div>
+        <div id="features-slots"></div>
+        <div class="actions">
+            <button class="btn" type="button" id="check-features">Check answers</button>
+            <button class="btn ghost" type="button" id="reset-features">Reset</button>
+        </div>
+        <p class="result" id="features-result"></p>
+        <div class="feedback" id="features-feedback"></div>
+    </section>
+
+    <!-- ============ TRUE / FALSE / NOT GIVEN ============ -->
+    <section class="task">
+        <h2>4. True / False / Not Given</h2>
+        <p class="hint">Do the statements agree with the <strong>information</strong> in the passage?</p>
+        <div id="tf-questions"></div>
+        <div class="actions">
+            <button class="btn" type="button" id="check-tf">Check answers</button>
+            <button class="btn ghost" type="button" id="reset-tf">Reset</button>
+        </div>
+        <p class="result" id="tf-result"></p>
+        <div class="feedback" id="tf-feedback"></div>
+    </section>
+
+    <!-- ============ YES / NO / NOT GIVEN ============ -->
+    <section class="task">
+        <h2>5. Yes / No / Not Given</h2>
+        <p class="hint">Do the statements agree with the <strong>views of the writer</strong>?</p>
+        <div id="yn-questions"></div>
+        <div class="actions">
+            <button class="btn" type="button" id="check-yn">Check answers</button>
+            <button class="btn ghost" type="button" id="reset-yn">Reset</button>
+        </div>
+        <p class="result" id="yn-result"></p>
+        <div class="feedback" id="yn-feedback"></div>
+    </section>
+
+    <a href="exams.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Exams</a>
+</div>
+
+<script>
+/* =========================================================
+   1. STRATEGY WARM-UP
+   ========================================================= */
+document.querySelectorAll('.strategy-group').forEach(function (group) {
+    group.addEventListener('click', function (e) {
+        var btn = e.target.closest('.opt');
+        if (!btn) return;
+        group.querySelectorAll('.opt').forEach(function (o) {
+            o.classList.remove('sel', 'correct', 'incorrect');
+        });
+        btn.classList.add('sel');
+    });
+});
+
+document.getElementById('check-strategy').addEventListener('click', function () {
+    var correct = 0, total = 0, html = '';
+
+    document.querySelectorAll('.strategy-row').forEach(function (row) {
+        row.querySelectorAll('.strategy-group').forEach(function (group) {
+            total++;
+            var key = group.dataset.key;
+            var sel = group.querySelector('.opt.sel');
+            var right = row.dataset[key];
+
+            group.querySelectorAll('.opt').forEach(function (o) {
+                o.classList.remove('correct', 'incorrect');
+            });
+
+            if (sel && sel.dataset.val === right) {
+                sel.classList.add('correct');
+                correct++;
+            } else {
+                if (sel) sel.classList.add('incorrect');
+                var target = group.querySelector('.opt[data-val="' + right + '"]');
+                if (target) target.classList.add('correct');
+                html += '<div class="no"><strong>' + row.querySelector('.name').textContent +
+                        '</strong>: the correct choice is <em>' + right + '</em>.</div>';
+            }
+        });
+    });
+
+    var result = document.getElementById('strategy-result');
+    result.textContent = correct + ' / ' + total + ' correct';
+    result.className = 'result ' + (correct === total ? 'good' : 'bad');
+    document.getElementById('strategy-feedback').innerHTML = html;
+});
+
+document.getElementById('reset-strategy').addEventListener('click', function () {
+    document.querySelectorAll('.strategy-group .opt').forEach(function (o) {
+        o.classList.remove('sel', 'correct', 'incorrect');
+    });
+    document.getElementById('strategy-result').textContent = '';
+    document.getElementById('strategy-feedback').innerHTML = '';
+});
+
+/* =========================================================
+   2. MATCHING HEADINGS
+   ========================================================= */
+var HEADINGS = [
+    { id: 'i',   text: 'A signal that prompts a search for meaning' },
+    { id: 'ii',  text: 'How boredom can enhance creative thinking' },
+    { id: 'iii', text: 'The dangers of too much unstructured time' },
+    { id: 'iv',  text: 'Rethinking a disliked emotion' },
+    { id: 'v',   text: 'Boredom in the classroom' },
+    { id: 'vi',  text: 'The link between boredom and risk-taking' },
+    { id: 'vii', text: 'A balanced view of a complex emotion' }
+];
+var HEADING_ANSWERS = { A: 'iv', B: 'ii', C: 'i', D: 'v', E: 'vii' };
+var HEADING_EXPLAIN = {
+    A: 'The paragraph is about rethinking boredom: it is disliked but may serve a purpose.',
+    B: 'Marsh’s experiment shows boredom can generate novel connections, i.e. creativity.',
+    C: 'Chen’s central claim is that boredom is a signal that something is missing. Risk-taking is only a detail.',
+    D: 'Nair’s research is about boredom in schools.',
+    E: 'A balanced conclusion: creative, motivating, or harmful, depending on how we respond.'
+};
+
+var headingPlacement = { A: null, B: null, C: null, D: null, E: null };
+var headingSelected = null;
+
+(function buildHeadingSlots() {
+    var wrap = document.getElementById('headings-slots');
+    Object.keys(HEADING_ANSWERS).forEach(function (p) {
+        var slot = document.createElement('div');
+        slot.className = 'slot';
+        slot.dataset.para = p;
+        slot.innerHTML = '<span class="slot-label">Paragraph ' + p + '</span>' +
+                         '<span class="slot-value">Click to place a heading</span>';
+        slot.addEventListener('click', function () {
+            if (headingPlacement[p]) headingPlacement[p] = null;
+            if (headingSelected) {
+                headingPlacement[p] = headingSelected;
+                headingSelected = null;
+            }
+            renderHeadings();
+        });
+        wrap.appendChild(slot);
+    });
+})();
+
+function renderHeadings() {
+    var pool = document.getElementById('headings-pool');
+    pool.innerHTML = '';
+
+    HEADINGS.forEach(function (h) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'chip';
+        btn.textContent = h.id + '. ' + h.text;
+
+        var placed = Object.keys(headingPlacement).some(function (k) {
+            return headingPlacement[k] === h.id;
+        });
+        if (placed) btn.classList.add('used');
+        if (headingSelected === h.id) btn.classList.add('selected');
+
+        btn.addEventListener('click', function () {
+            if (placed) return;
+            headingSelected = (headingSelected === h.id) ? null : h.id;
+            renderHeadings();
+        });
+        pool.appendChild(btn);
+    });
+
+    Object.keys(HEADING_ANSWERS).forEach(function (p) {
+        var slot = document.querySelector('#headings-slots .slot[data-para="' + p + '"]');
+        var val = headingPlacement[p];
+        var span = slot.querySelector('.slot-value');
+        slot.classList.toggle('filled', !!val);
+        slot.classList.remove('correct', 'incorrect');
+        if (val) {
+            var h = HEADINGS.filter(function (x) { return x.id === val; })[0];
+            span.textContent = val + '. ' + h.text;
+        } else {
+            span.textContent = 'Click to place a heading';
+        }
+    });
+}
+
+document.getElementById('check-headings').addEventListener('click', function () {
+    var correct = 0, html = '';
+    Object.keys(HEADING_ANSWERS).forEach(function (p) {
+        var slot = document.querySelector('#headings-slots .slot[data-para="' + p + '"]');
+        var ok = headingPlacement[p] === HEADING_ANSWERS[p];
+        slot.classList.toggle('correct', ok);
+        slot.classList.toggle('incorrect', !ok);
+        if (ok) correct++;
+        html += '<div class="' + (ok ? 'ok' : 'no') + '"><strong>Paragraph ' + p +
+                ':</strong> ' + (ok ? 'Correct. ' : 'You chose ' +
+                (headingPlacement[p] || 'nothing') + '. ') +
+                HEADING_EXPLAIN[p] + '</div>';
+    });
+    var r = document.getElementById('headings-result');
+    r.textContent = correct + ' / 5 correct';
+    r.className = 'result ' + (correct === 5 ? 'good' : 'bad');
+    document.getElementById('headings-feedback').innerHTML = html;
+});
+
+document.getElementById('reset-headings').addEventListener('click', function () {
+    headingPlacement = { A: null, B: null, C: null, D: null, E: null };
+    headingSelected = null;
+    renderHeadings();
+    document.getElementById('headings-result').textContent = '';
+    document.getElementById('headings-feedback').innerHTML = '';
+});
+
+/* =========================================================
+   3. MATCHING FEATURES
+   ========================================================= */
+var FEATURES = [
+    { id: 'A', name: 'Dr. Elena Marsh' },
+    { id: 'B', name: 'Professor David Chen' },
+    { id: 'C', name: 'Dr. Priya Nair' }
+];
+var FEATURE_STATEMENTS = [
+    { n: 1, text: 'Found that completing a boring task led to a greater quantity of creative ideas.', answer: 'A', explain: 'Paragraph B: Marsh’s bored participants “produced significantly more ideas”.' },
+    { n: 2, text: 'Argues that boredom can motivate people to look for new goals.', answer: 'B', explain: 'Paragraph C: Chen says boredom motivates us “to seek new goals and experiences”.' },
+    { n: 3, text: 'Suggests that schools should allow students more freedom to manage their own time.', answer: 'C', explain: 'Paragraph D: Nair believes students should have “more freedom to manage their own time”.' },
+    { n: 4, text: 'Warns that boredom may encourage risky behaviour.', answer: 'B', explain: 'Paragraph C: Chen warns boredom “can also lead to risk-taking” and dangerous behaviours. B is used twice.' },
+    { n: 5, text: 'Believes that the outcome of boredom depends heavily on the context in which it occurs.', answer: 'C', explain: 'Paragraph D: Nair says the outcome “depends heavily on the context in which it occurs”. Chen talks about “how people respond”, not context.' }
+];
+var featurePlacement = { 1: null, 2: null, 3: null, 4: null, 5: null };
+var featureSelected = null;
+
+(function buildFeatureSlots() {
+    var wrap = document.getElementById('features-slots');
+    FEATURE_STATEMENTS.forEach(function (s) {
+        var slot = document.createElement('div');
+        slot.className = 'slot feature-slot';
+        slot.dataset.n = s.n;
+        slot.innerHTML = '<div class="fstatement">' + s.n + '. ' + s.text + '</div>' +
+                         '<div class="fanswer empty">Click to place a researcher</div>';
+        slot.addEventListener('click', function () {
+            if (featurePlacement[s.n]) featurePlacement[s.n] = null;
+            if (featureSelected) {
+                featurePlacement[s.n] = featureSelected;
+                featureSelected = null;
+            }
+            renderFeatures();
+        });
+        wrap.appendChild(slot);
+    });
+})();
+
+function renderFeatures() {
+    var pool = document.getElementById('features-pool');
+    pool.innerHTML = '';
+    FEATURES.forEach(function (f) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'chip' + (featureSelected === f.id ? ' selected' : '');
+        btn.textContent = f.id + '. ' + f.name;
+        btn.addEventListener('click', function () {
+            featureSelected = (featureSelected === f.id) ? null : f.id;
+            renderFeatures();
+        });
+        pool.appendChild(btn);
+    });
+
+    FEATURE_STATEMENTS.forEach(function (s) {
+        var slot = document.querySelector('#features-slots .slot[data-n="' + s.n + '"]');
+        var val = featurePlacement[s.n];
+        var ans = slot.querySelector('.fanswer');
+        slot.classList.toggle('filled', !!val);
+        slot.classList.remove('correct', 'incorrect');
+        if (val) {
+            var f = FEATURES.filter(function (x) { return x.id === val; })[0];
+            ans.textContent = val + '. ' + f.name;
+            ans.classList.remove('empty');
+        } else {
+            ans.textContent = 'Click to place a researcher';
+            ans.classList.add('empty');
+        }
+    });
+}
+
+document.getElementById('check-features').addEventListener('click', function () {
+    var correct = 0, html = '';
+    FEATURE_STATEMENTS.forEach(function (s) {
+        var slot = document.querySelector('#features-slots .slot[data-n="' + s.n + '"]');
+        var ok = featurePlacement[s.n] === s.answer;
+        slot.classList.toggle('correct', ok);
+        slot.classList.toggle('incorrect', !ok);
+        if (ok) correct++;
+        html += '<div class="' + (ok ? 'ok' : 'no') + '"><strong>Statement ' + s.n +
+                ':</strong> ' + (ok ? 'Correct. ' : 'You chose ' +
+                (featurePlacement[s.n] || 'nothing') + '. ') + s.explain + '</div>';
+    });
+    var r = document.getElementById('features-result');
+    r.textContent = correct + ' / 5 correct';
+    r.className = 'result ' + (correct === 5 ? 'good' : 'bad');
+    document.getElementById('features-feedback').innerHTML = html;
+});
+
+document.getElementById('reset-features').addEventListener('click', function () {
+    featurePlacement = { 1: null, 2: null, 3: null, 4: null, 5: null };
+    featureSelected = null;
+    renderFeatures();
+    document.getElementById('features-result').textContent = '';
+    document.getElementById('features-feedback').innerHTML = '';
+});
+
+/* =========================================================
+   4. TRUE / FALSE / NOT GIVEN
+   ========================================================= */
+var TF = [
+    { n: 1, text: 'Dr. Marsh’s study involved participants who first completed a boring task.', answer: 'TRUE',
+      explain: 'Paragraph B: participants copied numbers from a telephone directory before the creative task.' },
+    { n: 2, text: 'Professor Chen claims that boredom always leads to positive outcomes.', answer: 'FALSE',
+      explain: 'Paragraph C: Chen warns boredom “can also lead to risk-taking”. The word “always” makes the statement false.' },
+    { n: 3, text: 'Dr. Nair has conducted research in several countries.', answer: 'NOT GIVEN',
+      explain: 'Paragraph D mentions her research in schools but says nothing about how many countries. No information = Not Given.' },
+    { n: 4, text: 'The passage concludes that boredom is always negative.', answer: 'FALSE',
+      explain: 'Paragraph E says society has been “too quick to dismiss” boredom as purely negative. The passage concludes the opposite.' }
+];
+var tfSelection = {};
+
+function buildChoiceTask(config) {
+    var wrap = document.getElementById(config.container);
+    wrap.innerHTML = '';
+    config.items.forEach(function (item) {
+        var q = document.createElement('div');
+        q.className = 'q';
+        q.dataset.n = item.n;
+
+        var p = document.createElement('p');
+        p.textContent = item.n + '. ' + item.text;
+        q.appendChild(p);
+
+        var opts = document.createElement('div');
+        opts.className = 'opts';
+        config.options.forEach(function (opt) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'opt';
+            b.dataset.val = opt;
+            b.textContent = opt;
+            b.addEventListener('click', function () {
+                config.selection[item.n] = opt;
+                opts.querySelectorAll('.opt').forEach(function (o) {
+                    o.classList.remove('sel', 'correct', 'incorrect');
+                });
+                b.classList.add('sel');
+            });
+            opts.appendChild(b);
+        });
+        q.appendChild(opts);
+        wrap.appendChild(q);
+    });
+}
+
+buildChoiceTask({ container: 'tf-questions', items: TF, options: ['TRUE', 'FALSE', 'NOT GIVEN'], selection: tfSelection });
+
+document.getElementById('check-tf').addEventListener('click', function () {
+    var correct = 0, html = '';
+    TF.forEach(function (item) {
+        var q = document.querySelector('#tf-questions .q[data-n="' + item.n + '"]');
+        var chosen = tfSelection[item.n];
+        var ok = chosen === item.answer;
+        if (ok) correct++;
+
+        q.querySelectorAll('.opt').forEach(function (o) {
+            o.classList.remove('correct', 'incorrect');
+            if (o.dataset.val === chosen) o.classList.add(ok ? 'correct' : 'incorrect');
+            if (!ok && o.dataset.val === item.answer) o.classList.add('correct');
+        });
+
+        html += '<div class="' + (ok ? 'ok' : 'no') + '"><strong>Q' + item.n + ':</strong> ' +
+                item.answer + '. ' + item.explain + '</div>';
+    });
+    var r = document.getElementById('tf-result');
+    r.textContent = correct + ' / ' + TF.length + ' correct';
+    r.className = 'result ' + (correct === TF.length ? 'good' : 'bad');
+    document.getElementById('tf-feedback').innerHTML = html;
+});
+
+document.getElementById('reset-tf').addEventListener('click', function () {
+    tfSelection = {};
+    document.querySelectorAll('#tf-questions .opt').forEach(function (o) {
+        o.classList.remove('sel', 'correct', 'incorrect');
+    });
+    document.getElementById('tf-result').textContent = '';
+    document.getElementById('tf-feedback').innerHTML = '';
+});
+
+/* =========================================================
+   5. YES / NO / NOT GIVEN
+   ========================================================= */
+var YN = [
+    { n: 1, text: 'The writer believes that boredom has been unfairly dismissed by society.', answer: 'YES',
+      explain: 'Paragraph A says boredom “may not be the enemy we assume”; Paragraph E says society has been “too quick to dismiss” it.' },
+    { n: 2, text: 'The writer argues that all forms of boredom are beneficial.', answer: 'NO',
+      explain: 'Paragraph A: “This does not mean that all boredom is good.” Paragraph E: boredom can “lead to harm”.' },
+    { n: 3, text: 'The writer claims that Professor Chen’s warning about risk-taking is exaggerated.', answer: 'NOT GIVEN',
+      explain: 'The writer reports Chen’s warning but gives no opinion on whether it is exaggerated. Reporting a view is not agreeing with it.' },
+    { n: 4, text: 'The writer suggests that schools should eliminate structured activities.', answer: 'NO',
+      explain: 'Paragraph D: Nair “does not suggest that schools should abandon structured learning.”' },
+    { n: 5, text: 'The writer believes that how people respond to boredom is more important than boredom itself.', answer: 'YES',
+      explain: 'Paragraph E: “What matters most is not boredom itself but how we respond to it.”' }
+];
+var ynSelection = {};
+
+buildChoiceTask({ container: 'yn-questions', items: YN, options: ['YES', 'NO', 'NOT GIVEN'], selection: ynSelection });
+
+document.getElementById('check-yn').addEventListener('click', function () {
+    var correct = 0, html = '';
+    YN.forEach(function (item) {
+        var q = document.querySelector('#yn-questions .q[data-n="' + item.n + '"]');
+        var chosen = ynSelection[item.n];
+        var ok = chosen === item.answer;
+        if (ok) correct++;
+
+        q.querySelectorAll('.opt').forEach(function (o) {
+            o.classList.remove('correct', 'incorrect');
+            if (o.dataset.val === chosen) o.classList.add(ok ? 'correct' : 'incorrect');
+            if (!ok && o.dataset.val === item.answer) o.classList.add('correct');
+        });
+
+        html += '<div class="' + (ok ? 'ok' : 'no') + '"><strong>Q' + item.n + ':</strong> ' +
+                item.answer + '. ' + item.explain + '</div>';
+    });
+    var r = document.getElementById('yn-result');
+    r.textContent = correct + ' / ' + YN.length + ' correct';
+    r.className = 'result ' + (correct === YN.length ? 'good' : 'bad');
+    document.getElementById('yn-feedback').innerHTML = html;
+});
+
+document.getElementById('reset-yn').addEventListener('click', function () {
+    ynSelection = {};
+    document.querySelectorAll('#yn-questions .opt').forEach(function (o) {
+        o.classList.remove('sel', 'correct', 'incorrect');
+    });
+    document.getElementById('yn-result').textContent = '';
+    document.getElementById('yn-feedback').innerHTML = '';
+});
+
+/* =========================================================
+   INITIAL RENDER
+   ========================================================= */
+renderHeadings();
+renderFeatures();
+</script>
+<script src="tracking.js"></script>
 </body>
 </html>
