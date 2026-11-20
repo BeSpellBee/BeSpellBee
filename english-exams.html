@@ -12,25 +12,57 @@
     }
     *{box-sizing:border-box;}
     body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;
-         margin:0;padding:40px 20px;line-height:1.6;}
+         margin:0;padding:40px 20px;line-height:1.65;}
     .container{max-width:900px;margin:0 auto;}
     h1{color:var(--accent);font-size:2.2rem;margin:0 0 .4rem;}
-    .subhead{color:var(--sub);margin:0 0 2rem;}
+    .subhead{color:var(--sub);margin:0 0 1.5rem;}
+
+    /* anchor nav */
+    .subnav{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap;}
+    .subnav a{color:var(--muted);text-decoration:none;font-size:.85rem;
+        border:1px solid #222;border-radius:30px;padding:5px 16px;transition:.25s;}
+    .subnav a:hover{color:var(--accent);border-color:var(--accent);}
+
     section.task{background:var(--panel);border:1px solid var(--line);
         border-radius:16px;padding:24px;margin-bottom:24px;}
     section.task h2{color:#fff;font-size:1.35rem;margin:0 0 .3rem;}
     section.task .hint{color:var(--muted);font-size:.9rem;margin:0 0 1.2rem;}
+
+    /* ---------- LESSON ---------- */
+    .video-block{text-align:center;margin-bottom:24px;}
+    .video-btn{display:inline-flex;align-items:center;gap:10px;
+        border:1px solid var(--accent);border-radius:30px;padding:12px 30px;
+        color:var(--accent);text-decoration:none;font-weight:600;transition:.25s;}
+    .video-btn:hover{background:var(--accent);color:#000;}
+    .video-meta{color:var(--muted);font-size:.8rem;margin-top:8px;}
+
+    .callout{border-left:3px solid var(--accent);background:rgba(0,255,255,.05);
+        padding:14px 18px;border-radius:0 12px 12px 0;margin:0 0 22px;}
+    .callout strong{color:var(--accent);}
+
+    .conclusion{margin-bottom:22px;}
+    .conclusion:last-child{margin-bottom:0;}
+    .conclusion h3{color:var(--sub);font-size:1rem;margin:0 0 .5rem;
+        text-transform:uppercase;letter-spacing:.06em;font-weight:700;}
+    .conclusion ul{margin:0;padding-left:20px;}
+    .conclusion li{margin-bottom:.45rem;font-size:.93rem;}
+    .conclusion li strong{color:#fff;}
+
     .passage p{margin:0 0 .9rem;font-size:.95rem;}
     .passage .plabel{color:var(--accent);font-weight:700;margin-right:.4rem;}
 
-    /* strategy warm-up */
-    .strategy-row{display:flex;justify-content:space-between;gap:12px;
-        flex-wrap:wrap;border-bottom:1px solid #141414;padding:12px 0;align-items:center;}
+    /* ---------- STRATEGY WARM-UP ---------- */
+    .strategy-row{display:grid;grid-template-columns:180px 1fr;gap:10px 16px;
+        align-items:start;border-bottom:1px solid #141414;padding:16px 0;}
     .strategy-row:last-of-type{border-bottom:none;}
-    .strategy-row .name{font-size:.95rem;color:#fff;min-width:190px;}
-    .strategy-group{display:flex;gap:8px;flex-wrap:wrap;}
+    .strategy-row .name{font-size:.95rem;color:#fff;font-weight:600;padding-top:6px;}
+    .strategy-groups{display:flex;flex-wrap:wrap;gap:12px 22px;}
+    .strategy-group{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+    .strategy-group::before{content:attr(data-label);font-size:.68rem;
+        color:var(--muted);text-transform:uppercase;letter-spacing:.06em;
+        margin-right:2px;width:100%;}
 
-    /* chips + slots */
+    /* ---------- CHIPS + SLOTS ---------- */
     .chip-pool{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;}
     .chip{background:#111;border:1px solid var(--line);color:var(--text);
         border-radius:30px;padding:8px 16px;font:inherit;font-size:.88rem;
@@ -53,7 +85,7 @@
     .feature-slot .fanswer{margin-top:8px;color:var(--accent);font-weight:700;font-size:.9rem;}
     .feature-slot .fanswer.empty{color:var(--muted);font-weight:400;font-style:italic;}
 
-    /* options */
+    /* ---------- OPTIONS + BUTTONS ---------- */
     .q{border-bottom:1px solid #141414;padding:14px 0;}
     .q:last-of-type{border-bottom:none;}
     .q p{margin:0 0 .7rem;font-size:.95rem;}
@@ -66,7 +98,6 @@
     .opt.correct{border-color:var(--ok);color:var(--ok);}
     .opt.incorrect{border-color:var(--bad);color:var(--bad);}
 
-    /* buttons + feedback */
     .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;}
     .btn{border:1px solid var(--accent);background:transparent;color:var(--accent);
         border-radius:30px;padding:9px 26px;font:inherit;font-weight:600;
@@ -84,11 +115,13 @@
     .feedback div.no{border-color:var(--bad);}
     .back-link{display:inline-block;margin-top:8px;color:#666;text-decoration:none;}
     .back-link:hover{color:var(--accent);}
-    @media(max-width:600px){
+
+    @media(max-width:640px){
         body{padding:24px 14px;}
         section.task{padding:18px;}
+        .strategy-row{grid-template-columns:1fr;}
+        .strategy-row .name{padding-top:0;}
         .slot .slot-label{min-width:76px;}
-        .strategy-row .name{min-width:100%;}
     }
 </style>
 </head>
@@ -98,56 +131,167 @@
     <h1>📘 IELTS Academic Practice</h1>
     <p class="subhead">Four question types, one rule: know whether to start with the text or the statements.</p>
 
-    <!-- ============ WARM-UP ============ -->
-    <section class="task">
-        <h2>1. Strategy warm-up</h2>
-        <p class="hint">For each task type, choose whether the answers are <strong>ordered</strong> or <strong>unordered</strong>, and whether you start with the <strong>text</strong> or the <strong>options/statements</strong>.</p>
+    <nav class="subnav">
+        <a href="#lesson">1. Lesson</a>
+        <a href="#warmup">2. Strategy check</a>
+        <a href="#passage">3. Passage</a>
+        <a href="#headings">4. Matching Headings</a>
+        <a href="#features">5. Matching Features</a>
+        <a href="#tf">6. True/False/NG</a>
+        <a href="#yn">7. Yes/No/NG</a>
+    </nav>
 
-        <div class="strategy-row" data-task="headings" data-order="unordered" data-start="text">
+    <!-- ================= LESSON ================= -->
+    <section class="task" id="lesson">
+        <h2>Lesson: The four conclusions</h2>
+        <p class="hint">Watch the session first. The conclusions below are drawn from it and they drive every activity on this page.</p>
+
+        <div class="video-block">
+            <!-- Replace the href below with your video link -->
+            <a class="video-btn" href="PASTE_YOUR_VIDEO_URL_HERE" target="_blank" rel="noopener">
+                <i class="fas fa-play"></i> Watch Session 1
+            </a>
+            <p class="video-meta">Reading strategies for Matching Headings, Matching Features, True/False and Yes/No</p>
+        </div>
+
+        <div class="callout">
+            <strong>The golden rule.</strong> In option-based tasks, never start with the options.
+            The options are full of distractors and misleading wording. Start with the text.
+            This applies to Matching Headings and Matching Features. It is deliberately
+            <em>broken</em> for True/False and Yes/No, where the answers are ordered.
+        </div>
+
+        <div class="conclusion">
+            <h3>1. Reading is not Listening</h3>
+            <ul>
+                <li>In <strong>Reading</strong> the text is in front of you. In <strong>Listening</strong> it is not.</li>
+                <li>Because of this, in Listening you are more dependent on the questions; in Reading the <strong>text is your starting point</strong>.</li>
+                <li>But the two skills are not opposites. Most question types give you options, and in all of them the options are a trap if you read them first.</li>
+            </ul>
+        </div>
+
+        <div class="conclusion">
+            <h3>2. Matching Headings and Matching Features are unordered</h3>
+            <ul>
+                <li>The answers can be <strong>anywhere in the text</strong>, so you cannot work through them in sequence.</li>
+                <li>Both start with the <strong>text</strong>: skim the layout, skim the first and last sentence of each paragraph, decide which paragraphs are relevant.</li>
+                <li>For headings: skim, then go to the headings, underline keywords and <strong>eliminate</strong> what cannot fit. There are more headings than you need.</li>
+                <li>The topic sentence is <strong>not always first</strong>. Do not stop at the first and last sentence if the main idea is not there — keep reading.</li>
+                <li>For features: after skimming, think of <strong>synonyms</strong> before you go back to the text, because the text will paraphrase, not repeat your keywords.</li>
+                <li>There are fewer features than paragraphs, and <strong>one feature may match more than one paragraph</strong>. This is why the instruction says you may use a letter more than once.</li>
+            </ul>
+        </div>
+
+        <div class="conclusion">
+            <h3>3. Matching Headings and Matching Features ask different questions</h3>
+            <ul>
+                <li><strong>Headings ask for the main idea.</strong> One word in the paragraph is not enough; the heading must cover the whole paragraph.</li>
+                <li><strong>Features ask for connections between facts and opinions</strong> — who said or found what. That is why you need to close read around the keywords, not just scan.</li>
+            </ul>
+        </div>
+
+        <div class="conclusion">
+            <h3>4. True/False and Yes/No break the rule — on purpose</h3>
+            <ul>
+                <li>The answers are in the <strong>same order</strong> as the information in the text. You are on safe ground reading the statements first.</li>
+                <li>Read the statement, underline keywords, think of synonyms, turn it into a question, find the paragraph, scan for the keywords, then <strong>close read</strong> around them.</li>
+                <li>Looking for specific information does not mean you can skip close reading. It is where the traps live.</li>
+                <li><strong>True/False tests factual information in the text. Yes/No tests the writer's views or claims.</strong> Same mechanics, different target.</li>
+                <li>Reporting a view is not the same as agreeing with it. If the writer reports someone else's claim and gives no opinion, the answer is <strong>Not Given</strong>, not Yes or No.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ================= STRATEGY WARM-UP ================= -->
+    <section class="task" id="warmup">
+        <h2>Strategy check</h2>
+        <p class="hint">For each task type, decide three things: is it ordered or unordered, do you start with the text or the statements, and <strong>what is the question actually asking you to look for?</strong></p>
+
+        <!-- Matching Headings -->
+        <div class="strategy-row" data-task="headings"
+             data-order="unordered" data-start="text" data-focus="main">
             <span class="name">Matching Headings</span>
-            <div class="strategy-group" data-key="order">
-                <button class="opt" type="button" data-val="unordered">Unordered</button>
-                <button class="opt" type="button" data-val="ordered">Ordered</button>
-            </div>
-            <div class="strategy-group" data-key="start">
-                <button class="opt" type="button" data-val="text">Text first</button>
-                <button class="opt" type="button" data-val="options">Options first</button>
+            <div class="strategy-groups">
+                <div class="strategy-group" data-key="order" data-label="Ordered?">
+                    <button class="opt" type="button" data-val="unordered">Unordered</button>
+                    <button class="opt" type="button" data-val="ordered">Ordered</button>
+                </div>
+                <div class="strategy-group" data-key="start" data-label="Start with">
+                    <button class="opt" type="button" data-val="text">Text first</button>
+                    <button class="opt" type="button" data-val="statements">Statements first</button>
+                </div>
+                <div class="strategy-group" data-key="focus" data-label="Look for">
+                    <button class="opt" type="button" data-val="main">Main idea</button>
+                    <button class="opt" type="button" data-val="specific">Specific information</button>
+                    <button class="opt" type="button" data-val="connections">Connections between facts &amp; opinions</button>
+                    <button class="opt" type="button" data-val="views">Writer's views or claims</button>
+                </div>
             </div>
         </div>
 
-        <div class="strategy-row" data-task="features" data-order="unordered" data-start="text">
+        <!-- Matching Features -->
+        <div class="strategy-row" data-task="features"
+             data-order="unordered" data-start="text" data-focus="connections">
             <span class="name">Matching Features</span>
-            <div class="strategy-group" data-key="order">
-                <button class="opt" type="button" data-val="unordered">Unordered</button>
-                <button class="opt" type="button" data-val="ordered">Ordered</button>
-            </div>
-            <div class="strategy-group" data-key="start">
-                <button class="opt" type="button" data-val="text">Text first</button>
-                <button class="opt" type="button" data-val="options">Options first</button>
+            <div class="strategy-groups">
+                <div class="strategy-group" data-key="order" data-label="Ordered?">
+                    <button class="opt" type="button" data-val="unordered">Unordered</button>
+                    <button class="opt" type="button" data-val="ordered">Ordered</button>
+                </div>
+                <div class="strategy-group" data-key="start" data-label="Start with">
+                    <button class="opt" type="button" data-val="text">Text first</button>
+                    <button class="opt" type="button" data-val="statements">Statements first</button>
+                </div>
+                <div class="strategy-group" data-key="focus" data-label="Look for">
+                    <button class="opt" type="button" data-val="main">Main idea</button>
+                    <button class="opt" type="button" data-val="specific">Specific information</button>
+                    <button class="opt" type="button" data-val="connections">Connections between facts &amp; opinions</button>
+                    <button class="opt" type="button" data-val="views">Writer's views or claims</button>
+                </div>
             </div>
         </div>
 
-        <div class="strategy-row" data-task="tf" data-order="ordered" data-start="options">
+        <!-- True / False / Not Given -->
+        <div class="strategy-row" data-task="tf"
+             data-order="ordered" data-start="statements" data-focus="specific">
             <span class="name">True / False / Not Given</span>
-            <div class="strategy-group" data-key="order">
-                <button class="opt" type="button" data-val="unordered">Unordered</button>
-                <button class="opt" type="button" data-val="ordered">Ordered</button>
-            </div>
-            <div class="strategy-group" data-key="start">
-                <button class="opt" type="button" data-val="text">Text first</button>
-                <button class="opt" type="button" data-val="options">Statements first</button>
+            <div class="strategy-groups">
+                <div class="strategy-group" data-key="order" data-label="Ordered?">
+                    <button class="opt" type="button" data-val="unordered">Unordered</button>
+                    <button class="opt" type="button" data-val="ordered">Ordered</button>
+                </div>
+                <div class="strategy-group" data-key="start" data-label="Start with">
+                    <button class="opt" type="button" data-val="text">Text first</button>
+                    <button class="opt" type="button" data-val="statements">Statements first</button>
+                </div>
+                <div class="strategy-group" data-key="focus" data-label="Look for">
+                    <button class="opt" type="button" data-val="main">Main idea</button>
+                    <button class="opt" type="button" data-val="specific">Specific information</button>
+                    <button class="opt" type="button" data-val="connections">Connections between facts &amp; opinions</button>
+                    <button class="opt" type="button" data-val="views">Writer's views or claims</button>
+                </div>
             </div>
         </div>
 
-        <div class="strategy-row" data-task="yn" data-order="ordered" data-start="options">
+        <!-- Yes / No / Not Given -->
+        <div class="strategy-row" data-task="yn"
+             data-order="ordered" data-start="statements" data-focus="views">
             <span class="name">Yes / No / Not Given</span>
-            <div class="strategy-group" data-key="order">
-                <button class="opt" type="button" data-val="unordered">Unordered</button>
-                <button class="opt" type="button" data-val="ordered">Ordered</button>
-            </div>
-            <div class="strategy-group" data-key="start">
-                <button class="opt" type="button" data-val="text">Text first</button>
-                <button class="opt" type="button" data-val="options">Statements first</button>
+            <div class="strategy-groups">
+                <div class="strategy-group" data-key="order" data-label="Ordered?">
+                    <button class="opt" type="button" data-val="unordered">Unordered</button>
+                    <button class="opt" type="button" data-val="ordered">Ordered</button>
+                </div>
+                <div class="strategy-group" data-key="start" data-label="Start with">
+                    <button class="opt" type="button" data-val="text">Text first</button>
+                    <button class="opt" type="button" data-val="statements">Statements first</button>
+                </div>
+                <div class="strategy-group" data-key="focus" data-label="Look for">
+                    <button class="opt" type="button" data-val="main">Main idea</button>
+                    <button class="opt" type="button" data-val="specific">Specific information</button>
+                    <button class="opt" type="button" data-val="connections">Connections between facts &amp; opinions</button>
+                    <button class="opt" type="button" data-val="views">Writer's views or claims</button>
+                </div>
             </div>
         </div>
 
@@ -159,9 +303,9 @@
         <div class="feedback" id="strategy-feedback"></div>
     </section>
 
-    <!-- ============ READING PASSAGE ============ -->
-    <section class="task">
-        <h2>Reading Passage</h2>
+    <!-- ================= PASSAGE ================= -->
+    <section class="task" id="passage">
+        <h2>Reading Passage: The Unexpected Benefits of Boredom</h2>
         <p class="hint">Read once for the general idea before attempting the tasks below.</p>
         <div class="passage">
             <p><span class="plabel">A</span>Boredom is one of the most disliked emotions. We avoid it with smartphones, streaming services and constant activity. Yet a growing body of research suggests that boredom may not be the enemy we assume. Psychologists are beginning to argue that boredom can serve a purpose, and that our attempts to eliminate it may be counterproductive. This does not mean that all boredom is good, but it does mean that the emotion deserves a more careful look.</p>
@@ -172,10 +316,10 @@
         </div>
     </section>
 
-    <!-- ============ MATCHING HEADINGS ============ -->
-    <section class="task">
-        <h2>2. Matching Headings</h2>
-        <p class="hint">Click a heading, then click a paragraph to place it. Click a placed heading to send it back.</p>
+    <!-- ================= MATCHING HEADINGS ================= -->
+    <section class="task" id="headings">
+        <h2>Task 1: Matching Headings</h2>
+        <p class="hint">Unordered. Start with the text, not the headings. Click a heading, then click a paragraph. Click a placed heading to send it back.</p>
         <div class="chip-pool" id="headings-pool"></div>
         <div id="headings-slots"></div>
         <div class="actions">
@@ -186,10 +330,10 @@
         <div class="feedback" id="headings-feedback"></div>
     </section>
 
-    <!-- ============ MATCHING FEATURES ============ -->
-    <section class="task">
-        <h2>3. Matching Features</h2>
-        <p class="hint">Letters may be used more than once. Click a researcher, then click a statement.</p>
+    <!-- ================= MATCHING FEATURES ================= -->
+    <section class="task" id="features">
+        <h2>Task 2: Matching Features</h2>
+        <p class="hint">Unordered. Start with the text. Letters may be used more than once. Click a researcher, then click a statement.</p>
         <div class="chip-pool" id="features-pool"></div>
         <div id="features-slots"></div>
         <div class="actions">
@@ -200,10 +344,10 @@
         <div class="feedback" id="features-feedback"></div>
     </section>
 
-    <!-- ============ TRUE / FALSE / NOT GIVEN ============ -->
-    <section class="task">
-        <h2>4. True / False / Not Given</h2>
-        <p class="hint">Do the statements agree with the <strong>information</strong> in the passage?</p>
+    <!-- ================= TRUE / FALSE / NOT GIVEN ================= -->
+    <section class="task" id="tf">
+        <h2>Task 3: True / False / Not Given</h2>
+        <p class="hint">Ordered. Start with the statements. Do they agree with the <strong>information</strong> in the passage?</p>
         <div id="tf-questions"></div>
         <div class="actions">
             <button class="btn" type="button" id="check-tf">Check answers</button>
@@ -213,10 +357,10 @@
         <div class="feedback" id="tf-feedback"></div>
     </section>
 
-    <!-- ============ YES / NO / NOT GIVEN ============ -->
-    <section class="task">
-        <h2>5. Yes / No / Not Given</h2>
-        <p class="hint">Do the statements agree with the <strong>views of the writer</strong>?</p>
+    <!-- ================= YES / NO / NOT GIVEN ================= -->
+    <section class="task" id="yn">
+        <h2>Task 4: Yes / No / Not Given</h2>
+        <p class="hint">Ordered. Start with the statements. Do they agree with the <strong>views of the writer</strong>?</p>
         <div id="yn-questions"></div>
         <div class="actions">
             <button class="btn" type="button" id="check-yn">Check answers</button>
@@ -231,8 +375,20 @@
 
 <script>
 /* =========================================================
-   1. STRATEGY WARM-UP
+   1. STRATEGY WARM-UP  (3 dimensions)
    ========================================================= */
+var VALUE_LABEL = {
+    order: { unordered: 'Unordered', ordered: 'Ordered' },
+    start: { text: 'Text first', statements: 'Statements first' },
+    focus: {
+        main: 'Main idea',
+        specific: 'Specific information',
+        connections: 'Connections between facts & opinions',
+        views: "Writer's views or claims"
+    }
+};
+var DIMENSIONS = ['order', 'start', 'focus'];
+
 document.querySelectorAll('.strategy-group').forEach(function (group) {
     group.addEventListener('click', function (e) {
         var btn = e.target.closest('.opt');
@@ -248,32 +404,43 @@ document.getElementById('check-strategy').addEventListener('click', function () 
     var correct = 0, total = 0, html = '';
 
     document.querySelectorAll('.strategy-row').forEach(function (row) {
-        row.querySelectorAll('.strategy-group').forEach(function (group) {
+        var rowOk = true, chosen = [], right = [];
+
+        DIMENSIONS.forEach(function (key) {
+            var group = row.querySelector('.strategy-group[data-key="' + key + '"]');
+            if (!group) return;
             total++;
-            var key = group.dataset.key;
             var sel = group.querySelector('.opt.sel');
-            var right = row.dataset[key];
+            var answer = row.dataset[key];
 
             group.querySelectorAll('.opt').forEach(function (o) {
                 o.classList.remove('correct', 'incorrect');
             });
 
-            if (sel && sel.dataset.val === right) {
+            if (sel && sel.dataset.val === answer) {
                 sel.classList.add('correct');
                 correct++;
             } else {
+                rowOk = false;
                 if (sel) sel.classList.add('incorrect');
-                var target = group.querySelector('.opt[data-val="' + right + '"]');
+                var target = group.querySelector('.opt[data-val="' + answer + '"]');
                 if (target) target.classList.add('correct');
-                html += '<div class="no"><strong>' + row.querySelector('.name').textContent +
-                        '</strong>: the correct choice is <em>' + right + '</em>.</div>';
             }
+
+            chosen.push(sel ? VALUE_LABEL[key][sel.dataset.val] : '—');
+            right.push(VALUE_LABEL[key][answer]);
         });
+
+        var name = row.querySelector('.name').textContent;
+        html += '<div class="' + (rowOk ? 'ok' : 'no') + '"><strong>' + name + '</strong> — ' +
+                right.join(' · ') +
+                (rowOk ? ' &nbsp;✔' : '<br><em>You chose: ' + chosen.join(' · ') + '</em>') +
+                '</div>';
     });
 
-    var result = document.getElementById('strategy-result');
-    result.textContent = correct + ' / ' + total + ' correct';
-    result.className = 'result ' + (correct === total ? 'good' : 'bad');
+    var r = document.getElementById('strategy-result');
+    r.textContent = correct + ' / ' + total + ' correct';
+    r.className = 'result ' + (correct === total ? 'good' : 'bad');
     document.getElementById('strategy-feedback').innerHTML = html;
 });
 
@@ -299,11 +466,11 @@ var HEADINGS = [
 ];
 var HEADING_ANSWERS = { A: 'iv', B: 'ii', C: 'i', D: 'v', E: 'vii' };
 var HEADING_EXPLAIN = {
-    A: 'The paragraph is about rethinking boredom: it is disliked but may serve a purpose.',
-    B: 'Marsh’s experiment shows boredom can generate novel connections, i.e. creativity.',
-    C: 'Chen’s central claim is that boredom is a signal that something is missing. Risk-taking is only a detail.',
-    D: 'Nair’s research is about boredom in schools.',
-    E: 'A balanced conclusion: creative, motivating, or harmful, depending on how we respond.'
+    A: 'The paragraph is about rethinking boredom: it is disliked, but it may serve a purpose. “iv” captures the whole paragraph; the background about phones and streaming is supporting detail.',
+    B: 'Marsh’s experiment shows that boredom generates novel connections — that is creativity. “vi” (risk-taking) is a distractor: risk-taking is never mentioned in paragraph B.',
+    C: 'Chen’s central claim is that boredom is a signal that something is missing, which pushes us to seek new goals. “vi” is tempting because risk-taking is mentioned, but risk-taking is a supporting detail, not the main idea. This is the classic trap: do not match a heading to one word.',
+    D: 'Nair’s research is about boredom in schools. “iii” is wrong because Nair argues for MORE unstructured time, not less.',
+    E: 'A balanced conclusion: boredom can spark creativity, motivate change or lead to harm, and what matters is how we respond. “vii” captures that balance across all the findings.'
 };
 
 var headingPlacement = { A: null, B: null, C: null, D: null, E: null };
@@ -318,7 +485,7 @@ var headingSelected = null;
         slot.innerHTML = '<span class="slot-label">Paragraph ' + p + '</span>' +
                          '<span class="slot-value">Click to place a heading</span>';
         slot.addEventListener('click', function () {
-            if (headingPlacement[p]) headingPlacement[p] = null;
+            if (headingPlacement[p]) { headingPlacement[p] = null; }
             if (headingSelected) {
                 headingPlacement[p] = headingSelected;
                 headingSelected = null;
@@ -332,19 +499,16 @@ var headingSelected = null;
 function renderHeadings() {
     var pool = document.getElementById('headings-pool');
     pool.innerHTML = '';
-
     HEADINGS.forEach(function (h) {
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'chip';
         btn.textContent = h.id + '. ' + h.text;
-
         var placed = Object.keys(headingPlacement).some(function (k) {
             return headingPlacement[k] === h.id;
         });
         if (placed) btn.classList.add('used');
         if (headingSelected === h.id) btn.classList.add('selected');
-
         btn.addEventListener('click', function () {
             if (placed) return;
             headingSelected = (headingSelected === h.id) ? null : h.id;
@@ -376,9 +540,8 @@ document.getElementById('check-headings').addEventListener('click', function () 
         slot.classList.toggle('correct', ok);
         slot.classList.toggle('incorrect', !ok);
         if (ok) correct++;
-        html += '<div class="' + (ok ? 'ok' : 'no') + '"><strong>Paragraph ' + p +
-                ':</strong> ' + (ok ? 'Correct. ' : 'You chose ' +
-                (headingPlacement[p] || 'nothing') + '. ') +
+        html += '<div class="' + (ok ? 'ok' : 'no') + '"><strong>Paragraph ' + p + ':</strong> ' +
+                (ok ? 'Correct. ' : 'You chose ' + (headingPlacement[p] || 'nothing') + '. ') +
                 HEADING_EXPLAIN[p] + '</div>';
     });
     var r = document.getElementById('headings-result');
@@ -404,11 +567,16 @@ var FEATURES = [
     { id: 'C', name: 'Dr. Priya Nair' }
 ];
 var FEATURE_STATEMENTS = [
-    { n: 1, text: 'Found that completing a boring task led to a greater quantity of creative ideas.', answer: 'A', explain: 'Paragraph B: Marsh’s bored participants “produced significantly more ideas”.' },
-    { n: 2, text: 'Argues that boredom can motivate people to look for new goals.', answer: 'B', explain: 'Paragraph C: Chen says boredom motivates us “to seek new goals and experiences”.' },
-    { n: 3, text: 'Suggests that schools should allow students more freedom to manage their own time.', answer: 'C', explain: 'Paragraph D: Nair believes students should have “more freedom to manage their own time”.' },
-    { n: 4, text: 'Warns that boredom may encourage risky behaviour.', answer: 'B', explain: 'Paragraph C: Chen warns boredom “can also lead to risk-taking” and dangerous behaviours. B is used twice.' },
-    { n: 5, text: 'Believes that the outcome of boredom depends heavily on the context in which it occurs.', answer: 'C', explain: 'Paragraph D: Nair says the outcome “depends heavily on the context in which it occurs”. Chen talks about “how people respond”, not context.' }
+    { n: 1, text: 'Found that completing a boring task led to a greater quantity of creative ideas.', answer: 'A',
+      explain: 'Paragraph B: Marsh’s bored participants “produced significantly more ideas”. You will not find the words “greater quantity” — you must think of the synonym before scanning.' },
+    { n: 2, text: 'Argues that boredom can motivate people to look for new goals.', answer: 'B',
+      explain: 'Paragraph C: Chen says boredom motivates us “to seek new goals and experiences”. “Look for” paraphrases “seek”.' },
+    { n: 3, text: 'Suggests that schools should allow students more freedom to manage their own time.', answer: 'C',
+      explain: 'Paragraph D: Nair believes students should have “more freedom to manage their own time”. Careful: she does NOT say schools should abandon structured learning — the statement does not claim that, so it matches.' },
+    { n: 4, text: 'Warns that boredom may encourage risky behaviour.', answer: 'B',
+      explain: 'Paragraph C: Chen warns boredom “can also lead to risk-taking” and mentions “dangerous behaviours”. B is used twice — this is why the instruction says you may use a letter more than once.' },
+    { n: 5, text: 'Believes that the outcome of boredom depends heavily on the context in which it occurs.', answer: 'C',
+      explain: 'Paragraph D: Nair says the outcome “depends heavily on the context in which it occurs”. Chen also says effects depend on “how people respond” — similar idea, different person. Only close reading around the keywords separates them.' }
 ];
 var featurePlacement = { 1: null, 2: null, 3: null, 4: null, 5: null };
 var featureSelected = null;
@@ -422,7 +590,7 @@ var featureSelected = null;
         slot.innerHTML = '<div class="fstatement">' + s.n + '. ' + s.text + '</div>' +
                          '<div class="fanswer empty">Click to place a researcher</div>';
         slot.addEventListener('click', function () {
-            if (featurePlacement[s.n]) featurePlacement[s.n] = null;
+            if (featurePlacement[s.n]) { featurePlacement[s.n] = null; }
             if (featureSelected) {
                 featurePlacement[s.n] = featureSelected;
                 featureSelected = null;
@@ -473,9 +641,9 @@ document.getElementById('check-features').addEventListener('click', function () 
         slot.classList.toggle('correct', ok);
         slot.classList.toggle('incorrect', !ok);
         if (ok) correct++;
-        html += '<div class="' + (ok ? 'ok' : 'no') + '"><strong>Statement ' + s.n +
-                ':</strong> ' + (ok ? 'Correct. ' : 'You chose ' +
-                (featurePlacement[s.n] || 'nothing') + '. ') + s.explain + '</div>';
+        html += '<div class="' + (ok ? 'ok' : 'no') + '"><strong>Statement ' + s.n + ':</strong> ' +
+                (ok ? 'Correct. ' : 'You chose ' + (featurePlacement[s.n] || 'nothing') + '. ') +
+                s.explain + '</div>';
     });
     var r = document.getElementById('features-result');
     r.textContent = correct + ' / 5 correct';
@@ -492,19 +660,32 @@ document.getElementById('reset-features').addEventListener('click', function () 
 });
 
 /* =========================================================
-   4. TRUE / FALSE / NOT GIVEN
+   4 & 5. CHOICE-BASED TASKS (T/F/NG and Y/N/NG)
    ========================================================= */
 var TF = [
     { n: 1, text: 'Dr. Marsh’s study involved participants who first completed a boring task.', answer: 'TRUE',
-      explain: 'Paragraph B: participants copied numbers from a telephone directory before the creative task.' },
+      explain: 'Paragraph B: participants copied numbers from a telephone directory before the creative task. Ordered answer 1 is in the first relevant paragraph.' },
     { n: 2, text: 'Professor Chen claims that boredom always leads to positive outcomes.', answer: 'FALSE',
-      explain: 'Paragraph C: Chen warns boredom “can also lead to risk-taking”. The word “always” makes the statement false.' },
+      explain: 'Paragraph C: Chen warns boredom “can also lead to risk-taking” and “dangerous behaviours”. He never says outcomes are always positive. The word “always” makes the statement false.' },
     { n: 3, text: 'Dr. Nair has conducted research in several countries.', answer: 'NOT GIVEN',
-      explain: 'Paragraph D mentions her research in schools but says nothing about how many countries. No information = Not Given.' },
+      explain: 'Paragraph D says she studied boredom in schools, but says nothing about how many countries. No information in the text = Not Given. Do not use outside knowledge.' },
     { n: 4, text: 'The passage concludes that boredom is always negative.', answer: 'FALSE',
-      explain: 'Paragraph E says society has been “too quick to dismiss” boredom as purely negative. The passage concludes the opposite.' }
+      explain: 'Paragraph E says society has been “too quick to dismiss” boredom as purely negative. The passage concludes the opposite. The final answer is in the final paragraph — that is the ordering at work.' }
 ];
-var tfSelection = {};
+var YN = [
+    { n: 1, text: 'The writer believes that boredom has been unfairly dismissed by society.', answer: 'YES',
+      explain: 'Paragraph A: boredom “may not be the enemy we assume”. Paragraph E: society has been “too quick to dismiss” it. This is the writer’s own view, not a reported fact.' },
+    { n: 2, text: 'The writer argues that all forms of boredom are beneficial.', answer: 'NO',
+      explain: 'Paragraph A explicitly says “This does not mean that all boredom is good”, and paragraph E says it can “lead to harm”. The word “all” contradicts the writer.' },
+    { n: 3, text: 'The writer claims that Professor Chen’s warning about risk-taking is exaggerated.', answer: 'NOT GIVEN',
+      explain: 'The writer reports Chen’s warning in paragraph C but gives no opinion on whether it is exaggerated. Reporting a view is not agreeing or disagreeing with it. This is the key Y/N trap.' },
+    { n: 4, text: 'The writer suggests that schools should eliminate structured activities.', answer: 'NO',
+      explain: 'Paragraph D: Nair “does not suggest that schools should abandon structured learning”, and the writer reports this without correcting it. The statement contradicts the passage.' },
+    { n: 5, text: 'The writer believes that how people respond to boredom is more important than boredom itself.', answer: 'YES',
+      explain: 'Paragraph E: “What matters most is not boredom itself but how we respond to it.” That is the writer’s own concluding claim.' }
+];
+
+var tfSelection = {}, ynSelection = {};
 
 function buildChoiceTask(config) {
     var wrap = document.getElementById(config.container);
@@ -540,89 +721,63 @@ function buildChoiceTask(config) {
     });
 }
 
-buildChoiceTask({ container: 'tf-questions', items: TF, options: ['TRUE', 'FALSE', 'NOT GIVEN'], selection: tfSelection });
+buildChoiceTask({
+    container: 'tf-questions', items: TF,
+    options: ['TRUE', 'FALSE', 'NOT GIVEN'], selection: tfSelection
+});
+buildChoiceTask({
+    container: 'yn-questions', items: YN,
+    options: ['YES', 'NO', 'NOT GIVEN'], selection: ynSelection
+});
+
+function checkChoice(config) {
+    var correct = 0, html = '';
+    config.items.forEach(function (item) {
+        var q = document.querySelector('#' + config.container + ' .q[data-n="' + item.n + '"]');
+        var chosen = config.selection[item.n];
+        var ok = chosen === item.answer;
+        if (ok) correct++;
+
+        q.querySelectorAll('.opt').forEach(function (o) {
+            o.classList.remove('correct', 'incorrect');
+            if (o.dataset.val === chosen) o.classList.add(ok ? 'correct' : 'incorrect');
+            if (!ok && o.dataset.val === item.answer) o.classList.add('correct');
+        });
+
+        html += '<div class="' + (ok ? 'ok' : 'no') + '"><strong>Q' + item.n + ':</strong> ' +
+                item.answer + '. ' + item.explain + '</div>';
+    });
+
+    var r = document.getElementById(config.result);
+    r.textContent = correct + ' / ' + config.items.length + ' correct';
+    r.className = 'result ' + (correct === config.items.length ? 'good' : 'bad');
+    document.getElementById(config.feedback).innerHTML = html;
+}
+
+function resetChoice(config) {
+    for (var k in config.selection) delete config.selection[k];
+    document.querySelectorAll('#' + config.container + ' .opt').forEach(function (o) {
+        o.classList.remove('sel', 'correct', 'incorrect');
+    });
+    document.getElementById(config.result).textContent = '';
+    document.getElementById(config.feedback).innerHTML = '';
+}
 
 document.getElementById('check-tf').addEventListener('click', function () {
-    var correct = 0, html = '';
-    TF.forEach(function (item) {
-        var q = document.querySelector('#tf-questions .q[data-n="' + item.n + '"]');
-        var chosen = tfSelection[item.n];
-        var ok = chosen === item.answer;
-        if (ok) correct++;
-
-        q.querySelectorAll('.opt').forEach(function (o) {
-            o.classList.remove('correct', 'incorrect');
-            if (o.dataset.val === chosen) o.classList.add(ok ? 'correct' : 'incorrect');
-            if (!ok && o.dataset.val === item.answer) o.classList.add('correct');
-        });
-
-        html += '<div class="' + (ok ? 'ok' : 'no') + '"><strong>Q' + item.n + ':</strong> ' +
-                item.answer + '. ' + item.explain + '</div>';
-    });
-    var r = document.getElementById('tf-result');
-    r.textContent = correct + ' / ' + TF.length + ' correct';
-    r.className = 'result ' + (correct === TF.length ? 'good' : 'bad');
-    document.getElementById('tf-feedback').innerHTML = html;
+    checkChoice({ container: 'tf-questions', items: TF, selection: tfSelection,
+                  result: 'tf-result', feedback: 'tf-feedback' });
 });
-
 document.getElementById('reset-tf').addEventListener('click', function () {
-    tfSelection = {};
-    document.querySelectorAll('#tf-questions .opt').forEach(function (o) {
-        o.classList.remove('sel', 'correct', 'incorrect');
-    });
-    document.getElementById('tf-result').textContent = '';
-    document.getElementById('tf-feedback').innerHTML = '';
+    resetChoice({ container: 'tf-questions', items: TF, selection: tfSelection,
+                  result: 'tf-result', feedback: 'tf-feedback' });
 });
-
-/* =========================================================
-   5. YES / NO / NOT GIVEN
-   ========================================================= */
-var YN = [
-    { n: 1, text: 'The writer believes that boredom has been unfairly dismissed by society.', answer: 'YES',
-      explain: 'Paragraph A says boredom “may not be the enemy we assume”; Paragraph E says society has been “too quick to dismiss” it.' },
-    { n: 2, text: 'The writer argues that all forms of boredom are beneficial.', answer: 'NO',
-      explain: 'Paragraph A: “This does not mean that all boredom is good.” Paragraph E: boredom can “lead to harm”.' },
-    { n: 3, text: 'The writer claims that Professor Chen’s warning about risk-taking is exaggerated.', answer: 'NOT GIVEN',
-      explain: 'The writer reports Chen’s warning but gives no opinion on whether it is exaggerated. Reporting a view is not agreeing with it.' },
-    { n: 4, text: 'The writer suggests that schools should eliminate structured activities.', answer: 'NO',
-      explain: 'Paragraph D: Nair “does not suggest that schools should abandon structured learning.”' },
-    { n: 5, text: 'The writer believes that how people respond to boredom is more important than boredom itself.', answer: 'YES',
-      explain: 'Paragraph E: “What matters most is not boredom itself but how we respond to it.”' }
-];
-var ynSelection = {};
-
-buildChoiceTask({ container: 'yn-questions', items: YN, options: ['YES', 'NO', 'NOT GIVEN'], selection: ynSelection });
-
 document.getElementById('check-yn').addEventListener('click', function () {
-    var correct = 0, html = '';
-    YN.forEach(function (item) {
-        var q = document.querySelector('#yn-questions .q[data-n="' + item.n + '"]');
-        var chosen = ynSelection[item.n];
-        var ok = chosen === item.answer;
-        if (ok) correct++;
-
-        q.querySelectorAll('.opt').forEach(function (o) {
-            o.classList.remove('correct', 'incorrect');
-            if (o.dataset.val === chosen) o.classList.add(ok ? 'correct' : 'incorrect');
-            if (!ok && o.dataset.val === item.answer) o.classList.add('correct');
-        });
-
-        html += '<div class="' + (ok ? 'ok' : 'no') + '"><strong>Q' + item.n + ':</strong> ' +
-                item.answer + '. ' + item.explain + '</div>';
-    });
-    var r = document.getElementById('yn-result');
-    r.textContent = correct + ' / ' + YN.length + ' correct';
-    r.className = 'result ' + (correct === YN.length ? 'good' : 'bad');
-    document.getElementById('yn-feedback').innerHTML = html;
+    checkChoice({ container: 'yn-questions', items: YN, selection: ynSelection,
+                  result: 'yn-result', feedback: 'yn-feedback' });
 });
-
 document.getElementById('reset-yn').addEventListener('click', function () {
-    ynSelection = {};
-    document.querySelectorAll('#yn-questions .opt').forEach(function (o) {
-        o.classList.remove('sel', 'correct', 'incorrect');
-    });
-    document.getElementById('yn-result').textContent = '';
-    document.getElementById('yn-feedback').innerHTML = '';
+    resetChoice({ container: 'yn-questions', items: YN, selection: ynSelection,
+                  result: 'yn-result', feedback: 'yn-feedback' });
 });
 
 /* =========================================================
